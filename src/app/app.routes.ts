@@ -17,6 +17,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'profile',
+        loadChildren: () => import('./profile-module/profile.module').then(m => m.ProfileModule),
+        canActivate: [ProtectedGuard]
+    },
+
+    {
         path: 'configuration',
         loadChildren: () => import('./configuration-module/configuration.module').then(m => m.ConfigurationModule),
         canActivate: [ProtectedGuard]
