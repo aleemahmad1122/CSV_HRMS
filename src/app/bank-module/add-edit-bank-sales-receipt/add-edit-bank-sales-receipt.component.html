@@ -1,0 +1,201 @@
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light"> {{ 'language.generic.dashboard' | translate }}
+      /</span>{{this.isEdit? ('language.generic.edit' | translate) : ('language.generic.add' | translate)}}
+    {{ 'language.sidebar.bankReceipts' | translate }}
+  </h4>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <hr class="my-0" />
+        <div class="card-body">
+          <form novalidate [formGroup]="bankReceiptForm" (ngSubmit)="submitForm()" #bankReceiptFormRef="ngForm"
+            autocomplete="off">
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label class="form-label"> {{ 'language.generic.date' | translate }}<span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="text" name="receiptDate" formControlName="receiptDate" ngbDatepicker
+                  #fromDate="ngbDatepicker" (click)="fromDate.toggle()" />
+                <!-- <span (click)="fromDate.toggle()" class="input-group-text cursor-pointer"><i class='bx bxs-calendar'></i></span> -->
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="firstName" class="form-label"> {{ 'language.invoice.selCustomer' | translate }}<span
+                    class="text-danger">*</span></label>
+                <ng-select formControlName="selectedId"
+                  [ngClass]="(!this.bankReceiptForm.controls['selectedId'].valid && bankReceiptFormRef?.submitted)?'invalid':''"
+                  bindLabel="name" bindValue="customerId">
+                  <ng-option [value]="''">{{ 'language.invoice.selCustomer' | translate }}</ng-option>
+                  @for(customer of customerList; track $index) {
+                  <ng-option [value]="customer.customerId">{{customer.name}}</ng-option>
+                  }
+                </ng-select>
+
+                @if (bankReceiptForm.get('selectedId')?.hasError('required') && bankReceiptFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.invoice.customerReq' | translate }}</div>
+                }
+              </div>
+
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label"> {{ 'language.role.manager' | translate }}<span
+                    class="text-danger">*</span></label>
+                <ng-select formControlName="assignedTo"
+                  [ngClass]="(!this.bankReceiptForm.controls['assignedTo'].valid && bankReceiptFormRef?.submitted)?'invalid':''"
+                  bindLabel="name" bindValue="userId">
+                  <ng-option [value]="''">{{ 'language.invoice.selectManager' | translate }}</ng-option>
+                  @for(manager of managerList; track $index) {
+                  <ng-option [value]="manager.userId">{{manager.name}}</ng-option>
+                  }
+                </ng-select>
+
+                @if (bankReceiptForm.get('assignedTo')?.hasError('required') && bankReceiptFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.bank.selectManagerReq' | translate }}
+                </div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label">{{ 'language.bank.bank' | translate }}<span
+                    class="text-danger">*</span></label>
+                <ng-select formControlName="bankId"
+                  [ngClass]="(!this.bankReceiptForm.controls['bankId'].valid && bankReceiptFormRef?.submitted)?'invalid':''"
+                  bindLabel="title" bindValue="bankId" (change)="addBankModal()">
+                  <ng-option [value]="''"> {{ 'language.bank.selectBank' | translate }}</ng-option>
+                  @for(bank of bankList; track $index){
+                  <ng-option [value]="bank.bankId">{{bank.title}}</ng-option>
+                  }
+                </ng-select>
+
+                @if (bankReceiptForm.get('bankId')?.hasError('required') && bankReceiptFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.bank.bankReq' | translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label">{{ 'language.bank.serialNumber' | translate }}<span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="number" name="receiptNumber" formControlName="receiptNumber"
+                  [ngClass]="(!this.bankReceiptForm.controls['receiptNumber'].valid && bankReceiptFormRef?.submitted)?'invalid':''" />
+                @if (bankReceiptForm.get('receiptNumber')?.hasError('required') && bankReceiptFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.bank.serialNumberReq' | translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label">{{ 'language.bank.amount' | translate }}<span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="number" step="0.1" name="amount" formControlName="amount"
+                  [ngClass]="(!this.bankReceiptForm.controls['amount'].valid && bankReceiptFormRef?.submitted)?'invalid':''" />
+                @if (bankReceiptForm.get('amount')?.hasError('required') && bankReceiptFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.bank.amountReq' | translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-12">
+                <label class="form-label">{{ 'language.generic.remarks' | translate }}</label>
+                <textarea class="form-control" name="remarks" formControlName="remarks"></textarea>
+              </div>
+
+              <div class="mb-3 col-md-12">
+                <!-- accept="{{fileAcceptedFormat}}" -->
+                <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="droppedFiles($event)" [useDragEnter]="true"
+                  [multiple]="true">
+                  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                    <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+                      <i class='bx bxs-cloud-upload fs-xlarge'></i>
+                      <div class="d-flex flex-column">
+                        <span class="fs-14 text-gray-300 fw-500">{{ 'language.generic.dragandDrop' | translate }}</span>
+                        <span class="fs-20 text-dark fw-500">{{ 'language.generic.upload' | translate }}
+                          {{ 'language.generic.files' | translate }}</span>
+                        <!-- <span class="fs-14 text-gray-300 fw-500">{{fileAcceptedFormat}}</span>  -->
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-file-drop>
+              </div>
+              @if(this.attachedFiles.length > 0) {
+              <div class="mb-3 col-md-12">
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      @for(file of attachedFiles; track $index){
+                      <tr>
+                        <td width="95%">
+                          <span class="underline" (click)="getSelectedFile($index)">{{file.name ||
+                            file.fileName}}</span>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-icon btn-danger btn-sm"
+                            (click)="removeAttachment($index)">
+                            <span class="bx bx-trash"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      }
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              }
+
+              <div class="col-md-12">
+                @if(this.attachedFiles.length > 0) {
+                <iframe [src]="selectedFile?.url" width="100%" height="600"></iframe>
+                }
+              </div>
+            </div>
+            <div class="mt-2 text-end">
+              <button type="reset" class="btn btn-outline-secondary me-2" (click)="back()">{{ 'language.generic.cancel'
+                | translate }}</button>
+              <button type="submit" class="btn btn-primary">{{ 'language.invoice.saveChanges'
+                | translate }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">{{ 'language.configurations.addCustomer'
+          | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <app-add-edit-customer [isChild]="true"></app-add-edit-customer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addBankModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.configurations.addBank'
+          | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <app-add-edit-bank [isChild]="true"></app-add-edit-bank>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

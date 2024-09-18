@@ -1,0 +1,134 @@
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light">{{ 'language.generic.dashboard' | translate }}
+      /</span> {{ 'language.sidebar.manageUsers' | translate }}</h4>
+
+  <div class="mb-2 table-search">
+    <div>
+      <input class="form-control" [(ngModel)]="query" type="text"
+        [placeholder]="'language.generic.search' | translate" />
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="navigate(1, null)">
+      <i class='bx bxs-plus-circle'></i>
+      {{ 'language.configurations.addUsers' | translate }}
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'language.configurations.firstName' | translate }}</th>
+            <th>{{ 'language.configurations.lastName' | translate }}</th>
+            <th>{{ 'language.configurations.email' | translate }}</th>
+            <th>{{ 'language.configurations.location' | translate }}</th>
+            <th>{{ 'language.location.status' | translate }}</th>
+            <th>{{ 'language.configurations.role' | translate }}</th>
+            <th>{{ 'language.location.createdBy' | translate }}</th>
+            <th>{{ 'language.location.createdDate' | translate }}</th>
+            <th>{{ 'language.location.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          @if(allUsers?.length > 0){
+          @for(user of allUsers | filter:query; track $index){
+          <tr>
+            <td>
+              <span [innerHTML]="user.firstName | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="user.lastName | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="user.email | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="user.locationTitle | highlight:query"></span>
+            </td>
+            <td>
+              @if(user.isActive){
+              <span class="badge bg-label-success me-1">{{ 'language.generic.active' | translate }}</span>
+              }
+
+              @if(!user.isActive){
+              <span class="badge bg-label-danger me-1">{{ 'language.generic.inActive' | translate }}</span>
+              }
+
+            </td>
+
+            <td>
+              @if (user.role === 1) {
+              <span class="badge bg-label-warning me-1">{{ 'language.role.admin' | translate }}</span>
+              }
+
+              @if (user.role === 2) {
+              <span class="badge bg-label-primary me-1">{{ 'language.role.manager' | translate }}</span>
+              }
+
+              @if (user.role === 3) {
+              <span class="badge bg-label-secondary me-1">{{ 'language.role.operator' | translate }}</span>
+              }
+
+            </td>
+
+            <td>
+              <span [innerHTML]="user.createdBy | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="user?.createdDate | date: 'mediumDate' | highlight:query"></span>
+            </td>
+            <td>
+              <button type="button" class="btn btn-icon btn-primary me-2 btn-sm" (click)="navigate(2, user)">
+                <span class="bx bxs-edit"></span>
+              </button>
+
+              <button type="button" class="btn btn-icon btn-danger btn-sm" (click)="deleteConfirmation(user)">
+                <span class="bx bx-trash"></span>
+              </button>
+            </td>
+          </tr>
+          }
+          }
+
+          @if (allUsers?.length === 0) {
+          <tr>
+            <td colspan="7" align="center">{{ 'language.generic.notFound' | translate }}</td>
+          </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.close' |
+          translate
+          }} {{ 'language.generic.confirmation' |
+          translate
+          }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <h5>{{ 'language.generic.delMsg' | translate }}</h5>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' |
+          translate
+          }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteUser()">{{ 'language.generic.delete' |
+          translate
+          }}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,243 @@
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light">{{ 'language.generic.dashboard' | translate }}
+      /</span> {{ 'language.invoice.managePurchaseInvoices' | translate }}
+  </h4>
+  <div class="mb-2 table-search">
+    <div>
+      <input class="form-control" [(ngModel)]="query" type="text"
+        [placeholder]="'language.generic.search' | translate" />
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary me-2" (click)="navigate(1, null)">
+        <i class='bx bxs-plus-circle'></i>
+        {{ 'language.invoice.addPurIn' | translate }}
+      </button>
+
+      <button type="button" class="btn btn-success" (click)="downloadExcel()">
+        <i class='bx bxs-download'></i>
+        {{ 'language.invoice.exportExcel' | translate }}
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'language.location.sr' | translate }}</th>
+            <th> {{ 'language.generic.date' | translate }}</th>
+            <th>{{ 'language.invoice.supplierName' | translate }}</th>
+            <th>{{ 'language.invoice.invoiceNum' | translate }}</th>
+            <th>{{ 'language.generic.total' | translate }} ({{ 'language.expense.excludingVat' | translate }})</th>
+            <th>{{ 'language.configurations.vat' | translate }}</th>
+            <th>{{ 'language.generic.total' | translate }} ({{ 'language.expense.includingVat' | translate }})</th>
+            <th>{{ 'language.location.status' | translate }}</th>
+            <th>{{ 'language.location.createdBy' | translate }}</th>
+            <th>{{ 'language.location.createdDate' | translate }}</th>
+            <th>{{ 'language.location.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          @if(invoicesList?.length > 0){
+          @for(invoice of invoicesList | filter:query; track $index){
+          <tr>
+            <td>
+              <span [innerHTML]="'IVP-'+padNumberWithZeros($index+1) | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.receiptDate | date: 'mediumDate'"></span>
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.name | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.invoiceNumber | highlight:query"></span>
+
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.totalBeforeVat | highlight:query"></span>
+            </td>
+
+            <td>
+              <span [innerHTML]="invoice?.vat | highlight:query"></span>
+            </td>
+
+            <td>
+              <span [innerHTML]="invoice?.totalWithVat | highlight:query"></span>
+            </td>
+
+            <td>
+
+              @if(!isUserRole) {
+              @if(invoice.status === 2 ) {
+              <span class="badge bg-label-success me-1">{{ 'language.status.accepted' | translate }}</span>
+              }
+              @if(invoice.status !== 2 ) {
+              <select class="select2 form-select" [ngModel]="invoice.status"
+                (change)="changeStatus($event, invoice?.invoiceId)">
+                <option value="1">{{ 'language.status.pending' | translate }}</option>
+                <option value="2">{{ 'language.status.accepted' | translate }}</option>
+                <option value="3">{{ 'language.status.rejected' | translate }}</option>
+              </select>
+              }
+
+              }
+
+              @if(isUserRole) {
+              @if(invoice.status === 1 ) {
+              <span class="badge bg-label-warning me-1">{{ 'language.status.pending' | translate }}</span>
+              }
+
+              @if(invoice.status === 2 ) {
+              <span class="badge bg-label-success me-1">{{ 'language.status.accepted' | translate }}</span>
+              }
+
+              @if(invoice.status === 3 ) {
+              <span class="badge bg-label-danger me-1">{{ 'language.status.rejected' | translate }}</span>
+              }
+              }
+
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.createdBy | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="invoice?.createdDate | date: 'mediumDate' | highlight:query"></span>
+            </td>
+            <td>
+              @if(invoice.status!== 2) {
+              <button type="button" class="btn btn-icon btn-primary me-2 btn-sm" (click)="navigate(2, invoice)">
+                <span class="bx bxs-edit"></span>
+              </button>
+
+              <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteConfirmation(invoice)">
+                <span class="bx bx-trash"></span>
+              </button>
+              }
+
+
+              <button type="button" class="btn btn-icon btn-secondary btn-sm" (click)="viewRemarksHistory(invoice)">
+                <span class="bx bx-history"></span>
+              </button>
+            </td>
+          </tr>
+          }
+          }
+
+          @if (invoicesList?.length === 0) {
+          <tr>
+            <td colspan="10" align="center"> {{ 'language.generic.notFound' | translate }}</td>
+          </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.delete' | translate }} {{
+          'language.generic.confirmation' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <h5> {{ 'language.generic.delMsg' | translate }}</h5>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteLocations()">{{ 'language.generic.delete' |
+          translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remarksModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">{{ 'language.generic.actionRemarks' |
+          translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          @if (this.remarksList.length > 0) {
+          <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>{{ 'language.location.createdBy' |
+                    translate }}</th>
+                  <th>{{ 'language.configurations.role' |
+                    translate }}</th>
+                  <th>{{ 'language.generic.date' |
+                    translate }}</th>
+                  <th [width]="50">{{ 'language.generic.remarks' |
+                    translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+                @if(remarksList.length > 0){
+                @for(bank of remarksList ; track $index){
+                <tr>
+                  <td>
+                    <span [innerHTML]="bank?.createdBy"></span>
+                  </td>
+                  <td>
+                    @if (bank.role === 1) {
+                    <span class="badge bg-label-warning me-1">{{ 'language.role.admin' | translate }}</span>
+                    }
+
+                    @if (bank.role === 2) {
+                    <span class="badge bg-label-primary me-1">{{ 'language.role.manager' | translate }}</span>
+                    }
+
+                    @if (bank.role === 3) {
+                    <span class="badge bg-label-secondary me-1">{{ 'language.role.operator' | translate }}</span>
+                    }
+
+                  </td>
+                  <td>{{bank.createdDate | date: 'MMM d, y'}}</td>
+                  <td [width]="30">
+                    {{bank?.remarks}}
+                  </td>
+                </tr>
+                }
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+          @if (this.remarksList.length === 0) {
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Remarks</label>
+            <textarea class="form-control" [(ngModel)]="this.changeStatusObj.remarks"></textarea>
+          </div>
+          }
+
+        </div>
+      </div>
+      @if (this.remarksList.length === 0) {
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" (click)="getPurchaseInvoices()">
+          {{ 'language.generic.close' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveRemarks()"> {{ 'language.generic.save' | translate
+          }}</button>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>

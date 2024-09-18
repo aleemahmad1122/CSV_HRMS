@@ -1,0 +1,104 @@
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light">{{ 'language.generic.dashboard' | translate }}
+      /</span> {{ 'language.configurations.manageBanks' | translate }}</h4>
+  <div class="mb-2 table-search">
+    <div>
+      <input class="form-control" [(ngModel)]="query" type="text"
+        [placeholder]="'language.generic.search' | translate" />
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="navigate(1, null)">
+      <i class='bx bxs-plus-circle'></i>
+      {{ 'language.configurations.addBank' | translate }}
+    </button>
+  </div>
+
+
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>{{ 'language.location.sr' | translate }}</th>
+            <th>{{ 'language.location.title' | translate }}</th>
+            <th>{{ 'language.configurations.iban' | translate }}</th>
+            <th>{{ 'language.location.createdBy' | translate }}</th>
+            <th>{{ 'language.location.createdDate' | translate }}</th>
+            <th>{{ 'language.location.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          @if(allBanks.length > 0){
+          @for(bank of allBanks | filter:query; track $index){
+          <tr>
+            <td>
+              <span [innerHTML]="($index+1) | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="bank.title | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="bank.iban | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="bank.createdBy | highlight:query"></span>
+            </td>
+            <td>
+              <span [innerHTML]="bank?.createdDate | date: 'mediumDate' | highlight:query"></span>
+            </td>
+            <td>
+              <button type="button" class="btn btn-icon btn-primary me-2 btn-sm" (click)="navigate(2, bank)">
+                <span class="bx bxs-edit"></span>
+              </button>
+
+              <button type="button" class="btn btn-icon btn-danger btn-sm" (click)="deleteConfirmation(bank)">
+                <span class="bx bx-trash"></span>
+              </button>
+            </td>
+          </tr>
+          }
+          }
+
+          @if (allBanks.length === 0) {
+          <tr>
+            <td colspan="6" align="center">{{ 'language.generic.notFound' | translate }}</td>
+          </tr>
+          }
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.close' |
+          translate
+          }} {{ 'language.generic.confirmation' |
+          translate
+          }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <h5>{{ 'language.generic.delMsg' | translate }}</h5>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' |
+          translate
+          }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="delete()">
+          {{ 'language.generic.delete' |
+          translate
+          }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

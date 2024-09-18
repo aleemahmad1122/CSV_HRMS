@@ -1,0 +1,147 @@
+<div [ngClass]="!isChild?'container-xxl flex-grow-1 container-p-y':''">
+  @if(!isChild) {
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light"> {{ 'language.generic.dashboard' | translate }}
+      /</span> {{this.isEdit? ('language.generic.edit' | translate) : ('language.generic.add' | translate)}} {{
+    'language.invoice.supplier' | translate }}
+  </h4>
+  }
+
+  <div [ngClass]="!isChild?'row':''">
+    <div [ngClass]="!isChild?'col-md-12':''">
+      <div [ngClass]="!isChild?'card mb-4':''">
+        <div [ngClass]="!isChild?'card-body':''">
+          <form novalidate [formGroup]="SupplierForm" (ngSubmit)="submitForm()" #SupplierFormRef="ngForm"
+            autocomplete="off">
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label class="form-label"> {{ 'language.generic.name' | translate }} <span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="text" formControlName="name" name="name"
+                  [ngClass]="(!this.SupplierForm.controls['name'].valid && SupplierFormRef?.submitted)?'invalid':''" />
+                @if(SupplierForm.get('name')?.hasError('required') && SupplierFormRef?.submitted) {
+                <div class="text-danger"> {{ 'language.forget.nameReq' | translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.location.address' | translate }}</label>
+                <input class="form-control" type="text" formControlName="address" />
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.representativeName' |
+                  translate }}</label>
+                <input class="form-control" type="text" formControlName="representativeName" />
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.computerNum' | translate }}</label>
+                <input class="form-control" type="number" formControlName="computerNumber" />
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.commercialRegistration' |
+                  translate }}<span class="text-danger">*</span></label>
+                <input class="form-control" type="number" formControlName="commercialRegistration"
+                  [ngClass]="(!this.SupplierForm.controls['commercialRegistration'].valid && SupplierFormRef?.submitted)?'invalid':''" />
+                @if(SupplierForm.get('commercialRegistration')?.hasError('required') && SupplierFormRef?.submitted) {
+                <div class="text-danger">{{
+                  'language.generic.commercialRegistrationReq' |
+                  translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.chamberCommerce' | translate }}</label>
+                <input class="form-control" type="number" formControlName="chamberOfCommerce" />
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.vatNumber' | translate }} <span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="number" formControlName="vatNumber" name="vatNumber"
+                  [ngClass]="(!this.SupplierForm.controls['vatNumber'].valid && SupplierFormRef?.submitted)?'invalid':''" />
+                @if(SupplierForm.get('vatNumber')?.hasError('required') && SupplierFormRef?.submitted) {
+                <div class="text-danger"> {{ 'language.generic.vatNumberReq' | translate }} </div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.municipalityNumber' |
+                  translate }}</label>
+                <input class="form-control" type="text" formControlName="municipalityNumber" />
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.generic.phoneNum' | translate }}</label>
+                <input class="form-control" type="text" formControlName="phoneNumber" />
+              </div>
+
+              <div class="mb-3 col-md-12">
+                <!-- accept="{{fileAcceptedFormat}}" -->
+                <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="droppedFiles($event)" [useDragEnter]="true"
+                  [multiple]="true">
+                  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                    <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+                      <i class='bx bxs-cloud-upload fs-xlarge'></i>
+                      <div class="d-flex flex-column">
+                        <span class="fs-14 text-gray-300 fw-500">{{ 'language.generic.dragandDrop' | translate }}</span>
+                        <span class="fs-20 text-dark fw-500">{{ 'language.generic.upload' | translate }}
+                          {{ 'language.generic.files' | translate }}</span>
+                        <!-- <span class="fs-14 text-gray-300 fw-500">{{fileAcceptedFormat}}</span>  -->
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-file-drop>
+              </div>
+              @if(this.attachedFiles.length > 0) {
+              <div class="mb-3 col-md-12">
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>File Name</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      @for(file of attachedFiles; track $index){
+                      <tr>
+                        <td width="95%">
+                          <span class="underline" (click)="getSelectedFile($index)">{{file.name ||
+                            file.fileName}}</span>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-icon btn-danger btn-sm"
+                            (click)="removeAttachment($index)">
+                            <span class="bx bx-trash"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      }
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              }
+
+              <div class="col-md-12">
+                @if(this.attachedFiles.length > 0) {
+                <iframe [src]="selectedFile?.url" width="100%" height="600"></iframe>
+                }
+              </div>
+            </div>
+            <div class="mt-2 text-end">
+              <button type="reset" class="btn btn-outline-secondary me-2" (click)="this.backToUsers()">{{
+                'language.generic.cancel'
+                | translate }}</button>
+              <button type="submit" class="btn btn-primary">{{ 'language.invoice.saveChanges'
+                | translate }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

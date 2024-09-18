@@ -1,0 +1,45 @@
+<div [ngClass]="!isChild?'container-xxl flex-grow-1 container-p-y':''">
+  @if(!isChild) {
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light"> {{ 'language.generic.dashboard' | translate }}
+      /</span> {{this.isEdit? ('language.generic.edit' | translate) : ('language.generic.add' | translate)}} {{
+    'language.generic.customer' | translate }}</h4>
+  }
+
+  <div [ngClass]="!isChild?'row':''">
+    <div [ngClass]="!isChild?'col-md-12':''">
+      <div [ngClass]="!isChild?'card mb-4':''">
+        <div [ngClass]="!isChild?'card-body':''">
+          <form novalidate [formGroup]="bankForm" (ngSubmit)="submitForm()" #bankFormRef="ngForm" autocomplete="off">
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label class="form-label">{{ 'language.location.title' | translate }} <span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="text" formControlName="title"
+                  [ngClass]="(!this.bankForm.controls['title'].valid && bankFormRef?.submitted)?'invalid':''" />
+                @if(bankForm.get('title')?.hasError('required') && bankFormRef?.submitted) {
+                <div class="text-danger"> {{ 'language.location.titleReq' | translate }}</div>
+                }
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">{{ 'language.configurations.iban' | translate }} <span
+                    class="text-danger">*</span></label>
+                <input class="form-control" type="text" formControlName="iban"
+                  [ngClass]="(!this.bankForm.controls['iban'].valid && bankFormRef?.submitted)?'invalid':''" />
+                @if(bankForm.get('iban')?.hasError('required') && bankFormRef?.submitted) {
+                <div class="text-danger">{{ 'language.configurations.ibanReq' | translate }}</div>
+                }
+              </div>
+            </div>
+            <div class="mt-2 text-end">
+              <button type="reset" class="btn btn-outline-secondary me-2" (click)="this.back()">{{
+                'language.generic.cancel' | translate }}</button>
+              <button type="submit" class="btn btn-primary">{{
+                'language.invoice.saveChanges' | translate }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

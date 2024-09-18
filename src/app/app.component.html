@@ -1,0 +1,36 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="ball-atom" [fullScreen]="true">
+    <p style="color: white"></p>
+</ngx-spinner>
+
+<!-- @if(!this.isLogin) {
+<router-outlet />
+} -->
+
+
+
+
+
+@if(true) {
+<app-mob-nav></app-mob-nav>
+<div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-row flex-column-fluid page">
+        <app-sidebar></app-sidebar>
+        <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+            <app-header></app-header>
+            <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="min-height: 100dvh;">
+                <app-subheader></app-subheader>
+                <router-outlet />
+
+            </div>
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>
+<app-user-panel></app-user-panel>
+<app-quick-cart></app-quick-cart>
+<app-quick-panel></app-quick-panel>
+<app-chat-modal></app-chat-modal>
+<app-scrolltop></app-scrolltop>
+<app-sticky-toolbar></app-sticky-toolbar>
+<app-demo-panel></app-demo-panel>
+}
