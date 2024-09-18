@@ -19,6 +19,10 @@ const routes: Routes = [
                 path: 'acc-info',
                 loadComponent: () => import(`./acc-info/acc-info.component`).then(c => c.AccInfoComponent),
             },
+            {
+                path: 'change-password',
+                loadComponent: () => import(`./change-password/change-password.component`).then(c => c.ChangePasswordComponent),
+            },
         ],
         title: 'Profile',
     },

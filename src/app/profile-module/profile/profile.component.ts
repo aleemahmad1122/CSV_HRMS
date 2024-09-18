@@ -46,28 +46,8 @@ export class ProfileComponent {
       },
       {
         label: 'Change Password',
-        link: 'custom/apps/profile/profile-1/change-password.html',
+        link: 'change-password',
         iconPath: 'assets/media/svg/icons/Communication/Shield-user.svg'
-      },
-      {
-        label: 'Email Settings',
-        link: 'custom/apps/profile/profile-1/email-settings.html',
-        iconPath: 'assets/media/svg/icons/Communication/Mail-opened.svg'
-      },
-      {
-        label: 'Saved Credit Cards',
-        link: 'custom/apps/profile/profile-1/email-settings.html',
-        iconPath: 'assets/media/svg/icons/Communication/Mail-opened.svg'
-      },
-      {
-        label: 'Tax information',
-        link: 'custom/apps/profile/profile-1/email-settings.html',
-        iconPath: 'assets/media/svg/icons/Communication/Mail-opened.svg'
-      },
-      {
-        label: 'Statements',
-        link: 'custom/apps/profile/profile-1/email-settings.html',
-        iconPath: 'assets/media/svg/icons/Communication/Mail-opened.svg'
       }
     ];
 
