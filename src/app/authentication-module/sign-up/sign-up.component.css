@@ -86292,3 +86292,18 @@ body {
     width: 600px;
   }
 }
+
+
+
+a:hover {
+  color: #0073e9;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+}
+
+.is-invalid {
+  border: 2px solid red !important;
+}
