@@ -27,9 +27,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _apiCalling: ApiCallingService,
     private _authService: UserAuthenticationService,
     private _dataShare: DataShareService) {
+
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
