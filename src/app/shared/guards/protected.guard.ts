@@ -21,6 +21,6 @@ class ProtectedGuardService {
 }
 
 export const ProtectedGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
-  // return inject(ProtectedGuardService).canActivate(next, state);
-  return true
+  return inject(ProtectedGuardService).canActivate(next, state);
+  // return true
 }

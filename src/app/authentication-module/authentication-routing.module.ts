@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+
 
 const routes: Routes = [
   {
     path: '',
     loadComponent: () => import(`./login/login.component`).then(c => c.LoginComponent),
     title:'Login',
+  },
+  {
+    path: 'sign-up',
+    loadComponent: () => import(`./sign-up/sign-up.component`).then(c => c.SignUpComponent),
+    title:'Sign Up',
   },
   {
     path: 'forgot-password',
