@@ -1,0 +1,7 @@
+.menu-link.menu-item-active {
+  background-color: #1b1b28;
+  color:white !important;
+}
+.menu-link.menu-item-active > span{
+  color:white !important;
+}
