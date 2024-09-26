@@ -11,6 +11,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'admin',
+        loadChildren: () => import('./admin-module/admin-module.module').then(m => m.AdminModuleModule),
+        canActivate: [ProtectedGuard]
+    },
+
+    {
         path: 'dashboard',
         loadChildren: () => import('./dashboard-module/dashboard.module').then(m => m.DashboardModule),
         canActivate: [ProtectedGuard]

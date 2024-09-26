@@ -13,6 +13,12 @@ declare const $: any;
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   activRoute: string = '';
+  adminItems: {name: string, route: string}[] = [
+    {
+      name: 'Company',
+      route: '/admin/company-structure'
+    }
+  ]
   constructor(@Inject(DOCUMENT) private _document: Document, private _route: Router, public translate: TranslateService) {
     _route.events.subscribe((val) =>
       this.activRoute = _route.url
@@ -26,6 +32,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
   }
 
 
