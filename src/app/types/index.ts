@@ -7,3 +7,10 @@ export interface Company {
   timezone: string;
   parent: string | null;
 }
+
+
+export interface Job {
+  id: number;
+  code: string;
+  name: string;
+}
