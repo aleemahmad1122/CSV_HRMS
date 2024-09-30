@@ -1,17 +1,18 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Company } from '../../../types';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [],
+  imports: [RouterModule, CommonModule],
   templateUrl: './company-list.component.html',
   styleUrl: './company-list.component.css'
 })
 export class CompanyListComponent implements OnInit {
   constructor(
-    private dialog: MatDialog,
   ) { }
 
   companyList: Company[] = [
