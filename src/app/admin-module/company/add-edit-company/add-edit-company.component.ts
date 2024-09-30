@@ -72,7 +72,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._apiCalling.postData("auth", "login",
+    this._apiCalling.postData("company", "addEditCompany",
       {
         "companyImage": this.selectedFile,
         "name": this.companyForm.get('name')?.value,
@@ -101,47 +101,6 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
           this._toaster.error("Internal server error occured while processing your request")
         }
       })
-
-    console.log('Form submitted', this.companyForm.value);
-
-    // if (this.companyForm.valid) {
-    //   const formData = new FormData();
-
-    //   Object.keys(this.companyForm.controls).forEach(key => {
-    //     const control = this.companyForm.get(key);
-    //     if (control) {
-    //       if (key === 'companyImage' && this.selectedFile) {
-    //         formData.append(key, this.selectedFile, this.selectedFile.name);
-    //       } else {
-    //         formData.append(key, control.value);
-    //       }
-    //     }
-    //   });
-
-    //   // Here you would typically send the formData to your backend service
-
-
-    //   // TODO: Add your API call here
-    //   this.companyService.createCompany(formData).subscribe(
-    //     response => {
-    //       console.log('Company created successfully', response);
-    //       this.router.navigate(['/companies']); // Navigate to companies list
-    //     },
-    //     error => {
-    //       console.error('Error creating company', error);
-    //       // Handle error (show message to user, etc.)
-    //     }
-    //   );
-    // } else {
-    //   // Mark all fields as touched to trigger validation messages
-    //   Object.keys(this.companyForm.controls).forEach(key => {
-    //     const control = this.companyForm.get(key);
-    //     if (control) {
-    //       control.markAsTouched();
-    //     }
-    //   });
-    //   console.log('Form is invalid');
-    // }
   }
 
   cancelForm() {
@@ -153,7 +112,6 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      console.log(file);
       if (file.size > this.maxSizeInBytes) {
         this.imageSizeExceeded = true;
         return;
