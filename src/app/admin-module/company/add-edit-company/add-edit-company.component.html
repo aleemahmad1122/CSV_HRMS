@@ -1,0 +1,109 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+    <h1 class="font-weight-bold text-center" style="font-size: 30px;">{{isEditMode ? 'Edit' : 'Create'}} Company</h1>
+
+    <form [formGroup]="companyForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="image-input image-input-outline"
+                    style="background-size: cover; background-position: center;" id="kt_image_5"
+                    [style.background-image]="'url(' + imagePreview + ')'">
+                    <div class="image-input-wrapper"></div>
+
+                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="change" data-toggle="tooltip" title="Change avatar">
+                        <i class="fa fa-pen icon-sm text-muted"></i>
+                        <input type="file" formControlName="companyImage" name="profile_avatar"
+                            accept=".png, .jpg, .jpeg" (change)="onFileSelected($event)" />
+                    </label>
+
+                    <span *ngIf="imagePreview !== defaultImagePath"
+                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="remove" data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="text-danger mt-2">
+                @if(imageSizeExceeded) {
+                <span>Image size should not exceed 1 MB</span>
+                }
+            </div>
+            <div class="text-muted mb-4 mx-4 small">
+                <span>Max file size: 1 MB. Allowed formats: PNG, JPG, JPEG</span>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Enter name" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Heads</label>
+                <input type="text" class="form-control" formControlName="heads" placeholder="Enter heads" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Time Zone</label>
+                <select class="form-control custom-select" formControlName="timeZone">
+                    @for(type of types; track type) {
+                    <option [value]="type.typeId">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Parent Structure</label>
+                <select class="form-control custom-select" formControlName="parentStructure">
+                    @for(type of types; track type) {
+                    <option [value]="type.typeId">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Type</label>
+                <select class="form-control custom-select" formControlName="type">
+                    @for(type of types; track type) {
+                    <option [value]="type.typeId">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Country</label>
+                <select class="form-control custom-select" formControlName="country">
+                    @for(type of types; track type) {
+                    <option [value]="type.typeId">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Details</label>
+                <textarea class="form-control" formControlName="details" placeholder="Enter details"
+                    rows="3"></textarea>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Address</label>
+                <textarea class="form-control" formControlName="address" placeholder="Enter address"
+                    rows="3"></textarea>
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
+                    (click)="cancelForm()">Cancel</button>
+                <button type="submit" class="btn btn-primary font-weight-bold me-3"
+                    [disabled]="!companyForm.valid">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
