@@ -1,7 +1,6 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { Company } from '../../../types';
-import { CompanyModalComponent } from "../company-modal/company-modal.component";
 
 @Component({
   selector: 'app-company-list',
@@ -102,21 +101,5 @@ export class CompanyListComponent implements OnInit {
   ngOnInit(): void { }
 
 
-  openCreateCompanyModal() {
-    const dialogRef = this.dialog.open(CompanyModalComponent, {
-      disableClose: true,
-      data: {},
-      maxWidth: '70vw',
-      width: '100%',
-    });
-    dialogRef.afterClosed().subscribe(_ => { if (_ === undefined) this.ngOnInit(); });
-  }
 
-
-  openEditCompanyModal(company: {}) {
-    this.dialog.open(CompanyModalComponent, {
-      height: '800px',
-      width: '800px'
-    });
-  }
 }
