@@ -11,14 +11,9 @@ import { CompanyModalComponent } from "../company-modal/company-modal.component"
   styleUrl: './company-list.component.css'
 })
 export class CompanyListComponent implements OnInit {
-
-
   constructor(
     private dialog: MatDialog,
-  ) {
-
-  }
-
+  ) { }
 
   companyList: Company[] = [
     {
@@ -104,12 +99,8 @@ export class CompanyListComponent implements OnInit {
     }
   ];
 
+  ngOnInit(): void { }
 
-
-
-  ngOnInit(): void {
-
-  }
 
   openCreateCompanyModal() {
     const dialogRef = this.dialog.open(CompanyModalComponent, {
@@ -121,15 +112,11 @@ export class CompanyListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(_ => { if (_ === undefined) this.ngOnInit(); });
   }
 
+
   openEditCompanyModal(company: {}) {
-    const dialogRef = this.dialog.open(CompanyModalComponent, {
-      disableClose: true,
-      data: company,
-      maxWidth: '70vw',
-      width: '100%',
+    this.dialog.open(CompanyModalComponent, {
+      height: '800px',
+      width: '800px'
     });
-    dialogRef.afterClosed().subscribe(_ => { if (_ === undefined) this.ngOnInit(); });
   }
-
-
 }

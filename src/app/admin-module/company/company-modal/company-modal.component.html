@@ -1,13 +1,80 @@
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero at qui quo excepturi itaque dolorem id. Deserunt cum
-    tempora libero deleniti cumque dolor repellendus veniam, iste amet rerum, doloribus velit alias sapiente quod ipsam
-    adipisci iusto minus porro sint magni eum, animi minima. Suscipit facere ad ipsa perspiciatis, velit quaerat illo
-    autem ab obcaecati fugit odio repellendus nulla explicabo necessitatibus. Aperiam obcaecati aliquid error molestias
-    modi nemo, earum perferendis cum facere! Aspernatur nemo aliquam nisi, sapiente velit consectetur veniam ipsa animi
-    numquam earum id, voluptas eveniet neque recusandae sit eos, autem ut quae error est iusto tempora ipsam aut.
-    Voluptas reiciendis tempore obcaecati voluptatem dolorem. Necessitatibus eos deserunt nisi modi ex accusamus
-    temporibus, enim dolor blanditiis officia laboriosam eveniet iusto dolorem vero non eius sed nobis assumenda ipsam
-    doloremque veniam provident. Fuga, vero quos. Repellat rem sint repellendus non ea commodi ullam nihil! Ducimus
-    maiores assumenda voluptate nisi quo odit dignissimos beatae. Non eos architecto quaerat dignissimos alias?
-    Assumenda similique aut aliquam voluptatem sint possimus error quas totam repudiandae ipsum culpa rem sequi amet
-    tempore libero enim veniam rerum, iste suscipit tenetur laborum. Quas laudantium mollitia id, ea ipsam laboriosam
-    nemo, accusamus labore officiis dolores dolor autem consectetur placeat laborum.</p>
+<div class="container-modal">
+    <h1 mat-dialog-title>{{createCompanyForm.value.Id != null ? 'Update Company' : 'Create Company'}}</h1>
+
+    <mat-dialog-content class="mat-typography">
+        <form [formGroup]="createCompanyForm">
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Name</label>
+                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Name" formControlName="name" />
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Details</label>
+                <textarea class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Details" formControlName="details"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Address</label>
+                <textarea class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Address" formControlName="address"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Type</label>
+                <select class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Address" formControlName="address">
+                    @for (type of types; track type) {
+                    <option [value]="type.typeName">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Country</label>
+                <select class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Country" formControlName="country">
+                    @for (type of types; track type) {
+                    <option [value]="type.typeName">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">TimeZone</label>
+                <select class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="TimeZone" formControlName="timeZone">
+                    @for (type of types; track type) {
+                    <option [value]="type.typeName">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Parent Structure</label>
+                <select class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Parent Structure" formControlName="parentStructure">
+                    @for (type of types; track type) {
+                    <option [value]="type.typeName">{{type.typeName}}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="font-size-h6 font-weight-bolder text-dark">Head</label>
+                <input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="text"
+                    placeholder="Head" formControlName="head" />
+            </div>
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button [mat-dialog-close]="false" class="btn btn pull-right btn-danger">
+            Cancel</button>
+
+        <button (click)="createCompanyForm.value.Id != null ? onUpdate() : onSubmit()" cdkFocusInitial
+            class="btn btn pull-right btn-success">
+            {{createCompanyForm.value.Id != null ? 'Update' : 'Create'}}</button>
+    </mat-dialog-actions>
+</div>

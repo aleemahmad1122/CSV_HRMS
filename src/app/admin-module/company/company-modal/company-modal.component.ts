@@ -1,15 +1,40 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
+import { CommonModule } from '@angular/common';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+interface Typess {
+  typeId: number;
+  typeName: string;
+}
 @Component({
   selector: 'app-company-modal',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatDialogModule
+  ],
   templateUrl: './company-modal.component.html',
   styleUrl: './company-modal.component.css'
 })
-export class CompanyModalComponent {
+
+export class CompanyModalComponent implements OnInit {
+  types: any[] = []
   createCompanyForm!: FormGroup;
   projectTypes: any;
   emailList: string[] = []
@@ -27,24 +52,10 @@ export class CompanyModalComponent {
 
   setForm() {
     this.createCompanyForm = this.fb.group({
-      Id: [null],
-      CompanyName: ['', Validators.required],
-      Country: ['', Validators.required],
-      City: ['', Validators.required],
-      ContactPerson: ['', Validators.required],
-      OfficeContactNumber: ['', Validators.required],
-      MobileNumber: ['', Validators.required],
-      EmailAddress: ['', [Validators.required, Validators.email]],
+
     });
     this.createCompanyForm.patchValue({
-      Id: this.data.id,
-      CompanyName: this.data.companyName,
-      Country: this.data.country,
-      City: this.data.city,
-      ContactPerson: this.data.contactPerson,
-      OfficeContactNumber: this.data.officeContactNumber,
-      MobileNumber: this.data.mobileNumber,
-      EmailAddress: this.data.emailAddress,
+
     })
 
   }
@@ -65,7 +76,6 @@ export class CompanyModalComponent {
   }
 
   onSubmit() {
-
 
   }
 
