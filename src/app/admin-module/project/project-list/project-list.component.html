@@ -6,8 +6,8 @@
       <!--begin::Header-->
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
-          <h3 class="card-label">Qualifications Management
-            <span class="d-block text-muted pt-2 font-size-sm">Qualifications management made easy</span>
+          <h3 class="card-label">Project Management
+            <span class="d-block text-muted pt-2 font-size-sm">Project management made easy</span>
           </h3>
         </div>
         <div class="card-toolbar">
@@ -84,7 +84,7 @@
           </div>
           <!--end::Dropdown-->
           <!--begin::Button-->
-          <button  class="btn btn-primary font-weight-bolder">
+          <a href="#" class="btn btn-primary font-weight-bolder">
             <span class="svg-icon svg-icon-md">
               <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -98,7 +98,7 @@
                 </g>
               </svg>
               <!--end::Svg Icon-->
-            </span>New Record</button>
+            </span>New Record</a>
           <!--end::Button-->
         </div>
       </div>
@@ -108,45 +108,40 @@
         <!--begin: Datatable-->
         <div
           class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-          id="kt_datatable">
+          id="kt_datatable" >
           <table class="datatable-table" style="display: block;">
             <thead class="datatable-head">
               <tr class="datatable-row" style="left: 0px;">
                 <th data-field="RecordID"
                   class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                  <span style="width: 40px;">#<i class="flaticon2-arrow-up"></i></span>
-                </th>
+                  <span style="width: 40px;">#<i class="flaticon2-arrow-up"></i></span></th>
 
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;">Name</span>
-                </th>
+                  <span
+                    style="width: 250px;">Name</span></th>
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                    style="width: 124px;">Client</span></th>
 
-                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;">address</span>
-                </th>
+
 
                 <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
                     style="width: 130px;">Actions</span></th>
               </tr>
             </thead>
-            <tbody class="datatable-body">
-              @for (data of qualificationsList; track $index) {
+            <tbody class="datatable-body" >
+              @for (project of projectlist; track $index) {
               <tr data-row="0" class="datatable-row" style="left: 0px;">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{data.id}}</span></span>
-                </td>
+                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{project.id}}</span></span></td>
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.name || "N/A"}}</div>
+                        <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{project.name || "N/A"}}</div>
                     </div>
                   </span></td>
-
-
-                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                    <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.description || "N/A"}}</div>
-                    </div>
+                <td data-field="Country" aria-label="Brazil" class="datatable-cell"><span style="width: 124px;">
+                    <div class="font-weight-bolder font-size-lg mb-0">{{project.client || "N/A" }}</div>
                   </span></td>
+
 
                 <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell"><span
                     style="overflow: visible; position: relative; width: 130px;">

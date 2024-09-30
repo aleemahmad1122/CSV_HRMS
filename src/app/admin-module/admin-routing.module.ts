@@ -13,6 +13,21 @@ const routes: Routes = [
     loadComponent: () => import(`./job/job-list/job-list.component`).then(c => c.JobListComponent),
     title:'Job Detail',
   },
+  {
+    path: 'qualifications',
+    loadComponent: () => import(`./qualifications/qualifications-list/qualifications-list.component`).then(c => c.QualificationsListComponent),
+    title:'Qualifications',
+  },
+  {
+    path: 'projects',
+    loadComponent: () => import(`./project/project-list/project-list.component`).then(c => c.ProjectListComponent),
+    title:'Projects',
+  },
+  {
+    path: 'clients',
+    loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
+    title:'Clients',
+  }
 ];
 
 @NgModule({

@@ -6,8 +6,8 @@
       <!--begin::Header-->
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
-          <h3 class="card-label">Qualifications Management
-            <span class="d-block text-muted pt-2 font-size-sm">Qualifications management made easy</span>
+          <h3 class="card-label">Client Management
+            <span class="d-block text-muted pt-2 font-size-sm">Client management made easy</span>
           </h3>
         </div>
         <div class="card-toolbar">
@@ -120,6 +120,12 @@
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                   <span style="width: 250px;">Name</span>
                 </th>
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                    style="width: 124px;">Contact Number</span></th>
+
+                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
+                    style="width: 124px;">Details</span></th>
+
 
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                   <span style="width: 250px;">address</span>
@@ -130,7 +136,7 @@
               </tr>
             </thead>
             <tbody class="datatable-body">
-              @for (data of qualificationsList; track $index) {
+              @for (data of clientList; track $index) {
               <tr data-row="0" class="datatable-row" style="left: 0px;">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
                   aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{data.id}}</span></span>
@@ -140,11 +146,17 @@
                       <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.name || "N/A"}}</div>
                     </div>
                   </span></td>
+                <td data-field="Country" aria-label="Brazil" class="datatable-cell"><span style="width: 124px;">
+                    <div class="font-weight-bolder font-size-lg mb-0">{{data.contact_number || "N/A" }}</div>
+                  </span></td>
+                <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
+                    <div class="font-weight-bolder text-primary mb-0">{{data.details || "N/A"}}</div>
+                  </span></td>
 
 
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.description || "N/A"}}</div>
+                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.address || "N/A"}}</div>
                     </div>
                   </span></td>
 

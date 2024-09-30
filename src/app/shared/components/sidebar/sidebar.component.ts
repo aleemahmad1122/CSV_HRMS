@@ -22,6 +22,18 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       name: 'Job Details Setup',
       route: '/admin/job-detail'
     },
+    {
+      name: 'Qualifications',
+      route: '/admin/qualifications'
+    },
+    {
+      name: 'Projects',
+      route: '/admin/projects'
+    },
+    {
+      name: 'Clients',
+      route: '/admin/clients'
+    },
   ]
   constructor(@Inject(DOCUMENT) private _document: Document, private _route: Router, public translate: TranslateService) {
     _route.events.subscribe((val) =>
