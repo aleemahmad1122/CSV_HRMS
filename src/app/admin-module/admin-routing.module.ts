@@ -24,6 +24,11 @@ const routes: Routes = [
     title: 'Projects',
   },
   {
+    path: 'clients',
+    loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
+    title: 'Clients',
+  },
+  {
     path: 'company/:action',
     loadComponent: () => import(`./company/add-edit-company/add-edit-company.component`).then(c => c.AddEditCompanyComponent),
     title: 'Company',
