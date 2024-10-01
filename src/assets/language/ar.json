@@ -21,7 +21,9 @@
     "qualification": {
       "qualification": "المؤهل",
       "qualificationsManagement": "إدارة المؤهلات",
-      "qualificationHeading": "إدارة المؤهلات بسهولة"
+      "qualificationHeading": "إدارة المؤهلات بسهولة",
+      "errorMessageName": "الاسم مطلوب",
+      "errorMessageDescription": "الوصف مطلوب"
     }
   }
 }
