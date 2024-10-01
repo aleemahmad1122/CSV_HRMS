@@ -32,6 +32,11 @@ const routes: Routes = [
     path: 'company/:action',
     loadComponent: () => import(`./company/add-edit-company/add-edit-company.component`).then(c => c.AddEditCompanyComponent),
     title: 'Company',
+  },
+  {
+    path: 'qualifications/:action',
+    loadComponent: () => import(`./qualifications/add-edit-qualification/add-edit-qualification.component`).then(c => c.AddEditQualificationComponent),
+    title: 'Qualifications',
   }
 ];
 

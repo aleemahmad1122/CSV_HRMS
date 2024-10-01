@@ -1,0 +1,41 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+    <h1 class="font-weight-bold text-center" style="font-size: 30px;">
+        {{isEditMode ? 'language.generic.edit' : 'language.generic.create'| translate }}
+        {{ 'language.generic.company'| translate }}
+    </h1>
+
+    <form [formGroup]="qualificationForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{ 'language.generic.name'| translate }}</label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Enter name"
+                    [ngClass]="{'border-danger border-2': qualificationForm.get('name')?.invalid && qualificationForm.get('name')?.touched}" />
+                <div *ngIf="qualificationForm.get('name')?.invalid && qualificationForm.get('name')?.touched"
+                    class="text-danger mt-1">
+                    {{ 'language.qualification.errorMessageName' | translate }}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{ 'language.generic.description'| translate }}</label>
+                <input type="text" class="form-control" formControlName="description" placeholder="Enter description"
+                    [ngClass]="{'border-danger border-2': qualificationForm.get('description')?.invalid && qualificationForm.get('description')?.touched}" />
+                <div *ngIf="qualificationForm.get('description')?.invalid && qualificationForm.get('description')?.touched"
+                    class="text-danger mt-1">
+                    {{ 'language.qualification.errorMessageDescription' | translate }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
+                    {{ 'language.generic.back'| translate }}
+                </button>
+                <button type="submit" class="btn btn-primary font-weight-bold me-3"
+                    [disabled]="!qualificationForm.valid">
+                    {{ 'language.generic.submit'| translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
