@@ -1,5 +1,11 @@
 {
   "language": {
+    "en": "English",
+    "ar": "Arabic",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "ja": "Japanese"
     "generic": {
       "name": "Name",
       "cancel": "Cancel",
