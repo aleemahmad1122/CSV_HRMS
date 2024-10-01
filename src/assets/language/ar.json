@@ -6,5 +6,20 @@
     "fr": "الفرنسية",
     "de": "الألمانية",
     "ja": "اليابانية"
+    "generic": {
+      "name": "الاسم",
+      "cancel": "الغاء",
+      "back": "العودة",
+      "submit": "ارسال",
+      "company": "الشركة",
+      "edit": "تعديل",
+      "create": "إنشاء",
+      "description": "الوصف"
+    },
+    "qualification": {
+      "qualification": "المؤهل",
+      "qualificationsManagement": "إدارة المؤهلات",
+      "qualificationHeading": "إدارة المؤهلات بسهولة"
+    }
   }
 }

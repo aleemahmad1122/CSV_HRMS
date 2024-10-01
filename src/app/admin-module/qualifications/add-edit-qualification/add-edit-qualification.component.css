@@ -1,0 +1,8 @@
+.button-spacing {
+    margin-right: 10px;
+}
+
+.container {
+    gap: 20px;
+    padding: 40px;
+}

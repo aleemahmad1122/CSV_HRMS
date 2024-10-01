@@ -6,5 +6,22 @@
     "fr": "French",
     "de": "German",
     "ja": "Japanese"
+    "generic": {
+      "name": "Name",
+      "cancel": "Cancel",
+      "back": "Back",
+      "submit": "Submit",
+      "company": "Company",
+      "edit": "Edit",
+      "create": "Create",
+      "description": "Description"
+    },
+    "qualification": {
+      "qualification": "Qualification",
+      "qualificationsManagement": "Qualifications Management",
+      "qualificationHeading": "Qualifications management made easy",
+      "errorMessageName": "Name is required",
+      "errorMessageDescription": "Description is required"
+    }
   }
 }
