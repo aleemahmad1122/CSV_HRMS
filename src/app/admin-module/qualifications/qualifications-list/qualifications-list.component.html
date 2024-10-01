@@ -6,8 +6,10 @@
       <!--begin::Header-->
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
-          <h3 class="card-label">Qualifications Management
-            <span class="d-block text-muted pt-2 font-size-sm">Qualifications management made easy</span>
+          <h3 class="card-label"> {{ 'language.qualificationsManagement'
+            | translate }}
+            <span class="d-block text-muted pt-2 font-size-sm">{{'language.qualification.qualificationHeading'
+              | translate}}</span>
           </h3>
         </div>
         <div class="card-toolbar">
@@ -84,7 +86,7 @@
           </div>
           <!--end::Dropdown-->
           <!--begin::Button-->
-          <button  class="btn btn-primary font-weight-bolder">
+          <button class="btn btn-primary font-weight-bolder" routerLink="/admin/qualifications/create">
             <span class="svg-icon svg-icon-md">
               <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
