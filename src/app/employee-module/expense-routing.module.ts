@@ -12,6 +12,12 @@ const routes: Routes = [
         title:'Manage Employee',
         canActivate: [ProtectedGuard]
       },
+      {
+        path: 'add-employee',
+        loadComponent: () => import(`./add-edit-module/add-edit-module.component`).then(c => c.AddEditModuleComponent),
+        title:'Add Employee',
+        canActivate: [ProtectedGuard]
+      },
     ]
   },
 ];

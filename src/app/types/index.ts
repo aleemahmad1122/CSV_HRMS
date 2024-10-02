@@ -39,3 +39,42 @@ export interface Sidebar {
   name: string;
   route: string;
 }
+
+
+export interface Employee {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Document {
+  id: number;
+  code: string;
+  name: string;
+}
+
+
+export interface Attendance {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Travel {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Overtime {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export interface Loan {
+  id: number;
+  code: string;
+  name: string;
+}
+

@@ -59,6 +59,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'manage',
+        loadChildren: () => import('./manage-module/manage.module').then(m => m.ManageModuleModule),
+        canActivate: [ProtectedGuard]
+    },
+
+    {
         path: '**',
         loadChildren: () => import('./shared/components/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent),
         title: 'Page Not Found'

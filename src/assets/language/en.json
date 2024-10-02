@@ -12,15 +12,21 @@
     "qualifications": "Qualifications",
     "projects": "Projects",
     "clients": "Clients",
-    "admin": "Admin"
+    "admin": "Admin",
+    "manage": "Manage",
+    "document": "Document",
+    "attendance": "Attendance",
+    "travel": "Travel",
+    "overtime": "Overtime",
+    "loans": "Loans"
   },
-  "language": { 
+  "language": {
     "en": "English",
     "ar": "Arabic",
     "es": "Spanish",
     "fr": "French",
     "de": "German",
-    "ja": "Japanese", 
+    "ja": "Japanese",
     "langs": {
       "en": "English",
       "ar": "Arabic",
@@ -28,7 +34,7 @@
       "fr": "French",
       "de": "German",
       "ja": "Japanese"
-    }, 
+    },
     "generic": {
       "name": "Name",
       "cancel": "Cancel",

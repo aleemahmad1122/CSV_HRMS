@@ -12,7 +12,13 @@
     "qualifications": "資格",
     "projects": "プロジェクト",
     "clients": "クライアント",
-    "admin": "管理者"
+    "admin": "管理者",
+    "manage": "管理",
+    "document": "ドキュメント",
+    "attendance": "出勤",
+    "travel": "旅行",
+    "overtime": "残業",
+    "loans": "貸付"
   },
   "language": {
     "langs": {

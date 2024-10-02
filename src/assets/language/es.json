@@ -12,7 +12,13 @@
     "qualifications": "Calificaciones",
     "projects": "Proyectos",
     "clients": "Clientes",
-    "admin": "Administrador"
+    "admin": "Administrador",
+    "manage": "Administrar",
+    "document": "Documentos",
+    "attendance": "Asistencia",
+    "travel": "Viaje",
+    "overtime": "Horas Extras",
+    "loans": "Préstamos"
   },
   "language": {
     "langs": {
