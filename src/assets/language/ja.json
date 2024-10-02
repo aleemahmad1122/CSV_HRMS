@@ -1,4 +1,19 @@
 {
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "job": "仕事",
+    "project": "プロジェクト",
+    "client": "クライアント",
+    "qualification": "資格",
+    "employee": "従業員",
+    "setting": "設定",
+    "company": "会社",
+    "jobDetailsSetup": "仕事詳細の設定",
+    "qualifications": "資格",
+    "projects": "プロジェクト",
+    "clients": "クライアント",
+    "admin": "管理者"
+  },
   "language": {
     "en": "英語",
     "ar": "アラビア語",

@@ -53,6 +53,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'employee',
+        loadChildren: () => import('./employee-module/employee.module').then(m => m.EmployeeModuleModule),
+        canActivate: [ProtectedGuard]
+    },
+
+    {
         path: '**',
         loadChildren: () => import('./shared/components/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent),
         title: 'Page Not Found'

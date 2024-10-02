@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Inject, Injectable, OnInit } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import {Sidebar} from "../../../types/index";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 declare const $: any;
 @Injectable()
@@ -13,28 +14,36 @@ declare const $: any;
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   activRoute: string = '';
-  adminItems: {name: string, route: string}[] = [
+  adminItems: Sidebar[] = [
     {
-      name: 'Company',
+      name: 'sidebar.company',
       route: '/admin/company-structure'
     },
     {
-      name: 'Job Details Setup',
+      name: 'sidebar.jobDetailsSetup',
       route: '/admin/job-detail'
     },
     {
-      name: 'Qualifications',
+      name: 'sidebar.qualifications',
       route: '/admin/qualifications'
     },
     {
-      name: 'Projects',
+      name: 'sidebar.projects',
       route: '/admin/projects'
     },
     {
-      name: 'Clients',
+      name: 'sidebar.clients',
       route: '/admin/clients'
     },
   ]
+
+employeeItems: Sidebar[] = [
+  {
+    name: 'sidebar.employee',
+    route: '/employee/employee-list'
+  },
+]
+
   constructor(@Inject(DOCUMENT) private _document: Document, private _route: Router, public translate: TranslateService) {
     _route.events.subscribe((val) =>
       this.activRoute = _route.url

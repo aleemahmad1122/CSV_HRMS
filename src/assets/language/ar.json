@@ -1,11 +1,26 @@
 {
+  "sidebar": {
+    "dashboard": "الرئيسية",
+    "job": "الوظيفة",
+    "project": "المشروع",
+    "client": "العميل",
+    "qualification": "المؤهل",
+    "employee": "الموظف",
+    "setting": "الإعداد",
+    "company": "الشركة",
+    "jobDetailsSetup": "تعديل الوظيفة",
+    "qualifications": "المؤهلات",
+    "projects": "المشاريع",
+    "clients": "العملاء",
+    "admin": "المسؤول"
+  },
   "language": {
     "en": "الإنجليزية",
     "ar": "العربية",
     "es": "الإسبانية",
     "fr": "الفرنسية",
     "de": "الألمانية",
-    "ja": "اليابانية"
+    "ja": "اليابانية",
     "generic": {
       "name": "الاسم",
       "cancel": "الغاء",
