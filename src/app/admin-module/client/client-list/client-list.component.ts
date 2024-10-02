@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Clients } from '../../../types';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,RouterModule],
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.css'
 })

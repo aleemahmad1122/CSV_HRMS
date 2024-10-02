@@ -14,13 +14,21 @@
     "clients": "Clients",
     "admin": "Admin"
   },
-  "language": {
+  "language": { 
     "en": "English",
     "ar": "Arabic",
     "es": "Spanish",
     "fr": "French",
     "de": "German",
-    "ja": "Japanese",
+    "ja": "Japanese", 
+    "langs": {
+      "en": "English",
+      "ar": "Arabic",
+      "es": "Spanish",
+      "fr": "French",
+      "de": "German",
+      "ja": "Japanese"
+    }, 
     "generic": {
       "name": "Name",
       "cancel": "Cancel",

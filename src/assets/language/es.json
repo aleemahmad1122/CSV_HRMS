@@ -15,11 +15,30 @@
     "admin": "Administrador"
   },
   "language": {
-    "en": "Inglés",
-    "ar": "Arábico",
-    "es": "Español",
-    "fr": "Francés",
-    "de": "Alemán",
-    "ja": "Japonés"
+    "langs": {
+      "en": "Inglés",
+      "ar": "Árabe",
+      "es": "Español",
+      "fr": "Francés",
+      "de": "Alemán",
+      "ja": "Japonés"
+    },
+    "generic": {
+      "name": "Nombre",
+      "cancel": "Cancelar",
+      "back": "Atrás",
+      "submit": "Enviar",
+      "company": "Empresa",
+      "edit": "Editar",
+      "create": "Crear",
+      "description": "Descripción"
+    },
+    "qualification": {
+      "qualification": "Cualificación",
+      "qualificationsManagement": "Gestión de Cualificaciones",
+      "qualificationHeading": "Gestión de cualificaciones simplificada",
+      "errorMessageName": "El nombre es obligatorio",
+      "errorMessageDescription": "La descripción es obligatoria"
+    }
   }
 }

@@ -15,11 +15,30 @@
     "admin": "管理者"
   },
   "language": {
-    "en": "英語",
-    "ar": "アラビア語",
-    "es": "スペイン語",
-    "fr": "フランス語",
-    "de": "ドイツ語",
-    "ja": "日本語"
+    "langs": {
+      "en": "英語",
+      "ar": "アラビア語",
+      "es": "スペイン語",
+      "fr": "フランス語",
+      "de": "ドイツ語",
+      "ja": "日本語"
+    },
+    "generic": {
+      "name": "名前",
+      "cancel": "キャンセル",
+      "back": "戻る",
+      "submit": "送信",
+      "company": "会社",
+      "edit": "編集",
+      "create": "作成",
+      "description": "説明"
+    },
+    "qualification": {
+      "qualification": "資格",
+      "qualificationsManagement": "資格管理",
+      "qualificationHeading": "簡単な資格管理",
+      "errorMessageName": "名前は必須です",
+      "errorMessageDescription": "説明は必須です"
+    }
   }
 }

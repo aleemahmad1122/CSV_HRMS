@@ -19,12 +19,12 @@ export class TopbarComponent {
   currentLangFlag = '226-united-states.svg';
   Lang = 'en';
   languages = [
-    { code: 'en', name: 'language.en', flag: '226-united-states.svg' },
-    { code: 'ar', name: 'language.ar', flag: '008-saudi-arabia.svg' },
-    { code: 'es', name: 'language.es', flag: '128-spain.svg' },
-    { code: 'fr', name: 'language.fr', flag: '195-france.svg' },
-    { code: 'de', name: 'language.de', flag: '162-germany.svg' },
-    { code: 'ja', name: 'language.ja', flag: '063-japan.svg' }
+    { code: 'en', name: 'language.langs.en', flag: '226-united-states.svg' },
+    { code: 'ar', name: 'language.langs.ar', flag: '008-saudi-arabia.svg' },
+    { code: 'es', name: 'language.langs.es', flag: '128-spain.svg' },
+    { code: 'fr', name: 'language.langs.fr', flag: '195-france.svg' },
+    { code: 'de', name: 'language.langs.de', flag: '162-germany.svg' },
+    { code: 'ja', name: 'language.langs.ja', flag: '063-japan.svg' }
   ];
 
   constructor(
@@ -44,7 +44,7 @@ export class TopbarComponent {
     if (selectedLang) {
       this.currentLangFlag = selectedLang.flag;
     }
-    switch(langCode) {
+    switch (langCode) {
       case 'en': this.currentLangFlag = '226-united-states.svg'; break;
       case 'ar': this.currentLangFlag = '008-saudi-arabia.svg'; break;
       case 'es': this.currentLangFlag = '128-spain.svg'; break;

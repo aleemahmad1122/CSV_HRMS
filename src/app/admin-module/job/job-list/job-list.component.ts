@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Job } from '../../../types/index';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-job-list',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,RouterModule],
   templateUrl: './job-list.component.html',
   styleUrl: './job-list.component.css'
 })
