@@ -34,3 +34,8 @@ export interface Clients {
   address: string;
   contact_number: string;
 }
+
+export interface Sidebar {
+  name: string;
+  route: string;
+}

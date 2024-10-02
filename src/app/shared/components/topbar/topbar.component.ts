@@ -35,7 +35,7 @@ export class TopbarComponent {
     _translateService.addLangs(['en', 'ar', 'es', 'fr', 'de', 'ja']);
     _translateService.setDefaultLang('en');
     const browserLang = _translateService.getBrowserLang();
-    _translateService.use(browserLang?.match(/en|ar/) ? browserLang : 'en');
+    _translateService.use(browserLang?.match(/en|ar|es|fr|de|ja/) ? browserLang : 'en');
   }
 
   changeLang(langCode: string): void {

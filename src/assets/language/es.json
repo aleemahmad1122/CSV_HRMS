@@ -1,4 +1,19 @@
 {
+  "sidebar": {
+    "dashboard": "Inicio",
+    "job": "Trabajo",
+    "project": "Proyecto",
+    "client": "Cliente",
+    "qualification": "Calificación",
+    "employee": "Empleado",
+    "setting": "Configuración",
+    "company": "Empresa",
+    "jobDetailsSetup": "Configuración de detalles de trabajo",
+    "qualifications": "Calificaciones",
+    "projects": "Proyectos",
+    "clients": "Clientes",
+    "admin": "Administrador"
+  },
   "language": {
     "langs": {
       "en": "Inglés",
