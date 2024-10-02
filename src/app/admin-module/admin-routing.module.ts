@@ -37,6 +37,21 @@ const routes: Routes = [
     path: 'qualifications/:action',
     loadComponent: () => import(`./qualifications/add-edit-qualification/add-edit-qualification.component`).then(c => c.AddEditQualificationComponent),
     title: 'Qualifications',
+  },
+  {
+    path: 'job/:action',
+    loadComponent: () => import(`./job/add-edit-job/add-edit-job.component`).then(c => c.AddEditJobComponent),
+    title: 'Job',
+  },
+  {
+    path: 'project/:action',
+    loadComponent: () => import(`./project/add-edit-project/add-edit-job.component`).then(c => c.AddEditJobComponent),
+    title: 'Project',
+  },
+  {
+    path: 'client/:action',
+    loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
+    title: 'Client',
   }
 ];
 
