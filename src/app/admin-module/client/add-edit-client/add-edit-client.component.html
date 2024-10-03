@@ -1,1 +1,110 @@
-<p>add-edit-client works!</p>
+<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+    <h1 class="font-weight-bold text-center" style="font-size: 30px;">{{isEditMode ? 'Edit' : 'Create'}} Client</h1>
+
+    <form [formGroup]="clientForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+        <!-- Image upload section -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="image-input image-input-outline"
+                    style="background-size: cover; background-position: center;" id="kt_image_5"
+                    [style.background-image]="'url(' + imagePreview + ')'">
+                    <div class="image-input-wrapper"></div>
+
+                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="change" data-toggle="tooltip" title="Change avatar">
+                        <i class="fa fa-pen icon-sm text-muted"></i>
+                        <input type="file" formControlName="clientImage" name="profile_avatar"
+                            accept=".png, .jpg, .jpeg" (change)="onFileSelected($event)" />
+                    </label>
+
+                    <span *ngIf="imagePreview !== defaultImagePath"
+                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="remove" data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="!imageSizeExceeded && imagePreview == defaultImagePath" class="text-muted mb-4 mx-4 small">
+                <span>Max file size: 1 MB. Allowed formats: PNG, JPG, JPEG</span>
+            </div>
+            <div class="text-danger mx-4 small">
+                @if(imageSizeExceeded) {
+                <span>Image size should not exceed 1 MB</span>
+                }
+            </div>
+        </div>
+
+        <!-- Client details form fields -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" formControlName="name" placeholder="Enter name"
+                    [ngClass]="{'border-danger border-2': clientForm.get('name')?.invalid && clientForm.get('name')?.touched}" />
+                <div *ngIf="clientForm.get('name')?.invalid && clientForm.get('name')?.touched"
+                    class="text-danger mt-1">
+                    Name is required
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" formControlName="email" placeholder="Enter email"
+                    [ngClass]="{'border-danger border-2': clientForm.get('email')?.invalid && clientForm.get('email')?.touched}" />
+                <div *ngIf="clientForm.get('email')?.invalid && clientForm.get('email')?.touched"
+                    class="text-danger mt-1">
+                    <span *ngIf="clientForm.get('email')?.errors?.['required']">Email is
+                        required</span>
+                    <span *ngIf="clientForm.get('email')?.errors?.['email']">Enter a valid email
+                        address</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" formControlName="phone" placeholder="Enter phone number"
+                    [ngClass]="{'border-danger border-2': clientForm.get('phone')?.invalid && clientForm.get('phone')?.touched}" />
+                <div *ngIf="clientForm.get('phone')?.invalid && clientForm.get('phone')?.touched"
+                    class="text-danger mt-1">
+                    Valid phone number is required
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Client Type</label>
+                <select class="form-control custom-select" formControlName="clientType"
+                    [ngClass]="{'border-danger border-2': clientForm.get('clientType')?.invalid && clientForm.get('clientType')?.touched}">
+                    <option value="">Select Client</option>
+                    @for(client of clients; track client.clientTypeId) {
+                    <option [value]="client.clientTypeId">{{client.clientTypeName}}</option>
+                    }
+                </select>
+                <div *ngIf="clientForm.get('clientType')?.invalid && clientForm.get('clientType')?.touched"
+                    class="text-danger mt-1">
+                    Client Type is required
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Address</label>
+                <textarea class="form-control" formControlName="address" placeholder="Enter address" rows="3"
+                    [ngClass]="{'border-danger border-2': clientForm.get('address')?.invalid && clientForm.get('address')?.touched}"></textarea>
+                <div *ngIf="clientForm.get('address')?.invalid && clientForm.get('address')?.touched"
+                    class="text-danger mt-1">
+                    Address is required
+                </div>
+            </div>
+        </div>
+
+        <!-- Form submission buttons -->
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
+                    (click)="goBack()">{{'language.generic.back' | translate}}</button>
+                <button type="submit" class="btn btn-primary font-weight-bold me-3"
+                    [disabled]="!clientForm.valid">{{'language.generic.submit' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>
