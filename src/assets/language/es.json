@@ -7,7 +7,7 @@
     "de": "Alemán",
     "ja": "Japonés",
     "sidebar": {
-      "dashboard": "Inicio",
+      "dashboard": "Panel de control",
       "job": "Trabajo",
       "project": "Proyecto",
       "client": "Cliente",
@@ -29,6 +29,48 @@
       "adminReport": "Informes de Administración",
       "report": "Informe"
     },
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "quantity": "Cantidad",
+      "parentItem": "Elemento Principal",
+      "selectParentItem": "Seleccionar Elemento Principal",
+      "type": "Tipo",
+      "selectType": "Seleccionar Tipo",
+      "location": "Ubicación",
+      "selectLocation": "Seleccionar Ubicación",
+      "details": "Detalles",
+      "address": "Dirección",
+      "category": "Categoría",
+      "selectCategory": "Seleccionar Categoría"
+    },
+    "placeholders": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "parentItem": "Elemento Principal",
+      "selectParentItem": "Seleccionar Elemento Principal",
+      "type": "Tipo",
+      "selectType": "Seleccionar Tipo",
+      "location": "Ubicación",
+      "selectLocation": "Seleccionar Ubicación",
+      "details": "Detalles",
+      "address": "Dirección",
+      "quantity": "Cantidad",
+      "category": "Categoría",
+      "selectCategory": "Seleccionar Categoría"
+    },
+    "errors": {
+      "maxFileSize": "Tamaño máximo de archivo",
+      "allowedFormats": "Formatos permitidos",
+      "nameRequired": "El nombre es obligatorio",
+      "parentItemRequired": "El Elemento Principal es obligatorio",
+      "typeRequired": "El Tipo es obligatorio",
+      "locationRequired": "La Ubicación es obligatoria",
+      "detailsRequired": "Los Detalles son obligatorios",
+      "addressRequired": "La Dirección es obligatoria",
+      "quantityRequired": "La Cantidad es obligatoria",
+      "categoryRequired": "La Categoría es obligatoria"
+    },
     "generic": {
       "name": "Nombre",
       "cancel": "Cancelar",
@@ -37,7 +79,9 @@
       "company": "Empresa",
       "edit": "Editar",
       "create": "Crear",
-      "description": "Descripción"
+      "description": "Descripción",
+      "details": "Detalles",
+      "address": "Dirección"
     },
     "qualification": {
       "qualification": "Calificación",

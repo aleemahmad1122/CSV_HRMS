@@ -23,11 +23,53 @@
       "manage": "管理",
       "document": "ドキュメント",
       "attendance": "出勤",
-      "travel": "旅行",
+      "travel": "出張",
       "overtime": "残業",
       "loans": "貸付",
-      "adminReport": "管理者報告",
-      "report": "報告"
+      "adminReport": "管理者レポート",
+      "report": "レポート"
+    },
+    "form": {
+      "name": "名前",
+      "description": "説明",
+      "quantity": "数量",
+      "parentItem": "親アイテム",
+      "selectParentItem": "親アイテムを選択",
+      "type": "タイプ",
+      "selectType": "タイプを選択",
+      "location": "場所",
+      "selectLocation": "場所を選択",
+      "details": "詳細",
+      "address": "住所",
+      "category": "カテゴリ",
+      "selectCategory": "カテゴリを選択"
+    },
+    "placeholders": {
+      "name": "名前",
+      "description": "説明",
+      "parentItem": "親アイテム",
+      "selectParentItem": "親アイテムを選択",
+      "type": "タイプ",
+      "selectType": "タイプを選択",
+      "location": "場所",
+      "selectLocation": "場所を選択",
+      "details": "詳細",
+      "address": "住所",
+      "quantity": "数量",
+      "category": "カテゴリ",
+      "selectCategory": "カテゴリを選択"
+    },
+    "errors": {
+      "maxFileSize": "最大ファイルサイズ",
+      "allowedFormats": "許可されたフォーマット",
+      "nameRequired": "名前は必須です",
+      "parentItemRequired": "親アイテムは必須です",
+      "typeRequired": "タイプは必須です",
+      "locationRequired": "場所は必須です",
+      "detailsRequired": "詳細は必須です",
+      "addressRequired": "住所は必須です",
+      "quantityRequired": "数量は必須です",
+      "categoryRequired": "カテゴリは必須です"
     },
     "generic": {
       "name": "名前",
@@ -37,7 +79,9 @@
       "company": "会社",
       "edit": "編集",
       "create": "作成",
-      "description": "説明"
+      "description": "説明",
+      "details": "詳細",
+      "address": "住所"
     },
     "qualification": {
       "qualification": "資格",

@@ -26,116 +26,119 @@
                     </span>
                 </div>
             </div>
-            <div *ngIf="!imageSizeExceeded && imagePreview == defaultImagePath" class="text-muted mb-4 mx-4 small">
-                <span>Max file size: 1 MB. Allowed formats: PNG, JPG, JPEG</span>
-            </div>
+            @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
+            <div class="text-muted mb-4 mx-4 small">
+                <span>
+                  {{'language.errors.maxFileSize' | translate}} 1 MB. {{'language.errors.allowedFormats' | translate}} PNG, JPG, JPEG
+                 </span>
+            </div>}
             <div class="text-danger mx-4 small">
                 @if(imageSizeExceeded) {
-                <span>Image size should not exceed 1 MB</span>
+                <span>{{'language.errors.maxFileSize' | translate}} 1 MB</span>
                 }
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" formControlName="name" placeholder="Enter name"
+                <label class="form-label">{{'language.form.name' | translate}}</label>
+                <input type="text" class="form-control" formControlName="name" [placeholder]="'language.placeholders.name' | translate"
                     [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
                 <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Name is required
+                    {{'language.errors.nameRequired' | translate}}
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Quantity</label>
-                <input type="text" class="form-control" formControlName="heads" placeholder="Enter quantity"
+                <label class="form-label">{{'language.form.quantity' | translate}}</label>
+                <input type="text" class="form-control" formControlName="heads" [placeholder]="'language.placeholders.quantity' | translate"
                     [ngClass]="{'is-invalid': (addEditForm.get('heads')?.invalid && (addEditForm.get('heads')?.touched || isSubmitted))}" />
                 <div *ngIf="addEditForm.get('heads')?.invalid && (addEditForm.get('heads')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Quantity is required
+                    {{'language.errors.quantityRequired' | translate}}
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">Category</label>
+                <label class="form-label">{{'language.form.category' | translate}}</label>
                 <select class="form-control custom-select" formControlName="timeZone"
                     [ngClass]="{'is-invalid': (addEditForm.get('timeZone')?.invalid && (addEditForm.get('timeZone')?.touched || isSubmitted))}">
-                    <option value="">Select Category</option>
+                    <option value="">{{'language.form.selectCategory' | translate}}</option>
                     @for(type of itemTypes; track type) {
                     <option [value]="type.typeId">{{type.typeName}}</option>
                     }
                 </select>
                 <div *ngIf="addEditForm.get('timeZone')?.invalid && (addEditForm.get('timeZone')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Category is required
+                    {{'language.errors.categoryRequired' | translate}}
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Parent Item</label>
+                <label class="form-label">{{'language.form.parentItem' | translate}}</label>
                 <select class="form-control custom-select" formControlName="parentStructure"
                     [ngClass]="{'is-invalid': (addEditForm.get('parentStructure')?.invalid && (addEditForm.get('parentStructure')?.touched || isSubmitted))}">
-                    <option value="">Select Parent Item</option>
+                    <option value="">{{'language.form.selectParentItem' | translate}}</option>
                     @for(type of itemTypes; track type) {
                     <option [value]="type.typeId">{{type.typeName}}</option>
                     }
                 </select>
                 <div *ngIf="addEditForm.get('parentStructure')?.invalid && (addEditForm.get('parentStructure')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Parent Item is required
+                    {{'language.errors.parentItemRequired' | translate}}
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">Type</label>
+                <label class="form-label">{{'language.form.type' | translate}}</label>
                 <select class="form-control custom-select" formControlName="type"
                     [ngClass]="{'is-invalid': (addEditForm.get('type')?.invalid && (addEditForm.get('type')?.touched || isSubmitted))}">
-                    <option value="">Select Type</option>
+                    <option value="">{{'language.form.selectType' | translate}}</option>
                     @for(type of itemTypes; track type) {
                     <option [value]="type.typeId">{{type.typeName}}</option>
                     }
                 </select>
                 <div *ngIf="addEditForm.get('type')?.invalid && (addEditForm.get('type')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Type is required
+                    {{'language.errors.typeRequired' | translate}}
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Location</label>
+                <label class="form-label">{{'language.form.location' | translate}}</label>
                 <select class="form-control custom-select" formControlName="country"
                     [ngClass]="{'is-invalid': (addEditForm.get('country')?.invalid && (addEditForm.get('country')?.touched || isSubmitted))}">
-                    <option value="">Select Location</option>
+                    <option value="">{{'language.form.selectLocation' | translate}}</option>
                     @for(type of itemTypes; track type) {
                     <option [value]="type.typeId">{{type.typeName}}</option>
                     }
                 </select>
                 <div *ngIf="addEditForm.get('country')?.invalid && (addEditForm.get('country')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Location is required
+                    {{'language.errors.locationRequired' | translate}}
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">Details</label>
-                <textarea class="form-control" formControlName="details" placeholder="Enter details" rows="3"
+                <label class="form-label">{{'language.form.details' | translate}}</label>
+                <textarea class="form-control" formControlName="details" [placeholder]="'language.placeholders.details' | translate" rows="3"
                     [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}"></textarea>
                 <div *ngIf="addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Details are required
+                    {{'language.errors.detailsRequired' | translate}}
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">Address</label>
-                <textarea class="form-control" formControlName="address" placeholder="Enter address" rows="3"
+                <label class="form-label">{{'language.form.address' | translate}}</label>
+                <textarea class="form-control" formControlName="address" [placeholder]="'language.placeholders.address' | translate" rows="3"
                     [ngClass]="{'is-invalid': (addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted))}"></textarea>
                 <div *ngIf="addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    Address is required
+                    {{'language.errors.addressRequired' | translate}}
                 </div>
             </div>
         </div>
@@ -143,7 +146,7 @@
         <div class="row mt-3">
             <div class="col-12 text-right">
                 <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
-                    (click)="goBack()">{{'language.generic.back' | translate}}</button>
+                    (click)="goBack()">{{'language.generic.cancel' | translate}}</button>
                 <button type="submit" class="btn btn-primary font-weight-bold me-3">
                     {{'language.generic.submit' | translate}}
                 </button>

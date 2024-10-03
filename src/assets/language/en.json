@@ -29,6 +29,48 @@
       "adminReport": "Admin Report",
       "report": "Report"
     },
+    "form":{
+      "name":"Name",
+      "description":"Description",
+      "quantity":"Quantity",
+      "parentItem":"Parent Item",
+      "selectParentItem":"Select Parent Item",
+      "type":"Type",
+      "selectType":"Select Type",
+      "location":"Location",
+      "selectLocation":"Select Location",
+      "details":"Details",
+      "address":"Address",
+      "category":"Category",
+      "selectCategory":"Select Category"
+    },
+    "placeholders":{
+      "name":"Name",
+      "description":"Description",
+      "parentItem":"Parent Item",
+      "selectParentItem":"Select Parent Item",
+      "type":"Type",
+      "selectType":"Select Type",
+      "location":"Location",
+      "selectLocation":"Select Location",
+      "details":"Details",
+      "address":"Address",
+      "quantity":"Quantity",
+      "category":"Category",
+      "selectCategory":"Select Category"
+    },
+    "errors":{
+      "maxFileSize":"Max file size",
+      "allowedFormats":"Allowed formats",
+      "nameRequired":"Name is required",
+      "parentItemRequired":"Parent Item is required",
+      "typeRequired":"Type is required",
+      "locationRequired":"Location is required",
+      "detailsRequired":"Details are required",
+      "addressRequired":"Address is required",
+      "quantityRequired":"Quantity is required",
+      "categoryRequired":"Category is required"
+    },
     "generic": {
       "name": "Name",
       "cancel": "Cancel",
@@ -37,7 +79,9 @@
       "company": "Company",
       "edit": "Edit",
       "create": "Create",
-      "description": "Description"
+      "description": "Description",
+      "details":"Details",
+      "address":"Address"
     },
     "qualification": {
       "qualification": "Qualification",
