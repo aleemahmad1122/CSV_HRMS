@@ -1,35 +1,33 @@
 {
-  "sidebar": {
-    "dashboard": "Inicio",
-    "job": "Trabajo",
-    "project": "Proyecto",
-    "client": "Cliente",
-    "qualification": "Calificación",
-    "employee": "Empleado",
-    "setting": "Configuración",
-    "company": "Empresa",
-    "jobDetailsSetup": "Configuración de detalles de trabajo",
-    "qualifications": "Calificaciones",
-    "projects": "Proyectos",
-    "clients": "Clientes",
-    "admin": "Administrador",
-    "manage": "Administrar",
-    "document": "Documentos",
-    "attendance": "Asistencia",
-    "travel": "Viaje",
-    "overtime": "Horas Extras",
-    "loans": "Préstamos",
-    "adminReport": "Reportes",
-    "report": "Reporte"
-  },
   "language": {
-    "langs": {
-      "en": "Inglés",
-      "ar": "Árabe",
-      "es": "Español",
-      "fr": "Francés",
-      "de": "Alemán",
-      "ja": "Japonés"
+    "en": "Inglés",
+    "ar": "Árabe",
+    "es": "Español",
+    "fr": "Francés",
+    "de": "Alemán",
+    "ja": "Japonés",
+    "sidebar": {
+      "dashboard": "Inicio",
+      "job": "Trabajo",
+      "project": "Proyecto",
+      "client": "Cliente",
+      "qualification": "Calificación",
+      "employee": "Empleado",
+      "setting": "Configuración",
+      "company": "Empresa",
+      "jobDetailsSetup": "Configuración de detalles de trabajo",
+      "qualifications": "Calificaciones",
+      "projects": "Proyectos",
+      "clients": "Clientes",
+      "admin": "Administrador",
+      "manage": "Administrar",
+      "document": "Documentos",
+      "attendance": "Asistencia",
+      "travel": "Viaje",
+      "overtime": "Horas Extras",
+      "loans": "Préstamos",
+      "adminReport": "Informes de Administración",
+      "report": "Informe"
     },
     "generic": {
       "name": "Nombre",
@@ -42,9 +40,9 @@
       "description": "Descripción"
     },
     "qualification": {
-      "qualification": "Cualificación",
-      "qualificationsManagement": "Gestión de Cualificaciones",
-      "qualificationHeading": "Gestión de cualificaciones simplificada",
+      "qualification": "Calificación",
+      "qualificationsManagement": "Gestión de Calificaciones",
+      "qualificationHeading": "Gestión de calificaciones simplificada",
       "errorMessageName": "El nombre es obligatorio",
       "errorMessageDescription": "La descripción es obligatoria"
     }

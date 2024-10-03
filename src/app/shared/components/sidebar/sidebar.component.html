@@ -2,10 +2,11 @@
   <!--begin::Brand-->
   <div class="brand flex-column-auto" id="kt_brand">
     <!--begin::Logo-->
-    <a [routerLink]="['dashboard']"  class="brand-logo d-flex align-items-center justify-content-between">
-      <img alt="Logo" src="https://cybersoftvantage.com/logo.png" width="35px"  height="80px" style="object-fit: contain;"/>
-      @if (!isCollapsed  ) {
-        <h1 class="text-white ml-3" style="font-size: 20px; font-weight: bold;">CSV_HRMS</h1>
+    <a [routerLink]="['dashboard']" class="brand-logo d-flex align-items-center justify-content-between">
+      <img alt="Logo" src="https://cybersoftvantage.com/logo.png" width="35px" height="80px"
+        style="object-fit: contain;" />
+      @if (!isCollapsed ) {
+      <h1 class="text-white ml-3" style="font-size: 20px; font-weight: bold;">CSV_HRMS</h1>
       }
     </a>
     <!--end::Logo-->
@@ -62,7 +63,7 @@
 
 
 
-            <span class="menu-text">{{'sidebar.admin' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.admin' | translate}}</span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -76,14 +77,15 @@
 
               @for (item of adminItems; track $index) {
 
-                <li class="menu-item" aria-haspopup="true">
-                  <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' " class="menu-link" >
-                    <i class="menu-bullet menu-bullet-dot">
-                      <span></span>
-                    </i>
-                    <span class="menu-text">{{item.name | translate}}</span>
-                  </a>
-                </li>
+              <li class="menu-item" aria-haspopup="true">
+                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                  class="menu-link">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">{{item.name | translate}}</span>
+                </a>
+              </li>
               }
             </ul>
           </div>
@@ -110,7 +112,7 @@
 
 
 
-            <span class="menu-text">{{'sidebar.employee' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.employee' | translate}}</span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -124,14 +126,15 @@
 
               @for (item of employeeItems; track $index) {
 
-                <li class="menu-item" aria-haspopup="true">
-                  <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' " class="menu-link" >
-                    <i class="menu-bullet menu-bullet-dot">
-                      <span></span>
-                    </i>
-                    <span class="menu-text">{{item.name | translate}}</span>
-                  </a>
-                </li>
+              <li class="menu-item" aria-haspopup="true">
+                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                  class="menu-link">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">{{item.name | translate}}</span>
+                </a>
+              </li>
               }
             </ul>
           </div>
@@ -159,7 +162,7 @@
 
 
 
-            <span class="menu-text">{{'sidebar.manage' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.manage' | translate}}</span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -173,14 +176,15 @@
 
               @for (item of manageItems; track $index) {
 
-                <li class="menu-item" aria-haspopup="true">
-                  <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' " class="menu-link" >
-                    <i class="menu-bullet menu-bullet-dot">
-                      <span></span>
-                    </i>
-                    <span class="menu-text">{{item.name | translate}}</span>
-                  </a>
-                </li>
+              <li class="menu-item" aria-haspopup="true">
+                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                  class="menu-link">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">{{item.name | translate}}</span>
+                </a>
+              </li>
               }
             </ul>
           </div>
@@ -207,7 +211,7 @@
 
 
 
-            <span class="menu-text">{{'sidebar.adminReport' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.adminReport' | translate}}</span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -221,14 +225,15 @@
 
               @for (item of adminReportItems; track $index) {
 
-                <li class="menu-item" aria-haspopup="true">
-                  <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' " class="menu-link" >
-                    <i class="menu-bullet menu-bullet-dot">
-                      <span></span>
-                    </i>
-                    <span class="menu-text">{{item.name | translate}}</span>
-                  </a>
-                </li>
+              <li class="menu-item" aria-haspopup="true">
+                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                  class="menu-link">
+                  <i class="menu-bullet menu-bullet-dot">
+                    <span></span>
+                  </i>
+                  <span class="menu-text">{{item.name | translate}}</span>
+                </a>
+              </li>
               }
             </ul>
           </div>

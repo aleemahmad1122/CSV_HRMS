@@ -17,60 +17,60 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   activRoute: string = '';
   adminItems: Sidebar[] = [
     {
-      name: 'sidebar.company',
+      name: 'language.sidebar.company',
       route: '/admin/company-structure'
     },
     {
-      name: 'sidebar.jobDetailsSetup',
+      name: 'language.sidebar.jobDetailsSetup',
       route: '/admin/job-detail'
     },
     {
-      name: 'sidebar.qualifications',
+      name: 'language.sidebar.qualifications',
       route: '/admin/qualifications'
     },
     {
-      name: 'sidebar.projects',
+      name: 'language.sidebar.projects',
       route: '/admin/projects'
     },
     {
-      name: 'sidebar.clients',
+      name: 'language.sidebar.clients',
       route: '/admin/clients'
     },
   ]
 
   employeeItems: Sidebar[] = [
     {
-      name: 'sidebar.employee',
+      name: 'language.sidebar.employee',
       route: '/employee/employee-list'
     },
   ]
 
   manageItems: Sidebar[] = [
     {
-      name: 'sidebar.document',
+      name: 'language.sidebar.document',
       route: '/manage/document'
     },
     {
-      name: 'sidebar.attendance',
+      name: 'language.sidebar.attendance',
       route: '/manage/attendance'
     },
     {
-      name: 'sidebar.travel',
+      name: 'language.sidebar.travel',
       route: '/manage/travel'
     },
     {
-      name: 'sidebar.overtime',
+      name: 'language.sidebar.overtime',
       route: '/manage/overtime'
     },
     {
-      name: 'sidebar.loans',
+      name: 'language.sidebar.loans',
       route: '/manage/loans'
     },
   ]
 
   adminReportItems: Sidebar[] = [
     {
-      name: 'sidebar.report',
+      name: 'language.sidebar.report',
       route: '/admin-report/report'
     },
   ]
