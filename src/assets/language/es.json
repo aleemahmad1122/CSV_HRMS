@@ -18,7 +18,9 @@
     "attendance": "Asistencia",
     "travel": "Viaje",
     "overtime": "Horas Extras",
-    "loans": "Préstamos"
+    "loans": "Préstamos",
+    "adminReport": "Reportes",
+    "report": "Reporte"
   },
   "language": {
     "langs": {

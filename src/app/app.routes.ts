@@ -17,6 +17,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'admin-report',
+        loadChildren: () => import('./admin-report-module/admin-report.module').then(m => m.AdminReportModuleModule),
+        canActivate: [ProtectedGuard]
+    },
+
+    {
         path: 'dashboard',
         loadChildren: () => import('./dashboard-module/dashboard.module').then(m => m.DashboardModule),
         canActivate: [ProtectedGuard]

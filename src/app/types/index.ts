@@ -78,3 +78,10 @@ export interface Loan {
   name: string;
 }
 
+
+export interface AdminReportModule {
+  id: number;
+  code: string;
+  name: string;
+}
+

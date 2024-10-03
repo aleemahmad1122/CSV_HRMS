@@ -13,6 +13,7 @@ declare const $: any;
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
+  isCollapsed = false;
   activRoute: string = '';
   adminItems: Sidebar[] = [
     {
@@ -66,6 +67,17 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       route: '/manage/loans'
     },
   ]
+
+  adminReportItems: Sidebar[] = [
+    {
+      name: 'sidebar.report',
+      route: '/admin-report/report'
+    },
+  ]
+
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 
   constructor(@Inject(DOCUMENT) private _document: Document, private _route: Router, public translate: TranslateService) {
     _route.events.subscribe((val) =>

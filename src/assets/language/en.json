@@ -18,7 +18,9 @@
     "attendance": "Attendance",
     "travel": "Travel",
     "overtime": "Overtime",
-    "loans": "Loans"
+    "loans": "Loans",
+    "adminReport": "Admin Report",
+    "report": "Report"
   },
   "language": {
     "en": "English",
