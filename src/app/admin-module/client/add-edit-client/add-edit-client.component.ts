@@ -63,12 +63,14 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
     this.isEditMode = this._router.url.includes('edit');
 
     this.clientForm = this.fb.group({
-      clientImage: ['', Validators.required],
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      clientType: ['', Validators.required],
+      details: ['', Validators.required],
       address: ['', Validators.required],
+      contact_number: ['', Validators.required],
+      contact_email: ['', [Validators.required, Validators.email]],
+      company_url: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      status: ['Active', Validators.required],
+      first_contact_date: ['', Validators.required],
     });
   }
 
@@ -78,106 +80,50 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
   }
 
   submitForm() {
+    console.log(this.clientForm.value);
     if (!this.clientForm.valid) {
       return;
     }
 
-    if (!this.isEditMode) {
-      var formData = new FormData();
+    const formData = new FormData();
 
-      if (this.selectedFile) {
-        formData.append('companyImage', this.selectedFile);
-      }
-      formData.append('name', this.clientForm.get('name')?.value);
-      formData.append('heads', this.clientForm.get('heads')?.value);
-      formData.append('type', this.clientForm.get('type')?.value);
-      formData.append('country', this.clientForm.get('country')?.value);
-      formData.append('timeZone', this.clientForm.get('timeZone')?.value);
-      formData.append('parentStructure', this.clientForm.get('parentStructure')?.value);
-      formData.append('address', this.clientForm.get('address')?.value);
-      formData.append('details', this.clientForm.get('details')?.value);
+    if (this.selectedFile) {
+      formData.append('companyImage', this.selectedFile);
+    }
 
-      this._apiCalling.postData("client", "add", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+    Object.keys(this.clientForm.controls).forEach(key => {
+      formData.append(key, this.clientForm.get(key)?.value);
+    });
+
+    const endpoint = this.isEditMode ? `edit/${this.selectedClient.clientId}` : 'add';
+    const method = this.isEditMode ? this._apiCalling.putData : this._apiCalling.postData;
+
+    method.call(this._apiCalling, "client", endpoint, formData, true)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            if (!this.isEditMode) {
               this._authService.saveUser(response?.data?.user);
               this._authService.saveUserRole(response?.data?.user?.role);
               this._authService.setToken(response?.data?.token);
               this._dataShare.updateLoginStatus(true);
               this._router.navigate([`${'/dashboard'}`]);
-
             } else {
-              this._toaster.error(response?.message, 'Error!');
-            }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
-          }
-        })
-    }
-    else {
-      var formData = new FormData();
-
-      if (this.selectedFile) {
-        formData.append('companyImage', this.selectedFile);
-      }
-      formData.append('name', this.clientForm.get('name')?.value);
-      formData.append('heads', this.clientForm.get('heads')?.value);
-      formData.append('type', this.clientForm.get('type')?.value);
-      formData.append('country', this.clientForm.get('country')?.value);
-      formData.append('timeZone', this.clientForm.get('timeZone')?.value);
-      formData.append('parentStructure', this.clientForm.get('parentStructure')?.value);
-      formData.append('address', this.clientForm.get('address')?.value);
-      formData.append('details', this.clientForm.get('details')?.value);
-
-      this._apiCalling.putData("client", "edit/" + this.selectedClient.clientId + "", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
               this._toaster.success(response?.message, 'Success!');
               this.goBack();
-
-            } else {
-              this._toaster.error(response?.message, 'Error!');
             }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
+          } else {
+            this._toaster.error(response?.message, 'Error!');
           }
-        })
-    }
+        },
+        error: (error) => {
+          this._toaster.error("Internal server error occurred while processing your request");
+        }
+      });
   }
 
   goBack() {
     this._router.navigate([`${'/admin/clients'}`]);
-  }
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      if (file.size > this.maxSizeInBytes) {
-        this.imageSizeExceeded = true;
-        return;
-      }
-
-      this.imageSizeExceeded = false;
-      this.selectedFile = file;
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.imagePreview = e.target.result as string;
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeImage(): void {
-    this.imagePreview = this.defaultImagePath;
-    this.selectedFile = null;
-    this.imageSizeExceeded = false;
   }
 
 }

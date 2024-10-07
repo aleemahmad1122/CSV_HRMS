@@ -75,15 +75,10 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.addEditForm = this.fb.group({
-      itemImage: [''],
+      code: ['', Validators.required],
       name: ['', Validators.required],
-      details: ['', Validators.required],
-      address: ['', Validators.required],
-      type: ['', Validators.required],
-      country: ['', Validators.required],
-      timeZone: ['', Validators.required],
-      parentStructure: ['', Validators.required],
-      heads: ['', Validators.required]
+      description: ['', Validators.required],
+      specification: ['', Validators.required]
     });
   }
 
@@ -105,15 +100,10 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
 
   patchFormValues() {
     this.addEditForm.patchValue({
-      itemImage: this.selectedItem?.itemImage,
+      code: this.selectedItem?.code,
       name: this.selectedItem?.name,
-      details: this.selectedItem?.details,
-      address: this.selectedItem?.address,
-      type: this.selectedItem?.type,
-      country: this.selectedItem?.country,
-      timeZone: this.selectedItem?.timeZone,
-      parentStructure: this.selectedItem?.parentStructure,
-      heads: this.selectedItem?.heads
+      description: this.selectedItem?.description,
+
     });
   }
 

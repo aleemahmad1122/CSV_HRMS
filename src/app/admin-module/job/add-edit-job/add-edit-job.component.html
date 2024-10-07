@@ -1,156 +1,60 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
-    <h1 class="font-weight-bold text-center" style="font-size: 30px;">
-        {{isEditMode ? ('language.generic.edit' | translate) : ('language.generic.create' | translate)}}
-        {{'language.sidebar.job' | translate}}
-    </h1>
+  <h1 class="font-weight-bold text-center" style="font-size: 30px;">
+      {{isEditMode ? ('language.generic.edit' | translate) : ('language.generic.create' | translate)}}
+      {{'language.sidebar.job' | translate}}
+  </h1>
 
-    <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="onSubmit()">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="image-input image-input-outline"
-                    style="background-size: cover; background-position: center;" id="kt_image_5"
-                    [style.background-image]="'url(' + imagePreview + ')'">
-                    <div class="image-input-wrapper"></div>
+  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="onSubmit()">
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Code <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="code" placeholder="Enter code"
+                  [ngClass]="{'border-danger border-2': addEditForm.get('code')?.invalid && addEditForm.get('code')?.touched}" />
+              <div *ngIf="addEditForm.get('code')?.invalid && addEditForm.get('code')?.touched"
+                  class="text-danger mt-1">
+                  Code is required
+              </div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter name"
+                  [ngClass]="{'border-danger border-2': addEditForm.get('name')?.invalid && addEditForm.get('name')?.touched}" />
+              <div *ngIf="addEditForm.get('name')?.invalid && addEditForm.get('name')?.touched"
+                  class="text-danger mt-1">
+                  Name is required
+              </div>
+          </div>
+      </div>
 
-                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="change" data-toggle="tooltip" title="Change image">
-                        <i class="fa fa-pen icon-sm text-muted"></i>
-                        <input type="file" formControlName="itemImage" name="item_image" accept=".png, .jpg, .jpeg"
-                            (change)="onFileSelected($event)" />
-                    </label>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Description <span class="text-danger">*</span></label>
+              <textarea class="form-control" formControlName="description" placeholder="Enter description" rows="4"
+                  [ngClass]="{'border-danger border-2': addEditForm.get('description')?.invalid && addEditForm.get('description')?.touched}"></textarea>
+              <div *ngIf="addEditForm.get('description')?.invalid && addEditForm.get('description')?.touched"
+                  class="text-danger mt-1">
+                  Description is required
+              </div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Specification <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="specification" placeholder="Enter specification"
+                  [ngClass]="{'border-danger border-2': addEditForm.get('specification')?.invalid && addEditForm.get('specification')?.touched}" />
+              <div *ngIf="addEditForm.get('specification')?.invalid && addEditForm.get('specification')?.touched"
+                  class="text-danger mt-1">
+                  Specification is required
+              </div>
+          </div>
+      </div>
 
-                    <span *ngIf="imagePreview !== defaultImagePath"
-                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                        data-action="remove" data-toggle="tooltip" title="Remove image" (click)="removeImage()">
-                        <i class="ki ki-bold-close icon-xs text-muted"></i>
-                    </span>
-                </div>
-            </div>
-            @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
-            <div class="text-muted mb-4 mx-4 small">
-                <span>
-                  {{'language.errors.maxFileSize' | translate}} 1 MB. {{'language.errors.allowedFormats' | translate}} PNG, JPG, JPEG
-                 </span>
-            </div>}
-            <div class="text-danger mx-4 small">
-                @if(imageSizeExceeded) {
-                <span>{{'language.errors.maxFileSize' | translate}} 1 MB</span>
-                }
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.name' | translate}}</label>
-                <input type="text" class="form-control" formControlName="name" [placeholder]="'language.placeholders.name' | translate"
-                    [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
-                <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.nameRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.quantity' | translate}}</label>
-                <input type="text" class="form-control" formControlName="heads" [placeholder]="'language.placeholders.quantity' | translate"
-                    [ngClass]="{'is-invalid': (addEditForm.get('heads')?.invalid && (addEditForm.get('heads')?.touched || isSubmitted))}" />
-                <div *ngIf="addEditForm.get('heads')?.invalid && (addEditForm.get('heads')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.quantityRequired' | translate}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.category' | translate}}</label>
-                <select class="form-control custom-select" formControlName="timeZone"
-                    [ngClass]="{'is-invalid': (addEditForm.get('timeZone')?.invalid && (addEditForm.get('timeZone')?.touched || isSubmitted))}">
-                    <option value="">{{'language.form.selectCategory' | translate}}</option>
-                    @for(type of itemTypes; track type) {
-                    <option [value]="type.typeId">{{type.typeName}}</option>
-                    }
-                </select>
-                <div *ngIf="addEditForm.get('timeZone')?.invalid && (addEditForm.get('timeZone')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.categoryRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.parentItem' | translate}}</label>
-                <select class="form-control custom-select" formControlName="parentStructure"
-                    [ngClass]="{'is-invalid': (addEditForm.get('parentStructure')?.invalid && (addEditForm.get('parentStructure')?.touched || isSubmitted))}">
-                    <option value="">{{'language.form.selectParentItem' | translate}}</option>
-                    @for(type of itemTypes; track type) {
-                    <option [value]="type.typeId">{{type.typeName}}</option>
-                    }
-                </select>
-                <div *ngIf="addEditForm.get('parentStructure')?.invalid && (addEditForm.get('parentStructure')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.parentItemRequired' | translate}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.type' | translate}}</label>
-                <select class="form-control custom-select" formControlName="type"
-                    [ngClass]="{'is-invalid': (addEditForm.get('type')?.invalid && (addEditForm.get('type')?.touched || isSubmitted))}">
-                    <option value="">{{'language.form.selectType' | translate}}</option>
-                    @for(type of itemTypes; track type) {
-                    <option [value]="type.typeId">{{type.typeName}}</option>
-                    }
-                </select>
-                <div *ngIf="addEditForm.get('type')?.invalid && (addEditForm.get('type')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.typeRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.location' | translate}}</label>
-                <select class="form-control custom-select" formControlName="country"
-                    [ngClass]="{'is-invalid': (addEditForm.get('country')?.invalid && (addEditForm.get('country')?.touched || isSubmitted))}">
-                    <option value="">{{'language.form.selectLocation' | translate}}</option>
-                    @for(type of itemTypes; track type) {
-                    <option [value]="type.typeId">{{type.typeName}}</option>
-                    }
-                </select>
-                <div *ngIf="addEditForm.get('country')?.invalid && (addEditForm.get('country')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.locationRequired' | translate}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.details' | translate}}</label>
-                <textarea class="form-control" formControlName="details" [placeholder]="'language.placeholders.details' | translate" rows="3"
-                    [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}"></textarea>
-                <div *ngIf="addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.detailsRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.address' | translate}}</label>
-                <textarea class="form-control" formControlName="address" [placeholder]="'language.placeholders.address' | translate" rows="3"
-                    [ngClass]="{'is-invalid': (addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted))}"></textarea>
-                <div *ngIf="addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.addressRequired' | translate}}
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-12 text-right">
-                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
-                    (click)="goBack()">{{'language.generic.cancel' | translate}}</button>
-                <button type="submit" class="btn btn-primary font-weight-bold me-3">
-                    {{'language.generic.submit' | translate}}
-                </button>
-            </div>
-        </div>
-    </form>
+      <div class="row mt-3">
+          <div class="col-12 text-right">
+              <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
+                  (click)="goBack()">{{'language.generic.cancel' | translate}}</button>
+              <button type="submit" class="btn btn-primary font-weight-bold me-3">
+                  {{'language.generic.submit' | translate}}
+              </button>
+          </div>
+      </div>
+  </form>
 </div>
