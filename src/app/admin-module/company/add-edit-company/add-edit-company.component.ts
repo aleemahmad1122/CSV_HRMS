@@ -32,6 +32,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   imageSizeExceeded: boolean = false;
   maxSizeInBytes = 1048576;
   selectedCompany: any;
+  isSubmitted = false;
 
   types: Typess[] = [
     { typeId: 1, typeName: 'Head Office' },
@@ -64,15 +65,17 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
-      companyImage: ['', Validators.required],
       name: ['', Validators.required],
-      details: ['', Validators.required],
-      address: ['', Validators.required],
-      type: ['', Validators.required],
+      companyEmail: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      faxNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      website: ['', Validators.required],
+      registrationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       country: ['', Validators.required],
-      timeZone: ['', Validators.required],
-      parentStructure: ['', Validators.required],
-      heads: ['', Validators.required]
+      industry: ['', Validators.required],
+      firstAddress: ['', Validators.required],
+      employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      foundedDate: ['', Validators.required],
     });
   }
 
@@ -82,25 +85,31 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   submitForm() {
+    this.isSubmitted = true;
     if (!this.companyForm.valid) {
       return;
     }
 
+    var formData = new FormData();
+
+    if (this.selectedFile) {
+      formData.append('companyImage', this.selectedFile);
+    }
+    formData.append('name', this.companyForm.get('name')?.value);
+    formData.append('companyEmail', this.companyForm.get('companyEmail')?.value);
+    formData.append('phoneNumber', this.companyForm.get('phoneNumber')?.value);
+    formData.append('faxNumber', this.companyForm.get('faxNumber')?.value);
+    formData.append('website', this.companyForm.get('website')?.value);
+    formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
+    formData.append('country', this.companyForm.get('country')?.value);
+    formData.append('industry', this.companyForm.get('industry')?.value);
+    formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
+    formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
+    formData.append('type', this.companyForm.get('type')?.value);
+    formData.append('employeesCount', this.companyForm.get('employeesCount')?.value);
+    formData.append('foundedDate', this.companyForm.get('foundedDate')?.value);
+
     if (!this.isEditMode) {
-      var formData = new FormData();
-
-      if (this.selectedFile) {
-        formData.append('companyImage', this.selectedFile);
-      }
-      formData.append('name', this.companyForm.get('name')?.value);
-      formData.append('heads', this.companyForm.get('heads')?.value);
-      formData.append('type', this.companyForm.get('type')?.value);
-      formData.append('country', this.companyForm.get('country')?.value);
-      formData.append('timeZone', this.companyForm.get('timeZone')?.value);
-      formData.append('parentStructure', this.companyForm.get('parentStructure')?.value);
-      formData.append('address', this.companyForm.get('address')?.value);
-      formData.append('details', this.companyForm.get('details')?.value);
-
       this._apiCalling.postData("company", "add", formData, true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
@@ -110,44 +119,27 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
               this._authService.setToken(response?.data?.token);
               this._dataShare.updateLoginStatus(true);
               this._router.navigate([`${'/dashboard'}`]);
-
             } else {
               this._toaster.error(response?.message, 'Error!');
             }
           },
           error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
+            this._toaster.error("Internal server error occurred while processing your request")
           }
         })
-    }
-    else {
-      var formData = new FormData();
-
-      if (this.selectedFile) {
-        formData.append('companyImage', this.selectedFile);
-      }
-      formData.append('name', this.companyForm.get('name')?.value);
-      formData.append('heads', this.companyForm.get('heads')?.value);
-      formData.append('type', this.companyForm.get('type')?.value);
-      formData.append('country', this.companyForm.get('country')?.value);
-      formData.append('timeZone', this.companyForm.get('timeZone')?.value);
-      formData.append('parentStructure', this.companyForm.get('parentStructure')?.value);
-      formData.append('address', this.companyForm.get('address')?.value);
-      formData.append('details', this.companyForm.get('details')?.value);
-
+    } else {
       this._apiCalling.putData("company", "edit/" + this.selectedCompany.companyId + "", formData, true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
               this._toaster.success(response?.message, 'Success!');
               this.goBack();
-
             } else {
               this._toaster.error(response?.message, 'Error!');
             }
           },
           error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
+            this._toaster.error("Internal server error occurred while processing your request")
           }
         })
     }
@@ -183,5 +175,4 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.selectedFile = null;
     this.imageSizeExceeded = false;
   }
-
 }
