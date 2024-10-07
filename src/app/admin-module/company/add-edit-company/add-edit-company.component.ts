@@ -65,6 +65,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
+      companyImage: [''],
       name: ['', Validators.required],
       companyEmail: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
@@ -74,6 +75,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       country: ['', Validators.required],
       industry: ['', Validators.required],
       firstAddress: ['', Validators.required],
+      secondAddress: [''],
       employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       foundedDate: ['', Validators.required],
     });
