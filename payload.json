@@ -15,6 +15,15 @@
     "description": "sdfsdf",
     "specification": "sdfsdfds"
   },
+  "project":{
+    "name": "dfgdfg",
+    "status": 2,
+    "startDate": "2024-10-25",
+    "endDate": "2024-10-08",
+    "budget": 34534,
+    "currency": 435,
+    "description": "345345345"
+  },
   "qualifications":{
     "name":"",
     "description":""

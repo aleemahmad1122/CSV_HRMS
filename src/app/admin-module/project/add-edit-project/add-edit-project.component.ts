@@ -14,13 +14,13 @@ interface Status {
   statusName: string;
 }
 @Component({
-  selector: 'app-add-edit-job',
+  selector: 'app-add-edit-project',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule],
-  templateUrl: './add-edit-job.component.html',
-  styleUrl: './add-edit-job.component.css'
+  templateUrl: './add-edit-project.component.html',
+  styleUrl: './add-edit-project.component.css'
 })
-export class AddEditJobComponent {
+export class AddEditProjectComponent {
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
   isEditMode: boolean = false;

@@ -45,7 +45,7 @@ const routes: Routes = [
   },
   {
     path: 'project/:action',
-    loadComponent: () => import(`./project/add-edit-project/add-edit-job.component`).then(c => c.AddEditJobComponent),
+    loadComponent: () => import(`./project/add-edit-project/add-edit-project.component`).then(c => c.AddEditProjectComponent),
     title: 'Project',
   },
   {
