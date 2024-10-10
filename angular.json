@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "MCCL-Client": {
+    "CSV_HRMS": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "baseHref": "/",
-            "outputPath": "dist/mccl-client",
+            "outputPath": "dist/CSV_HRMS",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -40,13 +40,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 }
               ],
               "fileReplacements": [
@@ -77,10 +77,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "MCCL-Client:build:production"
+              "buildTarget": "CSV_HRMS:build:production"
             },
             "development": {
-              "buildTarget": "MCCL-Client:build:development"
+              "buildTarget": "CSV_HRMS:build:development"
             }
           },
           "defaultConfiguration": "development"

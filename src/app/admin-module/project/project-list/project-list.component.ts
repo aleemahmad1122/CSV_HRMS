@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Projects } from '../../../types/index';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-project-list',
   standalone: true,
@@ -9,30 +11,49 @@ import { RouterModule } from '@angular/router';
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.css'
 })
-export class ProjectListComponent {
+export class ProjectListComponent  {
+  private ngUnsubscribe = new Subject<void>();
+  dataList:Projects[] = [] ;
 
-
-  projectlist:Projects[] =  [
-      {
-        id: 1,
-        name: "Project 1",
-        client: null
-      },
-      {
-        id: 2,
-        name: "Project 2",
-        client: null
-      },
-      {
-        id: 3,
-        name: "Project 3",
-        client: "IceHrm Sample Client 1"
-      },
-      {
-        id: 4,
-        name: "Project 4",
-        client: "IceHrm Sample Client 2"
-      }
-    ]
+  constructor(
+    private _apiCalling: ApiCallingService
+  )
+  {
 
   }
+
+
+
+ngOnInit(): void {
+  this._apiCalling.getData("Project", "getProjects",  true)
+  .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    next: (response) => {
+      if (response?.success) {
+        this.dataList = response?.data;
+      } else {
+        this.dataList = [];
+      }
+    },
+    error: (error) => {
+      this.dataList = [];
+    }
+  });
+}
+
+
+onDelete(id:string):void{
+  this._apiCalling.deleteData("Project", `deleteProject?projectId=${id}`, id,true)
+    .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.dataList = this.dataList.filter((d:Projects) => d.projectId !== id);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting Job:', error);
+      }
+    });
+}
+
+
+}

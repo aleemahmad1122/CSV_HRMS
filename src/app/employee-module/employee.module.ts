@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmployeeRoutingModule } from './expense-routing.module';
+import { EmployeeRoutingModule } from './employee-routing.module';
 
 
 

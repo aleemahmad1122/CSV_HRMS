@@ -1,102 +1,87 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
   <h1 class="font-weight-bold text-center" style="font-size: 30px;">{{isEditMode ? 'Edit' : 'Create'}} Client</h1>
 
-  <form [formGroup]="clientForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
-      <!-- Client details form fields -->
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Name <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="name" placeholder="Enter name"
-                  [ngClass]="{'border-danger border-2': clientForm.get('name')?.invalid && clientForm.get('name')?.touched}" />
-              <div *ngIf="clientForm.get('name')?.invalid && clientForm.get('name')?.touched"
-                  class="text-danger mt-1">
-                  Name is required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Details <span class="text-danger">*</span></label>
-              <textarea class="form-control" formControlName="details" placeholder="Enter details"
-                  [ngClass]="{'border-danger border-2': clientForm.get('details')?.invalid && clientForm.get('details')?.touched}"></textarea>
-              <div *ngIf="clientForm.get('details')?.invalid && clientForm.get('details')?.touched"
-                  class="text-danger mt-1">
-                  Details are required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Address <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="address" placeholder="Enter address"
-                  [ngClass]="{'border-danger border-2': clientForm.get('address')?.invalid && clientForm.get('address')?.touched}" />
-              <div *ngIf="clientForm.get('address')?.invalid && clientForm.get('address')?.touched"
-                  class="text-danger mt-1">
-                  Address is required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Contact Number <span class="text-danger">*</span></label>
-              <input type="tel" class="form-control" formControlName="contact_number" placeholder="Enter contact number"
-                  [ngClass]="{'border-danger border-2': clientForm.get('contact_number')?.invalid && clientForm.get('contact_number')?.touched}" />
-              <div *ngIf="clientForm.get('contact_number')?.invalid && clientForm.get('contact_number')?.touched"
-                  class="text-danger mt-1">
-                  Contact number is required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Contact Email <span class="text-danger">*</span></label>
-              <input type="email" class="form-control" formControlName="contact_email" placeholder="Enter contact email"
-                  [ngClass]="{'border-danger border-2': clientForm.get('contact_email')?.invalid && clientForm.get('contact_email')?.touched}" />
-              <div *ngIf="clientForm.get('contact_email')?.invalid && clientForm.get('contact_email')?.touched"
-                  class="text-danger mt-1">
-                  Valid email is required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Company URL <span class="text-danger">*</span></label>
-              <input type="url" class="form-control" formControlName="company_url" placeholder="Enter company URL"
-                  [ngClass]="{'border-danger border-2': clientForm.get('company_url')?.invalid && clientForm.get('company_url')?.touched}" />
-              <div *ngIf="clientForm.get('company_url')?.invalid && clientForm.get('company_url')?.touched"
-                  class="text-danger mt-1">
-                  Valid URL is required (e.g., https://example.com)
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Status <span class="text-danger">*</span></label>
-              <select class="form-control" formControlName="status"
-                  [ngClass]="{'border-danger border-2': clientForm.get('status')?.invalid && clientForm.get('status')?.touched}">
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-              </select>
-              <div *ngIf="clientForm.get('status')?.invalid && clientForm.get('status')?.touched"
-                  class="text-danger mt-1">
-                  Status is required
-              </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-              <label class="form-label">First Contact Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" formControlName="first_contact_date"
-                  [ngClass]="{'border-danger border-2': clientForm.get('first_contact_date')?.invalid && clientForm.get('first_contact_date')?.touched}" />
-              <div *ngIf="clientForm.get('first_contact_date')?.invalid && clientForm.get('first_contact_date')?.touched"
-                  class="text-danger mt-1">
-                  First contact date is required
-              </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="name"
+              [placeholder]="'language.placeholders.name' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.nameRequired' | translate}}
           </div>
       </div>
 
-      <!-- Form submission buttons -->
-      <div class="row mt-3">
-          <div class="col-12 text-right">
-              <button type="button" class="btn btn-light-danger font-weight-bold button-spacing"
-                  (click)="goBack()">{{'language.generic.back' | translate}}</button>
-              <button type="submit" class="btn btn-primary font-weight-bold me-3"
-                  [disabled]="!clientForm.valid">{{'language.generic.submit' | translate}}</button>
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.details' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="details"
+              [placeholder]="'language.placeholders.details' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.detailsRequired' | translate}}
           </div>
       </div>
+
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.address' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="address"
+              [placeholder]="'language.placeholders.address' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.addressRequired' | translate}}
+          </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.contactNumber' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="contactNumber"
+              [placeholder]="'language.placeholders.contactNumber' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.contactNumberRequired' | translate}}
+          </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.email' | translate}} <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" formControlName="email"
+              [placeholder]="'language.placeholders.email' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.emailRequired' | translate}}
+          </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.website' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="website"
+              [placeholder]="'language.placeholders.website' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.websiteRequired' | translate}}
+          </div>
+      </div>
+
+    </div>
+
+    <!-- Form submission buttons -->
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+          <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
+              {{ 'language.generic.back'| translate }}
+          </button>
+          <button type="submit" class="btn btn-primary font-weight-bold me-3">
+              {{ 'language.generic.submit'| translate }}
+          </button>
+      </div>
+    </div>
   </form>
 </div>

@@ -1,36 +1,28 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
-import { UserAuthenticationService } from '../../../shared/Services/user-authentication.service';
-import { DataShareService } from '../../../shared/Services/data-share.service';
 import { ToastrService } from 'ngx-toastr';
 
-interface ClientType {
-  clientTypeId: number;
-  clientTypeName: string;
-}
+
+interface ClientType  { clientTypeId: number | string; clientTypeName: string}
 
 @Component({
   selector: 'app-add-edit-client',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-edit-client.component.html',
   styleUrl: './add-edit-client.component.css'
 })
 export class AddEditClientComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  clientForm!: FormGroup;
-  isEditMode: boolean = false;
-  defaultImagePath = '../../../assets/media/users/blank.png';
-  imagePreview: string = this.defaultImagePath;
-  selectedFile: File | null = null;
-  imageSizeExceeded: boolean = false;
-  maxSizeInBytes = 1048576;
-  selectedClient: any;
+  addEditForm: FormGroup;
+  isEditMode = false;
+  isSubmitted = false;
+  selectedValue: any;
 
   clients: ClientType[] = [
     { clientTypeId: 1, clientTypeName: 'Client 1' },
@@ -40,37 +32,37 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private _router: Router,
-    private _apiCalling: ApiCallingService,
-    private _authService: UserAuthenticationService,
-    private _dataShare: DataShareService,
-    private _route: ActivatedRoute,
-    private _toaster: ToastrService,
-    @Inject(PLATFORM_ID) private platformId: Object) {
-    this._route.queryParams.subscribe(params => {
-      this.isEditMode = false;
-      this.selectedClient = {};
-      if (params['clientId'] !== undefined && params['clientId'] !== null && params['clientId'] !== '' && params['clientId'] !== 0) {
-        this.isEditMode = true;
-        if (isPlatformBrowser(this.platformId)) {
-          this.selectedClient = JSON.parse(localStorage.getItem('client')!);
-        }
-      }
-    });
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiCalling: ApiCallingService,
+    private toaster: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.addEditForm = this.createForm();
   }
 
   ngOnInit(): void {
-    this.isEditMode = this._router.url.includes('edit');
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const id = params['id'];
+      this.isEditMode = id;
 
-    this.clientForm = this.fb.group({
-      name: ['', Validators.required],
-      details: ['', Validators.required],
-      address: ['', Validators.required],
-      contact_number: ['', Validators.required],
-      contact_email: ['', [Validators.required, Validators.email]],
-      company_url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-      status: ['Active', Validators.required],
-      first_contact_date: ['', Validators.required],
+      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+        this.apiCalling.getData("Client", `getClientById?clientId=${id}`,  true)
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+                this.selectedValue = response?.data;
+                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
+            } else {
+              this.selectedValue = [];
+            }
+          },
+          error: (error) => {
+            this.selectedValue = [];
+          }
+        });
+        // this.patchFormValues(); // Removed this line
+      }
     });
   }
 
@@ -79,51 +71,59 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  submitForm() {
-    console.log(this.clientForm.value);
-    if (!this.clientForm.valid) {
+
+  private createForm(): FormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      details: ['', Validators.required],
+      address: ['', Validators.required],
+      contactNumber: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      website: ['', [Validators.required, Validators.pattern('https?://.+')]],
+    });
+  }
+
+  private patchFormValues(): void {
+    if (this.selectedValue) {
+      this.addEditForm.patchValue({
+        name: this.selectedValue.name,
+        details: this.selectedValue.details,
+        address: this.selectedValue.address,
+        contactNumber: this.selectedValue.contactNumber,
+        email: this.selectedValue.email,
+        website: this.selectedValue.website,
+      });
+    }
+  }
+
+  submitForm(): void {
+    this.isSubmitted = true;
+    if (this.addEditForm.invalid) {
       return;
     }
 
-    const formData = new FormData();
+    const body = this.addEditForm.value;
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData("Client", `updateClient?clientId=${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("Client", "addClient", body, true);
 
-    if (this.selectedFile) {
-      formData.append('companyImage', this.selectedFile);
-    }
-
-    Object.keys(this.clientForm.controls).forEach(key => {
-      formData.append(key, this.clientForm.get(key)?.value);
-    });
-
-    const endpoint = this.isEditMode ? `edit/${this.selectedClient.clientId}` : 'add';
-    const method = this.isEditMode ? this._apiCalling.putData : this._apiCalling.postData;
-
-    method.call(this._apiCalling, "client", endpoint, formData, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
-          if (response?.success) {
-            if (!this.isEditMode) {
-              this._authService.saveUser(response?.data?.user);
-              this._authService.saveUserRole(response?.data?.user?.role);
-              this._authService.setToken(response?.data?.token);
-              this._dataShare.updateLoginStatus(true);
-              this._router.navigate([`${'/dashboard'}`]);
-            } else {
-              this._toaster.success(response?.message, 'Success!');
-              this.goBack();
-            }
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
-        },
-        error: (error) => {
-          this._toaster.error("Internal server error occurred while processing your request");
+    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.toaster.success(response.message, 'Success!');
+          this.goBack();
+        } else {
+          this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
-      });
+      },
+      error: (error) => {
+        console.error('API error:', error);
+        this.toaster.error("An error occurred while processing your request. Please try again later.");
+      }
+    });
   }
 
-  goBack() {
-    this._router.navigate([`${'/admin/clients'}`]);
+  goBack(): void {
+    this.router.navigate(['/admin/clients']);
   }
-
 }

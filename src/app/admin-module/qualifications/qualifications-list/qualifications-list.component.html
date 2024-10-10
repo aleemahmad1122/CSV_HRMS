@@ -132,10 +132,10 @@
               </tr>
             </thead>
             <tbody class="datatable-body">
-              @for (data of qualificationsList; track $index) {
+              @for (data of qualifications; track $index) {
               <tr data-row="0" class="datatable-row" style="left: 0px;">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{data.id}}</span></span>
+                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{$index + 1}}</span></span>
                 </td>
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
@@ -183,7 +183,33 @@
                                   class="la la-file-pdf-o"></i></span> <span class="navi-text">PDF</span> </a> </li>
                         </ul>
                       </div>
-                    </div> <a href="javascript:;"
+                    </div>
+
+
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            Are you absolutely sure?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          This action cannot be undone. This will delete and remove your data from our servers.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="button"  (click)="onDelete(data.qualificationId)"  data-bs-dismiss="modal" class="btn btn-danger">Continue</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                    <a [routerLink]="['/admin/qualifications/edit']"
+                    [queryParams]="{id: data.qualificationId}"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                       title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -199,7 +225,9 @@
                               d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
                               fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
                           </g>
-                        </svg> </span> </a> <a href="javascript:;"
+                        </svg> </span> </a>
+
+                        <button  data-bs-toggle="modal" data-bs-target="#exampleModal"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                         class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -213,7 +241,7 @@
                               d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
                               fill="#000000" opacity="0.3"></path>
                           </g>
-                        </svg> </span> </a>
+                        </svg> </span> </button>
                   </span></td>
               </tr>
               }
@@ -276,3 +304,4 @@
   </div>
   <!--end::Container-->
 </div>
+

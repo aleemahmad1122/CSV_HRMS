@@ -1,12 +1,10 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
-import { UserAuthenticationService } from '../../../shared/Services/user-authentication.service';
-import { DataShareService } from '../../../shared/Services/data-share.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -16,39 +14,46 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './add-edit-qualification.component.html',
   styleUrl: './add-edit-qualification.component.css'
 })
-export class AddEditQualificationComponent {
+export class AddEditQualificationComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  qualificationForm!: FormGroup;
-  isEditMode: boolean = false;
+  qualificationForm: FormGroup;
+  isEditMode = false;
+  isSubmitted = false;
   selectedQualification: any;
+
   constructor(
-    private _fb: FormBuilder,
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _apiCalling: ApiCallingService,
-    private _authService: UserAuthenticationService,
-    private _dataShare: DataShareService,
-    private _toaster: ToastrService,
-    @Inject(PLATFORM_ID) private platformId: Object) {
-    this._route.queryParams.subscribe(params => {
-      this.isEditMode = false;
-      this.selectedQualification = {};
-      if (params['qualificationId'] !== undefined && params['qualificationId'] !== null && params['qualificationId'] !== '' && params['qualificationId'] !== 0) {
-        this.isEditMode = true;
-        if (isPlatformBrowser(this.platformId)) {
-          this.selectedQualification = JSON.parse(localStorage.getItem('qualification')!);
-        }
-      }
-    });
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiCalling: ApiCallingService,
+    private toaster: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.qualificationForm = this.createForm();
   }
 
-
   ngOnInit(): void {
-    this.isEditMode = this._router.url.includes('edit');
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const id = params['id'];
+      this.isEditMode = id;
 
-    this.qualificationForm = this._fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+        this.apiCalling.getData("Qualification", `getQualificationById?qualificationId=${id}`,  true)
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+                this.selectedQualification = response?.data;
+                this.patchFormValues(); // Call patchFormValues here after setting selectedQualification
+            } else {
+              this.selectedQualification = [];
+            }
+          },
+          error: (error) => {
+            this.selectedQualification = [];
+          }
+        });
+        // this.patchFormValues(); // Removed this line
+      }
     });
   }
 
@@ -57,57 +62,50 @@ export class AddEditQualificationComponent {
     this.ngUnsubscribe.complete();
   }
 
-  submitForm() {
-    if (!this.qualificationForm.valid) {
-      return;
-    }
+  private createForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.maxLength(500)]],
+    });
+  }
 
-    if (!this.isEditMode) {
-      const formData = new FormData();
-      formData.append('name', this.qualificationForm.get('name')?.value || '');
-      formData.append('description', this.qualificationForm.get('description')?.value || '');
-
-      this._apiCalling.postData("qualification", "add", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-              this._toaster.success(response?.message, 'Success!');
-              this.goBack();
-
-            } else {
-              this._toaster.error(response?.message, 'Error!');
-            }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
-          }
-        });
-    }
-
-    else {
-      var formData = new FormData();
-      formData.append('name', this.qualificationForm.get('name')?.value || '');
-      formData.append('description', this.qualificationForm.get('description')?.value || '');
-
-      this._apiCalling.putData("qualification", "edit/" + this.selectedQualification.qualificationId + "", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-              this._toaster.success(response?.message, 'Success!');
-              this.goBack();
-
-            } else {
-              this._toaster.error(response?.message, 'Error!');
-            }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occured while processing your request")
-          }
-        })
+  private patchFormValues(): void {
+    if (this.selectedQualification) {
+      this.qualificationForm.patchValue({
+        name: this.selectedQualification.name,
+        description: this.selectedQualification.description
+      });
     }
   }
 
-  goBack() {
-    this._router.navigate([`${'/admin/qualifications'}`]);
+  submitForm(): void {
+    this.isSubmitted = true;
+    if (this.qualificationForm.invalid) {
+      return;
+    }
+
+    const body = this.qualificationForm.value;
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData("Qualification", `updateQualification?qualificationId=${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("Qualification", "addQualification", body, true);
+
+    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.toaster.success(response.message, 'Success!');
+          this.goBack();
+        } else {
+          this.toaster.error(response?.message || 'An error occurred', 'Error!');
+        }
+      },
+      error: (error) => {
+        console.error('API error:', error);
+        this.toaster.error("An error occurred while processing your request. Please try again later.");
+      }
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/admin/qualifications']);
   }
 }

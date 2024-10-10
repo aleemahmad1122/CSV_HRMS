@@ -13,7 +13,7 @@ const routes: Routes = [
         canActivate: [ProtectedGuard]
       },
       {
-        path: 'add-employee',
+        path: 'employee/:action',
         loadComponent: () => import(`./add-edit-module/add-edit-module.component`).then(c => c.AddEditModuleComponent),
         title:'Add Employee',
         canActivate: [ProtectedGuard]

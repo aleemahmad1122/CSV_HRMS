@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Clients } from '../../../types';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Clients } from '../../../types/index';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
+import { Subject, takeUntil } from 'rxjs';
+
+
+
 @Component({
   selector: 'app-client-list',
   standalone: true,
@@ -10,29 +14,49 @@ import { RouterModule } from '@angular/router';
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.css'
 })
-export class ClientListComponent implements OnInit {
+export class ClientListComponent {
+  private ngUnsubscribe = new Subject<void>();
+  dataList:Clients[] = [] ;
+
   constructor(
-    private dialog: MatDialog,
-  ) { }
+    private _apiCalling: ApiCallingService
+  )
+  {
 
-  clientList: Clients[] =  [
-    {
-      id: 1,
-      name: "IceHrm Sample Client 1",
-      details: null,
-      address: "001, Sample Road,\nSample City, USA",
-      contact_number: "678-894-1047"
+  }
+
+
+
+ngOnInit(): void {
+  this._apiCalling.getData("Client", "getClients",  true)
+  .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    next: (response) => {
+      if (response?.success) {
+        this.dataList = response?.data;
+      } else {
+        this.dataList = [];
+      }
     },
-    {
-      id: 2,
-      name: "IceHrm Sample Client 2",
-      details: null,
-      address: "001, Sample Road,\nSample City, USA",
-      contact_number: "678-894-1047"
+    error: (error) => {
+      this.dataList = [];
     }
-  ] ;
+  });
+}
 
-  ngOnInit(): void { }
+
+onDelete(id:string):void{
+  this._apiCalling.deleteData("Client", `deleteClient?clientId=${id}`, id,true)
+    .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.dataList = this.dataList.filter((d:Clients) => d.clientId !== id);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting Job:', error);
+      }
+    });
+}
 
 
 }

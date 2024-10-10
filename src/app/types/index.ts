@@ -1,3 +1,14 @@
+
+interface ICommon {
+  isActive: boolean;
+  createdBy: string;
+  createdDate: string;
+  modifiedBy: string;
+  modifiedDate: string;
+}
+
+
+
 export interface Company {
   id: number;
   title: string;
@@ -9,30 +20,39 @@ export interface Company {
 }
 
 
-export interface Job {
-  id: number;
-  code: string;
-  name: string;
+export interface Job extends ICommon{
+  jobId: string;
+  jobTitle: string;
+  jobCode: string;
+  jobDescription: string;
+  specification: string;
 }
 
-export interface Qualification {
-  id: number;
+export interface Qualification extends ICommon{
+  qualificationId: string;
   name: string;
   description: string;
 }
 
-export interface Projects {
-  id: number;
+export interface Projects extends ICommon {
+  projectId: string;
   name: string;
-  client: string | null;
+  statusId: string;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  currency: string;
+  description: string;
 }
 
-export interface Clients {
-  id: number;
+export interface Clients extends ICommon{
+  clientId: string;
   name: string;
-  details: string | null;
+  email: string;
   address: string;
-  contact_number: string;
+  details: string;
+  contactNumber: string;
+  website: string;
 }
 
 export interface Sidebar {
