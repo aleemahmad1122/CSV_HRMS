@@ -79,7 +79,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  constructor(@Inject(DOCUMENT) private _document: Document, private _route: Router, public translate: TranslateService) {
+  constructor(
+    @Inject(DOCUMENT)
+    private _document: Document,
+    private _route: Router,
+    public translate: TranslateService
+    ) {
     _route.events.subscribe((val) =>
       this.activRoute = _route.url
     )
@@ -92,7 +97,15 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.loadScript();
+  }
 
+  // New method to load the script
+  loadScript() {
+    const script = document.createElement('script');
+    script.src = './assets/js/scripts.bundle.js';
+    script.async = true;
+    document.body.appendChild(script);
   }
 
 

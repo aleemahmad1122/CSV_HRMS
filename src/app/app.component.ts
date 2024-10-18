@@ -38,10 +38,12 @@ export class AppComponent {
   ) {
     this.isLogin = _authService.isLogin();
     this._dataShare.$updateLoginStatus.subscribe(isLogin => {
+      console.warn(isLogin);
+
       if (isLogin) {
-        this.isLogin = false;
+        this.isLogin = true;
       } else {
-        this.isLogin = _authService.isLogin();
+        this.isLogin = false;
       }
     });
 

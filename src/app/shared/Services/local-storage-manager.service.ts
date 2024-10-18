@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { CompanyDetail,EmployeeDetail } from "../../types/index";
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +12,9 @@ export class LocalStorageManagerService {
   saveUserToStorage(data:any): boolean {
     this.removeUser();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('user',JSON.stringify(data));  
+      localStorage.setItem('user',JSON.stringify(data));
     }
-    
+
     return true;
   }
 
@@ -42,7 +43,7 @@ export class LocalStorageManagerService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('user',JSON.stringify(data));
     }
-    
+
   }
 
   saveUserRole(role: number): void {
@@ -66,8 +67,64 @@ export class LocalStorageManagerService {
       token =  localStorage.getItem('token') || '{}';
     }
     return token;
-    
+
   }
+
+  setCompanyDetail(companyDetail:CompanyDetail): void {
+    this.removeCompanyDetail();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('companyDetail',JSON.stringify(companyDetail));
+    }
+  }
+
+  getCompanyDetail(): CompanyDetail{
+    let companyDetail :CompanyDetail;
+    if (isPlatformBrowser(this.platformId)) {
+      companyDetail =  JSON.parse(localStorage.getItem('companyDetail')) || [];
+    }
+    return companyDetail;
+
+  }
+
+
+  removeCompanyDetail(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('companyDetail');
+    }
+  }
+
+
+
+
+
+
+  setEmployeeDetail(employeeDetail:EmployeeDetail[]): void {
+    this.removeEmployeeDetail();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('employeeDetail',JSON.stringify(employeeDetail));
+    }
+  }
+
+  getEmployeeDetail(): EmployeeDetail[]{
+    let employeeDetail :EmployeeDetail[] = [];
+    if (isPlatformBrowser(this.platformId)) {
+      employeeDetail =  JSON.parse(localStorage.getItem('employeeDetail')) || [];
+    }
+    return employeeDetail;
+
+  }
+
+
+  removeEmployeeDetail(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('employeeDetail');
+    }
+  }
+
+
+
+
+
 
   setTokenToStorage(token:string): void {
     this.removeToken();
@@ -80,7 +137,7 @@ export class LocalStorageManagerService {
     let token = '';
     if (isPlatformBrowser(this.platformId)) {
       token = localStorage.getItem('token') || '';
-    } 
+    }
 
     return token !== '' ?  true : false;
   }
@@ -90,7 +147,7 @@ export class LocalStorageManagerService {
     if (isPlatformBrowser(this.platformId)) {
       let token = localStorage.getItem('isAdmin') || '';
       token === '1' ?  true : false;
-    } 
+    }
     return token;
   }
 
@@ -99,7 +156,7 @@ export class LocalStorageManagerService {
     if (isPlatformBrowser(this.platformId)) {
       user = JSON.parse(localStorage.getItem('user') || '{}');
     }
-    
+
     return user;
   }
 
@@ -108,7 +165,7 @@ export class LocalStorageManagerService {
     if (isPlatformBrowser(this.platformId)) {
       userId = JSON.parse(localStorage.getItem('user') || '{}').userId;
     }
-    
+
     return userId;
   }
 
@@ -124,7 +181,7 @@ export class LocalStorageManagerService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
     }
-    
+
   }
 
   removePermissions(): void {

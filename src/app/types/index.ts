@@ -105,3 +105,13 @@ export interface AdminReportModule {
   name: string;
 }
 
+export interface CompanyDetail {
+  companyId: string;
+  companyName: string;
+}
+
+export interface EmployeeDetail {
+  employeeId: string;
+  email: string;
+  employeeName: string;
+}
