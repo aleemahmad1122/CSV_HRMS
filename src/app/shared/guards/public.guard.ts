@@ -21,6 +21,6 @@ class PublicGuardService {
 }
 
 export const PublicGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
-  // return inject(PublicGuardService).canActivate(next, state);
-  return false
+  return inject(PublicGuardService).canActivate(next, state);
+  // return false
 }

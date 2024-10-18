@@ -30,6 +30,7 @@
       "report": "Report"
     },
     "form":{
+      "fullName":"Full Name",
       "name":"Name",
       "description":"Description",
       "quantity":"Quantity",

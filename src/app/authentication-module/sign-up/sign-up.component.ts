@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ApiCallingService } from '../../shared/Services/api-calling.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,32 +16,37 @@ export class SignUpComponent implements OnInit {
   loading = false;
   currentStep = 1;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private _apiCalling: ApiCallingService,
+  ) {}
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
-      fname: ['', Validators.required],
-      lname: ['', Validators.required],
-      address1: ['', Validators.required],
-      address2: [''],
-      state: ['', Validators.required],
-      country: ['', Validators.required],
+      fullName: ['', Validators.required],
+      email: ['', [Validators.required,Validators.email]],
+      phoneNumber: [''],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[!@#$%^&*])/)]],
+      companyName: ['',Validators.required,],
+      address: [''],
+      country: [''],
+      city: [''],
     });
   }
 
   goToNextStep(): void {
-    if (this.currentStep === 1 && this.signupForm.get('fname')?.valid && this.signupForm.get('lname')?.valid) {
+    if (this.currentStep === 1 && this.signupForm.get('fullName')?.valid && this.signupForm.get('email')?.valid && this.signupForm.get('password')?.valid) {
       this.currentStep = 2;
-    } else if (this.currentStep === 2 && this.signupForm.get('address1')?.valid && this.signupForm.get('state')?.valid && this.signupForm.get('country')?.valid) {
+    } else if (this.currentStep === 2 && this.signupForm.get('address')?.valid && this.signupForm.get('country')?.valid && this.signupForm.get('city')?.valid) {
       this.currentStep = 3;
     }
   }
 
   canProceedToNextStep(): boolean | undefined {
     if (this.currentStep === 1) {
-      return this.signupForm.get('fname')?.valid && this.signupForm.get('lname')?.valid;
+      return this.currentStep === 1 && this.signupForm.get('fullName')?.valid && this.signupForm.get('email')?.valid && this.signupForm.get('password')?.valid;
     } else if (this.currentStep === 2) {
-      return this.signupForm.get('address1')?.valid && this.signupForm.get('state')?.valid && this.signupForm.get('country')?.valid;
+      return this.currentStep === 2 && this.signupForm.get('address')?.valid && this.signupForm.get('country')?.valid && this.signupForm.get('city')?.valid;
     }
     return false;
   }
@@ -53,7 +59,17 @@ export class SignUpComponent implements OnInit {
 
   onSubmit(): void {
     if (this.signupForm.valid && this.currentStep === 3) {
-      console.log(this.signupForm.value);
+      this._apiCalling.postData("Auth", "signUp", this.signupForm.value, true).subscribe({
+        next: (response) => {
+
+          console.log('Sign up successful', response);
+          this.signupForm.reset();
+          this.currentStep = 1;
+        },
+        error: (error) => {
+          console.error('Sign up failed', error);
+        }
+      });
     }
   }
 }
