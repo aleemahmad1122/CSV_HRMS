@@ -210,3 +210,21 @@ a:hover {
 .is-invalid {
   border: 2px solid red !important;
 }
+
+
+#selectCompanyModal{
+  .modal-dialog{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-body{
+    height: 15rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: auto !important;
+  }
+}

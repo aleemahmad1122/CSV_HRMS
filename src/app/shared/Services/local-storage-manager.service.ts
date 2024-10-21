@@ -80,7 +80,7 @@ export class LocalStorageManagerService {
   getCompanyDetail(): CompanyDetail{
     let companyDetail :CompanyDetail;
     if (isPlatformBrowser(this.platformId)) {
-      companyDetail =  JSON.parse(localStorage.getItem('companyDetail')) || [];
+      companyDetail =  JSON.parse(localStorage.getItem('companyDetail')) || {};
     }
     return companyDetail;
 
@@ -143,12 +143,12 @@ export class LocalStorageManagerService {
   }
 
   isAdminValidationFromStorage(): boolean {
-    let token = false;
+    let isAdmin = false; // Changed variable name for clarity
     if (isPlatformBrowser(this.platformId)) {
-      let token = localStorage.getItem('isAdmin') || '';
-      token === '1' ?  true : false;
+      const token = localStorage.getItem('isAdmin') || ''; // Removed redundant declaration
+      isAdmin = token === '1'; // Corrected the assignment logic
     }
-    return token;
+    return isAdmin; // Return the correct boolean value
   }
 
   getUserFromStorage(): any {

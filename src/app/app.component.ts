@@ -20,7 +20,6 @@ import { DataShareService } from './shared/Services/data-share.service';
     Components.PageNotFoundComponent,
     Components.ScrolltopComponent,
     Components.SidebarComponent,
-    Components.StickyToolbarComponent,
     Components.TopbarComponent,
     Components.SubheaderComponent,
     Components.QuickPanelComponent,
@@ -33,7 +32,8 @@ import { DataShareService } from './shared/Services/data-share.service';
 export class AppComponent {
   title = 'CSV_HRMS-Client';
   isLogin: boolean;
-  constructor(private _authService: UserAuthenticationService,
+  constructor(
+    private _authService: UserAuthenticationService,
     private _dataShare: DataShareService
   ) {
     this.isLogin = _authService.isLogin();

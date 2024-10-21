@@ -72,11 +72,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Select Company</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+        <button type="button" class="btn-close border-0" data-bs-dismiss="modal" aria-label="Close">x</button>
       </div>
       <div class="modal-body">
         <div *ngFor="let company of companyList">
-          <div class="company-item"  (click)="selectCompany(company)" >
+          <div class="company-item btn btn-secondary w-100 mb-3"  (click)="selectCompany(company)" >
             {{ company.companyName }}
           </div>
         </div>

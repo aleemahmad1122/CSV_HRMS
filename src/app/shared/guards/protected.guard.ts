@@ -1,16 +1,35 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable, inject } from '@angular/core';
 import { UserAuthenticationService } from '../Services/user-authentication.service';
+import { DataShareService } from '../Services/data-share.service';
 
 @Injectable({
   providedIn: 'root'
 })
 class ProtectedGuardService {
 
-  constructor(private _router: Router, private _authService: UserAuthenticationService) { }
+  isLogin:boolean;
+
+  constructor(
+    private _router: Router,
+    private _dataShare: DataShareService,
+     private _authService: UserAuthenticationService
+  )
+  {
+    this.isLogin = _authService.isLogin();
+    this._dataShare.$updateLoginStatus.subscribe(isLogin => {
+
+      if (isLogin) {
+        this.isLogin = true;
+      } else {
+        this.isLogin = false;
+      }
+    });
+
+  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this._authService.isLogin()) {
+    if (this.isLogin) {
       return true;
     }
     else {

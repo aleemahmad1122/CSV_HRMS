@@ -20,7 +20,7 @@ interface ClientType  { clientTypeId: number | string; clientTypeName: string}
 export class AddEditClientComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
-  isEditMode = false;
+  isEditMode :boolean | string= false;
   isSubmitted = false;
   selectedValue: any;
 
@@ -47,7 +47,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Client", `getClientById?clientId=${id}`,  true)
+        this.apiCalling.getData("Client", `getClientById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -104,7 +104,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Client", `updateClient?clientId=${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("Client", `updateClient/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Client", "addClient", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({

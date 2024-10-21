@@ -6,7 +6,6 @@ export { MobNavComponent } from './mob-nav/mob-nav.component';
 export { PageNotFoundComponent } from "./page-not-found/page-not-found.component"
 export { ScrolltopComponent } from './scrolltop/scrolltop.component';
 export { SidebarComponent } from './sidebar/sidebar.component';
-export { StickyToolbarComponent } from './sticky-toolbar/sticky-toolbar.component';
 export { UserPanelComponent } from './user-panel/user-panel.component';
 export { TopbarComponent } from './topbar/topbar.component';
 export { SubheaderComponent } from './subheader/subheader.component';

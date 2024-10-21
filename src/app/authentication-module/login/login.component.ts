@@ -20,7 +20,7 @@ declare var $: any;
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent  {
   private ngUnsubscribe = new Subject<void>();
   loginForm!: FormGroup;
   companyList: CompanyDetail[] = [];
@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private _toaster: ToastrService,
     private _fb: FormBuilder,
+    private _router: Router,
     private _apiCalling: ApiCallingService,
     private _authService: UserAuthenticationService,
     private _localStorageService: LocalStorageManagerService,
@@ -42,20 +43,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
-
   selectCompany(company: CompanyDetail): void {
     this._dataShare.updateLoginStatus(true);
     this._localStorageService.setCompanyDetail(company);
     $('#selectCompanyModal').modal('hide');
+    this._router.navigateByUrl('dashboard');
   }
 
   submitLoginForm(): void {

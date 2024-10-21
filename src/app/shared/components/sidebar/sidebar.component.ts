@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Injectable, OnInit, Output } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Sidebar } from "../../../types/index";
@@ -78,6 +78,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
   }
+
 
   constructor(
     @Inject(DOCUMENT)
