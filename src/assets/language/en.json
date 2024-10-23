@@ -27,7 +27,8 @@
       "overtime": "Overtime",
       "loans": "Loans",
       "adminReport": "Admin Report",
-      "report": "Report"
+      "report": "Report",
+      "permission":"Permission"
     },
     "form":{
       "fullName":"Full Name",
@@ -43,7 +44,8 @@
       "details":"Details",
       "address":"Address",
       "category":"Category",
-      "selectCategory":"Select Category"
+      "selectCategory":"Select Category",
+      "searchByNameNumberAddress": "Search by Name, Address and Number"
     },
     "placeholders":{
       "name":"Name",
@@ -58,7 +60,8 @@
       "address":"Address",
       "quantity":"Quantity",
       "category":"Category",
-      "selectCategory":"Select Category"
+      "selectCategory":"Select Category",
+      "searchByName": "Search by Name"
     },
     "errors":{
       "maxFileSize":"Max file size",
@@ -82,7 +85,36 @@
       "create": "Create",
       "description": "Description",
       "details":"Details",
-      "address":"Address"
+      "address":"Address",
+      "continue":"Continue",
+      "totalRecords":"Total records",
+      "newRecord":"New record",
+      "export":"Export",
+      "print":"Print",
+      "copy":"Copy",
+      "excel":"Excel",
+      "chooseAnOption":"Choose an option:",
+      "actions":"Actions",
+      "contactNumber":"Contact Number",
+      "specification":"specification",
+      "budget":"budget",
+      "startDate":"Start Date",
+      "endDate":"End Date"
+    },
+    "client":{
+      "clientManagement":"Client Management",
+      "clientManagementMadeEasy":"Client management made easy"
+    },
+    "job":{
+        "jobManagement":"Job Management",
+        "jobHeading": "Job management made easy"
+    },
+    "permission":{
+        "permission":"Permission"
+    },
+    "project":{
+      "projectManagement":"Project Management",
+      "projectHeading": "Project management made easy"
     },
     "qualification": {
       "qualification": "Qualification",
@@ -90,6 +122,10 @@
       "qualificationHeading": "Qualifications management made easy",
       "errorMessageName": "Name is required",
       "errorMessageDescription": "Description is required"
+    },
+    "msg":{
+"areYouAbsolutely":"Are you absolutely sure?",
+"actionCannotBeUndone":"This action cannot be undone. This will delete and remove your data from our servers."
     }
   }
 }

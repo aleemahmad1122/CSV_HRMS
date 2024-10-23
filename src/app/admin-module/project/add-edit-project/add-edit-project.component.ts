@@ -47,7 +47,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode) {
-        this.apiCalling.getData("Project", `getProjectById?projectId=${id}`, true)
+        this.apiCalling.getData("Project", `getProjectById/${id}`, true)
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
@@ -145,7 +145,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
     body.endDate = this.formatDateForSubmission(body.endDate);
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Project", `updateProject?projectId=${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("Project", `updateProject/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Project", "addProject", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({

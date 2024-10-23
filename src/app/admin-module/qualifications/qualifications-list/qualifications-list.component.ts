@@ -1,57 +1,107 @@
-import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
-import { Qualification } from '../../../types';
-import { TranslateModule } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Qualification,IQualificationRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { ExportService } from '../../../shared/Services/export.service';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-qualifications-list',
   standalone: true,
-  imports: [TranslateModule, CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
   templateUrl: './qualifications-list.component.html',
   styleUrl: './qualifications-list.component.css'
 })
-export class QualificationsListComponent implements OnInit {
+export class QualificationsListComponent {
   private ngUnsubscribe = new Subject<void>();
-  qualifications: Qualification[] = [];
+  private searchSubject = new Subject<string>();
+
+  dataList: Qualification[] = [];
+  dropDownList = [10, 50, 75, 100];
+  searchTerm = '';
+  totalCount = 0;
+  pageSize = 10;
+  pageNo = 1;
+  totalPages = 0;
+
   constructor(
-    private _apiCalling: ApiCallingService,
-  ) { }
-
-
-
-  ngOnInit(): void {
-    this._apiCalling.getData("Qualification", "getQualifications",  true)
-    .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.qualifications = response?.data;
-        } else {
-          this.qualifications = [];
-        }
-      },
-      error: (error) => {
-        this.qualifications = [];
-      }
-    });
+    private apiService: ApiCallingService,
+    private exportService: ExportService
+  ) {
+    this.initializeSearch();
+    this.getData();
   }
 
+  private initializeSearch(): void {
+    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((term) => this.getData(term));
+  }
 
-onDelete(id: string): void {
-  this._apiCalling.deleteData("Qualification", `deleteQualification?qualificationId=${id}`, id,true)
-    .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.qualifications = this.qualifications.filter((q:Qualification) => q.qualificationId !== id);
-        }
-      },
-      error: (error) => {
-        console.error('Error deleting qualification:', error);
-      }
-    });
-}
+  private getData(searchTerm = ''): void {
+    this.apiService.getData('Qualification', 'getQualifications', true, { searchQuery: searchTerm })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IQualificationRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
 
+  private handleResponse(response: IQualificationRes): void {
+    if (response?.success) {
+      const { qualifications, pagination } = response.data;
+      Object.assign(this, {
+        dataList: qualifications,
+        pageNo: pagination.pageNo,
+        pageSize: pagination.pageSize,
+        totalCount: pagination.totalCount,
+        totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
+      });
+    } else this.dataList = [];
+  }
+
+  search(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
+  }
+
+  changePage(newPage: number): void {
+    if (newPage > 0 && newPage <= this.totalPages) {
+      this.pageNo = newPage;
+      this.getPaginatedData();
+    }
+  }
+
+  changePageSize(size: number): void {
+    Object.assign(this, { pageSize: size, pageNo: 1 });
+    this.getPaginatedData();
+  }
+
+  private getPaginatedData(): void {
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
+    this.apiService.getData('Qualification', 'getQualifications', true, params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => this.handleResponse(res),
+        error: (err) => console.error('Error fetching data:', err),
+      });
+  }
+
+  onDelete(id: string): void {
+    console.log(id);
+
+    this.apiService.deleteData('Qualification', `deleteQualification/${id}`, id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.qualificationId !== id);
+        },
+        error: (err) => console.error('Error deleting Qualification:', err),
+      });
+  }
+
+  exportData(format: string): void {
+    this.exportService.exportData(format, this.dataList);
+  }
 }

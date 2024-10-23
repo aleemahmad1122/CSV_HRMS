@@ -8,6 +8,50 @@ interface ICommon {
 }
 
 
+interface ICommonRes {
+  status:number;
+  success:number;
+  message:string;
+}
+
+export interface IClientRes extends ICommonRes {
+
+  data: {
+    clients:Clients[]
+    pagination:IPagination
+  };
+
+}
+
+
+export interface IJobRes extends ICommonRes {
+
+  data: {
+    jobs:Job[]
+    pagination:IPagination
+  };
+
+}
+
+export interface IProjectRes extends ICommonRes {
+
+  data: {
+    projects:Projects[]
+    pagination:IPagination
+  };
+
+}
+
+export interface IQualificationRes extends ICommonRes {
+
+  data: {
+    qualifications:Qualification[]
+    pagination:IPagination
+  };
+
+}
+
+
 
 export interface Company {
   id: number;
@@ -45,7 +89,7 @@ export interface Projects extends ICommon {
   description: string;
 }
 
-export interface Clients extends ICommon{
+export interface Clients {
   clientId: string;
   name: string;
   email: string;
@@ -115,3 +159,11 @@ export interface EmployeeDetail {
   email: string;
   employeeName: string;
 }
+
+interface IPagination {
+  totalCount: number;
+  pageSize:number;
+  pageNo:number;
+}
+
+

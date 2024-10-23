@@ -39,7 +39,7 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Job", `getJobById?jobId=${id}`,  true)
+        this.apiCalling.getData("Job", `getJobById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -91,7 +91,7 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Job", `updateJob?jobId=${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("Job", `updateJob/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Job", "addJob", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({

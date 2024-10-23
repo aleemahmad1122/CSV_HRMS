@@ -1,59 +1,105 @@
 import { Component } from '@angular/core';
-import { Projects } from '../../../types/index';
+import { Projects,IProjectRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
-import { Subject, takeUntil } from 'rxjs';
+import { ExportService } from '../../../shared/Services/export.service';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.css'
 })
-export class ProjectListComponent  {
+export class ProjectListComponent {
   private ngUnsubscribe = new Subject<void>();
-  dataList:Projects[] = [] ;
+  private searchSubject = new Subject<string>();
+
+  dataList: Projects[] = [];
+  dropDownList = [10, 50, 75, 100];
+  searchTerm = '';
+  totalCount = 0;
+  pageSize = 10;
+  pageNo = 1;
+  totalPages = 0;
 
   constructor(
-    private _apiCalling: ApiCallingService
-  )
-  {
-
+    private apiService: ApiCallingService,
+    private exportService: ExportService
+  ) {
+    this.initializeSearch();
+    this.getData();
   }
 
+  private initializeSearch(): void {
+    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((term) => this.getData(term));
+  }
 
+  private getData(searchTerm = ''): void {
+    this.apiService.getData('Project', 'getProjects', true, { searchQuery: searchTerm })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IProjectRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
 
-ngOnInit(): void {
-  this._apiCalling.getData("Project", "getProjects",  true)
-  .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-    next: (response) => {
-      if (response?.success) {
-        this.dataList = response?.data;
-      } else {
-        this.dataList = [];
-      }
-    },
-    error: (error) => {
-      this.dataList = [];
+  private handleResponse(response: IProjectRes): void {
+    if (response?.success) {
+      const { projects, pagination } = response.data;
+      Object.assign(this, {
+        dataList: projects,
+        pageNo: pagination.pageNo,
+        pageSize: pagination.pageSize,
+        totalCount: pagination.totalCount,
+        totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
+      });
+    } else this.dataList = [];
+  }
+
+  search(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
+  }
+
+  changePage(newPage: number): void {
+    if (newPage > 0 && newPage <= this.totalPages) {
+      this.pageNo = newPage;
+      this.getPaginatedData();
     }
-  });
-}
+  }
 
+  changePageSize(size: number): void {
+    Object.assign(this, { pageSize: size, pageNo: 1 });
+    this.getPaginatedData();
+  }
 
-onDelete(id:string):void{
-  this._apiCalling.deleteData("Project", `deleteProject?projectId=${id}`, id,true)
-    .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.dataList = this.dataList.filter((d:Projects) => d.projectId !== id);
-        }
-      },
-      error: (error) => {
-        console.error('Error deleting Job:', error);
-      }
-    });
-}
+  private getPaginatedData(): void {
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
+    this.apiService.getData('Project', 'getProjects', true, params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => this.handleResponse(res),
+        error: (err) => console.error('Error fetching data:', err),
+      });
+  }
 
+  onDelete(id: string): void {
+    this.apiService.deleteData('Project', `deleteProject/${id}`, id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.projectId !== id);
+        },
+        error: (err) => console.error('Error deleting Project:', err),
+      });
+  }
 
+  exportData(format: string): void {
+    this.exportService.exportData(format, this.dataList);
+  }
 }

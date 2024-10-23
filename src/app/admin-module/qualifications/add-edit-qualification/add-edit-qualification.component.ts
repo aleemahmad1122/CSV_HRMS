@@ -38,7 +38,7 @@ export class AddEditQualificationComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Qualification", `getQualificationById?qualificationId=${id}`,  true)
+        this.apiCalling.getData("Qualification", `getQualificationById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -86,7 +86,7 @@ export class AddEditQualificationComponent implements OnInit, OnDestroy {
 
     const body = this.qualificationForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Qualification", `updateQualification?qualificationId=${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("Qualification", `updateQualification/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Qualification", "addQualification", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({

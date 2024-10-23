@@ -6,12 +6,14 @@
       <!--begin::Header-->
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
-          <h3 class="card-label">Client Management
-            <span class="d-block text-muted pt-2 font-size-sm">Client management made easy</span>
+          <h3 class="card-label">
+            {{'language.client.clientManagement' | translate}}
+            <span class="d-block text-muted pt-2 font-size-sm">  {{'language.client.clientManagementMadeEasy' | translate}}</span>
           </h3>
         </div>
-        <form class="d-flex w-50" role="search"  >
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="searchTerm" (input)="search($event)">
+        <form class="d-flex w-50" role="search">
+          <input class="form-control" type="search" [placeholder]="'language.form.searchByNameNumberAddress' | translate" aria-label="Search" name="searchTerm"
+            (input)="search($event)">
         </form>
         <div class="card-toolbar">
           <!--begin::Dropdown-->
@@ -33,19 +35,20 @@
                   </g>
                 </svg>
                 <!--end::Svg Icon-->
-              </span>Export</button>
+              </span>  {{'language.generic.export' | translate}} </button>
             <!--begin::Dropdown Menu-->
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
               <!--begin::Navigation-->
               <ul class="navi flex-column navi-hover py-2">
-                <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an
-                  option:</li>
+                <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">
+                  {{'language.generic.chooseAnOption' | translate}}
+                </li>
                 <li class="navi-item">
                   <a style="cursor: pointer;" class="navi-link" (click)="exportData('print')">
                     <span class="navi-icon">
                       <i class="la la-print"></i>
                     </span>
-                    <span class="navi-text">Print</span>
+                    <span class="navi-text">  {{'language.generic.print' | translate}}  </span>
                   </a>
                 </li>
                 <li class="navi-item">
@@ -53,7 +56,7 @@
                     <span class="navi-icon">
                       <i class="la la-copy"></i>
                     </span>
-                    <span class="navi-text">Copy</span>
+                    <span class="navi-text"> {{'language.generic.copy' | translate}}  </span>
                   </a>
                 </li>
                 <li class="navi-item">
@@ -61,7 +64,7 @@
                     <span class="navi-icon">
                       <i class="la la-file-excel-o"></i>
                     </span>
-                    <span class="navi-text">Excel</span>
+                    <span class="navi-text"> {{'language.generic.excel' | translate}} </span>
                   </a>
                 </li>
               </ul>
@@ -85,7 +88,7 @@
                 </g>
               </svg>
               <!--end::Svg Icon-->
-            </span>New Record</button>
+            </span> {{'language.generic.newRecord' | translate}}</button>
           <!--end::Button-->
         </div>
       </div>
@@ -105,29 +108,31 @@
                 </th>
 
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;">Name</span>
+                  <span style="width: 250px;">    {{'language.generic.name' | translate}} </span>
                 </th>
-                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span style="width: 124px;">Contact
-                    Number</span></th>
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span  >
+                      {{'language.generic.contactNumber' | translate}}
+                     </span></th>
 
                 <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
-                    style="width: 124px;">Details</span></th>
+                    style="width: 124px;">  {{'language.form.details' | translate}} </span></th>
 
 
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;">address</span>
+                  <span style="width: 250px;">  {{'language.form.address' | translate}}</span>
                 </th>
 
                 <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
-                    style="width: 130px;">Actions</span></th>
+                    style="width: 130px;">  {{'language.generic.actions' | translate}}</span></th>
               </tr>
             </thead>
             <tbody class="datatable-body">
               @for (data of dataList; track $index) {
               <tr data-row="0" class="datatable-row" style="left: 0px;">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">{{$index +
-                      1}}</span></span>
+                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">
+                    {{ (pageNo - 1) * pageSize + $index + 1 }}
+                  </span></span>
                 </td>
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
@@ -135,16 +140,16 @@
                     </div>
                   </span></td>
                 <td data-field="Country" aria-label="Brazil" class="datatable-cell"><span style="width: 124px;">
-                    <div class="font-weight-bolder font-size-lg mb-0">{{data.contactNumber || "N/A" }}</div>
+                    <div class="font-weight-bolder font-size-lg mb-0">{{data.contactNumber.slice(0,10) || "N/A" }} {{data.contactNumber.length > 10 ? '...' : ''}}</div>
                   </span></td>
                 <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
-                    <div class="font-weight-bolder text-primary mb-0">{{data.details || "N/A"}}</div>
+                    <div class="font-weight-bolder text-primary mb-0">{{data.details.slice(0,15) || "N/A"}} {{data.details.length > 15 ? '...' : ''}}</div>
                   </span></td>
 
 
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.address || "N/A"}}</div>
+                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.address.slice(0,30) || "N/A"}} {{data.address.length > 30 ? '...' : ''}}</div>
                     </div>
                   </span></td>
 
@@ -174,44 +179,48 @@
 
 
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                      aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                              Are you absolutely sure?</h1>
-                            <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
-                              aria-label="Close">x</button>
-                          </div>
-                          <div class="modal-body">
-                            This action cannot be undone. This will delete and remove your data from our servers.
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" (click)="onDelete(data.clientId)" data-bs-dismiss="modal"
-                              class="btn btn-danger">Continue</button>
+                        <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                               {{'language.msg.areYouAbsolutely' | translate}}
+                              </h1>
+                              <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                                aria-label="Close">x</button>
+                            </div>
+                            <div class="modal-body">
+                                      {{'language.msg.actionCannotBeUndone' | translate}}
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> {{'language.generic.cancel' | translate}}</button>
+                              <button type="button" (click)="onDelete(data.clientId)" data-bs-dismiss="modal"
+                                class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <button data-bs-toggle="modal" data-bs-target="#exampleModal"
-                      class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
-                        class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
-                          version="1.1">
-                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <rect x="0" y="0" width="24" height="24"></rect>
-                            <path
-                              d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
-                              fill="#000000" fill-rule="nonzero"></path>
-                            <path
-                              d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                              fill="#000000" opacity="0.3"></path>
-                          </g>
-                        </svg> </span> </button>
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
+                          class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
+                            version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                              <rect x="0" y="0" width="24" height="24"></rect>
+                              <path
+                                d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                                fill="#000000" fill-rule="nonzero"></path>
+                              <path
+                                d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                fill="#000000" opacity="0.3"></path>
+                            </g>
+                          </svg> </span>
+                        </button>        <!-- Modal -->
+
+
+
                   </span></td>
               </tr>
               }
@@ -220,40 +229,69 @@
 
 
           <!--begin::Pagination-->
-<div class="d-flex justify-content-between align-items-center flex-wrap">
-  <div class="d-flex flex-wrap py-2 mr-3">
-      <a href="#" class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-double-arrow-back icon-xs"></i></a>
-      <a href="#" class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-arrow-back icon-xs"></i></a>
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex flex-wrap py-2 mr-3">
+              <a
+                class="btn btn-icon btn-sm btn-light mr-2 my-1"
+                (click)="changePage(1)"
+                [class.disabled]="pageNo === 1"
+              >
+                <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+              </a>
 
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">...</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">23</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light btn-hover-primary active mr-2 my-1">24</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">25</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">26</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">27</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">28</a>
-      <a href="#" class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1">...</a>
+              <a
+                class="btn btn-icon btn-sm btn-light mr-2 my-1"
+                (click)="changePage(pageNo - 1)"
+                [class.disabled]="pageNo === 1"
+              >
+                <i class="ki ki-bold-arrow-back icon-xs"></i>
+              </a>
 
-      <a href="#" class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-arrow-next icon-xs"></i></a>
-      <a href="#" class="btn btn-icon btn-sm btn-light mr-2 my-1"><i class="ki ki-bold-double-arrow-next icon-xs"></i></a>
-  </div>
-  <div class="d-flex align-items-center py-3">
-      <div class="d-flex align-items-center">
-          <div class="mr-2 text-muted">Loading...</div>
-          <div class="spinner mr-10"></div>
-      </div>
+              <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
+                <a
+                  class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1"
+                  [class.active]="i + 1 === pageNo"
+                  (click)="changePage(i + 1)"
+                >
+                  {{ i + 1 }}
+                </a>
+              </span>
 
-      <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-      </select>
-      <span class="text-muted">Displaying 10 of 230 records</span>
-  </div>
-</div>
-<!--end:: Pagination-->
+              <a
+                class="btn btn-icon btn-sm btn-light mr-2 my-1"
+                (click)="changePage(pageNo + 1)"
+                [class.disabled]="pageNo === totalPages"
+              >
+                <i class="ki ki-bold-arrow-next icon-xs"></i>
+              </a>
+
+              <a
+                class="btn btn-icon btn-sm btn-light mr-2 my-1"
+                (click)="changePage(totalPages)"
+                [class.disabled]="pageNo === totalPages"
+              >
+                <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+              </a>
+            </div>
+
+            <div class="d-flex align-items-center py-3">
+              <select
+                class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                style="width: 75px;"
+                [(ngModel)]="pageSize"
+                (change)="changePageSize(pageSize)"
+              >
+                <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+              </select>
+
+              <span class="text-muted">
+                 {{'language.generic.totalRecords' | translate}} {{ totalCount }}
+              </span>
+            </div>
+
+          </div>
+
+          <!--end:: Pagination-->
 
 
 

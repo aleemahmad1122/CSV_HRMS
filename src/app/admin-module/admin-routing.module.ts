@@ -52,7 +52,7 @@ const routes: Routes = [
     path: 'client/:action',
     loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
     title: 'Client',
-  }
+  },
 ];
 
 @NgModule({
