@@ -43,3 +43,6 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+.vs/VSWorkspaceState.json
+.vs/Client/v17/.wsuo
+.vs/Client/v17/DocumentLayout.json
