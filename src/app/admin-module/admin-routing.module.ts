@@ -53,6 +53,26 @@ const routes: Routes = [
     loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
     title: 'Client',
   },
+  {
+    path: 'role',
+    loadComponent: () => import(`./role/role-list/role-list.component`).then(c => c.RoleListComponent),
+    title: 'Role',
+  },
+  {
+    path: 'role/:action',
+    loadComponent: () => import(`./role/role-add-edit/role-add-edit.component`).then(c => c.RoleAddEditComponent),
+    title: 'Role',
+  },
+  {
+    path: 'shift',
+    loadComponent: () => import(`./shift/shift-list/shift-list.component`).then(c => c.ShiftListComponent),
+    title: 'Shift',
+  },
+  {
+    path: 'shift/:action',
+    loadComponent: () => import(`./shift/shift-add-edit/shift-add-edit.component`).then(c => c.ShiftAddEditComponent),
+    title: 'Shift',
+  },
 ];
 
 @NgModule({

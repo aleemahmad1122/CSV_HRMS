@@ -28,7 +28,9 @@
       "loans": "Loans",
       "adminReport": "Admin Report",
       "report": "Report",
-      "permission":"Permission"
+      "permission":"Permission",
+      "role":"Role",
+      "shift":"Shift"
     },
     "form":{
       "fullName":"Full Name",
@@ -61,7 +63,8 @@
       "quantity":"Quantity",
       "category":"Category",
       "selectCategory":"Select Category",
-      "searchByName": "Search by Name"
+      "searchByName": "Search by Name",
+      "time":"08:00:00"
     },
     "errors":{
       "maxFileSize":"Max file size",
@@ -99,7 +102,9 @@
       "specification":"specification",
       "budget":"budget",
       "startDate":"Start Date",
-      "endDate":"End Date"
+      "endDate":"End Date",
+      "startTime":"Start Time",
+      "endTime":"End Time"
     },
     "client":{
       "clientManagement":"Client Management",
@@ -122,6 +127,16 @@
       "qualificationHeading": "Qualifications management made easy",
       "errorMessageName": "Name is required",
       "errorMessageDescription": "Description is required"
+    },
+    "role": {
+      "role": "Role",
+      "rolesManagement": "Roles Management",
+      "roleHeading": "Roles management made easy"
+    },
+    "shift": {
+      "shift": "Shift",
+      "shiftsManagement": "Shifts Management",
+      "shiftHeading": "Shifts management made easy"
     },
     "msg":{
 "areYouAbsolutely":"Are you absolutely sure?",

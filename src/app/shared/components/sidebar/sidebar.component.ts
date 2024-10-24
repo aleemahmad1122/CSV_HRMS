@@ -36,6 +36,14 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       name: 'language.sidebar.clients',
       route: '/admin/clients'
     },
+    {
+      name: 'language.sidebar.role',
+      route: '/admin/role'
+    },
+    {
+      name: 'language.sidebar.shift',
+      route: '/admin/shift'
+    },
   ]
 
   employeeItems: Sidebar[] = [

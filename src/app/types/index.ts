@@ -8,11 +8,55 @@ interface ICommon {
 }
 
 
+
+interface IPagination {
+  totalCount: number;
+  pageSize:number;
+  pageNo:number;
+}
+
 interface ICommonRes {
   status:number;
   success:number;
   message:string;
 }
+
+
+
+export interface IShift extends ICommon{
+  shiftId:string;
+  name:string;
+  startTime:string;
+  endTime:string;
+}
+
+
+export interface IShiftRes extends ICommonRes {
+
+  data: {
+    shifts:IShift[]
+    pagination:IPagination
+  };
+
+}
+
+
+export interface IRole extends ICommon{
+  roleId:string;
+  name:string;
+  description?:string;
+}
+
+
+export interface IRoleRes extends ICommonRes {
+
+  data: {
+    roles:IRole[]
+    pagination:IPagination
+  };
+
+}
+
 
 export interface IClientRes extends ICommonRes {
 
@@ -160,10 +204,5 @@ export interface EmployeeDetail {
   employeeName: string;
 }
 
-interface IPagination {
-  totalCount: number;
-  pageSize:number;
-  pageNo:number;
-}
 
 
