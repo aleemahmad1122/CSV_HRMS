@@ -138,6 +138,11 @@
       "shiftsManagement": "Shifts Management",
       "shiftHeading": "Shifts management made easy"
     },
+    "employee":{
+      "workHistory":"Work History",
+      "education":"Education",
+      "deactivated":"Deactivated"
+    },
     "msg":{
 "areYouAbsolutely":"Are you absolutely sure?",
 "actionCannotBeUndone":"This action cannot be undone. This will delete and remove your data from our servers."
