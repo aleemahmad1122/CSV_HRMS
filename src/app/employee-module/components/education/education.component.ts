@@ -1,31 +1,25 @@
 import { Component } from '@angular/core';
-import { IEmployee,IEmployeeRes } from '../../types/index';
+import { IRole,IRoleRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ApiCallingService } from '../../shared/Services/api-calling.service';
-import { ExportService } from '../../shared/Services/export.service';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
+import { ExportService } from '../../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { DeactivatedComponent } from "../components/deactivated/deactivated.component";
-import { EducationComponent } from "../components/education/education.component";
-import { WorkHistoryComponent } from "../components/work-history/work-history.component";
 
 @Component({
-  selector: 'app-employee-list',
+  selector: 'app-education',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,DeactivatedComponent,WorkHistoryComponent,EducationComponent],
-  templateUrl: './employee-list.component.html',
-  styleUrl: './employee-list.component.css'
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  templateUrl: './education.component.html',
+  styleUrl: './education.component.css'
 })
-export class EmployeeListComponent  {
+export class EducationComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  tabList:string[] = ["language.sidebar.employee","language.employee.workHistory","language.employee.education","language.employee.deactivated",]
-  activeTab: string = this.tabList[0];
-
-  dataList: IEmployee[] = [];
+  dataList: IRole[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   totalCount = 0;
@@ -47,19 +41,19 @@ export class EmployeeListComponent  {
   }
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm })
+    this.apiService.getData('Role', 'getRoles', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeRes) => this.handleResponse(res),
+        next: (res: IRoleRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IEmployeeRes): void {
+  private handleResponse(response: IRoleRes): void {
     if (response?.success) {
-      const {employeeDetails, pagination } = response.data;
+      const { roles, pagination } = response.data;
       Object.assign(this, {
-        dataList: employeeDetails,
+        dataList: roles,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -86,7 +80,7 @@ export class EmployeeListComponent  {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Employee', 'getEmployees', true, params)
+    this.apiService.getData('Role', 'getRoles', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -97,21 +91,18 @@ export class EmployeeListComponent  {
   onDelete(id: string): void {
     console.log(id);
 
-    this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
+    this.apiService.deleteData('Role', `deleteRole/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.roleId !== id);
         },
-        error: (err) => console.error('Error deleting Employee:', err),
+        error: (err) => console.error('Error deleting Role:', err),
       });
   }
 
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
   }
-
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
 }
+

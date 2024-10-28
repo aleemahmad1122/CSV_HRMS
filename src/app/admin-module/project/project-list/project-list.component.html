@@ -137,6 +137,7 @@
             </thead>
             <tbody class="datatable-body">
               @for (data of dataList; track $index) {
+
               <tr data-row="0" class="datatable-row" style="left: 0px;">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
                   aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">
@@ -249,6 +250,10 @@
                     </button>
                   </span></td>
               </tr>
+
+              }
+              @if(this.dataList.length < 1){
+                <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize" style="left: 0px;">No records yet!</tr>
               }
             </tbody>
           </table>

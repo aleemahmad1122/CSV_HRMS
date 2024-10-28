@@ -1,191 +1,117 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom py-5">
   <h1 class="font-weight-bold text-center" style="font-size: 30px;">
-      {{isEditMode ? 'language.generic.edit' : 'language.generic.create'| translate }}
-      {{ 'language.role.role'| translate }}
+    {{isEditMode ? 'language.generic.edit' : 'language.generic.create'| translate }}
+    {{ 'language.role.role'| translate }}
   </h1>
 
-  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
-      <div class="row">
-          <div class="col-md-12 mb-3">
-              <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="name"
-                  [placeholder]="'language.placeholders.name' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.nameRequired' | translate}}
-              </div>
+  <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="name"
+          [placeholder]="'language.placeholders.name' | translate"
+          [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
+        <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
+          class="invalid-feedback">
+          {{'language.errors.nameRequired' | translate}}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row mt-3 py-5">
+      <div class="col-md-12">
+        <div class="card card-custom gutter-b example example-compact">
+          <div class="card-header">
+            <h3 class="card-title">Role Permissions</h3>
           </div>
-
-      </div>
-
-    <div class="row mt-3">
-         <div class="col-md-12">
-            <div class="card card-custom gutter-b example example-compact">
-                <div class="card-header">
-                    <h3 class="card-title">Role Permissions</h3>
-                </div>
-                <div class="card-body">
-                    <div class="accordion  accordion-toggle-arrow" id="accordionExample4">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header" id="headingOne4">
-                                     <div class="card-title" data-toggle="collapse" data-target="#collapseOne4">
-                                      <!-- <i class="flaticon2-layers-1"></i> -->
-                                      Admin Panel > Company Permissions
-                                     </div>
-                                    </div>
-                                    <div id="collapseOne4" class="collapse show" data-parent="#accordionExample4">
-                                     <div class="row">
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Create Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Edit Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="View Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Delete Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                     </div>
-                                    </div>
-                                   </div>
+          <div class="card-body">
+            <div class="accordion  accordion-toggle-arrow" id="accordionExample4">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="card">
+                    <div class="card-header" id="headingOne4">
+                      <div class="card-title" data-toggle="collapse" data-target="#collapseOne4">
+                        <!-- <i class="flaticon2-layers-1"></i> -->
+                        Admin Panel > Company Permissions
+                      </div>
+                    </div>
+                    <div id="collapseOne4" class="collapse show" data-parent="#accordionExample4">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group p-3 m-0">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <label class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox">
+                                    <span></span>
+                                  </label>
+                                </span>
+                              </div>
+                              <input type="text" class="form-control disabled" value="Create Company">
                             </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header" id="headingOne4">
-                                     <div class="card-title" data-toggle="collapse" data-target="#collapseOne4">
-                                      <!-- <i class="flaticon2-layers-1"></i> -->
-                                      Admin Panel > Company Permissions
-                                     </div>
-                                    </div>
-                                    <div id="collapseOne4" class="collapse show" data-parent="#accordionExample4">
-                                     <div class="row">
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Create Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Edit Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="View Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group p-3 m-0">
-                                               <div class="input-group">
-                                                   <div class="input-group-prepend">
-                                                       <span class="input-group-text">
-                                                           <label class="checkbox checkbox-inline checkbox-primary">
-                                                               <input type="checkbox">
-                                                               <span></span>
-                                                           </label>
-                                                       </span>
-                                                   </div>
-                                                   <input type="text" class="form-control disabled" value="Delete Company">
-                                               </div>
-                                           </div>
-                                       </div>
-                                     </div>
-                                    </div>
-                                   </div>
-                            </div>
+                          </div>
                         </div>
-                        
-                       
-                       </div>
+                        <div class="col-md-6">
+                          <div class="form-group p-3 m-0">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <label class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox">
+                                    <span></span>
+                                  </label>
+                                </span>
+                              </div>
+                              <input type="text" class="form-control disabled" value="Edit Company">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group p-3 m-0">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <label class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox">
+                                    <span></span>
+                                  </label>
+                                </span>
+                              </div>
+                              <input type="text" class="form-control disabled" value="View Company">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group p-3 m-0">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                  <label class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox">
+                                    <span></span>
+                                  </label>
+                                </span>
+                              </div>
+                              <input type="text" class="form-control disabled" value="Delete Company">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
 
-           
-         </div>
+
+            </div>
+          </div>
+        </div>
+
+
       </div>
+    </div>
 
 
 

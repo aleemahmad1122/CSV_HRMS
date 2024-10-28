@@ -1,16 +1,16 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ICompany } from "../../../types/index";
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { Subject, takeUntil } from 'rxjs';
-import { UserAuthenticationService } from '../../../shared/Services/user-authentication.service';
 import { DataShareService } from '../../../shared/Services/data-share.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 
 interface Typess {
-  typeId: number;
+  typeId: string;
   typeName: string;
 }
 
@@ -25,38 +25,61 @@ interface Typess {
 export class AddEditCompanyComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
-  isEditMode: boolean = false;
-  defaultImagePath = '../../../assets/media/users/blank.png';
+  isEditMode: boolean | string = false;
+  defaultImagePath = 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg';
   imagePreview: string = this.defaultImagePath;
   selectedFile: File | null = null;
   imageSizeExceeded: boolean = false;
   maxSizeInBytes = 1048576;
-  selectedCompany: any;
+  selectedCompany: ICompany ;
   isSubmitted = false;
 
+
+  countries: {id:string;name:string}[] = [
+    { id: 'PK', name: 'Pakistan' },
+    { id: 'US', name: 'United States' },
+    { id: 'IN', name: 'India' },
+    { id: 'CA', name: 'Canada' },
+    { id: 'DE', name: 'Germany' },
+    { id: 'FR', name: 'France' },
+    { id: 'SA', name: 'Saudi Arabia' },
+    { id: 'AE', name: 'United Arab Emirates' },
+    { id: 'JP', name: 'Japan' },
+    { id: 'CN', name: 'China' },
+  ];
   types: Typess[] = [
-    { typeId: 1, typeName: 'Head Office' },
-    { typeId: 2, typeName: 'Branch' },
-    { typeId: 3, typeName: 'Subsidiary' },
+    { typeId: "1", typeName: 'Head Office' },
+    { typeId: "2", typeName: 'Branch' },
+    { typeId: "3", typeName: 'Subsidiary' },
   ];
 
   constructor(
     private fb: FormBuilder,
     private _router: Router,
     private _apiCalling: ApiCallingService,
-    private _authService: UserAuthenticationService,
     private _dataShare: DataShareService,
     private _route: ActivatedRoute,
     private _toaster: ToastrService,
     @Inject(PLATFORM_ID) private platformId: Object) {
     this._route.queryParams.subscribe(params => {
-      this.isEditMode = false;
-      this.selectedCompany = {};
-      if (params['companyId'] !== undefined && params['companyId'] !== null && params['companyId'] !== '' && params['companyId'] !== 0) {
-        this.isEditMode = true;
-        if (isPlatformBrowser(this.platformId)) {
-          this.selectedCompany = JSON.parse(localStorage.getItem('company')!);
-        }
+      const companyId = params['id'];
+      this.isEditMode = companyId !== undefined && companyId !== null && companyId !== '' && companyId !== 0;
+
+      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+        this._apiCalling.getData("Company",`getCompanyById/${companyId}` , true).subscribe({
+          next: (response:any) => {
+            if (response?.success) {
+              this.selectedCompany = response.data;
+              this.patchFormValues();
+            } else {
+              this._toaster.error('Company not found', 'Error!');
+              this._router.navigate(['/admin/company-structure']);
+            }
+          },
+          error: () => {
+            this._toaster.error('Error fetching company details', 'Error!');
+          }
+        });
       }
     });
   }
@@ -65,9 +88,9 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
-      companyImage: [''],
+      companyImage: [''], // Added field for company image
       name: ['', Validators.required],
-      companyEmail: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
       faxNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       website: ['', Validators.required],
@@ -78,6 +101,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       secondAddress: [''],
       employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       foundedDate: ['', Validators.required],
+      companyType: [2]
     });
   }
 
@@ -86,65 +110,69 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  private patchFormValues(): void {
+    if (this.selectedCompany) {
+      this.companyForm.patchValue({
+        name: this.selectedCompany.name,
+        email: this.selectedCompany.email,
+        phoneNumber: this.selectedCompany.phoneNumber,
+        faxNumber: this.selectedCompany.faxNumber,
+        website: this.selectedCompany.website,
+        registrationNumber: this.selectedCompany.registrationNumber,
+        country: this.selectedCompany.countryId,
+        industry: this.selectedCompany.industryId,
+        firstAddress: this.selectedCompany.firstAddress,
+        secondAddress: this.selectedCompany.secondAddress,
+        employeesCount: this.selectedCompany.employeesCount,
+        foundedDate: this.selectedCompany.foundedDate,
+        companyType: this.selectedCompany.companyType || 2,
+      });
+      this.imagePreview = this.selectedCompany.companyImage || this.defaultImagePath
+    }
+
+
+  }
+
   submitForm() {
     this.isSubmitted = true;
     if (!this.companyForm.valid) {
       return;
     }
 
-    var formData = new FormData();
+    const formData = new FormData();
 
     if (this.selectedFile) {
       formData.append('companyImage', this.selectedFile);
     }
     formData.append('name', this.companyForm.get('name')?.value);
-    formData.append('companyEmail', this.companyForm.get('companyEmail')?.value);
+    formData.append('email', this.companyForm.get('email')?.value);
     formData.append('phoneNumber', this.companyForm.get('phoneNumber')?.value);
     formData.append('faxNumber', this.companyForm.get('faxNumber')?.value);
     formData.append('website', this.companyForm.get('website')?.value);
     formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
-    formData.append('country', this.companyForm.get('country')?.value);
-    formData.append('industry', this.companyForm.get('industry')?.value);
+    formData.append('countryId', this.companyForm.get('country')?.value);
+    formData.append('industryId', this.companyForm.get('industry')?.value);
     formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
     formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
-    formData.append('type', this.companyForm.get('type')?.value);
-    formData.append('employeesCount', this.companyForm.get('employeesCount')?.value);
-    formData.append('foundedDate', this.companyForm.get('foundedDate')?.value);
+    formData.append('companyType', this.companyForm.get('companyType')?.value || 2);
 
-    if (!this.isEditMode) {
-      this._apiCalling.postData("company", "add", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-              this._authService.saveUser(response?.data?.user);
-              this._authService.saveUserRole(response?.data?.user?.role);
-              this._authService.setToken(response?.data?.token);
-              this._dataShare.updateLoginStatus(true);
-              this._router.navigate([`${'/dashboard'}`]);
-            } else {
-              this._toaster.error(response?.message, 'Error!');
-            }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occurred while processing your request")
-          }
-        })
-    } else {
-      this._apiCalling.putData("company", "edit/" + this.selectedCompany.companyId + "", formData, true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-              this._toaster.success(response?.message, 'Success!');
-              this.goBack();
-            } else {
-              this._toaster.error(response?.message, 'Error!');
-            }
-          },
-          error: (error) => {
-            this._toaster.error("Internal server error occurred while processing your request")
-          }
-        })
-    }
+    const apiCall = this.isEditMode
+      ? this._apiCalling.putData("Company", "updateCompany/" + this.selectedCompany?.companyId, formData, true)
+      : this._apiCalling.postData("Company", "addCompany", formData, true);
+
+    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this._dataShare.updateLoginStatus(true);
+          this.goBack()
+        } else {
+          this._toaster.error(response?.message, 'Error!');
+        }
+      },
+      error: (error) => {
+        this._toaster.error("Internal server error occurred while processing your request")
+      }
+    });
   }
 
   goBack() {

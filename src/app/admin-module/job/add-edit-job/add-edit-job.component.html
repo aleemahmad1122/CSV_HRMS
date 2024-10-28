@@ -1,7 +1,7 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
   <h1 class="font-weight-bold text-center" style="font-size: 30px;">
       {{isEditMode ? 'language.generic.edit' : 'language.generic.create'| translate }}
-      {{ 'language.qualification.qualification'| translate }}
+      {{ 'language.sidebar.job'| translate }}
   </h1>
 
   <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
@@ -42,7 +42,7 @@
           </div>
 
           <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.form.specification' | translate}} <span class="text-danger">*</span></label>
+              <label class="form-label">{{'language.generic.specification' | translate}} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="specification"
                   [placeholder]="'language.placeholders.specification' | translate"
                   [ngClass]="{'is-invalid': (addEditForm.get('specification')?.invalid && (addEditForm.get('specification')?.touched || isSubmitted))}" />

@@ -58,6 +58,64 @@ export interface IRoleRes extends ICommonRes {
 }
 
 
+export interface ICompany  extends ICommon{
+  companyId: string;
+  companyImage: string;
+  countryId: string;
+  employeesCount: number;
+  faxNumber: string;
+  firstAddress: string;
+  foundedDate: string;
+  industryId: string;
+  name: string;
+  phoneNumber: string;
+  registrationNumber: string;
+}
+
+
+export interface ICompanyRes extends ICommonRes {
+
+  data: {
+    companies:ICompany[]
+    pagination:IPagination
+  };
+
+}
+
+
+export interface IEmployee extends ICommon{
+  employeeId: string;
+  imagePath: string;
+  fullName: string;
+  email: string;
+  country: string;
+  city: string;
+  address: string;
+  phoneNumber: string;
+  role: string;
+  cnic: string;
+  ssn: string;
+  passportNumber: string;
+  dateOfBirth: string;
+  gender: 'Male' | 'Female' | 'Other';
+  maritalStatus: string;
+  department: string;
+  dateOfHire: string;
+  salary: number;
+  employmentType: 'Full-time' | 'Part-time' | 'Contract';
+}
+
+
+export interface IEmployeeRes extends ICommonRes {
+
+  data: {
+    employeeDetails:IEmployee[]
+    pagination:IPagination
+  };
+
+}
+
+
 export interface IClientRes extends ICommonRes {
 
   data: {
@@ -96,16 +154,6 @@ export interface IQualificationRes extends ICommonRes {
 }
 
 
-
-export interface Company {
-  id: number;
-  title: string;
-  address: string;
-  type: string;
-  country: string;
-  timezone: string;
-  parent: string | null;
-}
 
 
 export interface Job extends ICommon{
@@ -205,4 +253,27 @@ export interface EmployeeDetail {
 }
 
 
+export interface ICompany {
+  companyId: string;
+  companyImage: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  faxNumber: string;
+  registrationNumber: string;
+  countryId: string;
+  industryId: string;
+  firstAddress: string;
+  secondAddress?: string; // Optional field
+  website: string;
+  employeesCount: number;
+  foundedDate: string; // ISO 8601 date format
+  companyType: number;
+}
 
+
+interface EmergencyContact {
+  name: string;
+  relationship: string;
+  phoneNumber: string;
+}

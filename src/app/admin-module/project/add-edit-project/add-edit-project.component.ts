@@ -22,6 +22,8 @@ interface Status {
 export class AddEditProjectComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
+  currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
+
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;

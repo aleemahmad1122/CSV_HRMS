@@ -1,4 +1,4 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50 glass rounded flex-column">
+<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
     <h1 class="font-weight-bold text-center" style="font-size: 30px;">
         {{isEditMode ? ('language.generic.edit' | translate) : ('language.generic.create' | translate)}}
         {{'language.sidebar.company' | translate}}
@@ -52,14 +52,14 @@
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.companyEmail' | translate}} <span
+                <label class="form-label">{{'language.form.email' | translate}} <span
                         class="text-danger">*</span></label>
-                <input type="email" class="form-control" formControlName="companyEmail"
-                    [placeholder]="'language.placeholders.companyEmail' | translate"
-                    [ngClass]="{'is-invalid': (companyForm.get('companyEmail')?.invalid && (companyForm.get('companyEmail')?.touched || isSubmitted))}" />
-                <div *ngIf="companyForm.get('companyEmail')?.invalid && (companyForm.get('companyEmail')?.touched || isSubmitted)"
+                <input type="email" class="form-control" formControlName="email"
+                    [placeholder]="'language.placeholders.email' | translate"
+                    [ngClass]="{'is-invalid': (companyForm.get('email')?.invalid && (companyForm.get('email')?.touched || isSubmitted))}" />
+                <div *ngIf="companyForm.get('email')?.invalid && (companyForm.get('email')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    {{'language.errors.companyEmailRequired' | translate}}
+                    {{'language.errors.emailRequired' | translate}}
                 </div>
             </div>
         </div>
@@ -121,8 +121,8 @@
                 <select class="form-control custom-select" formControlName="country"
                     [ngClass]="{'is-invalid': (companyForm.get('country')?.invalid && (companyForm.get('country')?.touched || isSubmitted))}">
                     <option value="">{{'language.form.selectCountry' | translate}}</option>
-                    @for(country of types; track country) {
-                    <option [value]="country.typeId">{{country.typeName}}</option>
+                    @for(country of countries; track country) {
+                    <option [value]="country.id">{{country.name}}</option>
                     }
                 </select>
                 <div *ngIf="companyForm.get('country')?.invalid && (companyForm.get('country')?.touched || isSubmitted)"

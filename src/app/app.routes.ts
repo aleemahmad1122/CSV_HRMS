@@ -13,60 +13,43 @@ export const routes: Routes = [
     {
         path: 'admin',
         loadChildren: () => import('./admin-module/admin-module.module').then(m => m.AdminModuleModule),
+        data:{ breadcrumb: 'Admin' },
         canActivate: [ProtectedGuard]
     },
 
     {
         path: 'admin-report',
         loadChildren: () => import('./admin-report-module/admin-report.module').then(m => m.AdminReportModuleModule),
+        data:{ breadcrumb: 'Admin Report' },
         canActivate: [ProtectedGuard]
     },
 
     {
         path: 'dashboard',
         loadChildren: () => import('./dashboard-module/dashboard.module').then(m => m.DashboardModule),
+        data:{ breadcrumb: 'Dashboard' },
         canActivate: [ProtectedGuard]
     },
 
     {
         path: 'profile',
         loadChildren: () => import('./profile-module/profile.module').then(m => m.ProfileModule),
+        data:{ breadcrumb: 'Profile' },
         canActivate: [ProtectedGuard]
     },
 
-    {
-        path: 'configuration',
-        loadChildren: () => import('./configuration-module/configuration.module').then(m => m.ConfigurationModule),
-        canActivate: [ProtectedGuard]
-    },
-
-    {
-        path: 'expense',
-        loadChildren: () => import('./expense-module/expense-routing.module').then(m => m.ExpenseRoutingModule),
-        canActivate: [ProtectedGuard]
-    },
-
-    {
-        path: 'invoice',
-        loadChildren: () => import('./invoice-module/invoice-routing.module').then(m => m.InvoiceRoutingModule),
-        canActivate: [ProtectedGuard]
-    },
-
-    {
-        path: 'bank',
-        loadChildren: () => import('./bank-module/bank-routing.module').then(m => m.BankRoutingModule),
-        canActivate: [ProtectedGuard]
-    },
 
     {
         path: 'employee',
         loadChildren: () => import('./employee-module/employee.module').then(m => m.EmployeeModuleModule),
+        data:{ breadcrumb: 'Employee' },
         canActivate: [ProtectedGuard]
     },
 
     {
         path: 'manage',
         loadChildren: () => import('./manage-module/manage.module').then(m => m.ManageModuleModule),
+        data:{ breadcrumb: 'Manage' },
         canActivate: [ProtectedGuard]
     },
 

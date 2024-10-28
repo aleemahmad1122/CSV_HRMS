@@ -1,106 +1,107 @@
-import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
-import { Company } from '../../../types';
+import { Component } from '@angular/core';
+import { ICompany,ICompanyRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
+import { ExportService } from '../../../shared/Services/export.service';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
   templateUrl: './company-list.component.html',
   styleUrl: './company-list.component.css'
 })
-export class CompanyListComponent implements OnInit {
+export class CompanyListComponent  {
+  private ngUnsubscribe = new Subject<void>();
+  private searchSubject = new Subject<string>();
+
+  dataList: ICompany[] = [];
+  dropDownList = [10, 50, 75, 100];
+  searchTerm = '';
+  totalCount = 0;
+  pageSize = 10;
+  pageNo = 1;
+  totalPages = 0;
+
   constructor(
-  ) { }
+    private apiService: ApiCallingService,
+    private exportService: ExportService
+  ) {
+    this.initializeSearch();
+    this.getData();
+  }
 
-  companyList: Company[] = [
-    {
-      "id": 1,
-      "title": "Your Company",
-      "address": "",
-      "type": "Company",
-      "country": "United States",
-      "timezone": "Europe/London",
-      "parent": null
-    },
-    {
-      "id": 2,
-      "title": "Head Office",
-      "address": "PO Box 001002\nSample Road, Sample Town",
-      "type": "Head Office",
-      "country": "United States",
-      "timezone": "Europe/London",
-      "parent": "Your Company"
-    },
-    {
-      "id": 3,
-      "title": "Marketing Department",
-      "address": "PO Box 001002\nSample Road, Sample Town",
-      "type": "Department",
-      "country": "United States",
-      "timezone": "Europe/London",
-      "parent": "Head Office"
-    },
-    {
-      "id": 4,
-      "title": "Development Center",
-      "address": "PO Box 001002\nSample Road, Sample Town",
-      "type": "Regional Office",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Your Company"
-    },
-    {
-      "id": 5,
-      "title": "Engineering Department",
-      "address": "PO Box 001002\nSample Road, Sample Town,  341234",
-      "type": "Department",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Development Center"
-    },
-    {
-      "id": 6,
-      "title": "Development Team",
-      "address": "",
-      "type": "Unit",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Engineering Department"
-    },
-    {
-      "id": 7,
-      "title": "QA Team",
-      "address": "",
-      "type": "Unit",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Engineering Department"
-    },
-    {
-      "id": 8,
-      "title": "Server Administration",
-      "address": "",
-      "type": "Unit",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Engineering Department"
-    },
-    {
-      "id": 9,
-      "title": "Administration & HR",
-      "address": "",
-      "type": "Department",
-      "country": "Singapore",
-      "timezone": "Europe/London",
-      "parent": "Development Center"
+  private initializeSearch(): void {
+    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((term) => this.getData(term));
+  }
+
+  private getData(searchTerm = ''): void {
+    this.apiService.getData('Company', 'getCompanies', true, { searchQuery: searchTerm })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: ICompanyRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
+
+  private handleResponse(response: ICompanyRes): void {
+    if (response?.success) {
+      const { companies, pagination } = response.data;
+      Object.assign(this, {
+        dataList: companies,
+        pageNo: pagination.pageNo,
+        pageSize: pagination.pageSize,
+        totalCount: pagination.totalCount,
+        totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
+      });
+    } else this.dataList = [];
+  }
+
+  search(event: Event): void {
+    this.searchSubject.next((event.target as HTMLInputElement).value);
+  }
+
+  changePage(newPage: number): void {
+    if (newPage > 0 && newPage <= this.totalPages) {
+      this.pageNo = newPage;
+      this.getPaginatedData();
     }
-  ];
+  }
 
-  ngOnInit(): void { }
+  changePageSize(size: number): void {
+    Object.assign(this, { pageSize: size, pageNo: 1 });
+    this.getPaginatedData();
+  }
 
+  private getPaginatedData(): void {
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
+    this.apiService.getData('Company', 'getCompanies', true, params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => this.handleResponse(res),
+        error: (err) => console.error('Error fetching data:', err),
+      });
+  }
 
+  onDelete(id: string): void {
+    console.log(id);
 
+    this.apiService.deleteData('Company', `deleteCompany/${id}`, id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.companyId !== id);
+        },
+        error: (err) => console.error('Error deleting Company:', err),
+      });
+  }
+
+  exportData(format: string): void {
+    this.exportService.exportData(format, this.dataList);
+  }
 }

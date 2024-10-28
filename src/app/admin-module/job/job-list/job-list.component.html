@@ -219,6 +219,9 @@
                   </span></td>
               </tr>
               }
+              @if(this.dataList.length < 1){
+                <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize" style="left: 0px;">No records yet!</tr>
+              }
             </tbody>
           </table>
 
