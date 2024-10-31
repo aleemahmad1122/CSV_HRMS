@@ -18,6 +18,18 @@ const routes: Routes = [
         title:'Add Employee',
         canActivate: [ProtectedGuard]
       },
+      {
+        path: 'work-history/:action',
+        loadComponent: () => import(`./components/work-history/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+        title:'Add Employee',
+        canActivate: [ProtectedGuard]
+      },
+      {
+        path: 'education-history/:action',
+        loadComponent: () => import(`./components/education/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+        title:'Add Employee',
+        canActivate: [ProtectedGuard]
+      },
     ]
   },
 ];

@@ -57,6 +57,22 @@ export interface IRoleRes extends ICommonRes {
 
 }
 
+export interface IEmployeeWorkHistory extends ICommon{
+  roleId:string;
+  name:string;
+  description?:string;
+}
+
+
+export interface IEmployeeWorkHistoryRes extends ICommonRes {
+
+  data: {
+    employeeWorkHistoryDetails:IEmployeeWorkHistory[]
+    pagination:IPagination
+  };
+
+}
+
 
 export interface ICompany  extends ICommon{
   companyId: string;

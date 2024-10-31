@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IRole,IRoleRes } from '../../../types/index';
+import { IEmployeeWorkHistoryRes,IEmployeeWorkHistory, IRoleRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -19,7 +19,7 @@ export class WorkHistoryComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: IRole[] = [];
+  dataList: IEmployeeWorkHistory[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   totalCount = 0;
@@ -41,19 +41,19 @@ export class WorkHistoryComponent {
   }
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Role', 'getRoles', true, { searchQuery: searchTerm })
+    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IRoleRes) => this.handleResponse(res),
+        next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IRoleRes): void {
+  private handleResponse(response: IEmployeeWorkHistoryRes): void {
     if (response?.success) {
-      const { roles, pagination } = response.data;
+      const { employeeWorkHistoryDetails, pagination } = response.data;
       Object.assign(this, {
-        dataList: roles,
+        dataList: employeeWorkHistoryDetails,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -80,7 +80,7 @@ export class WorkHistoryComponent {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Role', 'getRoles', true, params)
+    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -91,13 +91,13 @@ export class WorkHistoryComponent {
   onDelete(id: string): void {
     console.log(id);
 
-    this.apiService.deleteData('Role', `deleteRole/${id}`, id, true)
+    this.apiService.deleteData('EmployeeWorkHistory', `deleteEmployeeWorkHistory/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
           if (res?.success) this.dataList = this.dataList.filter((d) => d.roleId !== id);
         },
-        error: (err) => console.error('Error deleting Role:', err),
+        error: (err) => console.error('Error deleting Employee Work History:', err),
       });
   }
 

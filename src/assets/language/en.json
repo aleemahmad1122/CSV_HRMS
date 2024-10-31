@@ -94,7 +94,8 @@
       "category":"Category",
       "selectCategory":"Select Category",
       "searchByName": "Search by Name",
-      "time":"08:00:00"
+      "time":"08:00:00",
+      "edit":"Edit"
     },
     "errors":{
       "maxFileSize":"Max file size",
@@ -121,6 +122,7 @@
     },
     "generic": {
       "companyImage":"Image",
+      "view":"View",
       "name": "Name",
       "cancel": "Cancel",
       "back": "Back",
@@ -199,10 +201,14 @@
     "employee":{
       "employee":"Employee",
       "workHistory":"Work History",
+      "employeeWorkHistroyManagement": "Employee work history management",
       "education":"Education",
       "deactivated":"Deactivated",
       "employeesManagement": "Employees Management",
-      "employeeHeading": "Employees management made easy"
+      "employeeHeading": "Employees management made easy",
+      "employeeWorkHistroyManagementHeading": "Employee work history management made easy",
+      "employeeEdManagementHeadingHeading": "Employee education management made easy",
+      "employeeEdManagementHeading": "Employee education management made easy"
     },
     "msg":{
 "areYouAbsolutely":"Are you absolutely sure?",

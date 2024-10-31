@@ -15,7 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './deactivated.component.html',
   styleUrl: './deactivated.component.css'
 })
-export class DeactivatedComponent  {
+export class DeactivatedComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
@@ -105,3 +105,4 @@ export class DeactivatedComponent  {
     this.exportService.exportData(format, this.dataList);
   }
 }
+

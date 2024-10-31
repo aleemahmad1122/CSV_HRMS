@@ -7,14 +7,12 @@ import { ExportService } from '../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { DeactivatedComponent } from "../components/deactivated/deactivated.component";
-import { EducationComponent } from "../components/education/education.component";
-import { WorkHistoryComponent } from "../components/work-history/work-history.component";
+
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,DeactivatedComponent,WorkHistoryComponent,EducationComponent],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })
@@ -22,8 +20,6 @@ export class EmployeeListComponent  {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  tabList:string[] = ["language.sidebar.employee","language.employee.workHistory","language.employee.education","language.employee.deactivated",]
-  activeTab: string = this.tabList[0];
 
   dataList: IEmployee[] = [];
   dropDownList = [10, 50, 75, 100];
@@ -111,7 +107,5 @@ export class EmployeeListComponent  {
     this.exportService.exportData(format, this.dataList);
   }
 
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-  }
+
 }

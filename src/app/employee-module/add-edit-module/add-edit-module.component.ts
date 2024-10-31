@@ -7,10 +7,14 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 
+import { DeactivatedComponent } from "../components/deactivated/deactivated.component";
+import { EducationComponent } from "../components/education/education.component";
+import { WorkHistoryComponent } from "../components/work-history/work-history.component";
+
 @Component({
   selector: 'app-add-edit-module',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,DeactivatedComponent,EducationComponent,WorkHistoryComponent],
   templateUrl: './add-edit-module.component.html',
   styleUrl: './add-edit-module.component.css'
 })
@@ -19,7 +23,12 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   addEditForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
+  isView:boolean = false;
   selectedValue: any;
+
+
+  tabList:string[] = ["language.sidebar.employee","language.employee.workHistory","language.employee.education","language.employee.deactivated",]
+  activeTab: string = this.tabList[0];
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +45,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
       this.isEditMode = id;
+      const view = params['view'];
+      this.isView = view === 'true';
+console.log( view === 'true');
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
         this.apiCalling.getData("Employee", `getEmployeeById/${id}`, true)
@@ -120,5 +132,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/employee/job-detail']);
+  }
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
   }
 }
