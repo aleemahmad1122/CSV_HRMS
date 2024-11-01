@@ -87,7 +87,7 @@ export class ResetPasswordComponent {
       return ; 
     }
 
-    this._apiCalling.postData("auth","updatePassword",
+    this._apiCalling.postData("auth","resetPassword",
     {
       "password": this.resetPasswordForm.get('newPassword')?.value,
       "token": this.token,
