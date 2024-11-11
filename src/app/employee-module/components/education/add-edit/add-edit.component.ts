@@ -24,7 +24,7 @@ export class AddEditComponent {
   files: NgxFileDropEntry[] = [];
   imageObject: any = [];
   ngUnsubscribe = new Subject<void>();
-  expenseForm!: FormGroup;
+  Form!: FormGroup;
   expenseSubmissionForm!: FormGroup;
   expenseMainForm!: FormGroup;
   isEdit: boolean = false;
@@ -93,22 +93,21 @@ export class AddEditComponent {
     return this.expenseMainForm.controls["expenseAllItem"] as FormArray;
   }
 
-  convertExpenseForm(form: any): FormGroup {
+  convertForm(form: any): FormGroup {
     return form as FormGroup;
   }
 
   addExpenseItem() {
-    const expenseItemForm = this._fb.group(
+    const addEditItemForm = this._fb.group(
       {
-        receiptDate: [new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())],
-        documentNumber: ['', [Validators.required]],
-        costCenter: [''],
-        totalBeforeVat: ['', [Validators.required]],
-        vat: ['15', [Validators.required]],
-        totalWithVat: ['', [Validators.required]],
-        remarks: [''],
+        attachmentTypeId: [''],
+        educationDocument: [''],
+        educationTitle: [''],
+        institution: [''],
+        startDate: [new Date('2024-10-31T18:19:22.771Z')],
+        endDate: [new Date('2024-10-31T18:19:22.771Z')]
       });
-    this.expenseAllItem.push(expenseItemForm);
+    this.expenseAllItem.push(addEditItemForm);
   }
 
   deleteLesson(index: number) {
@@ -116,7 +115,7 @@ export class AddEditComponent {
   }
 
   resetForm(): void {
-    this.expenseForm.patchValue({
+    this.Form.patchValue({
       receiptDate: new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
       documentNumber: '',
       costCenter: '',
@@ -131,8 +130,8 @@ export class AddEditComponent {
     this.isViewOnly = false;
   }
 
-  editExpenseForm(expense: any, index: number): void {
-    this.expenseForm.patchValue({
+  editForm(expense: any, index: number): void {
+    this.Form.patchValue({
       receiptDate: new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
       documentNumber: expense.documentNumber,
       costCenter: expense.costCenter,
@@ -184,33 +183,33 @@ export class AddEditComponent {
   }
 
   submitForm(): void {
-    if (!this.expenseForm.valid) {
+    if (!this.Form.valid) {
       return;
     }
 
     if (!this.isEdit) {
       this.expenseItems.push({
         date: new Date(),
-        receiptDate: `${this.expenseForm.get('receiptDate')?.value.year}-${this.expenseForm.get('receiptDate')?.value.month}-${this.expenseForm.get('receiptDate')?.value.day}`,
-        documentNumber: this.expenseForm.get('documentNumber')?.value,
-        costCenter: this.expenseForm.get('costCenter')?.value,
-        totalBeforeVat: this.expenseForm.get('totalBeforeVat')?.value,
-        vat: this.expenseForm.get('vat')?.value,
-        totalWithVat: this.expenseForm.get('totalWithVat')?.value,
-        remarks: this.expenseForm.get('remarks')?.value,
+        receiptDate: `${this.Form.get('receiptDate')?.value.year}-${this.Form.get('receiptDate')?.value.month}-${this.Form.get('receiptDate')?.value.day}`,
+        documentNumber: this.Form.get('documentNumber')?.value,
+        costCenter: this.Form.get('costCenter')?.value,
+        totalBeforeVat: this.Form.get('totalBeforeVat')?.value,
+        vat: this.Form.get('vat')?.value,
+        totalWithVat: this.Form.get('totalWithVat')?.value,
+        remarks: this.Form.get('remarks')?.value,
         attachments: this.attachedFiles.length > 0 ? this.attachedFiles : 0
       });
       this.attachedFiles = [];
       this.showAddingInput = false;
     } else {
       this.expenseItems[this.selectedIndex].date = new Date();
-      this.expenseItems[this.selectedIndex].receiptDate = `${this.expenseForm.get('receiptDate')?.value.year}-${this.expenseForm.get('receiptDate')?.value.month}-${this.expenseForm.get('receiptDate')?.value.day}`;
-      this.expenseItems[this.selectedIndex].documentNumber = this.expenseForm.get('documentNumber')?.value;
-      this.expenseItems[this.selectedIndex].costCenter = this.expenseForm.get('costCenter')?.value;
-      this.expenseItems[this.selectedIndex].totalBeforeVat = this.expenseForm.get('totalBeforeVat')?.value;
-      this.expenseItems[this.selectedIndex].vat = this.expenseForm.get('vat')?.value;
-      this.expenseItems[this.selectedIndex].totalWithVat = this.expenseForm.get('totalWithVat')?.value;
-      this.expenseItems[this.selectedIndex].remarks = this.expenseForm.get('remarks')?.value;
+      this.expenseItems[this.selectedIndex].receiptDate = `${this.Form.get('receiptDate')?.value.year}-${this.Form.get('receiptDate')?.value.month}-${this.Form.get('receiptDate')?.value.day}`;
+      this.expenseItems[this.selectedIndex].documentNumber = this.Form.get('documentNumber')?.value;
+      this.expenseItems[this.selectedIndex].costCenter = this.Form.get('costCenter')?.value;
+      this.expenseItems[this.selectedIndex].totalBeforeVat = this.Form.get('totalBeforeVat')?.value;
+      this.expenseItems[this.selectedIndex].vat = this.Form.get('vat')?.value;
+      this.expenseItems[this.selectedIndex].totalWithVat = this.Form.get('totalWithVat')?.value;
+      this.expenseItems[this.selectedIndex].remarks = this.Form.get('remarks')?.value;
       this.expenseItems[this.selectedIndex].attachments = this.attachedFiles;
       if (this.isEditPermanently) {
         var formData = new FormData();
@@ -351,9 +350,9 @@ export class AddEditComponent {
     this._router.navigate([`${'/expense/expense-sheet'}`]);
   }
 
-  calculateTotal(expenseItemForm: any): void {
-    var total = Math.floor(Number(expenseItemForm.get('totalBeforeVat')?.value) + ((expenseItemForm.get('totalBeforeVat')?.value) * (Number(expenseItemForm.get('vat')?.value) / 100)));
-    expenseItemForm.patchValue({
+  calculateTotal(addEditItemForm: any): void {
+    var total = Math.floor(Number(addEditItemForm.get('totalBeforeVat')?.value) + ((addEditItemForm.get('totalBeforeVat')?.value) * (Number(addEditItemForm.get('vat')?.value) / 100)));
+    addEditItemForm.patchValue({
       totalWithVat: total,
     });
   }
