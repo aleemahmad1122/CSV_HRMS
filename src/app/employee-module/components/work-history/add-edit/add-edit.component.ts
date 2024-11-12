@@ -6,10 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from  '../../../../shared/Services/api-calling.service';
+import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
 import { UserAuthenticationService } from '../../../../shared/Services/user-authentication.service';
 import { NgbDate, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { IAttachmentType, IAttachmentTypeRes, ICompany } from '../../../../types';
 declare const $: any;
 
 
@@ -22,6 +23,11 @@ declare const $: any;
   styleUrl: './add-edit.component.css'
 })
 export class AddEditComponent {
+  employeeWorkhistoryForm!: FormGroup;
+  isEditMode: boolean | string = false;
+  attachmentTypes: IAttachmentType[] = [];
+  isSubmitted = false;
+
   files: NgxFileDropEntry[] = [];
   imageObject: any = [];
   ngUnsubscribe = new Subject<void>();
@@ -53,27 +59,6 @@ export class AddEditComponent {
     private _route: ActivatedRoute,
     private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object) {
-    this.isUserRole = _authService.getUserRole() === 3 ? true : false;
-    this._route.queryParams.subscribe(params => {
-      this.isEdit = false;
-      this.isEditPermanently = false;
-      this.selectedExpense = {};
-      if (params['expenseId'] !== undefined && params['expenseId'] !== null && params['expenseId'] !== '' && Number(params['expenseId']) !== 0) {
-        this.isEdit = true;
-        this.isEditPermanently = true;
-
-        if (isPlatformBrowser(this.platformId)) {
-          this.selectedExpense = JSON.parse(localStorage.getItem('expense')!);
-        }
-
-        this.showAddingInput = false;
-        this.expenseItems = this.selectedExpense?.expenseSubInformation == undefined ? this.selectedExpense : this.selectedExpense?.expenseSubInformation;
-      }
-
-      if (params['isView'] !== undefined && params['isView'] !== null && params['isView'] !== '' && Number(params['isView']) !== 0) {
-        this.isViewOnly = true;
-      }
-    });
 
     this.expenseSubmissionForm = this._fb.group({
       assignedTo: ['', [Validators.required]],
@@ -83,11 +68,12 @@ export class AddEditComponent {
       expenseAllItem: this._fb.array([])
     });
 
-    this.addExpenseItem();
+    this.addWorkHistoryItem();
   }
 
   ngOnInit(): void {
     this.getManager();
+    this.getAttachmentTypes();
   }
 
   get expenseAllItem(): FormArray {
@@ -98,16 +84,30 @@ export class AddEditComponent {
     return form as FormGroup;
   }
 
-  addExpenseItem() {
+  getAttachmentTypes() {
+    this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
+      next: (response: any) => {
+        if (response?.success) {
+          this.attachmentTypes = response.data.attachmentTypes;
+        } else {
+          this._toaster.error('No attachment types found', 'Error!');
+        }
+      },
+      error: () => {
+        this._toaster.error('Error fetching company details', 'Error!');
+      }
+    });
+  }
+
+  addWorkHistoryItem() {
     const expenseItemForm = this._fb.group(
       {
-        receiptDate: [new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())],
-        documentNumber: ['', [Validators.required]],
-        costCenter: [''],
-        totalBeforeVat: ['', [Validators.required]],
-        vat: ['15', [Validators.required]],
-        totalWithVat: ['', [Validators.required]],
-        remarks: [''],
+        attachmentTypeId: ['', [Validators.required]],
+        workHistoryDocument: [null, [Validators.required]],
+        positionTitle: ['', [Validators.required]],
+        organization: ['', [Validators.required]],
+        startDate: [new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())],
+        endDate: [new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())],
       });
     this.expenseAllItem.push(expenseItemForm);
   }
@@ -185,70 +185,40 @@ export class AddEditComponent {
   }
 
   submitForm(): void {
-    if (!this.expenseForm.valid) {
+    if (!this.expenseMainForm.valid) {
       return;
     }
 
-    if (!this.isEdit) {
-      this.expenseItems.push({
-        date: new Date(),
-        receiptDate: `${this.expenseForm.get('receiptDate')?.value.year}-${this.expenseForm.get('receiptDate')?.value.month}-${this.expenseForm.get('receiptDate')?.value.day}`,
-        documentNumber: this.expenseForm.get('documentNumber')?.value,
-        costCenter: this.expenseForm.get('costCenter')?.value,
-        totalBeforeVat: this.expenseForm.get('totalBeforeVat')?.value,
-        vat: this.expenseForm.get('vat')?.value,
-        totalWithVat: this.expenseForm.get('totalWithVat')?.value,
-        remarks: this.expenseForm.get('remarks')?.value,
-        attachments: this.attachedFiles.length > 0 ? this.attachedFiles : 0
-      });
-      this.attachedFiles = [];
-      this.showAddingInput = false;
-    } else {
-      this.expenseItems[this.selectedIndex].date = new Date();
-      this.expenseItems[this.selectedIndex].receiptDate = `${this.expenseForm.get('receiptDate')?.value.year}-${this.expenseForm.get('receiptDate')?.value.month}-${this.expenseForm.get('receiptDate')?.value.day}`;
-      this.expenseItems[this.selectedIndex].documentNumber = this.expenseForm.get('documentNumber')?.value;
-      this.expenseItems[this.selectedIndex].costCenter = this.expenseForm.get('costCenter')?.value;
-      this.expenseItems[this.selectedIndex].totalBeforeVat = this.expenseForm.get('totalBeforeVat')?.value;
-      this.expenseItems[this.selectedIndex].vat = this.expenseForm.get('vat')?.value;
-      this.expenseItems[this.selectedIndex].totalWithVat = this.expenseForm.get('totalWithVat')?.value;
-      this.expenseItems[this.selectedIndex].remarks = this.expenseForm.get('remarks')?.value;
-      this.expenseItems[this.selectedIndex].attachments = this.attachedFiles;
-      if (this.isEditPermanently) {
-        var formData = new FormData();
-        formData.append(`receiptDate`, this.expenseItems[this.selectedIndex].receiptDate);
-        formData.append(`documentNumber`, this.expenseItems[this.selectedIndex].documentNumber);
-        formData.append(`costCenter`, this.expenseItems[this.selectedIndex].costCenter);
-        formData.append(`totalBeforeVat`, this.expenseItems[this.selectedIndex].totalBeforeVat);
-        formData.append(`vat`, this.expenseItems[this.selectedIndex].vat);
-        formData.append(`totalWithVat`, this.expenseItems[this.selectedIndex].totalWithVat);
-        formData.append(`remarks`, this.expenseItems[this.selectedIndex].remarks);
-        formData.append(`actionBy`, String(this._authService.getUserId()));
-        if (this.attachedFiles.length > 0) {
-          this.attachedFiles.forEach(function (attachment: any) {
-            formData.append(`attachments`, attachment.file);
-          });
+    const formData = new FormData();
+    this.expenseAllItem.controls.forEach((control: FormGroup) => {
+      const attachmentTypeId = control.get('attachmentTypeId')?.value;
+      const workHistoryDocument = control.get('workHistoryDocument')?.value;
+      const positionTitle = control.get('positionTitle')?.value;
+      const organization = control.get('organization')?.value;
+      const startDate = control.get('startDate')?.value;
+      const endDate = control.get('endDate')?.value;
+
+      formData.append('attachmentTypeId', attachmentTypeId);
+      formData.append('workHistoryDocument', workHistoryDocument);
+      formData.append('positionTitle', positionTitle);
+      formData.append('organization', organization);
+      formData.append('startDate', startDate);
+      formData.append('endDate', endDate);
+    });
+
+    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this._toaster.success(response?.message, 'Success!');
+          } else {
+            this._toaster.error(response?.message, 'Error!');
+          }
+        },
+        error: (error) => {
+          this._toaster.error("Internal server error occurred while processing your request");
         }
-
-        this._apiCalling.putData("expense", `edit/${this.expenseItems[this.selectedIndex].expenseSubDetailId}`, formData, true)
-          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-            next: (response) => {
-              if (response?.success) {
-                this._toaster.success(response?.message, 'Success!');
-                this.expenseItems[this.selectedIndex] = response.data;
-              } else {
-                this._toaster.error(response?.message, 'Error!');
-              }
-            },
-            error: (error) => {
-              this._toaster.error("Internal server error occured while processing your request")
-            }
-          })
-      }
-      this.attachedFiles = [];
-      this.showAddingInput = false;
-      this.isEdit = this.isEditPermanently;
-    }
-
+      });
   }
 
   droppedFiles(files: NgxFileDropEntry[]) {
@@ -308,7 +278,6 @@ export class AddEditComponent {
 
     var formData = new FormData();
     var ref = this;
-    //.controls[0].controls.receiptDate.value
     var formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
     formArray.value.forEach(function (expenseElement: any, expenseElementIndex: any) {
       formData.append(`request[${expenseElementIndex}].receiptDate`, `${expenseElement.receiptDate.year}-${expenseElement.receiptDate.month}-${expenseElement.receiptDate.day}`);

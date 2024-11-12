@@ -11,70 +11,100 @@ interface ICommon {
 
 interface IPagination {
   totalCount: number;
-  pageSize:number;
-  pageNo:number;
+  pageSize: number;
+  pageNo: number;
 }
 
 interface ICommonRes {
-  status:number;
-  success:number;
-  message:string;
+  status: number;
+  success: number;
+  message: string;
 }
 
 
 
-export interface IShift extends ICommon{
-  shiftId:string;
-  name:string;
-  startTime:string;
-  endTime:string;
+export interface IShift extends ICommon {
+  shiftId: string;
+  name: string;
+  startTime: string;
+  endTime: string;
 }
 
 
 export interface IShiftRes extends ICommonRes {
 
   data: {
-    shifts:IShift[]
-    pagination:IPagination
+    shifts: IShift[]
+    pagination: IPagination
   };
 
 }
 
 
-export interface IRole extends ICommon{
-  roleId:string;
-  name:string;
-  description?:string;
+export interface IRole extends ICommon {
+  roleId: string;
+  name: string;
+  description?: string;
 }
 
 
 export interface IRoleRes extends ICommonRes {
 
   data: {
-    roles:IRole[]
-    pagination:IPagination
+    roles: IRole[]
+    pagination: IPagination
   };
 
 }
 
-export interface IEmployeeWorkHistory extends ICommon{
-  roleId:string;
-  name:string;
-  description?:string;
-}
+// export interface IEmployeeWorkHistory extends ICommon{
+//   roleId:string;
+//   name:string;
+//   description?:string;
+// }
 
+
+// export interface IEmployeeWorkHistoryRes extends ICommonRes {
+
+//   data: {
+//     employeeWorkHistoryDetails:IEmployeeWorkHistory[]
+//     pagination:IPagination
+//   };
+
+// }
+
+export interface IEmployeeWorkHistory extends ICommon {
+  attachmentTypeId: string;
+  positionTitle: string;
+  organization?: string;
+  startDate?: string;
+  endDate?: string;
+}
 
 export interface IEmployeeWorkHistoryRes extends ICommonRes {
 
   data: {
-    employeeWorkHistoryDetails:IEmployeeWorkHistory[]
-    pagination:IPagination
+    employeeWorkHistoryDetails: IEmployeeWorkHistory[]
+    pagination: IPagination
   };
 
 }
 
+export interface IAttachmentType extends ICommon {
+  attachmentTypeId: string;
+  name: string;
+  description: string;
+}
 
-export interface ICompany  extends ICommon{
+export interface IAttachmentTypeRes extends ICommonRes {
+  data: {
+    attachmentTypes: IAttachmentType[]
+    pagination: IPagination
+  };
+}
+
+
+export interface ICompany extends ICommon {
   companyId: string;
   companyImage: string;
   countryId: string;
@@ -92,14 +122,14 @@ export interface ICompany  extends ICommon{
 export interface ICompanyRes extends ICommonRes {
 
   data: {
-    companies:ICompany[]
-    pagination:IPagination
+    companies: ICompany[]
+    pagination: IPagination
   };
 
 }
 
 
-export interface IEmployee extends ICommon{
+export interface IEmployee extends ICommon {
   employeeId: string;
   imagePath: string;
   fullName: string;
@@ -125,8 +155,8 @@ export interface IEmployee extends ICommon{
 export interface IEmployeeRes extends ICommonRes {
 
   data: {
-    employeeDetails:IEmployee[]
-    pagination:IPagination
+    employeeDetails: IEmployee[]
+    pagination: IPagination
   };
 
 }
@@ -135,8 +165,8 @@ export interface IEmployeeRes extends ICommonRes {
 export interface IClientRes extends ICommonRes {
 
   data: {
-    clients:Clients[]
-    pagination:IPagination
+    clients: Clients[]
+    pagination: IPagination
   };
 
 }
@@ -145,8 +175,8 @@ export interface IClientRes extends ICommonRes {
 export interface IJobRes extends ICommonRes {
 
   data: {
-    jobs:Job[]
-    pagination:IPagination
+    jobs: Job[]
+    pagination: IPagination
   };
 
 }
@@ -154,8 +184,8 @@ export interface IJobRes extends ICommonRes {
 export interface IProjectRes extends ICommonRes {
 
   data: {
-    projects:Projects[]
-    pagination:IPagination
+    projects: Projects[]
+    pagination: IPagination
   };
 
 }
@@ -163,8 +193,8 @@ export interface IProjectRes extends ICommonRes {
 export interface IQualificationRes extends ICommonRes {
 
   data: {
-    qualifications:Qualification[]
-    pagination:IPagination
+    qualifications: Qualification[]
+    pagination: IPagination
   };
 
 }
@@ -172,7 +202,7 @@ export interface IQualificationRes extends ICommonRes {
 
 
 
-export interface Job extends ICommon{
+export interface Job extends ICommon {
   jobId: string;
   jobTitle: string;
   jobCode: string;
@@ -180,7 +210,7 @@ export interface Job extends ICommon{
   specification: string;
 }
 
-export interface Qualification extends ICommon{
+export interface Qualification extends ICommon {
   qualificationId: string;
   name: string;
   description: string;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IEmployeeWorkHistoryRes,IEmployeeWorkHistory, IRoleRes } from '../../../types/index';
+import { IEmployeeWorkHistoryRes, IEmployeeWorkHistory, IRoleRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-work-history',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './work-history.component.html',
   styleUrl: './work-history.component.css'
 })
@@ -95,7 +95,7 @@ export class WorkHistoryComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.roleId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.attachmentTypeId !== id);
         },
         error: (err) => console.error('Error deleting Employee Work History:', err),
       });
