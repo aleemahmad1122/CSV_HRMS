@@ -122,7 +122,7 @@
                 </button>
               </td>
               <td colspan="4" align="right">
-                <button class="btn btn-success mt-1 mb-1" type="submit" (click)="openCofirmationModal()">
+                <button class="btn btn-success mt-1 mb-1" type="submit" (click)="onSubmit()">
                   Save
                 </button>
               </td>
@@ -133,4 +133,256 @@
       </div>
     </div>
   </form>
+</div>
+
+
+
+
+
+
+ @if (!showAddingInput) {
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-1"><span class="text-muted fw-light">Expense /</span>
+    {{
+    this.isEdit && !isViewOnly ?'Edit':
+    !this.isEdit && isViewOnly ?'View':'Add'}}
+
+    Expense
+  </h4>
+  <div class="text-end mb-3">
+    @if(!this.isEdit && !isViewOnly) {
+    <button type="button" class="btn btn-primary me-3" (click)="showAddingInput = true;resetForm()">
+      <i class='bx bxs-plus-circle'></i>
+      Add Expense
+    </button>
+
+    <button type="button" class="btn btn-success" (click)="onSubmit()">
+      <i class='bx bxs-save'></i>
+      Save Batch
+    </button>
+    }
+  </div>
+  <div class="card">
+    <div class="table-responsive text-nowrap">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Attachment Type</th>
+            <th>Position</th>
+            <th>Organization</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Upload Attachment</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          @if(expenseItems.length > 0) {
+          @for(item of expenseItems; track $index){
+          <tr>
+            <td>{{item?.receiptDate | date: 'mediumDate'}}</td>
+            <td>{{item?.documentNumber}}</td>
+            <td>{{item?.costCenter}}</td>
+            <td>{{item?.remarks ==="null"?'':item?.remarks}}</td>
+            <td>{{item?.totalBeforeVat}}</td>
+            <td>{{item?.vat}}</td>
+            <td>{{item?.totalWithVat}}</td>
+            <td>{{item?.attachments?.length || item?.expenseMediaInformation?.length}}</td>
+            @if (this.isEdit || isViewOnly) {
+            <td>
+              @if(this.isEdit && !isViewOnly) {
+              @if(!isUserRole) {
+              @if(item.status === 2 ) {
+              <span class="badge bg-label-success me-1">Accepted</span>
+              }
+              @if(item.status !== 2 ) {
+              <select class="select2 form-select" [ngModel]="item.status"
+                (change)="changeStatus($event, item?.expenseSubDetailId)">
+                <option value="1">{{ 'language.status.pending' | translate }}</option>
+                <option value="2">{{ 'language.status.accepted' | translate }}</option>
+                <option value="3">{{ 'language.status.rejected' | translate }}</option>
+              </select>
+              }
+
+              }
+
+
+              }
+
+            </td>
+            }
+
+          </tr>
+          }
+          }
+          @if(expenseItems.length === 0) {
+          <tr>
+            <td colspan="9" align="center">{{ 'language.generic.notFound' | translate }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+}
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">{{ 'language.generic.delete' | translate }} {{
+          'language.generic.confirmation' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <h5> {{ 'language.generic.delMsg' | translate }}</h5>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteExpense()">{{ 'language.generic.delete' | translate
+          }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remarksModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Action Remarks</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          @if (this.remarksList.length > 0) {
+          <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>{{ 'language.location.createdBy' | translate }}</th>
+                  <th>{{ 'language.configurations.role' | translate }}</th>
+                  <th>{{ 'language.generic.date' | translate }}</th>
+                  <th [width]="50">{{ 'language.generic.remarks' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+                @if(remarksList.length > 0){
+                @for(bank of remarksList ; track $index){
+                <tr>
+                  <td>
+                    <span [innerHTML]="bank?.createdBy"></span>
+                  </td>
+                  <td>
+                    @if (bank.role === 1) {
+                    <span class="badge bg-label-warning me-1">{{ 'language.role.admin' | translate }}</span>
+                    }
+
+                    @if (bank.role === 2) {
+                    <span class="badge bg-label-primary me-1">{{ 'language.role.manager' | translate }}</span>
+                    }
+
+                    @if (bank.role === 3) {
+                    <span class="badge bg-label-secondary me-1">{{ 'language.role.operator' | translate }}</span>
+                    }
+
+                  </td>
+                  <td>{{bank.createdDate | date: 'MMM d, y'}}</td>
+                  <td [width]="30">
+                    {{bank?.remarks}}
+                  </td>
+                </tr>
+                }
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+          @if (this.remarksList.length === 0) {
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Remarks</label>
+            <textarea class="form-control" [(ngModel)]="this.changeStatusObj.remarks"></textarea>
+          </div>
+          }
+
+        </div>
+      </div>
+      @if (this.remarksList.length === 0) {
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveRemarks()">{{ 'language.generic.save' |
+          translate }}</button>
+      </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="uploadAttachmentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.upload' | translate }} {{
+          'language.generic.files' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="mb-1">
+            <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="droppedFiles($event)" [useDragEnter]="true"
+              [multiple]="false">
+              <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+                  <i class='bx bxs-cloud-upload fs-xlarge'></i>
+                  <div class="d-flex flex-column">
+                    <span class="fs-14 text-gray-300 fw-500">{{ 'language.generic.dragandDrop' | translate }}</span>
+                    <span class="fs-20 text-dark fw-500"> {{ 'language.generic.upload' | translate }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-file-drop>
+          </div>
+          @if(this.attachedFile) {
+
+            <div class="mb-3 col-md-12">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>File Name</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <tr>
+                      <td width="95%">
+                        <span class="underline" (click)="getSelectedFile()">{{attachedFile.name || attachedFile.fileName}}</span>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' |
+          translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveItemAttachment()">{{ 'language.generic.save' |
+          translate }}</button>
+      </div>
+    </div>
+  </div>
 </div>
