@@ -261,18 +261,20 @@ export class AddEditComponent {
     const formData = new FormData();
     const formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
 
-    formArray.value.forEach((expenseElement: any) => {
+    formArray.value.forEach((expenseElement: any, index: number) => {
+      formData.append(`workHistoryRequest[${index}].attachmentTypeId`,expenseElement.attachmentTypeId);
+      formData.append(`workHistoryRequest[${index}].workHistoryDocument`,expenseElement.workHistoryDocument);
+      
+      // const workHistoryItem = {
+      //   attachmentTypeId: expenseElement.attachmentTypeId,
+      //   workHistoryDocument: this.itemAttachment?.file,
+      //   positionTitle: expenseElement.positionTitle,
+      //   organization: expenseElement.organization,
+      //   startDate: expenseElement.startDate,
+      //   endDate: expenseElement.endDate
+      // };
+      // formData.append('employeeWorkHistories', workHistoryItem);
 
-      const workHistoryItem = {
-        attachmentTypeId: expenseElement.attachmentTypeId,
-        workHistoryDocument: this.itemAttachment?.file,
-        positionTitle: expenseElement.positionTitle,
-        organization: expenseElement.organization,
-        startDate: expenseElement.startDate,
-        endDate: expenseElement.endDate
-      };
-
-      formData.append('employeeWorkHistories', JSON.stringify(workHistoryItem));
     });
 
     this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
