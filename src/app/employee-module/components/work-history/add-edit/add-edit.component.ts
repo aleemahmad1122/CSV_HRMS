@@ -251,38 +251,33 @@ export class AddEditComponent {
 
   }
 
-  onSubmit(): void {
 
+
+  onSubmit(): void {
     // if (!this.expenseSubmissionForm.valid) {
     //   return;
     // }
 
-    var formData = new FormData();
-    var ref = this;
-    var formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
-    formArray.value.forEach(function (expenseElement: any, expenseElementIndex: any) {
+    const formData = new FormData();
+    const formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
 
+    formArray.value.forEach((expenseElement: any) => {
 
-console.warn("payload=====", expenseElement);
+      const workHistoryItem = {
+        attachmentTypeId: expenseElement.attachmentTypeId,
+        workHistoryDocument: this.itemAttachment?.file,
+        positionTitle: expenseElement.positionTitle,
+        organization: expenseElement.organization,
+        startDate: expenseElement.startDate,
+        endDate: expenseElement.endDate
+      };
 
-
-      formData.append(`request[${expenseElementIndex}].attachmentTypeId`, expenseElement.attachmentTypeId);
-      formData.append(`request[${expenseElementIndex}].positionTitle`, expenseElement.positionTitle);
-      formData.append(`request[${expenseElementIndex}].organization`, expenseElement.organization);
-      formData.append(`request[${expenseElementIndex}].startDate`, expenseElement.startDate);
-      formData.append(`request[${expenseElementIndex}].endDate`, expenseElement.endDate);
-
-
-      if (ref.itemAttachment) {
-        formData.append(`request[${expenseElementIndex}].workHistoryDocument`, ref.itemAttachment);
-      }
-
+      formData.append('employeeWorkHistories', JSON.stringify(workHistoryItem));
     });
 
-
-
     this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
         next: (response) => {
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
@@ -292,11 +287,13 @@ console.warn("payload=====", expenseElement);
             this._toaster.error(response?.message, 'Error!');
           }
         },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
+        error: () => {
+          this._toaster.error("Internal server error occurred while processing your request");
         }
-      })
+      });
   }
+
+
 
   back(): void {
     this._router.navigate([`${'/expense/expense-sheet'}`]);
