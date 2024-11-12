@@ -7,8 +7,8 @@
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
           <h3 class="card-label">
-            {{'language.qualification.qualificationsManagement' | translate}}
-            <span class="d-block text-muted pt-2 font-size-sm">  {{'language.qualification.qualificationHeading' | translate}}</span>
+            {{'language.role.rolesManagement' | translate}}
+            <span class="d-block text-muted pt-2 font-size-sm">  {{'language.role.roleHeading' | translate}}</span>
           </h3>
         </div>
         <form class="d-flex w-50" role="search">
@@ -59,7 +59,7 @@
           </div>
           <!--end::Dropdown-->
           <!--begin::Button-->
-          <button routerLink="/admin/qualifications/add" class="btn btn-primary font-weight-bolder">
+          <button routerLink="/admin/role/add" class="btn btn-primary font-weight-bolder">
             <span class="svg-icon svg-icon-md">
               <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -93,19 +93,19 @@
                 </th>
 
                 <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;">    {{'language.generic.name' | translate}} </span>
+                  <span style="width: 250px;">  Title</span>
+                </th>
+
+                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                  <span style="width: 250px;">  Code</span>
+                </th>
+
+                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                  <span style="width: 250px;">  description</span>
                 </th>
 
 
 
-                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
-                    style="width: 124px;">  {{'language.form.details' | translate}} </span></th>
-
-
-
-
-                <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
-                    style="width: 130px;">  {{'language.generic.actions' | translate}}</span></th>
               </tr>
             </thead>
             <tbody class="datatable-body">
@@ -118,12 +118,17 @@
                 </td>
                 <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.name || "N/A"}}</div>
+                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.designationTitle || "N/A"}}</div>
+                    </div>
+                  </span></td>
+                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+                    <div class="d-flex align-items-center">
+                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.designationCode || "N/A"}}</div>
                     </div>
                   </span></td>
 
                 <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
-                    <div class="font-weight-bolder text-primary mb-0">{{data.description.slice(0,15) || "N/A"}} {{data.description.length > 15 ? '...' : ''}}</div>
+                    <div class="font-weight-bolder text-primary mb-0">{{data?.description?.slice(0,15) || "N/A"}} {{data?.description?.length > 15 ? '...' : ''}}</div>
                   </span></td>
 
 
@@ -132,7 +137,7 @@
 
 
 
-                    <a [routerLink]="['/admin/qualifications/edit']" [queryParams]="{id: data.qualificationId}"
+                    <a [routerLink]="['/admin/role/edit']" [queryParams]="{id: data.designationId}"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                       title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -169,7 +174,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> {{'language.generic.cancel' | translate}}</button>
-                            <button type="button" (click)="onDelete(data.qualificationId)" data-bs-dismiss="modal"
+                            <button type="button" (click)="onDelete(data.designationId)" data-bs-dismiss="modal"
                               class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
                           </div>
                         </div>
@@ -194,7 +199,6 @@
                       </button>
                   </span></td>
               </tr>
-
               }
               @if(this.dataList.length < 1){
                 <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize" style="left: 0px;">No records yet!</tr>
