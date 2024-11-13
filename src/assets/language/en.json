@@ -126,6 +126,7 @@
     },
     "generic": {
       "companyImage":"Image",
+      "activeStatus":"Active Status",
       "view":"View",
       "name": "Name",
       "cancel": "Cancel",
@@ -215,7 +216,7 @@
       "employeeEdManagementHeading": "Employee education management made easy"
     },
     "msg":{
-"areYouAbsolutely":"Are you absolutely sure?",
+"areYouAbsolutely":"Are you sure?",
 "actionCannotBeUndone":"This action cannot be undone. This will delete and remove your data from our servers."
     }
   }

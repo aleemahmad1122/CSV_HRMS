@@ -27,7 +27,7 @@ export class ApiCallingService {
 
 
 
-  getData<T>(controllerName: string, methodName: string, showLoader: boolean, paginationParams?: { page?: number, limit?: number,searchQuery?:string }): Observable<any> {
+  getData<T>(controllerName: string, methodName: string, showLoader: boolean, paginationParams?: { page?: number, limit?: number,searchQuery?:string ,activeStatus?:string | number; }): Observable<any> {
     if(showLoader) {
       this._loader.show();
     }
