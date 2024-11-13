@@ -31,11 +31,11 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;
   imageSizeExceeded: boolean = false;
   maxSizeInBytes = 1048576;
-  selectedCompany: ICompany ;
+  selectedCompany: ICompany;
   isSubmitted = false;
 
 
-  countries: {id:string;name:string}[] = [
+  countries: { id: string; name: string }[] = [
     { id: 'PK', name: 'Pakistan' },
     { id: 'US', name: 'United States' },
     { id: 'IN', name: 'India' },
@@ -66,8 +66,8 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       this.isEditMode = companyId !== undefined && companyId !== null && companyId !== '' && companyId !== 0;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this._apiCalling.getData("Company",`getCompanyById/${companyId}` , true).subscribe({
-          next: (response:any) => {
+        this._apiCalling.getData("Company", `getCompanyById/${companyId}`, true).subscribe({
+          next: (response: any) => {
             if (response?.success) {
               this.selectedCompany = response.data;
               this.patchFormValues();
@@ -155,6 +155,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
     formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
     formData.append('companyType', this.companyForm.get('companyType')?.value || 2);
+    formData.append('employeesCount', this.companyForm.get('employeesCount')?.value);
 
     const apiCall = this.isEditMode
       ? this._apiCalling.putData("Company", "updateCompany/" + this.selectedCompany?.companyId, formData, true)
