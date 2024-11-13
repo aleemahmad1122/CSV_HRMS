@@ -208,6 +208,7 @@ export interface ICompany extends ICommon {
   name: string;
   phoneNumber: string;
   registrationNumber: string;
+  isActive:boolean;
 }
 
 
@@ -319,7 +320,7 @@ export interface Projects extends ICommon {
   description: string;
 }
 
-export interface Clients {
+export interface Clients extends ICommon {
   clientId: string;
   name: string;
   email: string;

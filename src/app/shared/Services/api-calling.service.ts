@@ -27,13 +27,24 @@ export class ApiCallingService {
 
 
 
-  getData<T>(controllerName: string, methodName: string, showLoader: boolean, paginationParams?: { page?: number, limit?: number,searchQuery?:string }): Observable<any> {
+  getData<T>(
+    controllerName: string,
+    methodName: string,
+    showLoader: boolean,
+    paginationParams?: {
+      page?: number,
+      limit?: number,
+      searchQuery?: string,
+      activeStatus?: string | number;
+    }
+  ): Observable<any> {
     if(showLoader) {
       this._loader.show();
     }
     const staticQueryParams = {
       companyId: this._localStorage.getCompanyDetail().companyId,
       employeeId: this.employeeId,
+      activeStatus: paginationParams?.activeStatus ?? 1,
       ...paginationParams
     };
     return this._httpClient.get<any>(`${environment.baseUrl}${controllerName}/${methodName}`, { params: staticQueryParams }).pipe(this.catchApiErrors());

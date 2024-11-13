@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IRole,IRoleRes } from '../../../types/index';
+import { IRole, IRoleRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -11,9 +11,9 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-role-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './role-list.component.html',
-  styleUrl: './role-list.component.css'
+  styleUrls: ['./role-list.component.css']
 })
 export class RoleListComponent {
   private ngUnsubscribe = new Subject<void>();
@@ -21,6 +21,7 @@ export class RoleListComponent {
 
   dataList: IRole[] = [];
   dropDownList = [10, 50, 75, 100];
+  selectedStatus: number | string = 1;
   searchTerm = '';
   totalCount = 0;
   pageSize = 10;
@@ -32,7 +33,7 @@ export class RoleListComponent {
     private exportService: ExportService
   ) {
     this.initializeSearch();
-    this.getData();
+    this.getData(); // Initial data fetch
   }
 
   private initializeSearch(): void {
@@ -40,6 +41,26 @@ export class RoleListComponent {
       .subscribe((term) => this.getData(term));
   }
 
+  // Handles status change from the dropdown
+  onStatusChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStatus = selectedValue;
+    this.getActiveStatusData('', selectedValue);
+  }
+
+  // Fetch data filtered by active status
+  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+
+    // Call the API with the active status filter
+    this.apiService.getData('Role', 'getRoles', true, { searchQuery: searchTerm, activeStatus: isActive })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IRoleRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
+
+  // Fetch data with search term
   private getData(searchTerm = ''): void {
     this.apiService.getData('Role', 'getRoles', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -49,6 +70,7 @@ export class RoleListComponent {
       });
   }
 
+  // Handle response after fetching data
   private handleResponse(response: IRoleRes): void {
     if (response?.success) {
       const { roles, pagination } = response.data;
@@ -59,13 +81,17 @@ export class RoleListComponent {
         totalCount: pagination.totalCount,
         totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
       });
-    } else this.dataList = [];
+    } else {
+      this.dataList = [];
+    }
   }
 
+  // Search method to trigger search with debounce
   search(event: Event): void {
     this.searchSubject.next((event.target as HTMLInputElement).value);
   }
 
+  // Change page number for pagination
   changePage(newPage: number): void {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.pageNo = newPage;
@@ -73,11 +99,13 @@ export class RoleListComponent {
     }
   }
 
+  // Change page size for pagination
   changePageSize(size: number): void {
     Object.assign(this, { pageSize: size, pageNo: 1 });
     this.getPaginatedData();
   }
 
+  // Fetch paginated data
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
     this.apiService.getData('Role', 'getRoles', true, params)
@@ -88,6 +116,7 @@ export class RoleListComponent {
       });
   }
 
+  // Delete a role by its ID
   onDelete(id: string): void {
     console.log(id);
 
@@ -101,6 +130,7 @@ export class RoleListComponent {
       });
   }
 
+  // Export data in a specified format
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
   }
