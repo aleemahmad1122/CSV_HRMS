@@ -126,6 +126,7 @@
     },
     "generic": {
       "companyImage":"Image",
+      "all":"All",
       "activeStatus":"Active Status",
       "view":"View",
       "name": "Name",

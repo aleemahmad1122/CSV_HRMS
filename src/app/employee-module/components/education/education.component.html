@@ -120,7 +120,7 @@
         </thead>
         <tbody class="datatable-body">
           @for (data of dataList; track $index) {
-          <tr data-row="0" class="datatable-row" style="left: 0px;">
+           <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
             <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
               aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">
                 {{ (pageNo - 1) * pageSize + $index + 1 }}
