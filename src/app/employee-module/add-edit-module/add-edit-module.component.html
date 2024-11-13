@@ -1,4 +1,5 @@
-<div class="card-header card-header-tabs-line mx-auto container ">
+@if(this.isEditMode){
+  <div class="card-header card-header-tabs-line mx-auto container ">
     <ul class="nav nav-dark nav-bold nav-tabs nav-tabs-line" data-remember-tab="tab_id" role="tablist">
         @for(item of tabList; track $index){
         <li class="nav-item">
@@ -10,6 +11,7 @@
         }
     </ul>
 </div>
+}
 
 
 
