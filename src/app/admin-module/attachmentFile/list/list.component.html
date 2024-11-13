@@ -7,8 +7,8 @@
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
           <h3 class="card-label">
-            {{'language.role.rolesManagement' | translate}}
-            <span class="d-block text-muted pt-2 font-size-sm">  {{'language.role.roleHeading' | translate}}</span>
+            {{'language.attachmentType.attachmentTypesManagement' | translate}}
+            <span class="d-block text-muted pt-2 font-size-sm">  {{'language.attachmentType.attachmentTypeHeading' | translate}}</span>
           </h3>
         </div>
          <form class="d-flex  mt-2 w-25"role="search">
@@ -21,9 +21,9 @@
           <div class="mr-2 dropdown dropdown-inline">
             <select class="form-control datatable-input" data-col-index="2" (change)="onStatusChange($event)">
               <option  >{{ 'language.generic.activeStatus' | translate }}</option>
-              <option value="0">All</option>
-              <option value="1" selected >Active</option>
-              <option value="2">In Active</option>
+            <option value="0">{{ 'language.generic.all' | translate }}</option>
+               <option value="1" selected >{{ 'language.generic.active' | translate }}</option>
+              <option value="2">{{ 'language.generic.Inactive' | translate }}</option>
             </select>
           </div>
           <!--begin::Dropdown-->

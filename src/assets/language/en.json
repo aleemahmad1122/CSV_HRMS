@@ -125,10 +125,12 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
-      "companyImage": "Image",
-      "all": "All",
-      "activeStatus": "Active Status",
-      "view": "View",
+      "companyImage":"Image",
+      "all":"All",
+      "active":"Active",
+      "inActive":"In Active",
+      "activeStatus":"Active Status",
+      "view":"View",
       "name": "Name",
       "cancel": "Cancel",
       "back": "Back",
@@ -198,6 +200,26 @@
       "role": "Role",
       "rolesManagement": "Roles Management",
       "roleHeading": "Roles management made easy"
+    },
+    "designation":{
+      "designation": "Designation",
+      "designationsManagement": "Designations Management",
+      "designationHeading": "Designations management made easy"
+    },
+    "department":{
+      "department": "Department",
+      "departmentsManagement": "Departments Management",
+      "departmentHeading": "Departments management made easy"
+    },
+    "team":{
+      "team": "Team",
+      "teamsManagement": "Teams Management",
+      "teamHeading": "Teams management made easy"
+    },
+    "attachmentType":{
+      "attachmentType": "Attachment Type",
+      "attachmentTypesManagement": "Attachment Types Management",
+      "attachmentTypeHeading": "Attachment Types management made easy"
     },
     "shift": {
       "shift": "Shift",

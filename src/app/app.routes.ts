@@ -48,7 +48,7 @@ export const routes: Routes = [
 
     {
         path: '**',
-        loadChildren: () => import('./shared/components/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent),
+        redirectTo:"",
         title: 'Page Not Found'
     },
 ];
