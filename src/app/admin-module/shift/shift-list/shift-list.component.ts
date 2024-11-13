@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IRoleRes, IShift,IShiftRes } from '../../../types/index';
+import {  IShift,IShiftRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';

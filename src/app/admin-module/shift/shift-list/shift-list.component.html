@@ -102,8 +102,33 @@
                     style="width: 124px;">  {{'language.generic.startTime' | translate}} </span></th>
 
 
-                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
-                    style="width: 124px;">  {{'language.generic.endTime' | translate}} </span></th>
+                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
+                  <span
+                    style="width: 124px;">
+                    {{'language.generic.endTime' | translate}}
+                  </span>
+                  </th>
+
+
+
+                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
+                  <span
+                    style="width: 124px;">
+                    Early Minutes
+                  </span>
+                  </th>
+
+
+
+
+                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
+                  <span
+                    style="width: 124px;">
+                    Grace Minutes
+                  </span>
+                  </th>
+
+
 
 
 
@@ -132,6 +157,14 @@
 
                 <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
                     <div class="font-weight-bolder text-primary mb-0">{{data.endTime || "N/A"}}  </div>
+                  </span></td>
+
+                <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
+                    <div class="font-weight-bolder text-primary mb-0">{{data.earlyMinutes || "N/A"}} {{data.earlyMinutes ? "mins" : ""}} </div>
+                  </span></td>
+
+                <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
+                    <div class="font-weight-bolder text-primary mb-0">{{data.graceMinutes || "N/A"}}  {{data.graceMinutes ? "mins" : ""}}</div>
                   </span></td>
 
 
