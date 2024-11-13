@@ -124,13 +124,13 @@ const routes: Routes = [
     title: 'Team',
   },
   {
-    path: 'attachmentFile',
+    path: 'attachmentType',
     loadComponent: () => import(`./attachmentFile/list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Company Structure' },
-    title: 'Attachment File',
+    title: 'Attachment Type',
   },
   {
-    path: 'attachmentFile/:action',
+    path: 'attachmentType/:action',
     loadComponent: () => import(`./attachmentFile/add-edit/add-edit.component`).then(c => c.AddEditComponent),
     data: { breadcrumb: 'Company Structure' },
     title: 'Attachment File',

@@ -41,7 +41,7 @@ export class ListComponent {
   }
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm })
+    this.apiService.getData('Designation', 'getDesignations', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: IDesignationRes) => this.handleResponse(res),
@@ -80,7 +80,7 @@ export class ListComponent {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, params)
+    this.apiService.getData('Designation', 'getDesignations', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -91,13 +91,13 @@ export class ListComponent {
   onDelete(id: string): void {
     console.log(id);
 
-    this.apiService.deleteData('EmployeeDesignation', `deleteEmployeeDesignation/${id}`, id, true)
+    this.apiService.deleteData('Designation', `deleteDesignation/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
           if (res?.success) this.dataList = this.dataList.filter((d) => d.designationId !== id);
         },
-        error: (err) => console.error('Error deleting Employee Designation:', err),
+        error: (err) => console.error('Error deleting Designation:', err),
       });
   }
 

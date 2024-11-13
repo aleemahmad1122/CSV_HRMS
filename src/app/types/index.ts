@@ -76,6 +76,60 @@ export interface IDesignationRes extends ICommonRes {
 
 }
 
+export interface IAttachmentType extends ICommon {
+        attachmentTypeId:string;
+        name :string;
+        description :string;
+}
+
+
+export interface IAttachmentTypeRes extends ICommonRes {
+
+  data: {
+    attachmentTypes: IAttachmentType[]
+    pagination: IPagination
+  };
+
+}
+
+
+export interface IDepartment extends ICommon {
+        departmentId:string;
+        companyId:string;
+        name :string;
+        hodId : string;
+        description :string;
+}
+
+
+export interface IDepartmentRes extends ICommonRes {
+
+  data: {
+    departments: IDepartment[]
+    pagination: IPagination
+  };
+
+}
+
+
+export interface ITeam extends ICommon {
+        teamId:string;
+        companyId:string;
+        name :string;
+        teamLeadId : string;
+        description :string;
+}
+
+
+export interface ITeamRes extends ICommonRes {
+
+  data: {
+    teams: ITeam[]
+    pagination: IPagination
+  };
+
+}
+
 // export interface IEmployeeWorkHistory extends ICommon{
 //   roleId:string;
 //   name:string;

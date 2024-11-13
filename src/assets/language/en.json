@@ -18,7 +18,7 @@
       "designation": "Designation",
       "team": "Team",
       "department": "Department",
-      "attachmentFile": "Attachment File",
+      "attachmentType": "Attachment Type",
       "jobDetailsSetup": "Job Details Setup",
       "qualifications": "Qualifications",
       "projects": "Projects",

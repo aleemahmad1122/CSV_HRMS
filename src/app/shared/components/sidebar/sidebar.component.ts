@@ -57,8 +57,8 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       route: '/admin/team'
     },
     {
-      name: 'language.sidebar.attachmentFile',
-      route: '/admin/attachmentFile'
+      name: 'language.sidebar.attachmentType',
+      route: '/admin/attachmentType'
     },
   ]
 

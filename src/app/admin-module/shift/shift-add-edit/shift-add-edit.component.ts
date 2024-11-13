@@ -47,7 +47,7 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
           next: (response) => {
             if (response?.success) {
                 this.selectedAddEditValue = response?.data;
-                this.patchFormValues(); // Call patchFormValues here after setting selectedAddEditValue
+                this.patchFormValues();
             } else {
               this.selectedAddEditValue = [];
             }
@@ -56,7 +56,6 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
             this.selectedAddEditValue = [];
           }
         });
-        // this.patchFormValues(); // Removed this line
       }
     });
   }
@@ -70,7 +69,10 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       startTime: ['', [Validators.required ]],
-      endTime: ['', [Validators.required ]]
+      endTime: ['', [Validators.required ]],
+      graceMinutes: [0],
+      earlyMinutes: [0],
+      description: ['']
     });
   }
 
@@ -80,6 +82,9 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
         name: this.selectedAddEditValue.name,
         startTime: this.selectedAddEditValue.startTime,
         endTime: this.selectedAddEditValue.endTime,
+        graceMinutes: this.selectedAddEditValue.graceMinutes,
+        earlyMinutes: this.selectedAddEditValue.earlyMinutes,
+        description: this.selectedAddEditValue.description,
       });
     }
   }
