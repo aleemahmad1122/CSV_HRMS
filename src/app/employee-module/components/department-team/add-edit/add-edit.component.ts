@@ -1,35 +1,29 @@
-
+import { ApiCallingService } from './../../../../shared/Services/api-calling.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
-import { DeactivatedComponent } from "../components/deactivated/deactivated.component";
-import { EducationComponent } from "../components/education/education.component";
-import { WorkHistoryComponent } from "../components/work-history/work-history.component";
-import { DepartmentTeamComponent } from './../components/department-team/department-team.component';
+import { IDepartmentRes, IDepartment, ITeam, IDesignations, IDesignationRes, ITeamRes } from '../../../../types';
 
 @Component({
-  selector: 'app-add-edit-module',
+  selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DeactivatedComponent, EducationComponent, WorkHistoryComponent, DepartmentTeamComponent],
-  templateUrl: './add-edit-module.component.html',
-  styleUrl: './add-edit-module.component.css'
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  templateUrl: './add-edit.component.html',
+  styleUrl: './add-edit.component.css'
 })
-export class AddEditModuleComponent implements OnInit, OnDestroy {
+export class AddEditComponent {
   private ngUnsubscribe = new Subject<void>();
+  departmentList: IDepartment[] = []
+  teamList: ITeam[] = []
+  designationList: IDesignations[] = []
   addEditForm: FormGroup;
-  isEditMode = false;
+  isEditMode: boolean | string = false;
   isSubmitted = false;
-  isView: boolean = false;
   selectedValue: any;
-
-
-  tabList: string[] = ["language.sidebar.employee", "language.employee.workHistory", "language.employee.education", "language.employee.deactivated", "language.employee.department"]
-  activeTab: string = this.tabList[0];
 
   constructor(
     private fb: FormBuilder,
@@ -46,12 +40,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
       this.isEditMode = id;
-      const view = params['view'];
-      this.isView = view === 'true';
-      console.log(view === 'true');
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Employee", `getEmployeeById/${id}`, true)
+        this.apiCalling.getData("EmployeeDesignation", `getEmployeeDesignationById/${id}`, true)
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
@@ -67,6 +58,10 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
           });
       }
     });
+
+    this.getDepartments();
+    this.getDesignations();
+    this.getTeams();
   }
 
   ngOnDestroy(): void {
@@ -74,32 +69,49 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
+  getDepartments(): void {
+    this.apiCalling.getData('Department', 'getDepartments', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IDepartmentRes) => this.departmentList = res.data.departments,
+        error: () => ([]),
+      });
+  }
+
+  getDesignations(): void {
+    this.apiCalling.getData('Designation', 'getDesignations', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IDesignationRes) => this.designationList = res.data.designations,
+        error: () => ([]),
+      });
+  }
+
+  getTeams(): void {
+    this.apiCalling.getData('Team', 'getTeams', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: ITeamRes) => this.teamList = res.data.teams,
+        error: () => ([]),
+      });
+  }
+
   private createForm(): FormGroup {
     return this.fb.group({
-      employeeImage: ['', Validators.required],
-      fullName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      role: ['', Validators.required]
+      departmentId: ['', Validators.required],
+      designationId: ['', Validators.required],
+      teamId: ['', Validators.required],
+      description: ['', Validators.required],
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        employeeImage: this.selectedValue.employeeImage,
-        fullName: this.selectedValue.fullName,
-        email: this.selectedValue.email,
-        password: this.selectedValue.password,
-        country: this.selectedValue.country,
-        city: this.selectedValue.city,
-        address: this.selectedValue.address,
-        phoneNumber: this.selectedValue.phoneNumber,
-        role: this.selectedValue.role
+        departmentId: this.selectedValue.departmentId,
+        designationId: this.selectedValue.designationId,
+        teamId: this.selectedValue.teamId,
+        description: this.selectedValue.description
       });
     }
   }
@@ -112,8 +124,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Employee", `updateEmployee/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Employee", "addEmployee", body, true);
+      ? this.apiCalling.putData("EmployeeDesignation", `updateEmployeeDesignation/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("EmployeeDesignation", "addEmployeeDesignation", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
@@ -132,10 +144,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/employee/job-detail']);
-  }
-
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
+    this.router.navigate(['/admin/clients']);
   }
 }

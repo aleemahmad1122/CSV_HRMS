@@ -28,8 +28,8 @@ export interface IShift extends ICommon {
   name: string;
   startTime: string;
   endTime: string;
-  graceMinutes:number;
-  earlyMinutes:number;
+  graceMinutes: number;
+  earlyMinutes: number;
 }
 
 
@@ -61,11 +61,11 @@ export interface IRoleRes extends ICommonRes {
 
 
 export interface IDesignations extends ICommon {
-        designationId:string;
-        companyId:string;
-        designationTitle :string;
-        designationCode : string;
-        description :string;
+  designationId: string;
+  companyId: string;
+  designationTitle: string;
+  designationCode: string;
+  description: string;
 }
 
 
@@ -79,9 +79,9 @@ export interface IDesignationRes extends ICommonRes {
 }
 
 export interface IAttachmentType extends ICommon {
-        attachmentTypeId:string;
-        name :string;
-        description :string;
+  attachmentTypeId: string;
+  name: string;
+  description: string;
 }
 
 
@@ -96,11 +96,11 @@ export interface IAttachmentTypeRes extends ICommonRes {
 
 
 export interface IDepartment extends ICommon {
-        departmentId:string;
-        companyId:string;
-        name :string;
-        hodId : string;
-        description :string;
+  departmentId: string;
+  companyId: string;
+  name: string;
+  hodId: string;
+  description: string;
 }
 
 
@@ -115,11 +115,11 @@ export interface IDepartmentRes extends ICommonRes {
 
 
 export interface ITeam extends ICommon {
-        teamId:string;
-        companyId:string;
-        name :string;
-        teamLeadId : string;
-        description :string;
+  teamId: string;
+  companyId: string;
+  name: string;
+  teamLeadId: string;
+  description: string;
 }
 
 
@@ -160,6 +160,23 @@ export interface IEmployeeWorkHistoryRes extends ICommonRes {
 
   data: {
     employeeWorkHistoryDetails: IEmployeeWorkHistory[]
+    pagination: IPagination
+  };
+
+}
+
+export interface IEmployeeDesignation extends ICommon {
+  employeeDesignationId: string;
+  employeeId: string;
+  designationId?: string;
+  departmentId?: string;
+  teamId?: string;
+}
+
+export interface IEmployeeDesignationRes extends ICommonRes {
+
+  data: {
+    employeeDesignations: IEmployeeDesignation[]
     pagination: IPagination
   };
 
