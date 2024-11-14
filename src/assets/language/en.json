@@ -6,6 +6,9 @@
     "fr": "French",
     "de": "German",
     "ja": "Japanese",
+    "breadcrumb": {
+      "admin": "Admin"
+    },
     "sidebar": {
       "dashboard": "Dashboard",
       "job": "Job",
@@ -125,12 +128,24 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
-      "companyImage":"Image",
-      "all":"All",
-      "active":"Active",
-      "Inactive":"In Active",
-      "activeStatus":"Active Status",
-      "view":"View",
+      "addCompany": "Add Company",
+      "addJob": "Add Job",
+      "addQualification": "Add Qualification",
+      "addProject": "Add Project",
+      "addClient": "Add Client",
+      "addRole": "Add Role",
+      "addShift": "Add Shift",
+      "addDesignation": "Add Designation",
+      "addDepartment": "Add Department",
+      "addTeam": "Add Team",
+      "addAttachmentType": "Add Attachment Type",
+      "noRecords": "No records yet!",
+      "companyImage": "Image",
+      "all": "All",
+      "active": "Active",
+      "Inactive": "In Active",
+      "activeStatus": "Active Status",
+      "view": "View",
       "name": "Name",
       "cancel": "Cancel",
       "back": "Back",
@@ -158,7 +173,7 @@
       "endDate": "End Date",
       "startTime": "Start Time",
       "endTime": "End Time",
-      "edit":"Edit"
+      "edit": "Edit"
     },
     "company": {
       "companyManagement": "Company Management",
@@ -201,22 +216,22 @@
       "rolesManagement": "Roles Management",
       "roleHeading": "Roles management made easy"
     },
-    "designation":{
+    "designation": {
       "designation": "Designation",
       "designationsManagement": "Designations Management",
       "designationHeading": "Designations management made easy"
     },
-    "department":{
+    "department": {
       "department": "Department",
       "departmentsManagement": "Departments Management",
       "departmentHeading": "Departments management made easy"
     },
-    "team":{
+    "team": {
       "team": "Team",
       "teamsManagement": "Teams Management",
       "teamHeading": "Teams management made easy"
     },
-    "attachmentType":{
+    "attachmentType": {
       "attachmentType": "Attachment Type",
       "attachmentTypesManagement": "Attachment Types Management",
       "attachmentTypeHeading": "Attachment Types management made easy"

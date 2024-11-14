@@ -1,8 +1,3 @@
-
-
-
-
-
 <div class="d-flex flex-column-fluid">
   <!--begin::Container-->
   <div class="container">
@@ -13,10 +8,11 @@
         <div class="card-title">
           <h3 class="card-label">
             {{'language.employee.employeesManagement' | translate}}
-            <span class="d-block text-muted pt-2 font-size-sm"> {{'language.employee.employeeHeading' | translate}}</span>
+            <span class="d-block text-muted pt-2 font-size-sm"> {{'language.employee.employeeHeading' |
+              translate}}</span>
           </h3>
         </div>
-         <form class="d-flex  mt-2 w-25"role="search">
+        <form class="d-flex  mt-2 w-25" role="search">
           <input class="form-control" type="search" [placeholder]="'language.placeholders.searchByName' | translate"
             aria-label="Search" name="searchTerm" (input)="search($event)">
         </form>
@@ -153,7 +149,7 @@
             </thead>
             <tbody class="datatable-body">
               @for (data of dataList; track $index) {
-               <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
+              <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
                   aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">
                       {{ (pageNo - 1) * pageSize + $index + 1 }}
@@ -216,10 +212,9 @@
                       title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
                           version="1.1">
-                              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <rect x="0" y="0" width="24" height="24"></rect>
-                            <path
-                            style="fill:#0095ff;"
+                            <path style="fill:#0095ff;"
                               d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
                               fill="#000000" fill-rule="nonzero"
                               transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953) ">
@@ -229,7 +224,7 @@
                               fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
                           </g>
                         </svg> </span>
-                       </a>
+                    </a>
 
 
                     <a [routerLink]="['/employee/employee/view']" [queryParams]="{id: data.employeeId, view: true}"
@@ -237,16 +232,21 @@
                       title="Edit details">
                       <span class="svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\General\User.svg-->
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                          height="24px" viewBox="0 0 24 24" version="1.1">
                           <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                            <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                            <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero"></path>
+                            <path
+                              d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
+                              fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                            <path
+                              d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
+                              fill="#000000" fill-rule="nonzero"></path>
                           </g>
                         </svg>
                         <!--end::Svg Icon-->
                       </span>
-                       </a>
+                    </a>
 
 
 
@@ -275,7 +275,8 @@
                       </div>
                     </div>
 
-                    <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                    <button data-bs-toggle="modal" [disabled]="!data.isActive"
+                      [attr.data-bs-target]="'#modal-' + $index"
                       class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                         class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -294,9 +295,9 @@
                   </span></td>
               </tr>
               }
-              @if(this.dataList.length < 1){
-                <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize" style="left: 0px;">No records yet!</tr>
-              }
+              @if(this.dataList.length < 1){ <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize"
+                style="left: 0px;">{{'language.generic.noRecords' | translate}}</tr>
+                }
             </tbody>
           </table>
 

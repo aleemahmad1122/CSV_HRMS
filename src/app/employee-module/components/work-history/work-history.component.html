@@ -7,7 +7,7 @@
           translate}}</span>
       </h3>
     </div>
-     <form class="d-flex  mt-2 w-25"role="search">
+    <form class="d-flex  mt-2 w-25" role="search">
       <input class="form-control" type="search" [placeholder]="'language.placeholders.searchByName' | translate"
         aria-label="Search" name="searchTerm" (input)="search($event)">
     </form>
@@ -120,7 +120,7 @@
         </thead>
         <tbody class="datatable-body">
           @for (data of dataList; track $index) {
-           <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
+          <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
             <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
               <span style="width: 40px;"><span class="font-weight-bolder">
                   {{ (pageNo - 1) * pageSize + $index + 1 }}
@@ -189,7 +189,7 @@
                   </div>
                 </div>
 
-                <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                <button data-bs-toggle="modal" [disabled]="!data.isActive" [attr.data-bs-target]="'#modal-' + $index"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                     class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                       xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"

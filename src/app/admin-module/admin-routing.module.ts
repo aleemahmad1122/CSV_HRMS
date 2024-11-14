@@ -28,10 +28,22 @@ const routes: Routes = [
     title: 'Projects',
   },
   {
+    path: 'project/:action',
+    loadComponent: () => import(`./project/add-edit-project/add-edit-project.component`).then(c => c.AddEditProjectComponent),
+    data: { breadcrumb: 'Project' },
+    title: 'Project',
+  },
+  {
     path: 'clients',
     loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
     data: { breadcrumb: 'Clients' },
     title: 'Clients',
+  },
+  {
+    path: 'client/:action',
+    loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
+    data: { breadcrumb: 'Client' },
+    title: 'Client',
   },
   {
     path: 'company/:action',
@@ -48,73 +60,63 @@ const routes: Routes = [
   {
     path: 'job/:action',
     loadComponent: () => import(`./job/add-edit-job/add-edit-job.component`).then(c => c.AddEditJobComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Job' },
     title: 'Job',
   },
-  {
-    path: 'project/:action',
-    loadComponent: () => import(`./project/add-edit-project/add-edit-project.component`).then(c => c.AddEditProjectComponent),
-    data: { breadcrumb: 'Company Structure' },
-    title: 'Project',
-  },
-  {
-    path: 'client/:action',
-    loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
-    data: { breadcrumb: 'Company Structure' },
-    title: 'Client',
-  },
+
+
   {
     path: 'role',
     loadComponent: () => import(`./role/role-list/role-list.component`).then(c => c.RoleListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Role' },
     title: 'Role',
   },
   {
     path: 'role/:action',
     loadComponent: () => import(`./role/role-add-edit/role-add-edit.component`).then(c => c.RoleAddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Role' },
     title: 'Role',
   },
   {
     path: 'shift',
     loadComponent: () => import(`./shift/shift-list/shift-list.component`).then(c => c.ShiftListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Shift' },
     title: 'Shift',
   },
   {
     path: 'shift/:action',
     loadComponent: () => import(`./shift/shift-add-edit/shift-add-edit.component`).then(c => c.ShiftAddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Shift' },
     title: 'Shift',
   },
   {
     path: 'designation',
     loadComponent: () => import(`./designation/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Designation' },
     title: 'Designation',
   },
   {
     path: 'designation/:action',
     loadComponent: () => import(`./designation/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Designation' },
     title: 'Designation',
   },
   {
     path: 'department',
     loadComponent: () => import(`./department/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Department' },
     title: 'Department',
   },
   {
     path: 'department/:action',
     loadComponent: () => import(`./department/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Department' },
     title: 'Department',
   },
   {
     path: 'team',
     loadComponent: () => import(`./team/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Team' },
     title: 'Team',
   },
   {
@@ -126,7 +128,7 @@ const routes: Routes = [
   {
     path: 'attachmentType',
     loadComponent: () => import(`./attachmentFile/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Attachment Type' },
     title: 'Attachment Type',
   },
   {
