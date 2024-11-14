@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IEmployeeWorkHistoryRes, IEmployeeWorkHistory, IRoleRes } from '../../../types/index';
-import { RouterModule } from '@angular/router';
+import { IEmployeeWorkHistory,IEmployeeWorkHistoryRes } from '../../../types/index';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ExportService } from '../../../shared/Services/export.service';
@@ -11,27 +11,32 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-work-history',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
   templateUrl: './work-history.component.html',
   styleUrl: './work-history.component.css'
 })
-export class WorkHistoryComponent {
+export class WorkHistoryComponent{
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
   dataList: IEmployeeWorkHistory[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
+  selectedStatus: number | string = 1;
   totalCount = 0;
   pageSize = 10;
   pageNo = 1;
   totalPages = 0;
+  id:string = "";
 
   constructor(
     private apiService: ApiCallingService,
+    private route: ActivatedRoute,
     private exportService: ExportService
   ) {
     this.initializeSearch();
+
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(_ => this.id = _['id']);
     this.getData();
   }
 
@@ -40,8 +45,29 @@ export class WorkHistoryComponent {
       .subscribe((term) => this.getData(term));
   }
 
+
+    // Handles status change from the dropdown
+    onStatusChange(event: Event): void {
+      const selectedValue = (event.target as HTMLSelectElement).value;
+      this.selectedStatus = selectedValue;
+      this.getActiveStatusData('', selectedValue);
+    }
+
+    // Fetch data filtered by active status
+    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+
+      // Call the API with the active status filter
+      this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
+          error: () => (this.dataList = []),
+        });
+    }
+
+
   private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm })
+    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm,employeeId:this.id  })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
@@ -79,7 +105,7 @@ export class WorkHistoryComponent {
   }
 
   private getPaginatedData(): void {
-    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize,employeeId:this.id  };
     this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -89,15 +115,13 @@ export class WorkHistoryComponent {
   }
 
   onDelete(id: string): void {
-    console.log(id);
-
-    this.apiService.deleteData('EmployeeWorkHistory', `deleteEmployeeWorkHistory/${id}`, id, true)
+    this.apiService.deleteData('EmployeeWorkHistory', `deleteProject/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.attachmentTypeId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeWorkHistoryId !== id);
         },
-        error: (err) => console.error('Error deleting Employee Work History:', err),
+        error: (err) => console.error('Error deleting Employee Work Histories:', err),
       });
   }
 

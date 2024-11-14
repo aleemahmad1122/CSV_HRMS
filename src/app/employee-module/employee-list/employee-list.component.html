@@ -17,6 +17,17 @@
             aria-label="Search" name="searchTerm" (input)="search($event)">
         </form>
         <div class="card-toolbar">
+
+
+          <div class="mr-2 dropdown dropdown-inline">
+            <select class="form-control datatable-input" data-col-index="2" (change)="onStatusChange($event)">
+              <option>{{ 'language.generic.activeStatus' | translate }}</option>
+              <option value="0">{{ 'language.generic.all' | translate }}</option>
+              <option value="1" selected>{{ 'language.generic.active' | translate }}</option>
+              <option value="2">{{ 'language.generic.Inactive' | translate }}</option>
+            </select>
+          </div>
+
           <!--begin::Dropdown-->
           <div class="dropdown dropdown-inline mr-2">
             <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle"
@@ -43,22 +54,6 @@
               <ul class="navi flex-column navi-hover py-2">
                 <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">
                   {{'language.generic.chooseAnOption' | translate}}
-                </li>
-                <li class="navi-item">
-                  <a style="cursor: pointer;" class="navi-link" (click)="exportData('print')">
-                    <span class="navi-icon">
-                      <i class="la la-print"></i>
-                    </span>
-                    <span class="navi-text"> {{'language.generic.print' | translate}} </span>
-                  </a>
-                </li>
-                <li class="navi-item">
-                  <a style="cursor: pointer;" class="navi-link" (click)="exportData('copy')">
-                    <span class="navi-icon">
-                      <i class="la la-copy"></i>
-                    </span>
-                    <span class="navi-text"> {{'language.generic.copy' | translate}} </span>
-                  </a>
                 </li>
                 <li class="navi-item">
                   <a style="cursor: pointer;" class="navi-link" (click)="exportData('excel')">
@@ -89,7 +84,7 @@
                 </g>
               </svg>
               <!--end::Svg Icon-->
-            </span> {{'language.generic.newRecord' | translate}}
+            </span> {{'language.generic.addEmployee' | translate}}
           </button>
           <!--end::Button-->
         </div>
@@ -151,7 +146,7 @@
               @for (data of dataList; track $index) {
               <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
                 <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder">
+                  aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder  px-3">
                       {{ (pageNo - 1) * pageSize + $index + 1 }}
                     </span></span>
                 </td>
@@ -283,10 +278,10 @@
                           version="1.1">
                           <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <rect x="0" y="0" width="24" height="24"></rect>
-                            <path
+                            <path style="fill: red;"
                               d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
                               fill="#000000" fill-rule="nonzero"></path>
-                            <path
+                            <path style="fill: red;"
                               d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
                               fill="#000000" opacity="0.3"></path>
                           </g>

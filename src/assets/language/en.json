@@ -130,6 +130,9 @@
     "generic": {
       "addCompany": "Add Company",
       "addJob": "Add Job",
+      "addEmployee":"Add Employee",
+      "addEducation":"Add Education",
+      "addWorkHistory":"Add Work History",
       "addQualification": "Add Qualification",
       "addProject": "Add Project",
       "addClient": "Add Client",

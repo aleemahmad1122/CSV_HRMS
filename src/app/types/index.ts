@@ -43,6 +43,32 @@ export interface IShiftRes extends ICommonRes {
 }
 
 
+export interface IEmployeeWorkHistory extends ICommon {
+  employeeWorkHistoryId:string;
+  employeeId:string;
+  attachmentTypeId:string;
+  positionTitle:string;
+  organization?:string;
+  workHistoryAttachments:{
+    attachmentId:string;
+    documentPath:string;
+    documentName:string;
+  }[];
+  startDate?:string;
+  endDate?:string;
+}
+
+
+export interface IEmployeeWorkHistoryRes extends ICommonRes {
+
+  data: {
+    employeeWorkHistoryDetails: IEmployeeWorkHistory[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IRole extends ICommon {
   roleId: string;
   name: string;

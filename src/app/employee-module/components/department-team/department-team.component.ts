@@ -25,6 +25,7 @@ export class DepartmentTeamComponent {
   dataList: IEmployeeDesignation[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
+  selectedStatus: number | string = 1;
   totalCount = 0;
   pageSize = 10;
   pageNo = 1;
@@ -72,6 +73,29 @@ export class DepartmentTeamComponent {
     this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((term) => this.getData(term));
   }
+
+
+
+
+    // Handles status change from the dropdown
+    onStatusChange(event: Event): void {
+      const selectedValue = (event.target as HTMLSelectElement).value;
+      this.selectedStatus = selectedValue;
+      this.getActiveStatusData('', selectedValue);
+    }
+
+    // Fetch data filtered by active status
+    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+
+      // Call the API with the active status filter
+      this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm, activeStatus: isActive })
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res: IEmployeeDesignationRes) => this.handleResponse(res),
+          error: () => (this.dataList = []),
+        });
+    }
+
 
   private getData(searchTerm = ''): void {
     this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm })

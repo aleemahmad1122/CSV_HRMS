@@ -32,9 +32,10 @@ export class ApiCallingService {
     methodName: string,
     showLoader: boolean,
     paginationParams?: {
-      page?: number,
-      limit?: number,
-      searchQuery?: string,
+      employeeId?: string;
+      page?: number;
+      limit?: number;
+      searchQuery?: string;
       activeStatus?: string | number;
     }
   ): Observable<any> {
@@ -43,7 +44,6 @@ export class ApiCallingService {
     }
     const staticQueryParams = {
       companyId: this._localStorage.getCompanyDetail().companyId,
-      employeeId: this.employeeId,
       activeStatus: paginationParams?.activeStatus ?? 1,
       ...paginationParams
     };
