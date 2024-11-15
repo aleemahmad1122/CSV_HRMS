@@ -153,72 +153,11 @@ export class AddEditComponent {
     this.isViewOnly = false;
   }
 
-
-
-
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('expense');
-    }
-
-  }
-
-
-  droppedFiles(files: NgxFileDropEntry[]) {
-    this.files = files;
-    for (const droppedFile of files) {
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          const reader = new FileReader();
-          reader.onload = (e: any) => {
-            const blob = new Blob([e.target.result], { type: file.type });
-            const url = URL.createObjectURL(blob);
-            this.attachedFiles.push({
-              file: file,
-              name: file.name,
-              type: file.type,
-              url: this._sanitizer.bypassSecurityTrustResourceUrl(url)
-            });
-            this.getSelectedFile(this.attachedFiles.length - 1);
-          };
-          reader.readAsArrayBuffer(file);
-        });
-      }
-    }
-  }
-
-
-  getSelectedFile(index: number) {
-    this.selectedFile = this.attachedFiles[index];
-    console.log('Selected file:', this.selectedFile, {
-      name: this.selectedFile?.name,
-      type: this.selectedFile?.type,
-      url: this.selectedFile?.url
-    });
-  }
-
-  addFileToAttachment(newFile: File) {
-    this.attachedFiles.push(newFile);
-    console.log('File added to attachments:', newFile);
-    // Optionally, you can also call getSelectedFile if you want to select the newly added file
-    this.getSelectedFile(this.attachedFiles.length - 1);
-  }
-
-
-  removeAttachment(index: number): void {
-    this.attachedFiles.splice(index, 1);
-  }
-
-  removeExpenseEntry(expense: any, index: number): void {
-    this.selectedIndex = index;
-    this.expenseSubDetailId = expense.expenseSubDetailId;
-    if (!this.isEdit) {
-      this.expenseItems.splice(index, 1);
-    } else {
-      $("#deleteConfirmationModal").modal('show');
     }
 
   }
@@ -265,8 +204,7 @@ export class AddEditComponent {
     this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
-          console.log(formData);
-
+          localStorage.setItem('attachments', null);
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
             $('#saveBatchConfirmationModal').modal('hide');
@@ -285,43 +223,45 @@ export class AddEditComponent {
     this._router.navigate([`${'/employee/employee-list'}`]);
   }
 
-
-
-
-  deleteExpense(): void {
-    this._apiCalling.deleteData("expense", `deleteSubExpenseItem/${this.expenseSubDetailId}`,
-      {
-        "actionBy": this._authService.getUserId()
-      }, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
-          if (response?.success) {
-            this._toaster.success(response?.message, 'Success!');
-            $("#deleteConfirmationModal").modal('hide');
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.removeItem('expense');
-              localStorage.setItem('expense', JSON.stringify(response?.data));
-            }
-            this.expenseItems = response?.data;
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
-        },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
-  }
-
-
-
   attachmentIndex: number = -1;
 
+
+
+
+
   openUploadModal(index: any): void {
-    this.attachedFiles = [];
+    this.attachedFiles = []; // Reset the attached files array
     this.attachmentIndex = index;
+
+    // Retrieve the attachments from localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      const storedAttachments = localStorage.getItem('attachments');
+
+      if (storedAttachments) {
+        // Parse the stored attachments from localStorage
+        const parsedAttachments = JSON.parse(storedAttachments);
+
+        // Find the attachment entry for the given index
+        const existingAttachment = parsedAttachments.find((attachment: any) => attachment.index === index);
+
+        if (existingAttachment) {
+          // Map over the attachments and load their URLs for preview
+          this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
+            // Recreate the URL using the stored base64
+            const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
+            return {
+              ...attachment,
+              url: sanitizedUrl, // Trust the resource URL for preview
+            };
+          });
+        }
+      }
+    }
+
+    // Show the modal
     $("#uploadAttachmentModal").modal('show');
   }
+
 
   isImageFile(file: any): boolean {
     if (!file) return false;
@@ -335,23 +275,108 @@ export class AddEditComponent {
            (file?.name && file.name.toLowerCase().endsWith('.pdf'));
   }
 
-  saveItemAttachment(): void {
-    if (this.attachedFiles.length > 0) {
-      // Remove existing attachments for this index if they exist
-      const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
-      if (existingIndex !== -1) {
-        this.itemAttachment.splice(existingIndex, 1);
-      }
+  droppedFiles(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const base64 = e.target.result as string;
+            const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(base64);
 
-      // Add new attachments
+            // Push file details into the attachedFiles array
+            const fileDetails = {
+              file: file,
+              name: file.name,
+              type: file.type,
+              url: sanitizedUrl,
+              base64: base64 // Store the base64 string
+            };
+            this.attachedFiles.push(fileDetails);
+
+            // Optionally call getSelectedFile if needed
+            this.getSelectedFile(this.attachedFiles.length - 1);
+          };
+          reader.readAsDataURL(file); // Use Data URL to get base64 string
+        });
+      }
+    }
+  }
+
+
+  getSelectedFile(index: number) {
+    this.selectedFile = this.attachedFiles[index];
+    console.log('Selected file:', this.selectedFile, {
+      name: this.selectedFile?.name,
+      type: this.selectedFile?.type,
+      url: this.selectedFile?.url
+    });
+  }
+
+  addFileToAttachment(newFile: File) {
+    this.attachedFiles.push(newFile);
+    console.log('File added to attachments:', newFile);
+    // Optionally, you can also call getSelectedFile if you want to select the newly added file
+    this.getSelectedFile(this.attachedFiles.length - 1);
+  }
+
+
+removeAttachment(index: number): void {
+  // Remove the file from the attachedFiles array
+  this.attachedFiles.splice(index, 1);
+
+  // Update the attachments in itemAttachment for the current index
+  const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+  if (existingIndex !== -1) {
+    // Update the attachments for this index
+    this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
+  }
+
+  // Save the updated attachments to localStorage
+  if (isPlatformBrowser(this.platformId)) {
+    localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+  }
+
+}
+
+saveItemAttachment(): void {
+  if (this.attachedFiles.length > 0) {
+    // Convert files to base64 or data URL for persistence
+    const updatedAttachments = this.attachedFiles.map(file => {
+      const fileDetails = {
+        name: file.name,
+        type: file.type,
+        url: file.url, // already a safe URL created by _sanitizer
+        base64: file.url.changingThisBreaksApplicationSecurity // Store the URL string
+      };
+      return fileDetails;
+    });
+
+    // Check if an attachment already exists for the given index
+    const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+    if (existingIndex !== -1) {
+      // If it exists, update the existing attachment entry
+      this.itemAttachment[existingIndex].attachments = updatedAttachments;
+    } else {
+      // If it doesn't exist, add a new attachment entry
       this.itemAttachment.push({
         index: this.attachmentIndex,
-        attachments: [...this.attachedFiles] // Create a copy of attachments array
+        attachments: updatedAttachments
       });
     }
-    $("#uploadAttachmentModal").modal('hide');
-    this.attachedFiles = [];
+
+    // Save updated attachments to localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+    }
   }
+
+  // Hide modal and reset files
+  $("#uploadAttachmentModal").modal('hide');
+  this.attachedFiles = [];
+}
 
 
 

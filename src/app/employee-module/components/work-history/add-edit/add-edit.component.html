@@ -172,47 +172,6 @@
 
 <div
   class="modal fade"
-  id="deleteConfirmationModal"
-  tabindex="-1"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">
-          {{ "language.generic.delete" | translate }}
-          {{ "language.generic.confirmation" | translate }}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <h5>{{ "language.generic.delMsg" | translate }}</h5>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline-secondary"
-          data-bs-dismiss="modal"
-        >
-          {{ "language.generic.close" | translate }}
-        </button>
-        <button type="button" class="btn btn-danger" (click)="deleteExpense()">
-          {{ "language.generic.delete" | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div
-  class="modal fade"
   id="uploadAttachmentModal"
   tabindex="-1"
   aria-hidden="true"
