@@ -1,4 +1,3 @@
-import { ApiCallingService } from './../../../../shared/Services/api-calling.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ApiCallingService } from './../../../../shared/Services/api-calling.service';
 import { IDepartmentRes, IDepartment, ITeam, IDesignations, IDesignationRes, ITeamRes } from '../../../../types';
 
 @Component({
@@ -13,15 +13,17 @@ import { IDepartmentRes, IDepartment, ITeam, IDesignations, IDesignationRes, ITe
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-edit.component.html',
-  styleUrl: './add-edit.component.css'
+  styleUrls: ['./add-edit.component.css']
 })
-export class AddEditComponent {
+export class AddEditComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  departmentList: IDepartment[] = []
-  teamList: ITeam[] = []
-  designationList: IDesignations[] = []
+  departmentList: IDepartment[] = [];
+  teamList: ITeam[] = [];
+  designationList: IDesignations[] = [];
   addEditForm: FormGroup;
-  isEditMode: boolean | string = false;
+  isEditMode: boolean = false;
+  isViewMode: boolean = false;
+  isAddMode: boolean = false;
   isSubmitted = false;
   selectedValue: any;
 
@@ -37,25 +39,22 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      const id = params['id'];
-      this.isEditMode = id;
+    this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const action = params.get('action');
+      const id = this.route.snapshot.queryParams['id'];
 
-      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("EmployeeDesignation", `getEmployeeDesignationById/${id}`, true)
-          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-            next: (response) => {
-              if (response?.success) {
-                this.selectedValue = response?.data;
-                this.patchFormValues();
-              } else {
-                this.selectedValue = [];
-              }
-            },
-            error: (error) => {
-              this.selectedValue = [];
-            }
-          });
+      // Determine the mode based on the :action parameter
+      this.isEditMode = action === 'edit';
+      this.isViewMode = action === 'view';
+      this.isAddMode = action === 'add';
+
+      if (this.isEditMode || this.isViewMode) {
+        this.loadEmployeeDesignation(id);
+      }
+
+      // Disable the form in view mode
+      if (this.isViewMode) {
+        this.addEditForm.disable();
       }
     });
 
@@ -69,31 +68,24 @@ export class AddEditComponent {
     this.ngUnsubscribe.complete();
   }
 
-  getDepartments(): void {
-    this.apiCalling.getData('Department', 'getDepartments', true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: IDepartmentRes) => this.departmentList = res.data.departments,
-        error: () => ([]),
-      });
-  }
-
-  getDesignations(): void {
-    this.apiCalling.getData('Designation', 'getDesignations', true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: IDesignationRes) => this.designationList = res.data.designations,
-        error: () => ([]),
-      });
-  }
-
-  getTeams(): void {
-    this.apiCalling.getData('Team', 'getTeams', true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: ITeamRes) => this.teamList = res.data.teams,
-        error: () => ([]),
-      });
+  private loadEmployeeDesignation(id: string | null): void {
+    if (id && isPlatformBrowser(this.platformId)) {
+      this.apiCalling.getData("EmployeeDesignation", `getEmployeeDesignationById/${id}`, true)
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+              this.selectedValue = response.data;
+              this.patchFormValues();
+            } else {
+              this.selectedValue = null;
+              this.toaster.error('Failed to load data', 'Error');
+            }
+          },
+          error: () => {
+            this.toaster.error('Error loading data', 'Error');
+          }
+        });
+    }
   }
 
   private createForm(): FormGroup {
@@ -116,6 +108,33 @@ export class AddEditComponent {
     }
   }
 
+  getDepartments(): void {
+    this.apiCalling.getData('Department', 'getDepartments', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IDepartmentRes) => this.departmentList = res.data.departments,
+        error: () => this.toaster.error('Failed to load departments', 'Error'),
+      });
+  }
+
+  getDesignations(): void {
+    this.apiCalling.getData('Designation', 'getDesignations', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IDesignationRes) => this.designationList = res.data.designations,
+        error: () => this.toaster.error('Failed to load designations', 'Error'),
+      });
+  }
+
+  getTeams(): void {
+    this.apiCalling.getData('Team', 'getTeams', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: ITeamRes) => this.teamList = res.data.teams,
+        error: () => this.toaster.error('Failed to load teams', 'Error'),
+      });
+  }
+
   submitForm(): void {
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
@@ -124,7 +143,7 @@ export class AddEditComponent {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("EmployeeDesignation", `updateEmployeeDesignation/${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("EmployeeDesignation", `updateEmployeeDesignation/${this.route.snapshot.queryParams['id']}`, body, true)
       : this.apiCalling.postData("EmployeeDesignation", "addEmployeeDesignation", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
@@ -136,14 +155,13 @@ export class AddEditComponent {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
       },
-      error: (error) => {
-        console.error('API error:', error);
-        this.toaster.error("An error occurred while processing your request. Please try again later.");
+      error: () => {
+        this.toaster.error('An error occurred while processing your request', 'Error');
       }
     });
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/clients']);
+    this.router.navigate(['/employee/department-team']);
   }
 }

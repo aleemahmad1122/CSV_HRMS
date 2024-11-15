@@ -40,6 +40,11 @@
       "shift": "Shift"
     },
     "form": {
+      "designationId":"Designation Id",
+      "departmentId":"Department Id",
+      "selectDepartment":"Select Department",
+      "selectDesignation":"Select Designation",
+      "teamId":"Team Id",
       "companyEmail": "admin@csv.com",
       "firstAddress": "First address",
       "selectCountry": "Select Country",
