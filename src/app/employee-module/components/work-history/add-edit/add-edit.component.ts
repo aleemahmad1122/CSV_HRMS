@@ -254,7 +254,7 @@ export class AddEditComponent {
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
       if (attachmentItem?.attachments?.length > 0) {
         attachmentItem.attachments.forEach((attachment: any) => {
-          formData.append(`workHistoryRequest[${itemIndex}].attachments`, attachment.file);
+          formData.append(`workHistoryRequest[${itemIndex}].attachment`, attachment.file);
         });
       }
 
@@ -266,6 +266,8 @@ export class AddEditComponent {
     this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
+          console.log(formData);
+
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
             $('#saveBatchConfirmationModal').modal('hide');
