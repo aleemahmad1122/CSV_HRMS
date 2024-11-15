@@ -38,6 +38,7 @@ export class AddEditComponent {
   showAddingInput: boolean = true;
   selectedIndex = -1;
   expenseSubDetailId = 0;
+  attachmentIndex: number = -1;
   isViewOnly: boolean = false;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
@@ -51,7 +52,8 @@ export class AddEditComponent {
     private _authService: UserAuthenticationService,
     private _route: ActivatedRoute,
     private _sanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
 
     this._route.queryParams.subscribe(params => {
       this.id = params['id']
@@ -87,6 +89,16 @@ export class AddEditComponent {
   }
 
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('expense');
+    }
+
+  }
+
+
   private getAttachmentTypes() {
     this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
       next: (response: IAttachmentTypeRes) => {
@@ -112,21 +124,6 @@ export class AddEditComponent {
     return form as FormGroup;
   }
 
-
-  formatStartDate(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.mainForm.patchValue({
-      startDate: new Date(input.value).toISOString()
-    });
-  }
-
-  formatEndDate(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.mainForm.patchValue({
-      endDate: new Date(input.value).toISOString()
-    });
-  }
-
   addRow() {
     const expenseItemForm = this._fb.group(
       {
@@ -140,7 +137,6 @@ export class AddEditComponent {
   }
 
   deleteLesson(index: number) {
-    console.log(index);
 
     this.expenseAllItem.removeAt(index);
   }
@@ -151,15 +147,6 @@ export class AddEditComponent {
     this.selectedIndex = -1;
     this.isEdit = false;
     this.isViewOnly = false;
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('expense');
-    }
-
   }
 
 
@@ -204,7 +191,7 @@ export class AddEditComponent {
     this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
-          localStorage.setItem('attachments', null);
+          localStorage.setItem('attachments',JSON.stringify([]));
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
             $('#saveBatchConfirmationModal').modal('hide');
@@ -219,18 +206,8 @@ export class AddEditComponent {
       })
   }
 
-  back(): void {
-    this._router.navigate([`${'/employee/employee-list'}`]);
-  }
-
-  attachmentIndex: number = -1;
-
-
-
-
-
   openUploadModal(index: any): void {
-    this.attachedFiles = []; // Reset the attached files array
+    this.attachedFiles = [];
     this.attachmentIndex = index;
 
     // Retrieve the attachments from localStorage
@@ -242,7 +219,7 @@ export class AddEditComponent {
         const parsedAttachments = JSON.parse(storedAttachments);
 
         // Find the attachment entry for the given index
-        const existingAttachment = parsedAttachments.find((attachment: any) => attachment.index === index);
+        const existingAttachment = parsedAttachments?.find((attachment: any) => attachment.index === index);
 
         if (existingAttachment) {
           // Map over the attachments and load their URLs for preview
@@ -261,7 +238,6 @@ export class AddEditComponent {
     // Show the modal
     $("#uploadAttachmentModal").modal('show');
   }
-
 
   isImageFile(file: any): boolean {
     if (!file) return false;
@@ -305,7 +281,6 @@ export class AddEditComponent {
     }
   }
 
-
   getSelectedFile(index: number) {
     this.selectedFile = this.attachedFiles[index];
     console.log('Selected file:', this.selectedFile, {
@@ -321,7 +296,6 @@ export class AddEditComponent {
     // Optionally, you can also call getSelectedFile if you want to select the newly added file
     this.getSelectedFile(this.attachedFiles.length - 1);
   }
-
 
 removeAttachment(index: number): void {
   // Remove the file from the attachedFiles array
@@ -378,8 +352,8 @@ saveItemAttachment(): void {
   this.attachedFiles = [];
 }
 
-
-
-
+back(): void {
+  this._router.navigate([`${'/employee/employee-list'}`]);
+}
 
 }
