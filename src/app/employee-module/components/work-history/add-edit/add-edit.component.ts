@@ -85,7 +85,6 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
-    $("#uploadAttachmentModal").modal('show');
     this.getAttachmentTypes()
   }
 
@@ -187,42 +186,36 @@ export class AddEditComponent {
 
     if (!this.isEdit) {
       this.expenseItems.push({
-        date: new Date(),
-        receiptDate: `${this.rowForm.get('receiptDate')?.value.year}-${this.rowForm.get('receiptDate')?.value.month}-${this.rowForm.get('receiptDate')?.value.day}`,
-        documentNumber: this.rowForm.get('documentNumber')?.value,
-        costCenter: this.rowForm.get('costCenter')?.value,
-        totalBeforeVat: this.rowForm.get('totalBeforeVat')?.value,
-        vat: this.rowForm.get('vat')?.value,
-        totalWithVat: this.rowForm.get('totalWithVat')?.value,
-        attachments: this.attachedFiles.length > 0 ? this.attachedFiles : 0
+        attachmentTypeId: this.rowForm.get('attachmentTypeId').value,
+        positionTitle: this.rowForm.get('positionTitle')?.value,
+        organization: this.rowForm.get('organization')?.value,
+        startDate: `${this.rowForm.get('startDate')?.value.year}-${this.rowForm.get('startDate')?.value.month}-${this.rowForm.get('startDate')?.value.day}`,
+        endDate: `${this.rowForm.get('endDate')?.value.year}-${this.rowForm.get('endDate')?.value.month}-${this.rowForm.get('startDate')?.value.day}`,
+        attachment: this.attachedFiles.length > 0 ? this.attachedFiles : 0
       });
       this.attachedFiles = [];
       this.showAddingInput = false;
     } else {
-      this.expenseItems[this.selectedIndex].date = new Date();
-      this.expenseItems[this.selectedIndex].receiptDate = `${this.rowForm.get('receiptDate')?.value.year}-${this.rowForm.get('receiptDate')?.value.month}-${this.rowForm.get('receiptDate')?.value.day}`;
-      this.expenseItems[this.selectedIndex].documentNumber = this.rowForm.get('documentNumber')?.value;
-      this.expenseItems[this.selectedIndex].costCenter = this.rowForm.get('costCenter')?.value;
-      this.expenseItems[this.selectedIndex].totalBeforeVat = this.rowForm.get('totalBeforeVat')?.value;
-      this.expenseItems[this.selectedIndex].vat = this.rowForm.get('vat')?.value;
-      this.expenseItems[this.selectedIndex].totalWithVat = this.rowForm.get('totalWithVat')?.value;
-      this.expenseItems[this.selectedIndex].attachments = this.attachedFiles;
+      this.expenseItems[this.selectedIndex].attachmentTypeId = this.rowForm.get('attachmentTypeId').value;
+      this.expenseItems[this.selectedIndex].positionTitle = this.rowForm.get('positionTitle')?.value;
+      this.expenseItems[this.selectedIndex].organization = this.rowForm.get('organization')?.value;
+      this.expenseItems[this.selectedIndex].startDate = `${this.rowForm.get('startDate')?.value.year}-${this.rowForm.get('startDate')?.value.month}-${this.rowForm.get('startDate')?.value.day}`;
+      this.expenseItems[this.selectedIndex].endDate = `${this.rowForm.get('endDate')?.value.year}-${this.rowForm.get('endDate')?.value.month}-${this.rowForm.get('startDate')?.value.day}`;
+      this.expenseItems[this.selectedIndex].attachment = this.attachedFiles;
       if (this.isEditPermanently) {
         var formData = new FormData();
-        formData.append(`receiptDate`, this.expenseItems[this.selectedIndex].receiptDate);
-        formData.append(`documentNumber`, this.expenseItems[this.selectedIndex].documentNumber);
-        formData.append(`costCenter`, this.expenseItems[this.selectedIndex].costCenter);
-        formData.append(`totalBeforeVat`, this.expenseItems[this.selectedIndex].totalBeforeVat);
-        formData.append(`vat`, this.expenseItems[this.selectedIndex].vat);
-        formData.append(`totalWithVat`, this.expenseItems[this.selectedIndex].totalWithVat);
-        formData.append(`actionBy`, String(this._authService.getUserId()));
+        formData.append(`attachmentTypeId`, this.expenseItems[this.selectedIndex].attachmentTypeId);
+        formData.append(`positionTitle`, this.expenseItems[this.selectedIndex].positionTitle);
+        formData.append(`organization`, this.expenseItems[this.selectedIndex].organization);
+        formData.append(`startDate`, this.expenseItems[this.selectedIndex].startDate);
+        formData.append(`endDate`, this.expenseItems[this.selectedIndex].endDate);
         if (this.attachedFiles.length > 0) {
           this.attachedFiles.forEach(function (attachment: any) {
-            formData.append(`attachments`, attachment.file);
+            formData.append(`attachment`, attachment.file);
           });
         }
 
-        this._apiCalling.putData("expense", `edit/${this.expenseItems[this.selectedIndex].expenseSubDetailId}`, formData, true)
+        this._apiCalling.putData("EmployeeWorkHistory", `updateEmployeeWorkHistory/${this.expenseItems[this.selectedIndex].id}`, formData, true)
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
@@ -294,36 +287,32 @@ export class AddEditComponent {
   }
 
   onSubmit(): void {
-    debugger
-    if (!this.expenseSubmissionForm.valid) {
-      return;
-    }
+    // if (!this.expenseSubmissionForm.valid) {
+    //   return;
+    // }
 
     var formData = new FormData();
     var ref = this;
     //.controls[0].controls.receiptDate.value
     var formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
     formArray.value.forEach(function (expenseElement: any, expenseElementIndex: any) {
-      formData.append(`request[${expenseElementIndex}].receiptDate`, `${expenseElement.receiptDate.year}-${expenseElement.receiptDate.month}-${expenseElement.receiptDate.day}`);
-      formData.append(`request[${expenseElementIndex}].documentNumber`, expenseElement.documentNumber);
-      formData.append(`request[${expenseElementIndex}].costCenter`, expenseElement.costCenter);
-      formData.append(`request[${expenseElementIndex}].totalBeforeVat`, expenseElement.totalBeforeVat);
-      formData.append(`request[${expenseElementIndex}].vat`, expenseElement.vat);
-      formData.append(`request[${expenseElementIndex}].totalWithVat`, expenseElement.totalWithVat);
-      formData.append(`request[${expenseElementIndex}].assignedTo`, ref.expenseSubmissionForm.get('assignedTo')?.value);
-      formData.append(`request[${expenseElementIndex}].actionBy`, String(ref._authService.getUserId()));
+      formData.append(`workHistoryRequest[${expenseElementIndex}].attachmentTypeId`, expenseElement.attachmentTypeId);
+      formData.append(`workHistoryRequest[${expenseElementIndex}].positionTitle`, expenseElement.positionTitle);
+      formData.append(`workHistoryRequest[${expenseElementIndex}].organization`, expenseElement.organization);
+      formData.append(`workHistoryRequest[${expenseElementIndex}].startDate`, `${expenseElement.startDate.year}-${expenseElement.startDate.month}-${expenseElement.startDate.day}`);
+      formData.append(`workHistoryRequest[${expenseElementIndex}].endDate`, `${expenseElement.endDate.year}-${expenseElement.endDate.month}-${expenseElement.endDate.day}`);
       var attachment = ref.itemAttachment.filter((x: any) => x.index === expenseElementIndex)[0];
       if (attachment !== undefined) {
         if (attachment.attachments.length > 0) {
           attachment.attachments.forEach(function (attachment: any, attachmentIndex: any) {
-            formData.append(`request[${expenseElementIndex}].attachments`, attachment.file);
+            formData.append(`workHistoryRequest[${expenseElementIndex}].attachments`, attachment.file);
           });
         }
       }
 
     });
 
-    this._apiCalling.postData("expense", "add", formData, true)
+    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           if (response?.success) {
