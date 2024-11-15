@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,6 @@ import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
-import { UserAuthenticationService } from '../../../../shared/Services/user-authentication.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
@@ -49,7 +48,7 @@ export class AddEditComponent {
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
-    private _authService: UserAuthenticationService,
+    private _cdRef: ChangeDetectorRef,
     private _route: ActivatedRoute,
     private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -78,7 +77,7 @@ export class AddEditComponent {
     });
 
     this.mainForm = this._fb.group({
-      expenseAllItem: this._fb.array([])
+      tableData: this._fb.array([])
     });
 
     this.addRow();
@@ -116,8 +115,8 @@ export class AddEditComponent {
   }
 
 
-  get expenseAllItem(): FormArray {
-    return this.mainForm.controls["expenseAllItem"] as FormArray;
+  get tableData(): FormArray {
+    return this.mainForm.controls["tableData"] as FormArray;
   }
 
   convertRowForm(form: any): FormGroup {
@@ -133,13 +132,21 @@ export class AddEditComponent {
         startDate: ['', [Validators.required]],
         endDate: ['', [Validators.required]],
       });
-    this.expenseAllItem.push(expenseItemForm);
+    this.tableData.push(expenseItemForm);
   }
 
-  deleteLesson(index: number) {
 
-    this.expenseAllItem.removeAt(index);
-  }
+  deleteLesson(index: number): void {
+
+    if (index >= 0 && index < this.tableData.length) {
+        const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
+        this.mainForm.setControl('tableData', this._fb.array(updatedControls));
+    } else {
+    }
+
+}
+
+
 
   resetForm(): void {
     this.rowForm.reset();
@@ -164,7 +171,7 @@ export class AddEditComponent {
 
 
     var formData = new FormData();
-    var formArray = this.mainForm.get('expenseAllItem') as FormArray;
+    var formArray = this.mainForm.get('tableData') as FormArray;
 
     formArray.value.forEach((item: any, itemIndex: number) => {
 

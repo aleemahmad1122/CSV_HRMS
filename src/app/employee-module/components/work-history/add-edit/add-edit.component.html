@@ -23,8 +23,8 @@
             </tr>
           </thead>
           <tbody class="table-border-bottom-0">
-            <ng-container formArrayName="expenseAllItem">
-              @for(expenseItemForm of expenseAllItem.controls; track $index) {
+            <ng-container formArrayName="tableData">
+              @for(expenseItemForm of tableData.controls; track $index) {
               <tr [formGroupName]="$index">
                 <td>
                   {{ 1 + $index }}
