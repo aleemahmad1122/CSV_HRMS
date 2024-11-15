@@ -257,24 +257,27 @@ export class AddEditComponent {
           formData.append(`workHistoryRequest[${itemIndex}].attachments`, attachment.file);
         });
       }
+
+
+
     });
 
 
-    // this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
-    //   .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-    //     next: (response) => {
-    //       if (response?.success) {
-    //         this._toaster.success(response?.message, 'Success!');
-    //         $('#saveBatchConfirmationModal').modal('hide');
-    //         this.back();
-    //       } else {
-    //         this._toaster.error(response?.message, 'Error!');
-    //       }
-    //     },
-    //     error: (error) => {
-    //       this._toaster.error("Internal server error occured while processing your request")
-    //     }
-    //   })
+    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this._toaster.success(response?.message, 'Success!');
+            $('#saveBatchConfirmationModal').modal('hide');
+            this.back();
+          } else {
+            this._toaster.error(response?.message, 'Error!');
+          }
+        },
+        error: (error) => {
+          this._toaster.error("Internal server error occured while processing your request")
+        }
+      })
   }
 
   back(): void {
