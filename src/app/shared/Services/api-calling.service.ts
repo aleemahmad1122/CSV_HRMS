@@ -50,11 +50,11 @@ export class ApiCallingService {
     return this._httpClient.get<any>(`${environment.baseUrl}${controllerName}/${methodName}`, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
-  postData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
+  postData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean,employeeId?:string): Observable<any> {
     if(showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId:employeeId};
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 

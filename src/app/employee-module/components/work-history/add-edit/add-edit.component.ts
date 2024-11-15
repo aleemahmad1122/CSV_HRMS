@@ -1,14 +1,13 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { DomSanitizer,SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
 import { UserAuthenticationService } from '../../../../shared/Services/user-authentication.service';
-import { NgbDate, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
@@ -18,7 +17,7 @@ declare const $: any;
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, NgbDatepickerModule, TranslateModule],
+  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule,  TranslateModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -42,6 +41,7 @@ export class AddEditComponent {
   isViewOnly: boolean = false;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
+  id:string = '';
 
   constructor(
     private _router: Router,
@@ -54,6 +54,7 @@ export class AddEditComponent {
     @Inject(PLATFORM_ID) private platformId: Object) {
 
     this._route.queryParams.subscribe(params => {
+      this.id = params['id']
       this.isEdit = false;
       this.isEditPermanently = false;
       this.selectedValues = {};
@@ -111,14 +112,29 @@ export class AddEditComponent {
     return form as FormGroup;
   }
 
+
+  formatStartDate(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.mainForm.patchValue({
+      startDate: new Date(input.value).toISOString()
+    });
+  }
+
+  formatEndDate(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.mainForm.patchValue({
+      endDate: new Date(input.value).toISOString()
+    });
+  }
+
   addRow() {
     const expenseItemForm = this._fb.group(
       {
         positionTitle: ['', [Validators.required]],
-        organization: [''],
-        attachmentTypeId: [''],
-        startDate: [''],
-        endDate: [''],
+        organization: ['', [Validators.required]],
+        attachmentTypeId: ['', [Validators.required]],
+        startDate: ['', [Validators.required]],
+        endDate: ['', [Validators.required]],
       });
     this.expenseAllItem.push(expenseItemForm);
   }
@@ -137,31 +153,6 @@ export class AddEditComponent {
     this.isViewOnly = false;
   }
 
-  editExpenseForm(expense: any, index: number): void {
-    this.rowForm.patchValue({
-      receiptDate: new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
-      documentNumber: expense.documentNumber,
-      costCenter: expense.costCenter,
-      totalBeforeVat: expense.totalBeforeVat,
-      vat: expense.vat,
-      totalWithVat: expense.totalWithVat,
-
-    });
-    if (expense?.expenseMediaInformation?.length > 0) {
-      expense?.expenseMediaInformation.forEach((element: any) => {
-        this.attachedFiles.push({
-          name: element.fileName,
-          url: this._sanitizer.bypassSecurityTrustResourceUrl(element.mediaUrl)
-        })
-      });
-
-      this.getSelectedFile(0);
-    }
-    this.selectedIndex = index;
-    this.isEdit = true;
-    this.showAddingInput = true;
-
-  }
 
 
 
@@ -232,23 +223,31 @@ export class AddEditComponent {
 
   }
 
+
+  trackByFn(index: number, type: any): any {
+    return type.attachmentTypeId;
+  }
+
   onSubmit(): void {
-    // if (!this.submissionForm.valid) {
-    //   return;
-    // }
+
+      if (this.mainForm.invalid) {
+        this.mainForm.markAllAsTouched();
+    this._toaster.error('Please fill the form before submitting', 'Validation Error');
+    return;
+  }
+
+
     var formData = new FormData();
     var formArray = this.mainForm.get('expenseAllItem') as FormArray;
 
     formArray.value.forEach((item: any, itemIndex: number) => {
-      // Add null checks for dates
-      const startDate = item.startDate ? `${item.startDate.year}-${item.startDate.month}-${item.startDate.day}` : '';
-      const endDate = item.endDate ? `${item.endDate.year}-${item.endDate.month}-${item.endDate.day}` : '';
+
 
       formData.append(`workHistoryRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
       formData.append(`workHistoryRequest[${itemIndex}].positionTitle`, item.positionTitle || '');
       formData.append(`workHistoryRequest[${itemIndex}].organization`, item.organization || '');
-      formData.append(`workHistoryRequest[${itemIndex}].startDate`, startDate);
-      formData.append(`workHistoryRequest[${itemIndex}].endDate`, endDate);
+      formData.append(`workHistoryRequest[${itemIndex}].startDate`, item.startDate);
+      formData.append(`workHistoryRequest[${itemIndex}].endDate`, item.endDate );
 
       // Find attachments for this index
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
@@ -263,7 +262,7 @@ export class AddEditComponent {
     });
 
 
-    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true)
+    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           console.log(formData);
@@ -283,7 +282,7 @@ export class AddEditComponent {
   }
 
   back(): void {
-    this._router.navigate([`${'/employee/work-history'}`]);
+    this._router.navigate([`${'/employee/employee-list'}`]);
   }
 
 
