@@ -1,240 +1,203 @@
 @if (showAddingInput) {
-  <div class="container-xxl flex-grow-1 container-p-y">
-    <form novalidate [formGroup]="expenseMainForm" #form="ngForm" #expenseMainFormRef="ngForm" autocomplete="off">
-      <div class="card">
-        <div class="table-responsive text-nowrap">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>attachment Type</th>
-                <th>position Title</th>
-                <th>organization</th>
-                <th>startDate</th>
-                <th>endDate</th>
-                <th>attachment</th>
-                <th>actions</th>
-              </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-              <ng-container formArrayName="expenseAllItem">
-                @for(expenseItemForm of expenseAllItem.controls; track $index) {
-                <tr [formGroupName]="$index">
+<div class="container-xxl flex-grow-1 container-p-y">
+  <form novalidate [formGroup]="expenseMainForm" #form="ngForm" #expenseMainFormRef="ngForm" autocomplete="off">
+    <div class="card">
+      <div class="table-responsive text-nowrap">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>attachment Type</th>
+              <th>position Title</th>
+              <th>organization</th>
+              <th>startDate</th>
+              <th>endDate</th>
+              <th>attachment</th>
+              <th>actions</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <ng-container formArrayName="expenseAllItem">
+              @for(expenseItemForm of expenseAllItem.controls; track $index) {
+              <tr [formGroupName]="$index">
 
-                  <td>
-                 {{1 + $index}}
-                  </td>
-
-                  <td>
-                    <select class="form-control form-select" name="attachmentTypeId" formControlName="attachmentTypeId">
-                      <option value="">Select Type</option>
-                      @for(type of attachmentTypes; track type.attachmentTypeId) {
-                        <option [value]="type.attachmentTypeId">{{type.name}}</option>
-                      }
-                    </select>
-                  </td>
-
-                  <td>
-                    <div class="mb-1">
-                      <input class="form-control" type="text" name="positionTitle" formControlName="positionTitle"
-                        [ngClass]="(!convertRowForm(this.rowForm).controls['positionTitle'].valid && form.submitted)?'invalid':''" />
-                    </div>
-                  </td>
-
-                  <!-- <td>
-                    <div class="mb-1">
-                      <input class="form-control" type="text" name="costCenter" formControlName="costCenter"
-                        [ngClass]="(!convertRowForm(this.rowForm).controls['costCenter'].valid && form.submitted)?'invalid':''" />
-                    </div>
-                  </td> -->
-
-                  <!-- <td>
-                    <input class="form-control" type="datetime" name="startDate" formControlName="startDate" ngbDatepicker
-                      #startDate="ngbDatepicker" (click)="startDate.toggle()" />
-                  </td> -->
-
-                  <!-- <td>
-                    <input class="form-control" type="datetime" name="endDate" formControlName="endDate" ngbDatepicker
-                      #endDate="ngbDatepicker" (click)="endDate.toggle()" />
-                  </td> -->
-
-
-
-                  <!-- <td align="center">
-                    <button type="button" class="btn btn-icon btn-primary me-2 btn-sm" (click)="openUploadModal($index)">
-                      <i class='bx bx-upload'></i>
-                    </button>
-                  </td> -->
-
-                  <td>
-                    @if($index !== 0) {
-                    <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteLesson($index)">
-                      <span class="bx bx-trash"></span>
-                    </button>
-                    }
-                  </td>
-                </tr>
-                }
-              </ng-container>
-
-              <tr>
-                <td colspan="5">
-                  <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
-                    add more
-                  </button>
+                <td>
+                  {{1 + $index}}
                 </td>
-                <td colspan="4" align="right">
-                  <button class="btn btn-success mt-1 mb-1" type="submit" (click)="openCofirmationModal()">
-                    save
-                  </button>
-                </td>
-              </tr>
-            </tbody>
 
-          </table>
-        </div>
-      </div>
-    </form>
-  </div>
-  }
-
-
-
-  <div class="modal fade" id="saveBatchConfirmationModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1">Add Supplier</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <form novalidate [formGroup]="expenseSubmissionForm" (ngSubmit)="onSubmit()"
-              #expenseSubmissionFormRef="ngForm" autocomplete="off">
-              <div class="row">
-                <div class="mb-3 col-md-12">
-                  <label class="form-label">Manager<span class="text-danger">*</span></label>
-                  <select class="form-control form-select" name="assignedTo" formControlName="assignedTo"
-                    [ngClass]="(!this.expenseSubmissionForm.controls['assignedTo'].valid && expenseSubmissionFormRef?.submitted)?'invalid':''">
-                    <option value="">Select Manager</option>
-                    @for(manager of managerList; track $index){
-                    <option value="{{manager.userId}}">{{manager.name}}</option>
+                <td>
+                  <select class="form-control form-select" name="attachmentTypeId" formControlName="attachmentTypeId">
+                    <option value="">Select Type</option>
+                    @for(type of attachmentTypes; track type.attachmentTypeId) {
+                    <option [value]="type.attachmentTypeId">{{type.name}}</option>
                     }
                   </select>
-                  @if (expenseSubmissionForm.get('assignedTo')?.hasError('required') &&
-                  expenseSubmissionFormRef?.submitted) {
-                  <div class="text-danger">Reporting Manager is required</div>
-                  }
-                </div>
+                </td>
 
-
-              </div>
-              <div class="mt-2 text-end">
-                <button type="reset" class="btn btn-outline-secondary me-2" (click)="back()">Cancel</button>
-                <button type="submit" class="btn btn-primary">{{ 'language.generic.save' | translate }} changes</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1">{{ 'language.generic.delete' | translate }} {{
-            'language.generic.confirmation' | translate }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <h5> {{ 'language.generic.delMsg' | translate }}</h5>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-            {{ 'language.generic.close' | translate }}
-          </button>
-          <button type="button" class="btn btn-danger" (click)="deleteExpense()">{{ 'language.generic.delete' | translate
-            }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="modal fade" id="uploadAttachmentModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.upload' | translate }} {{
-            'language.generic.files' | translate }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="mb-1">
-              <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="droppedFiles($event)" [useDragEnter]="true"
-                [multiple]="true">
-                <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-                  <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
-                    <i class='bx bxs-cloud-upload fs-xlarge'></i>
-                    <div class="d-flex flex-column">
-                      <span class="fs-14 text-gray-300 fw-500">{{ 'language.generic.dragandDrop' | translate }}</span>
-                      <span class="fs-20 text-dark fw-500"> {{ 'language.generic.upload' | translate }}</span>
-                    </div>
+                <td>
+                  <div class="mb-1">
+                    <input class="form-control" type="text" name="positionTitle" formControlName="positionTitle" />
                   </div>
-                </ng-template>
-              </ngx-file-drop>
-            </div>
-            @if(this.attachedFiles.length > 0) {
-            <div class="mb-3 col-md-12">
-              <div class="table-responsive text-nowrap">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>File Name</th>
-                      <th>Actions {{ 'language.location.actions' |
-                        translate }}</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table-border-bottom-0">
-                    @for(file of attachedFiles; track $index){
-                    <tr>
-                      <td width="95%">
-                        <span class="underline" (click)="getSelectedFile($index)">{{file.name || file.fileName}}</span>
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-icon btn-danger btn-sm" (click)="removeAttachment($index)">
-                          <span class="bx bx-trash"></span>
-                        </button>
-                      </td>
-                    </tr>
-                    }
+                </td>
 
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            }
+                <td>
+                  <div class="mb-1">
+                    <input class="form-control" type="text" name="organization" formControlName="organization" />
+                  </div>
+                </td>
 
-            <div class="col-md-12">
-              @if(this.attachedFiles.length > 0) {
-              <iframe [src]="selectedFile?.url" width="100%" height="600"></iframe>
+
+
+
+                <td>
+                  <input class="form-control" type="datetime" name="startDate" formControlName="startDate" ngbDatepicker
+                    #startDate="ngbDatepicker" (click)="startDate.toggle()" />
+                </td>
+
+                <td>
+                  <input class="form-control" type="datetime" name="endDate" formControlName="endDate" ngbDatepicker
+                    #endDate="ngbDatepicker" (click)="endDate.toggle()" />
+                </td>
+
+
+
+
+
+
+                <td align="center">
+                  <button type="button" class="btn btn-icon btn-primary me-2 btn-sm" (click)="openUploadModal($index)">
+                    <i class='bx bx-upload'></i>
+                  </button>
+                </td>
+
+                <td>
+                  @if($index !== 0) {
+                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteLesson($index)">
+                    <span class="bx bx-trash"></span>
+                  </button>
+                  }
+                </td>
+              </tr>
               }
-            </div>
-          </div>
+            </ng-container>
+
+            <tr>
+              <td colspan="5">
+                <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
+                  add more
+                </button>
+              </td>
+              <td colspan="4" align="right">
+                <button class="btn btn-success mt-1 mb-1" type="submit">
+                  save
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </form>
+</div>
+}
+
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">{{ 'language.generic.delete' | translate }} {{
+          'language.generic.confirmation' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <h5> {{ 'language.generic.delMsg' | translate }}</h5>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-            {{ 'language.generic.close' |
-            translate }}
-          </button>
-          <button type="button" class="btn btn-primary" (click)="saveItemAttachment()">{{ 'language.generic.save' |
-            translate }}</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="deleteExpense()">{{ 'language.generic.delete' | translate
+          }}</button>
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="modal fade" id="uploadAttachmentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1"> {{ 'language.generic.upload' | translate }} {{
+          'language.generic.files' | translate }}</h5>
+        <button type="button" class="btn-danger btn" data-bs-dismiss="modal" aria-label="Close">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="row align-items-center  justify-content-center">
+          <div class="mb-1">
+            <ngx-file-drop dropZoneLabel="Drop files here" class="px-5" (onFileDrop)="droppedFiles($event)"
+              [useDragEnter]="true" [multiple]="true">
+              <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+                  <i class='bx bxs-cloud-upload fs-xlarge'></i>
+                  <div class="d-flex flex-column">
+                    <span class="fs-14 text-gray-300 fw-500">{{ 'language.generic.dragandDrop' | translate }}</span>
+                    <span class="fs-20 text-dark fw-500"> {{ 'language.generic.upload' | translate }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-file-drop>
+          </div>
+          @if(this.attachedFiles.length > 0) {
+          <div class="mb-3 col-md-12">
+            <div class="table-responsive text-nowrap">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>File Name</th>
+                    <th>Actions {{ 'language.location.actions' |
+                      translate }}</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  @for(file of attachedFiles; track $index){
+                  <tr>
+                    <td width="95%">
+                      <span class="underline" (click)="getSelectedFile($index)">{{file.name || file.fileName}}</span>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-icon btn-danger btn-sm" (click)="removeAttachment($index)">
+                        <span class="bx bx-trash"></span>
+                      </button>
+                    </td>
+                  </tr>
+                  }
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          }
+
+          <div class="col-md-12">
+            @if(this.attachedFiles.length > 0) {
+            <iframe [src]="selectedFile?.url" width="100%" height="600"></iframe>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          {{ 'language.generic.close' |
+          translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="saveItemAttachment()">{{ 'language.generic.save' |
+          translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

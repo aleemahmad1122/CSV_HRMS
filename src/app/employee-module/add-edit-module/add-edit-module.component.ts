@@ -1,4 +1,3 @@
-
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,17 +6,25 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
-import { DeactivatedComponent } from "../components/deactivated/deactivated.component";
-import { EducationComponent } from "../components/education/education.component";
-import { WorkHistoryComponent } from "../components/work-history/work-history.component";
+import { DeactivatedComponent } from '../components/deactivated/deactivated.component';
+import { EducationComponent } from '../components/education/education.component';
+import { WorkHistoryComponent } from '../components/work-history/work-history.component';
 import { DepartmentTeamComponent } from './../components/department-team/department-team.component';
 
 @Component({
   selector: 'app-add-edit-module',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DeactivatedComponent, EducationComponent, WorkHistoryComponent, DepartmentTeamComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    DeactivatedComponent,
+    EducationComponent,
+    WorkHistoryComponent,
+    DepartmentTeamComponent,
+  ],
   templateUrl: './add-edit-module.component.html',
-  styleUrl: './add-edit-module.component.css'
+  styleUrls: ['./add-edit-module.component.css'],
 })
 export class AddEditModuleComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
@@ -26,9 +33,21 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   isView: boolean = false;
   selectedValue: any;
+  defaultImagePath =
+    'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg';
+  imagePreview: string = this.defaultImagePath;
+  selectedFile: File | null = null;
+  imageSizeExceeded = false;
 
+  readonly maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
+  allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-  tabList: string[] = ["language.sidebar.employee", "language.employee.workHistory", "language.employee.education",  "language.employee.department"]
+  tabList: string[] = [
+    'language.sidebar.employee',
+    'language.employee.workHistory',
+    'language.employee.education',
+    'language.employee.department',
+  ];
   activeTab: string = this.tabList[0];
 
   constructor(
@@ -43,16 +62,17 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
-      this.isEditMode = id;
+      this.isEditMode = !!id;
       const view = params['view'];
       this.isView = view === 'true';
-      console.log(view === 'true');
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Employee", `getEmployeeById/${id}`, true)
-          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        this.apiCalling
+          .getData('Employee', `getEmployeeById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe({
             next: (response) => {
               if (response?.success) {
                 this.selectedValue = response?.data;
@@ -61,9 +81,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
                 this.selectedValue = [];
               }
             },
-            error: (error) => {
+            error: () => {
               this.selectedValue = [];
-            }
+            },
           });
       }
     });
@@ -84,7 +104,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       city: ['', Validators.required],
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      role: ['', Validators.required]
+      role: ['', Validators.required],
     });
   }
 
@@ -99,10 +119,47 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         city: this.selectedValue.city,
         address: this.selectedValue.address,
         phoneNumber: this.selectedValue.phoneNumber,
-        role: this.selectedValue.role
+        role: this.selectedValue.role,
       });
+      this.imagePreview = this.selectedValue.employeeImage || this.defaultImagePath;
     }
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      if (!this.allowedFileTypes.includes(file.type)) {
+        this.toaster.error('Invalid file type. Please select a PNG, JPG, or JPEG file.');
+        return;
+      }
+
+      if (file.size > this.maxSizeInBytes) {
+        this.toaster.error('File size exceeds 1 MB. Please select a smaller file.');
+        this.imageSizeExceeded = true;
+        return;
+      }
+
+      this.imageSizeExceeded = false;
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.imagePreview = e.target.result as string;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(): void {
+    this.imagePreview = this.defaultImagePath;
+    this.selectedFile = null;
+    this.imageSizeExceeded = false;
+  }
+
+
 
   submitForm(): void {
     this.isSubmitted = true;
@@ -110,11 +167,25 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const body = this.addEditForm.value;
-    const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Employee", `updateEmployee/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Employee", "addEmployee", body, true);
+    // Create a FormData instance
+    const formData = new FormData();
 
+    // Append each form control's value to FormData
+    Object.keys(this.addEditForm.controls).forEach((key) => {
+      const value = this.addEditForm.get(key)?.value;
+      if (key === 'employeeImage' && this.selectedFile) {
+        formData.append(key, this.selectedFile); // Append file if selected
+      } else {
+        formData.append(key, value); // Append other form values
+      }
+    });
+
+    // Determine API call based on mode
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData('Employee', `updateEmployee/${this.isEditMode}`, formData, true)
+      : this.apiCalling.postData('Employee', 'addEmployee', formData, true);
+
+    // Execute the API call
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
@@ -124,15 +195,15 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
       },
-      error: (error) => {
-        console.error('API error:', error);
-        this.toaster.error("An error occurred while processing your request. Please try again later.");
-      }
+      error: () => {
+        this.toaster.error('An error occurred while processing your request. Please try again later.');
+      },
     });
   }
 
+
   goBack(): void {
-    this.router.navigate(['/employee/job-detail']);
+    this.router.navigate(['/employee/employee-list']);
   }
 
   setActiveTab(tab: string) {

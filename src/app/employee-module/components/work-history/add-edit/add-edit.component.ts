@@ -10,7 +10,7 @@ import { ApiCallingService } from '../../../../shared/Services/api-calling.servi
 import { UserAuthenticationService } from '../../../../shared/Services/user-authentication.service';
 import { NgbDate, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { IAttachmentTypeRes ,IAttachmentType} from "../../../../types/index";
+import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
 
 
@@ -44,7 +44,7 @@ export class AddEditComponent {
   changeStatusObj: any = {};
   remarksList: any[] = [];
   itemAttachment: any[] = [];
-  attachmentTypes:IAttachmentType[] = [];
+  attachmentTypes: IAttachmentType[] = [];
 
   constructor(
     private _router: Router,
@@ -55,12 +55,12 @@ export class AddEditComponent {
     private _route: ActivatedRoute,
     private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object) {
-    this.isUserRole = _authService.getUserRole() === 3 ? true : false;
+
     this._route.queryParams.subscribe(params => {
       this.isEdit = false;
       this.isEditPermanently = false;
       this.selectedExpense = {};
-      if (params['expenseId'] !== undefined && params['expenseId'] !== null && params['expenseId'] !== '' && Number(params['expenseId']) !== 0) {
+      if (params['id'] !== undefined && params['id'] !== null && params['id'] !== '' && Number(params['id']) !== 0) {
         this.isEdit = true;
         this.isEditPermanently = true;
 
@@ -77,10 +77,6 @@ export class AddEditComponent {
       }
     });
 
-    this.expenseSubmissionForm = this._fb.group({
-      assignedTo: ['', [Validators.required]],
-    });
-
     this.expenseMainForm = this._fb.group({
       expenseAllItem: this._fb.array([])
     });
@@ -89,33 +85,34 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
+    $("#uploadAttachmentModal").modal('show');
     this.getAttachmentTypes()
   }
 
 
-private getAttachmentTypes() {
-  this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
-    next: (response: IAttachmentTypeRes) => {
-      if (response?.success) {
-        this.attachmentTypes = response.data.attachmentTypes;
-        console.log(response.data.attachmentTypes);
+  private getAttachmentTypes() {
+    this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
+      next: (response: IAttachmentTypeRes) => {
+        if (response?.success) {
+          this.attachmentTypes = response.data.attachmentTypes;
+          console.log(response.data.attachmentTypes);
 
-      } else {
-        this._toaster.error('No attachment types found', 'Error!');
+        } else {
+          this._toaster.error('No attachment types found', 'Error!');
+        }
+      },
+      error: () => {
+        this._toaster.error('Error fetching company details', 'Error!');
       }
-    },
-    error: () => {
-      this._toaster.error('Error fetching company details', 'Error!');
-    }
-  });
-}
+    });
+  }
 
 
   get expenseAllItem(): FormArray {
     return this.expenseMainForm.controls["expenseAllItem"] as FormArray;
   }
 
-   convertRowForm(form: any): FormGroup {
+  convertRowForm(form: any): FormGroup {
     return form as FormGroup;
   }
 
@@ -133,18 +130,13 @@ private getAttachmentTypes() {
   }
 
   deleteLesson(index: number) {
+    console.log(index);
+
     this.expenseAllItem.removeAt(index);
   }
 
   resetForm(): void {
-    this.rowForm.patchValue({
-      positionTitle: "",
-      organization: "",
-      attachmentTypeId: "",
-      attachment: "",
-      startDate: "",
-      endDate: "",
-    });
+    this.rowForm.reset();
     this.attachedFiles = [];
     this.selectedIndex = -1;
     this.isEdit = false;
@@ -352,22 +344,8 @@ private getAttachmentTypes() {
     this._router.navigate([`${'/employee/work-history'}`]);
   }
 
-  calculateTotal(expenseItemForm: any): void {
-    var total = Math.floor(Number(expenseItemForm.get('totalBeforeVat')?.value) + ((expenseItemForm.get('totalBeforeVat')?.value) * (Number(expenseItemForm.get('vat')?.value) / 100)));
-    expenseItemForm.patchValue({
-      totalWithVat: total,
-    });
-  }
 
-  openCofirmationModal(): void {
-    if (!this.expenseMainForm.valid) {
-      return;
-    }
-    this.expenseSubmissionForm.patchValue({
-      assignedTo: '',
-    });
-    $('#saveBatchConfirmationModal').modal('show');
-  }
+
 
   deleteExpense(): void {
     this._apiCalling.deleteData("expense", `deleteSubExpenseItem/${this.expenseSubDetailId}`,
@@ -392,14 +370,6 @@ private getAttachmentTypes() {
           this._toaster.error("Internal server error occured while processing your request")
         }
       })
-  }
-
-  changeStatus(event: any, expenseSubDetailId: number): void {
-    this.remarksList = [];
-    this.changeStatusObj = {};
-    this.changeStatusObj.expenseSubDetailId = expenseSubDetailId;
-    this.changeStatusObj.status = Number(event?.target?.value);
-    this.changeStatusObj.actionBy = this._authService.getUserId();
   }
 
 

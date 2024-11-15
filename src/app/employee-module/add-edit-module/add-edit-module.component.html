@@ -1,5 +1,5 @@
 @if(this.isEditMode){
-  <div class="card-header card-header-tabs-line mx-auto container ">
+<div class="card-header card-header-tabs-line mx-auto container ">
     <ul class="nav nav-dark nav-bold nav-tabs nav-tabs-line" data-remember-tab="tab_id" role="tablist">
         @for(item of tabList; track $index){
         <li class="nav-item">
@@ -26,19 +26,47 @@
     </h1>
 
     <form [formGroup]="addEditForm" class="form w-100 px-5" id="kt_form_1" (ngSubmit)="submitForm()">
-        <div class="row">
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ 'language.form.employeeImage' | translate }} <span
-                        class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="employeeImage" [readOnly]="isView"
-                    [placeholder]="'language.placeholders.employeeImage' | translate"
-                    [ngClass]="{'is-invalid': (!this.isView && addEditForm.get('employeeImage')?.invalid && (addEditForm.get('employeeImage')?.touched || isSubmitted))}" />
-                <div *ngIf="!this.isView && addEditForm.get('employeeImage')?.invalid && (addEditForm.get('employeeImage')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{ 'language.errors.employeeImageRequired' | translate }}
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="image-input image-input-outline"
+                    style="background-size: cover; background-position: center;" id="kt_image_5"
+                    [style.background-image]="'url(' + imagePreview + ')'">
+                    <div class="image-input-wrapper"></div>
+
+                    <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="change" data-toggle="tooltip" title="Change avatar">
+                        <i class="fa fa-pen icon-sm text-muted"></i>
+                        <input type="file" formControlName="employeeImage" name="profile_avatar"
+                            accept=".png, .jpg, .jpeg" (change)="onFileSelected($event)" />
+                    </label>
+
+                    <span *ngIf="imagePreview !== defaultImagePath"
+                        class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                        data-action="remove" data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+                        <i class="ki ki-bold-close icon-xs text-muted"></i>
+                    </span>
                 </div>
             </div>
+            @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
+            <div class="text-muted mb-4 mx-4 small">
+                <span>{{'language.errors.maxFileSize' | translate}} 1 MB. {{'language.errors.allowedFormats' |
+                    translate}} PNG, JPG, JPEG</span>
+            </div>
+            }
+            <div class="text-danger mx-4 small">
+                @if(imageSizeExceeded) {
+                <span>{{'language.errors.maxFileSize' | translate}} 1 MB</span>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+
+
+
 
             <div class="col-md-6 mb-3">
                 <label class="form-label">{{ 'language.form.fullName' | translate }} <span
