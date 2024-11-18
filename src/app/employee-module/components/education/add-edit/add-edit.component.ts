@@ -6,17 +6,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from  '../../../../shared/Services/api-calling.service';
-import { UserAuthenticationService } from '../../../../shared/Services/user-authentication.service';
-import { NgbDate, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { IAttachmentType, IAttachmentTypeRes } from '../../../../types';
 declare const $: any;
 
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, NgbDatepickerModule, TranslateModule],
+  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -24,12 +23,11 @@ export class AddEditComponent {
   files: NgxFileDropEntry[] = [];
   imageObject: any = [];
   ngUnsubscribe = new Subject<void>();
-  Form!: FormGroup;
-  expenseSubmissionForm!: FormGroup;
-  expenseMainForm!: FormGroup;
+  rowForm!: FormGroup;
+  submissionForm!: FormGroup;
+  mainForm!: FormGroup;
   isEdit: boolean = false;
-  isEditPermanently: boolean = false;
-  selectedExpense: any;
+  selectedValues: any;
   attachedFiles: any[] = [];
   managerList: any[] = [];
   selectedFile: any;
@@ -37,36 +35,37 @@ export class AddEditComponent {
   showAddingInput: boolean = true;
   selectedIndex = -1;
   expenseSubDetailId = 0;
+  attachmentIndex: number = -1;
   isViewOnly: boolean = false;
-  isUserRole: boolean = true;
-  changeStatusObj: any = {};
-  remarksList: any[] = [];
+  editId: string;
   itemAttachment: any[] = [];
+  attachmentTypes: IAttachmentType[] = [];
+  id: string = '';
 
   constructor(
     private _router: Router,
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
-    private _authService: UserAuthenticationService,
-    private _route: ActivatedRoute,
-    private _sanitizer: DomSanitizer,
-    @Inject(PLATFORM_ID) private platformId: Object) {
-    this.isUserRole = _authService.getUserRole() === 3 ? true : false;
+    private _route: ActivatedRoute, private _sanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+
     this._route.queryParams.subscribe(params => {
-      this.isEdit = false;
-      this.isEditPermanently = false;
-      this.selectedExpense = {};
-      if (params['expenseId'] !== undefined && params['expenseId'] !== null && params['expenseId'] !== '' && Number(params['expenseId']) !== 0) {
+      this.id = params['empId']
+      this.selectedValues = {};
+
+
+      if (params['editId'] !== undefined && params['editId'] !== null && params['editId'] !== '' && Number(params['editId']) !== 0) {
         this.isEdit = true;
-        this.isEditPermanently = true;
+        this.editId = params['editId']
 
         if (isPlatformBrowser(this.platformId)) {
-          this.selectedExpense = JSON.parse(localStorage.getItem('expense')!);
+          this.selectedValues = JSON.parse(localStorage.getItem('expense')!);
         }
 
         this.showAddingInput = false;
-        this.expenseItems = this.selectedExpense?.expenseSubInformation == undefined ? this.selectedExpense : this.selectedExpense?.expenseSubInformation;
+        this.expenseItems = this.selectedValues?.expenseSubInformation == undefined ? this.selectedValues : this.selectedValues?.expenseSubInformation;
       }
 
       if (params['isView'] !== undefined && params['isView'] !== null && params['isView'] !== '' && Number(params['isView']) !== 0) {
@@ -74,103 +73,59 @@ export class AddEditComponent {
       }
     });
 
-    this.expenseSubmissionForm = this._fb.group({
-      assignedTo: ['', [Validators.required]],
+    this.mainForm = this._fb.group({
+      tableData: this._fb.array([])
     });
 
-    this.expenseMainForm = this._fb.group({
-      expenseAllItem: this._fb.array([])
-    });
-
-    this.addExpenseItem();
+    this.addRow();
   }
 
   ngOnInit(): void {
-    this.getManager();
-  }
 
-  get expenseAllItem(): FormArray {
-    return this.expenseMainForm.controls["expenseAllItem"] as FormArray;
-  }
-
-  convertForm(form: any): FormGroup {
-    return form as FormGroup;
-  }
-
-  addExpenseItem() {
-    const addEditItemForm = this._fb.group(
-      {
-        attachmentTypeId: [''],
-        educationDocument: [''],
-        educationTitle: [''],
-        institution: [''],
-        startDate: [new Date('2024-10-31T18:19:22.771Z')],
-        endDate: [new Date('2024-10-31T18:19:22.771Z')]
-      });
-    this.expenseAllItem.push(addEditItemForm);
-  }
-
-  deleteLesson(index: number) {
-    this.expenseAllItem.removeAt(index);
-  }
-
-  resetForm(): void {
-    this.Form.patchValue({
-      receiptDate: new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
-      documentNumber: '',
-      costCenter: '',
-      totalBeforeVat: '',
-      vat: '15',
-      totalWithVat: '',
-      remarks: '',
-    });
-    this.attachedFiles = [];
-    this.selectedIndex = -1;
-    this.isEdit = false;
-    this.isViewOnly = false;
-  }
-
-  editForm(expense: any, index: number): void {
-    this.Form.patchValue({
-      receiptDate: new NgbDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()),
-      documentNumber: expense.documentNumber,
-      costCenter: expense.costCenter,
-      totalBeforeVat: expense.totalBeforeVat,
-      vat: expense.vat,
-      totalWithVat: expense.totalWithVat,
-      remarks: expense.remarks,
-
-    });
-    if (expense?.expenseMediaInformation?.length > 0) {
-      expense?.expenseMediaInformation.forEach((element: any) => {
-        this.attachedFiles.push({
-          name: element.fileName,
-          url: this._sanitizer.bypassSecurityTrustResourceUrl(element.mediaUrl)
-        })
-      });
-
-      this.getSelectedFile(0);
-    }
-    this.selectedIndex = index;
-    this.isEdit = true;
-    this.showAddingInput = true;
-
-  }
-
-  getManager(): void {
-    this._apiCalling.getData("user", "manager", true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
+    if (this.isEdit) {
+      this._apiCalling.getData("EmployeeEducation", `getEmployeeEducationById/${this.editId}`, true, { employeeId: this.id }).subscribe({
+        next: (response: any) => {
           if (response?.success) {
-            this.managerList = response.data;
+            this.patchFormValues(response.data);
           } else {
-            this._toaster.error(response?.message, 'Error!');
+            this._toaster.error('Error fetching Employee Education', 'Error!');
           }
         },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
+        error: () => {
+          this._toaster.error('Error fetching Employee Education', 'Error!');
         }
-      })
+      });
+    }
+
+    this.getAttachmentTypes()
+  }
+
+
+  private patchFormValues(data: any): void {
+    console.warn(data);
+
+    if (data) {
+      const workHistoryFormArray = this.mainForm.get('tableData') as FormArray;
+
+      while (workHistoryFormArray.length) {
+        workHistoryFormArray.removeAt(0);
+      }
+
+      const expenseItemForm = this._fb.group({
+        educationTitle: [data.educationTitle, [Validators.required]],
+        institution: [data.institution, [Validators.required]],
+        attachmentTypeId: [data.attachmentTypeId, [Validators.required]],
+        startDate: [data.startDate, [Validators.required]],
+        endDate: [data.endDate, [Validators.required]],
+      });
+      workHistoryFormArray.push(expenseItemForm);
+    }
+
+    // Optionally, if there are attachments or other data that need to be patched
+    this.itemAttachment = data?.attachments || [];
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+    }
   }
 
   ngOnDestroy() {
@@ -182,156 +137,129 @@ export class AddEditComponent {
 
   }
 
-  submitForm(): void {
-    if (!this.Form.valid) {
-      return;
-    }
 
-    if (!this.isEdit) {
-      this.expenseItems.push({
-        date: new Date(),
-        receiptDate: `${this.Form.get('receiptDate')?.value.year}-${this.Form.get('receiptDate')?.value.month}-${this.Form.get('receiptDate')?.value.day}`,
-        documentNumber: this.Form.get('documentNumber')?.value,
-        costCenter: this.Form.get('costCenter')?.value,
-        totalBeforeVat: this.Form.get('totalBeforeVat')?.value,
-        vat: this.Form.get('vat')?.value,
-        totalWithVat: this.Form.get('totalWithVat')?.value,
-        remarks: this.Form.get('remarks')?.value,
-        attachments: this.attachedFiles.length > 0 ? this.attachedFiles : 0
-      });
-      this.attachedFiles = [];
-      this.showAddingInput = false;
-    } else {
-      this.expenseItems[this.selectedIndex].date = new Date();
-      this.expenseItems[this.selectedIndex].receiptDate = `${this.Form.get('receiptDate')?.value.year}-${this.Form.get('receiptDate')?.value.month}-${this.Form.get('receiptDate')?.value.day}`;
-      this.expenseItems[this.selectedIndex].documentNumber = this.Form.get('documentNumber')?.value;
-      this.expenseItems[this.selectedIndex].costCenter = this.Form.get('costCenter')?.value;
-      this.expenseItems[this.selectedIndex].totalBeforeVat = this.Form.get('totalBeforeVat')?.value;
-      this.expenseItems[this.selectedIndex].vat = this.Form.get('vat')?.value;
-      this.expenseItems[this.selectedIndex].totalWithVat = this.Form.get('totalWithVat')?.value;
-      this.expenseItems[this.selectedIndex].remarks = this.Form.get('remarks')?.value;
-      this.expenseItems[this.selectedIndex].attachments = this.attachedFiles;
-      if (this.isEditPermanently) {
-        var formData = new FormData();
-        formData.append(`receiptDate`, this.expenseItems[this.selectedIndex].receiptDate);
-        formData.append(`documentNumber`, this.expenseItems[this.selectedIndex].documentNumber);
-        formData.append(`costCenter`, this.expenseItems[this.selectedIndex].costCenter);
-        formData.append(`totalBeforeVat`, this.expenseItems[this.selectedIndex].totalBeforeVat);
-        formData.append(`vat`, this.expenseItems[this.selectedIndex].vat);
-        formData.append(`totalWithVat`, this.expenseItems[this.selectedIndex].totalWithVat);
-        formData.append(`remarks`, this.expenseItems[this.selectedIndex].remarks);
-        formData.append(`actionBy`, String(this._authService.getUserId()));
-        if (this.attachedFiles.length > 0) {
-          this.attachedFiles.forEach(function (attachment: any) {
-            formData.append(`attachments`, attachment.file);
-          });
+  private getAttachmentTypes() {
+    this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
+      next: (response: IAttachmentTypeRes) => {
+        if (response?.success) {
+          this.attachmentTypes = response.data.attachmentTypes;
+
+        } else {
+          this._toaster.error('No attachment types found', 'Error!');
         }
-
-        this._apiCalling.putData("expense", `edit/${this.expenseItems[this.selectedIndex].expenseSubDetailId}`, formData, true)
-          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-            next: (response) => {
-              if (response?.success) {
-                this._toaster.success(response?.message, 'Success!');
-                this.expenseItems[this.selectedIndex] = response.data;
-              } else {
-                this._toaster.error(response?.message, 'Error!');
-              }
-            },
-            error: (error) => {
-              this._toaster.error("Internal server error occured while processing your request")
-            }
-          })
+      },
+      error: () => {
+        this._toaster.error('Error fetching company details', 'Error!');
       }
-      this.attachedFiles = [];
-      this.showAddingInput = false;
-      this.isEdit = this.isEditPermanently;
+    });
+  }
+
+
+  get tableData(): FormArray {
+    return this.mainForm.controls["tableData"] as FormArray;
+  }
+
+  convertRowForm(form: any): FormGroup {
+    return form as FormGroup;
+  }
+
+  addRow() {
+    const expenseItemForm = this._fb.group(
+      {
+        educationTitle: ['', [Validators.required]],
+        institution: ['', [Validators.required]],
+        attachmentTypeId: ['', [Validators.required]],
+        startDate: ['', [Validators.required]],
+        endDate: ['', [Validators.required]],
+      });
+    this.tableData.push(expenseItemForm);
+  }
+
+
+  deleteRow(index: number): void {
+
+    if (index >= 0 && index < this.tableData.length) {
+      const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
+      this.mainForm.setControl('tableData', this._fb.array(updatedControls));
+    } else {
     }
 
   }
 
-  droppedFiles(files: NgxFileDropEntry[]) {
-    this.files = files;
-    for (const droppedFile of files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          const reader = new FileReader();
-          reader.onload = (e: any) => {
-            const arrayBuffer = e.target.result as ArrayBuffer;
-            const fileBlob = new Blob([new Uint8Array(arrayBuffer)], { type: file?.type });
-            this.attachedFiles.push(
-              {
-                file: file,
-                name: file.name,
-                type: file.type,
-                fileBlob: fileBlob,
-                url: this._sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(fileBlob))
+
+
+  resetForm(): void {
+    this.rowForm.reset();
+    this.attachedFiles = [];
+    this.selectedIndex = -1;
+    this.isEdit = false;
+    this.isViewOnly = false;
+  }
+
+
+  trackByFn(index: number, type: any): any {
+    return type.attachmentTypeId;
+  }
+
+  onSubmit(): void {
+    if (this.mainForm.invalid) {
+      this.mainForm.markAllAsTouched();
+      this._toaster.error('Please fill the form before submitting', 'Validation Error');
+      return;
+    }
+
+    const formData = new FormData();
+    const formArray = this.mainForm.get('tableData') as FormArray;
+
+    formArray.value.forEach((item: any, itemIndex: number) => {
+      // Append work history fields
+      formData.append(`educationRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
+      formData.append(`educationRequest[${itemIndex}].educationTitle`, item.educationTitle || '');
+      formData.append(`educationRequest[${itemIndex}].institution`, item.institution || '');
+      formData.append(`educationRequest[${itemIndex}].startDate`, item.startDate || '');
+      formData.append(`educationRequest[${itemIndex}].endDate`, item.endDate || '');
+
+      const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
+      if (attachmentItem?.attachments?.length > 0) {
+        attachmentItem.attachments.forEach((attachment: any) => {
+          if (attachment.url) {
+            // Extract the base64 data from the URL
+            const base64Data = attachment.url.split(',')[1];
+
+            // Convert base64 string into a binary Blob
+            const byteCharacters = atob(base64Data);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+              const slice = byteCharacters.slice(offset, offset + 1024);
+              const byteNumbers = new Array(slice.length);
+
+              for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
               }
 
-            );
-            console.log('File Blob:', fileBlob);
-          };
-          reader.readAsArrayBuffer(file);
+              const byteArray = new Uint8Array(byteNumbers);
+              byteArrays.push(byteArray);
+            }
+
+            const file = new Blob(byteArrays, { type: attachment.type });
+
+            // Append the file to FormData
+            formData.append(`educationRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
+          }
         });
       }
-    }
-    this.getSelectedFile(0);
-  }
 
-  getSelectedFile(index: number): void {
-    this.selectedFile = this.attachedFiles[index];
-  }
-
-  removeAttachment(index: number): void {
-    this.attachedFiles.splice(index, 1);
-  }
-
-  removeExpenseEntry(expense: any, index: number): void {
-    this.selectedIndex = index;
-    this.expenseSubDetailId = expense.expenseSubDetailId;
-    if (!this.isEdit) {
-      this.expenseItems.splice(index, 1);
-    } else {
-      $("#deleteConfirmationModal").modal('show');
-    }
-
-  }
-
-  saveBatch(): void {
-    debugger
-    if (!this.expenseSubmissionForm.valid) {
-      return;
-    }
-
-    var formData = new FormData();
-    var ref = this;
-    //.controls[0].controls.receiptDate.value
-    var formArray = this.expenseMainForm.get('expenseAllItem') as FormArray;
-    formArray.value.forEach(function (expenseElement: any, expenseElementIndex: any) {
-      formData.append(`request[${expenseElementIndex}].receiptDate`, `${expenseElement.receiptDate.year}-${expenseElement.receiptDate.month}-${expenseElement.receiptDate.day}`);
-      formData.append(`request[${expenseElementIndex}].documentNumber`, expenseElement.documentNumber);
-      formData.append(`request[${expenseElementIndex}].costCenter`, expenseElement.costCenter);
-      formData.append(`request[${expenseElementIndex}].totalBeforeVat`, expenseElement.totalBeforeVat);
-      formData.append(`request[${expenseElementIndex}].vat`, expenseElement.vat);
-      formData.append(`request[${expenseElementIndex}].totalWithVat`, expenseElement.totalWithVat);
-      formData.append(`request[${expenseElementIndex}].remarks`, expenseElement.remarks);
-      formData.append(`request[${expenseElementIndex}].assignedTo`, ref.expenseSubmissionForm.get('assignedTo')?.value);
-      formData.append(`request[${expenseElementIndex}].actionBy`, String(ref._authService.getUserId()));
-      var attachment = ref.itemAttachment.filter((x: any) => x.index === expenseElementIndex)[0];
-      if (attachment !== undefined) {
-        if (attachment.attachments.length > 0) {
-          attachment.attachments.forEach(function (attachment: any, attachmentIndex: any) {
-            formData.append(`request[${expenseElementIndex}].attachments`, attachment.file);
-          });
-        }
-      }
 
     });
 
-    this._apiCalling.postData("expense", "add", formData, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    // Make API call
+    this._apiCalling
+      .postData("EmployeeEducation", "addEmployeeEducation", formData, true, this.id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
         next: (response) => {
+          localStorage.setItem('attachments', JSON.stringify([]));
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
             $('#saveBatchConfirmationModal').modal('hide');
@@ -340,129 +268,166 @@ export class AddEditComponent {
             this._toaster.error(response?.message, 'Error!');
           }
         },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
-  }
-
-  back(): void {
-    this._router.navigate([`${'/expense/expense-sheet'}`]);
-  }
-
-  calculateTotal(addEditItemForm: any): void {
-    var total = Math.floor(Number(addEditItemForm.get('totalBeforeVat')?.value) + ((addEditItemForm.get('totalBeforeVat')?.value) * (Number(addEditItemForm.get('vat')?.value) / 100)));
-    addEditItemForm.patchValue({
-      totalWithVat: total,
-    });
-  }
-
-  openCofirmationModal(): void {
-    if (!this.expenseMainForm.valid) {
-      return;
-    }
-    this.expenseSubmissionForm.patchValue({
-      assignedTo: '',
-    });
-    $('#saveBatchConfirmationModal').modal('show');
-  }
-
-  deleteExpense(): void {
-    this._apiCalling.deleteData("expense", `deleteSubExpenseItem/${this.expenseSubDetailId}`,
-      {
-        "actionBy": this._authService.getUserId()
-      }, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
-          if (response?.success) {
-            this._toaster.success(response?.message, 'Success!');
-            $("#deleteConfirmationModal").modal('hide');
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.removeItem('expense');
-              localStorage.setItem('expense', JSON.stringify(response?.data));
-            }
-            this.expenseItems = response?.data;
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
+        error: () => {
+          this._toaster.error("Internal server error occurred while processing your request", 'Error');
         },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
+      });
   }
 
-  changeStatus(event: any, expenseSubDetailId: number): void {
-    this.remarksList = [];
-    this.changeStatusObj = {};
-    this.changeStatusObj.remarks = '';
-    this.changeStatusObj.expenseSubDetailId = expenseSubDetailId;
-    this.changeStatusObj.status = Number(event?.target?.value);
-    this.changeStatusObj.actionBy = this._authService.getUserId();
-    $("#remarksModal").modal('show');
-  }
 
-  saveRemarks(): void {
-    this.changeStatusObj.remarks = this.changeStatusObj.remarks.trim();
-    this._apiCalling.postData("expense", "saveExpenseItemRemarks", this.changeStatusObj, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
-          if (response?.success) {
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.removeItem('expense');
-              localStorage.setItem('expense', JSON.stringify(response?.data));
-            }
-            this.expenseItems = response?.data;
-            this._toaster.success(response?.message, 'Success!');
-            $("#remarksModal").modal('hide');
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
-        },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
-  }
-
-  viewRemarksHistory(expense: any): void {
-    this._apiCalling.getData("expense", `getExpenseItemRemarks/${expense.expenseSubDetailId}`, true)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-        next: (response) => {
-          if (response?.success) {
-            this.remarksList = response.data;
-            if (this.remarksList.length > 0) {
-              $("#remarksModal").modal('show');
-            } else {
-              this._toaster.error('No Remarks Added', 'Error!');
-            }
-
-
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
-        },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
-  }
-  attachmentIndex: number = -1;
   openUploadModal(index: any): void {
     this.attachedFiles = [];
     this.attachmentIndex = index;
+
+    // Retrieve the attachments from localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      const storedAttachments = localStorage.getItem('attachments');
+      if (storedAttachments) {
+        const parsedAttachments = JSON.parse(storedAttachments);
+
+        // Find the attachment entry for the given index
+        const existingAttachment = parsedAttachments?.find((attachment: any) => attachment.index === index);
+
+        if (existingAttachment) {
+          this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
+            const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
+            return { ...attachment, url: sanitizedUrl };
+          });
+        }
+      }
+    }
     $("#uploadAttachmentModal").modal('show');
   }
 
+
+  isImageFile(file: any): boolean {
+    if (!file) return false;
+    const fileName = file.name || file.fileName || '';
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+  }
+
+  isPdfFile(file: any): boolean {
+    return file?.type === 'application/pdf' ||
+      (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+  }
+
+  droppedFiles(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          const reader = new FileReader();
+          reader.onload = (e: any) => {
+            const base64 = e.target.result as string;
+            const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(base64);
+
+            // Push file details into the attachedFiles array
+            const fileDetails = {
+              file: file,
+              name: file.name,
+              type: file.type,
+              url: sanitizedUrl,
+              base64: base64 // Store the base64 string
+            };
+            this.attachedFiles.push(fileDetails);
+
+            // Optionally call getSelectedFile if needed
+            this.getSelectedFile(this.attachedFiles.length - 1);
+          };
+          reader.readAsDataURL(file); // Use Data URL to get base64 string
+        });
+      }
+    }
+  }
+
+  getSelectedFile(index: number) {
+    this.selectedFile = this.attachedFiles[index];
+    console.log('Selected file:', this.selectedFile, {
+      name: this.selectedFile?.name,
+      type: this.selectedFile?.type,
+      url: this.selectedFile?.url
+    });
+  }
+
+  addFileToAttachment(newFile: File) {
+    this.attachedFiles.push(newFile);
+    console.log('File added to attachments:', newFile);
+    // Optionally, you can also call getSelectedFile if you want to select the newly added file
+    this.getSelectedFile(this.attachedFiles.length - 1);
+  }
+
+  removeAttachment(index: number): void {
+    // Remove the file from the attachedFiles array
+    this.attachedFiles.splice(index, 1);
+
+    // Update the attachments in itemAttachment for the current index
+    const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+    if (existingIndex !== -1) {
+      // Update the attachments for this index
+      this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
+    }
+
+    // Save the updated attachments to localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+    }
+
+  }
+
+
+
   saveItemAttachment(): void {
     if (this.attachedFiles.length > 0) {
-      this.itemAttachment.push({
-        index: this.attachmentIndex,
-        attachments: this.attachedFiles
+      // Convert files to base64 or data URL for persistence
+      const updatedAttachments = this.attachedFiles.map(file => {
+        // If the file URL is a SafeResourceUrl, convert it to a string
+        const fileUrl = file.url
+          ? file.url.changingThisBreaksApplicationSecurity // Extract the actual URL
+          : file.url;
+
+        return {
+          name: file.name,
+          type: file.type,
+          url: fileUrl, // Store the actual URL string
+          base64: file.base64 // Store base64 string directly
+        };
       });
+
+      // Log to debug before saving
+      console.log("Updated Attachments:", updatedAttachments);
+
+      // Check if an attachment already exists for the given index
+      const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+      if (existingIndex !== -1) {
+        // If it exists, update the existing attachment entry
+        this.itemAttachment[existingIndex].attachments = updatedAttachments;
+      } else {
+        // If it doesn't exist, add a new attachment entry
+        this.itemAttachment.push({
+          index: this.attachmentIndex,
+          attachments: updatedAttachments
+        });
+      }
+
+      // Log itemAttachment to check the structure
+      console.log("Item Attachments Before Saving:", this.itemAttachment);
+
+      // Save updated attachments to localStorage
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+      }
     }
+
+    // Hide modal and reset files
     $("#uploadAttachmentModal").modal('hide');
     this.attachedFiles = [];
+  }
+
+
+  back(): void {
+    this._router.navigate([window.history.back()]);
   }
 
 }

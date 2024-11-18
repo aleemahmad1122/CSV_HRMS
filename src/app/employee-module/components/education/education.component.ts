@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Projects,IProjectRes } from '../../../types/index';
+import { Projects, IProjectRes, IEmployeeEducationRes, IEmployeeEducation } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-education',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './education.component.html',
   styleUrl: './education.component.css'
 })
@@ -19,7 +19,7 @@ export class EducationComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: Projects[] = [];
+  dataList: IEmployeeEducation[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -27,7 +27,7 @@ export class EducationComponent {
   pageSize = 10;
   pageNo = 1;
   totalPages = 0;
-  id:string = "";
+  id: string = "";
 
   constructor(
     private apiService: ApiCallingService,
@@ -46,40 +46,40 @@ export class EducationComponent {
   }
 
 
-    // Handles status change from the dropdown
-    onStatusChange(event: Event): void {
-      const selectedValue = (event.target as HTMLSelectElement).value;
-      this.selectedStatus = selectedValue;
-      this.getActiveStatusData('', selectedValue);
-    }
+  // Handles status change from the dropdown
+  onStatusChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStatus = selectedValue;
+    this.getActiveStatusData('', selectedValue);
+  }
 
-    // Fetch data filtered by active status
-    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+  // Fetch data filtered by active status
+  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
-      // Call the API with the active status filter
-      this.apiService.getData('EmployeeEducation', 'getEmployeeEducations', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (res: IProjectRes) => this.handleResponse(res),
-          error: () => (this.dataList = []),
-        });
-    }
-
-
-  private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeEducation', 'getEmployeeEducations', true, { searchQuery: searchTerm,employeeId:this.id  })
+    // Call the API with the active status filter
+    this.apiService.getData('EmployeeEducation', 'getEmployeeEducations', true, { searchQuery: searchTerm, activeStatus: isActive, employeeId: this.id })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IProjectRes) => this.handleResponse(res),
+        next: (res: IEmployeeEducationRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IProjectRes): void {
+
+  private getData(searchTerm = ''): void {
+    this.apiService.getData('EmployeeEducation', 'getEmployeeEducations', true, { searchQuery: searchTerm, employeeId: this.id })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IEmployeeEducationRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
+
+  private handleResponse(response: IEmployeeEducationRes): void {
     if (response?.success) {
-      const { projects, pagination } = response.data;
+      const { employeeEducationDetails, pagination } = response.data;
       Object.assign(this, {
-        dataList: projects,
+        dataList: employeeEducationDetails,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -105,7 +105,7 @@ export class EducationComponent {
   }
 
   private getPaginatedData(): void {
-    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize,employeeId:this.id  };
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize, employeeId: this.id };
     this.apiService.getData('EmployeeEducation', 'getEmployeeEducations', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -115,11 +115,11 @@ export class EducationComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeEducation', `deleteProject/${id}`, id, true)
+    this.apiService.deleteData('EmployeeEducation', `deleteEmployeeEducation/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.projectId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeEducationId !== id);
         },
         error: (err) => console.error('Error deleting Employee Education:', err),
       });

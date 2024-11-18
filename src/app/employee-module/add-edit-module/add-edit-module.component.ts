@@ -29,7 +29,7 @@ import { DepartmentTeamComponent } from './../components/department-team/departm
 export class AddEditModuleComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
-  isEditMode = false;
+  isEditMode: boolean | string = false;
   isSubmitted = false;
   isView: boolean = false;
   selectedValue: any;
@@ -64,7 +64,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
-      this.isEditMode = !!id;
+      this.isEditMode = id;
       const view = params['view'];
       this.isView = view === 'true';
 
@@ -97,7 +97,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       employeeImage: ['', Validators.required],
-      fullName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       country: ['', Validators.required],
@@ -112,7 +113,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
         employeeImage: this.selectedValue.employeeImage,
-        fullName: this.selectedValue.fullName,
+        firstName: this.selectedValue.firstName,
+        lastName: this.selectedValue.lastName,
         email: this.selectedValue.email,
         password: this.selectedValue.password,
         country: this.selectedValue.country,
@@ -121,7 +123,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         phoneNumber: this.selectedValue.phoneNumber,
         role: this.selectedValue.role,
       });
-      this.imagePreview = this.selectedValue.employeeImage || this.defaultImagePath;
+      this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;
     }
   }
 

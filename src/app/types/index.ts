@@ -44,18 +44,18 @@ export interface IShiftRes extends ICommonRes {
 
 
 export interface IEmployeeWorkHistory extends ICommon {
-  employeeWorkHistoryId:string;
-  employeeId:string;
-  attachmentTypeId:string;
-  positionTitle:string;
-  organization?:string;
-  workHistoryAttachments:{
-    attachmentId:string;
-    documentPath:string;
-    documentName:string;
+  employeeWorkHistoryId: string;
+  employeeId: string;
+  attachmentTypeId: string;
+  positionTitle: string;
+  organization?: string;
+  workHistoryAttachments: {
+    attachmentId: string;
+    documentPath: string;
+    documentName: string;
   }[];
-  startDate?:string;
-  endDate?:string;
+  startDate?: string;
+  endDate?: string;
 }
 
 
@@ -63,6 +63,31 @@ export interface IEmployeeWorkHistoryRes extends ICommonRes {
 
   data: {
     employeeWorkHistoryDetails: IEmployeeWorkHistory[]
+    pagination: IPagination
+  };
+
+}
+
+export interface IEmployeeEducation extends ICommon {
+  employeeEducationId: string;
+  employeeId: string;
+  attachmentTypeId: string;
+  educationTitle: string;
+  institution?: string;
+  educationAttachments: {
+    attachmentId: string;
+    documentPath: string;
+    documentName: string;
+  }[];
+  startDate?: string;
+  endDate?: string;
+}
+
+
+export interface IEmployeeEducationRes extends ICommonRes {
+
+  data: {
+    employeeEducationDetails: IEmployeeWorkHistory[]
     pagination: IPagination
   };
 
@@ -234,7 +259,7 @@ export interface ICompany extends ICommon {
   name: string;
   phoneNumber: string;
   registrationNumber: string;
-  isActive:boolean;
+  isActive: boolean;
 }
 
 
@@ -251,7 +276,8 @@ export interface ICompanyRes extends ICommonRes {
 export interface IEmployee extends ICommon {
   employeeId: string;
   imagePath: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   country: string;
   city: string;
