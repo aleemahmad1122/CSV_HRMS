@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,6 @@ import { ApiCallingService } from '../../../../shared/Services/api-calling.servi
 import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
-import { SafeResourceUrl } from '@angular/platform-browser';
 
 
 
@@ -29,7 +28,6 @@ export class AddEditComponent {
   submissionForm!: FormGroup;
   mainForm!: FormGroup;
   isEdit: boolean = false;
-  isEditPermanently: boolean = false;
   selectedValues: any;
   attachedFiles: any[] = [];
   managerList: any[] = [];
@@ -40,6 +38,7 @@ export class AddEditComponent {
   expenseSubDetailId = 0;
   attachmentIndex: number = -1;
   isViewOnly: boolean = false;
+  editId:string;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
   id:string = '';
@@ -55,12 +54,12 @@ export class AddEditComponent {
 
     this._route.queryParams.subscribe(params => {
       this.id = params['id']
-      this.isEdit = false;
-      this.isEditPermanently = false;
       this.selectedValues = {};
-      if (params['id'] !== undefined && params['id'] !== null && params['id'] !== '' && Number(params['id']) !== 0) {
+
+
+      if (params['editId'] !== undefined && params['editId'] !== null && params['editId'] !== '' && Number(params['editId']) !== 0) {
         this.isEdit = true;
-        this.isEditPermanently = true;
+        this.editId = params['editId']
 
         if (isPlatformBrowser(this.platformId)) {
           this.selectedValues = JSON.parse(localStorage.getItem('expense')!);
@@ -83,9 +82,56 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
+
+if(this.isEdit){
+  this._apiCalling.getData("EmployeeWorkHistory", `getEmployeeWorkHistoryById/${this.editId}`, true,{employeeId:this.id}).subscribe({
+    next: (response: any) => {
+      if (response?.success) {
+        this.patchFormValues(response.data);
+      } else {
+        this._toaster.error('Error fetching Work History', 'Error!');
+      }
+    },
+    error: () => {
+      this._toaster.error('Error fetching Work History', 'Error!');
+    }
+  });
+}
+
     this.getAttachmentTypes()
   }
 
+
+  private patchFormValues(data: any): void {
+    console.warn(data);
+
+    if (data) {
+      const workHistoryFormArray = this.mainForm.get('tableData') as FormArray;
+
+      // Clear any existing rows before patching data
+      while (workHistoryFormArray.length) {
+        workHistoryFormArray.removeAt(0);
+      }
+
+
+        const expenseItemForm = this._fb.group({
+          positionTitle: [data.positionTitle, [Validators.required]],
+          organization: [data.organization, [Validators.required]],
+          attachmentTypeId: [data.attachmentTypeId, [Validators.required]],
+          startDate: [data.startDate, [Validators.required]],
+          endDate: [data.endDate, [Validators.required]],
+        });
+
+        workHistoryFormArray.push(expenseItemForm);
+
+    }
+
+    // Optionally, if there are attachments or other data that need to be patched
+    this.itemAttachment = data?.attachments || [];
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+    }
+  }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -206,7 +252,7 @@ if (attachmentItem?.attachments?.length > 0) {
       const file = new Blob(byteArrays, { type: attachment.type });
 
       // Append the file to FormData
-      formData.append(`workHistoryRequest[${itemIndex}].attachments`, file, attachment.name || 'file');
+      formData.append(`workHistoryRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
     }
   });
 }

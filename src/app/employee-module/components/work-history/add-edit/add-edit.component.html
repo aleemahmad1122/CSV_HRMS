@@ -1,4 +1,4 @@
-@if(true){
+
   <div class="container-xxl flex-grow-1 container-p-y">
     <form
       novalidate
@@ -150,13 +150,15 @@
 
               <tr>
                 <td colspan="5">
-                  <button
-                    class="btn btn-primary mt-1 mb-1"
-                    type="button"
-                    (click)="addRow()"
-                  >
-                    Add more
-                  </button>
+      @if(!this.isEdit){
+        <button
+        class="btn btn-primary mt-1 mb-1"
+        type="button"
+        (click)="addRow()"
+      >
+        Add more
+      </button>
+      }
                 </td>
                 <td colspan="4" align="right">
                   <button class="btn btn-danger mt-1 mb-1 mx-3" type="button" (click)="back()">
@@ -173,7 +175,7 @@
       </div>
     </form>
   </div>
-}
+
 
 <div
   class="modal fade"
