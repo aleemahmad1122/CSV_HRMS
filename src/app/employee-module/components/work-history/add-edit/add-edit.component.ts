@@ -140,16 +140,22 @@ export class AddEditComponent {
       if (data.workHistoryAttachments && data.workHistoryAttachments.length > 0) {
         console.log('Attachments:', data.workHistoryAttachments);
 
-        // Map the attachment data to the format required by the form
-        this.attachedFiles = data.workHistoryAttachments.map((attachment: any) => ({
-          name: attachment.documentName,
-          type: 'pdf',  // Assuming the type is PDF; adjust if necessary
-          url: attachment.documentPath,
-          base64: '', // Base64 can be handled if needed
-        }));
 
-        // Call the saveItemAttachment to update the itemAttachments
-        this.saveItemAttachment();
+
+        localStorage.setItem('attachments', JSON.stringify(
+          [
+            {
+              index:0,
+              attachments:data.workHistoryAttachments.map((attachment: any) => ({
+                name: attachment.documentName,
+                type: attachment.documentPath.split(".").pop() == "pdf" ? "application/pdf" : ("image/" + attachment.documentPath.split(".").pop()),
+                url: attachment.documentPath
+              }))
+            }
+          ]
+      ));
+
+
       }
     } else {
       console.error('No data found to patch');
@@ -161,6 +167,7 @@ export class AddEditComponent {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    localStorage.setItem('attachments', JSON.stringify([]));
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('expense');
     }
@@ -240,6 +247,7 @@ private formatDateToISOString(date: Date | null): string | null {
     return type.attachmentTypeId;
   }
 
+
   onSubmit(): void {
     if (this.mainForm.invalid) {
       this.mainForm.markAllAsTouched();
@@ -249,70 +257,110 @@ private formatDateToISOString(date: Date | null): string | null {
     const formData = new FormData();
     const formArray = this.mainForm.get('tableData') as FormArray;
 
-    formArray.value.forEach((item: any, itemIndex: number) => {
-      // Append work history fields
-      formData.append(`workHistoryRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
-      formData.append(`workHistoryRequest[${itemIndex}].positionTitle`, item.positionTitle || '');
-      formData.append(`workHistoryRequest[${itemIndex}].organization`, item.organization || '');
-      formData.append(`workHistoryRequest[${itemIndex}].startDate`, item.startDate || '');
-      formData.append(`workHistoryRequest[${itemIndex}].endDate`, item.endDate || '');
+    if (!this.isEdit) {
+      // Create case
+      formArray.value.forEach((item: any, itemIndex: number) => {
+        // Append work history fields
+        formData.append(`workHistoryRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
+        formData.append(`workHistoryRequest[${itemIndex}].positionTitle`, item.positionTitle || '');
+        formData.append(`workHistoryRequest[${itemIndex}].organization`, item.organization || '');
+        formData.append(`workHistoryRequest[${itemIndex}].startDate`, item.startDate || '');
+        formData.append(`workHistoryRequest[${itemIndex}].endDate`, item.endDate || '');
 
+        const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
+
+        if (attachmentItem?.attachments?.length > 0) {
+          attachmentItem.attachments.forEach((attachment: any) => {
+            if (attachment.url) {
+              // Extract base64 data and convert to Blob
+              const base64Data = attachment.url.split(',')[1];
+              const byteCharacters = atob(base64Data);
+              const byteArrays = [];
+
+              for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+                const slice = byteCharacters.slice(offset, offset + 1024);
+                const byteNumbers = new Array(slice.length);
+
+                for (let i = 0; i < slice.length; i++) {
+                  byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+              }
+
+              const file = new Blob(byteArrays, { type: attachment.type });
+
+              // Append the file to FormData
+              formData.append(`workHistoryRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
+            }
+          });
+        }
+      });
+    } else {
+      const itemIndex = 0;
+      const item = formArray.value[itemIndex];
+
+      formData.append('attachmentTypeId', item.attachmentTypeId || '');
+      formData.append('positionTitle', item.positionTitle || '');
+      formData.append('organization', item.organization || '');
+      formData.append('startDate', item.startDate || '');
+      formData.append('endDate', item.endDate || '');
 
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
 
-if (attachmentItem?.attachments?.length > 0) {
-  attachmentItem.attachments.forEach((attachment: any) => {
-    if (attachment.url) {
-      // Extract the base64 data from the URL
-      const base64Data = attachment.url.split(',')[1];
+      if (attachmentItem?.attachments?.length > 0) {
+        attachmentItem.attachments.forEach((attachment: any) => {
+          if (attachment.url) {
+            const base64Data = attachment.url.split(',')[1];
+            const byteCharacters = atob(base64Data);
+            const byteArrays = [];
 
-      // Convert base64 string into a binary Blob
-      const byteCharacters = atob(base64Data);
-      const byteArrays = [];
+            for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+              const slice = byteCharacters.slice(offset, offset + 1024);
+              const byteNumbers = new Array(slice.length);
 
-      for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-        const slice = byteCharacters.slice(offset, offset + 1024);
-        const byteNumbers = new Array(slice.length);
+              for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+              }
 
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
+              const byteArray = new Uint8Array(byteNumbers);
+              byteArrays.push(byteArray);
+            }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
+            const file = new Blob(byteArrays, { type: attachment.type });
 
-      const file = new Blob(byteArrays, { type: attachment.type });
-
-      // Append the file to FormData
-      formData.append(`workHistoryRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
-    }
-  });
-}
-
-
-    });
-
-    // Make API call
-    this._apiCalling
-      .postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true, this.id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response) => {
-          localStorage.setItem('attachments', JSON.stringify([]));
-          if (response?.success) {
-            this._toaster.success(response?.message, 'Success!');
-            $('#saveBatchConfirmationModal').modal('hide');
-            this.back();
-          } else {
-            this._toaster.error(response?.message, 'Error!');
+            formData.append('attachment', file, attachment.name || 'file');
           }
-        },
-        error: () => {
-          this._toaster.error("Internal server error occurred while processing your request", 'Error');
-        },
-      });
+        });
+      }
+    }
+
+// Determine API method based on create or update action
+const apiCall = this.isEdit
+  ? this._apiCalling.putData('EmployeeWorkHistory',  `updateEmployeeWorkHistory/${this.editId}`, formData, true, this.id)
+  : this._apiCalling.postData('EmployeeWorkHistory', "addEmployeeWorkHistory", formData, true, this.id);
+
+apiCall
+  .pipe(takeUntil(this.ngUnsubscribe))
+  .subscribe({
+    next: (response) => {
+      localStorage.setItem('attachments', JSON.stringify([]));
+      if (response?.success) {
+        this._toaster.success(response?.message, 'Success!');
+        this.back();
+      } else {
+        this._toaster.error(response?.message, 'Error!');
+      }
+    },
+    error: () => {
+      this._toaster.error('Internal server error occurred while processing your request', 'Error');
+    },
+  });
+
   }
+
+
 
 
   openUploadModal(index: any): void {
@@ -330,8 +378,14 @@ if (attachmentItem?.attachments?.length > 0) {
 
         if (existingAttachment) {
           this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
+
+          if(attachment.base64){
             const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
             return { ...attachment, url: sanitizedUrl };
+          }else{
+
+            return attachment
+          }
           });
         }
       }
@@ -341,15 +395,25 @@ if (attachmentItem?.attachments?.length > 0) {
 
 
   isImageFile(file: any): boolean {
+
     if (!file) return false;
-    const fileName = file.name || file.fileName || '';
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-    return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+
+if(file && file.base64){
+  const fileName = file.name || file.fileName || '';
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+  return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+}else{
+  return file.type != 'application/pdf'
+}
+
   }
 
   isPdfFile(file: any): boolean {
-    return file?.type === 'application/pdf' ||
-           (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+if(file && file.base64){
+ return (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+}else{
+  return file.type == 'application/pdf'
+}
   }
 
   droppedFiles(files: NgxFileDropEntry[]) {
@@ -420,43 +484,33 @@ removeAttachment(index: number): void {
 
 saveItemAttachment(): void {
   if (this.attachedFiles.length > 0) {
-    // Convert files to base64 or data URL for persistence
+
     const updatedAttachments = this.attachedFiles.map(file => {
-      // If the file URL is a SafeResourceUrl, convert it to a string
       const fileUrl = file.url
-                      ? file.url.changingThisBreaksApplicationSecurity // Extract the actual URL
+                      ? file.url.changingThisBreaksApplicationSecurity
                       : file.url;
 
       return {
         name: file.name,
         type: file.type,
-        url: fileUrl, // Store the actual URL string
-        base64: file.base64 // Store base64 string directly
+        url: fileUrl,
+        base64: file.base64
       };
     });
 
-    // Log to debug before saving
-    console.log("Updated Attachments:", updatedAttachments);
-
-    // Check if an attachment already exists for the given index
     const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
     if (existingIndex !== -1) {
-      // If it exists, update the existing attachment entry
       this.itemAttachment[existingIndex].attachments = updatedAttachments;
     } else {
-      // If it doesn't exist, add a new attachment entry
       this.itemAttachment.push({
         index: this.attachmentIndex,
         attachments: updatedAttachments
       });
     }
 
-    // Log itemAttachment to check the structure
-    console.log("Item Attachments Before Saving:", this.itemAttachment);
-
-    // Save updated attachments to localStorage
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+
     }
   }
 

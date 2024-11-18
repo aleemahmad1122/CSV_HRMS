@@ -3,8 +3,8 @@
   <div class="card-header flex-wrap border-0 pt-6 pb-0">
     <div class="card-title">
       <h3 class="card-label">
-        {{'language.project.projectManagement' | translate}}
-        <span class="d-block text-muted pt-2 font-size-sm"> {{'language.project.projectHeading' | translate}}</span>
+        {{'language.workHistory.workHistoryManagement' | translate}}
+        <span class="d-block text-muted pt-2 font-size-sm"> {{'language.workHistory.workHistoryHeading' | translate}}</span>
       </h3>
     </div>
     <form class="d-flex  mt-2 w-25" role="search">
@@ -103,7 +103,7 @@
 
 
             <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-              <span> Organization </span>
+              <span style="width: 250px;"> Organization </span>
             </th>
 
 
@@ -122,40 +122,21 @@
             </td>
 
 
-            <!-- <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                <div class="d-flex align-items-center">
-                  <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.name || "N/A"}}</div>
-                </div>
-              </span></td> -->
-
-            <!-- <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
-                <div class="font-weight-bolder text-primary mb-0">{{data.description.slice(0,15) || "N/A"}}
-                  {{data.description.length > 15 ? '...' : ''}}</div>
-              </span></td> -->
-
-
-            <!-- <td style="width: 130px;" data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span>
-                <div class="d-flex align-items-center">
-                  <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.budget || "N/A"}} </div>
-                </div>
-              </span></td> -->
-
-
             <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-              <span>
+              <span style="width: 250px;" >
                 <div class="d-flex align-items-center">
                   <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
-                    {{ data.startDate | date: 'yyyy-MM-dd' }} {{ data.startDate || "N/A" }}
+                    {{ data.positionTitle}}
                   </div>
                 </div>
               </span>
             </td>
 
             <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-              <span>
+              <span style="width: 250px;">
                 <div class="d-flex align-items-center">
                   <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
-                    {{ data.endDate | date: 'yyyy-MM-dd' }} {{ data.endDate || "N/A" }}
+                    {{ data.organization}}
                   </div>
                 </div>
               </span>

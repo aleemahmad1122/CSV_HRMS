@@ -217,6 +217,10 @@
       "projectManagement": "Project Management",
       "projectHeading": "Project management made easy"
     },
+    "workHistory":{
+        "workHistoryManagement": "Work History Management",
+      "workHistoryHeading": "Work History management made easy"
+    },
     "qualification": {
       "qualification": "Qualification",
       "qualificationsManagement": "Qualifications Management",

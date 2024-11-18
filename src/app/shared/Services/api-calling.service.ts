@@ -66,22 +66,22 @@ export class ApiCallingService {
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { reportProgress: true, observe: 'events', params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
-  putData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
+  putData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean, employeeId?: string): Observable<any> {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
     return this._httpClient.put<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
-  deleteData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
+  deleteData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean, employeeId?: string): Observable<any> {
     if (showLoader) {
       this._loader.show();
     }
 
     const options = {
       body: body,
-      params: { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId }
+      params: { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId }
     };
 
     return this._httpClient.delete<any>(`${environment.baseUrl}${controllerName}/${methodName}`, options).pipe(this.catchApiErrors());

@@ -115,7 +115,7 @@ export class WorkHistoryComponent{
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeWorkHistory', `deleteProject/${id}`, id, true)
+    this.apiService.deleteData('EmployeeWorkHistory', `deleteEmployeeWorkHistory/${id}`, {},true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
