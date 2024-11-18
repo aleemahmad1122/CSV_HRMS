@@ -42,6 +42,7 @@ export class AddEditComponent {
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
   id:string = '';
+  patchData:any
 
   constructor(
     private _router: Router,
@@ -82,56 +83,80 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
-
-if(this.isEdit){
-  this._apiCalling.getData("EmployeeWorkHistory", `getEmployeeWorkHistoryById/${this.editId}`, true,{employeeId:this.id}).subscribe({
-    next: (response: any) => {
-      if (response?.success) {
-        this.patchFormValues(response.data);
-      } else {
-        this._toaster.error('Error fetching Work History', 'Error!');
-      }
-    },
-    error: () => {
-      this._toaster.error('Error fetching Work History', 'Error!');
+    if (this.isEdit) {
+      this._apiCalling.getData("EmployeeWorkHistory", `getEmployeeWorkHistoryById/${this.editId}`, true, { employeeId: this.id })
+        .subscribe({
+          next: (response: any) => {
+            if (response?.success) {
+              this.patchData = response.data;
+              this.patchFormValues(this.patchData);
+            } else {
+              this._toaster.error('Error fetching Work History', 'Error!');
+            }
+          },
+          error: () => {
+            this._toaster.error('Error fetching Work History', 'Error!');
+          }
+        });
     }
-  });
-}
-
-    this.getAttachmentTypes()
+    this.getAttachmentTypes();
   }
 
 
   private patchFormValues(data: any): void {
-    console.warn(data);
-
     if (data) {
-      const workHistoryFormArray = this.mainForm.get('tableData') as FormArray;
+      console.log('API Response:', data);
 
-      // Clear any existing rows before patching data
-      while (workHistoryFormArray.length) {
-        workHistoryFormArray.removeAt(0);
+      // Patch main form values
+      const workHistoryData = {
+        positionTitle: data.positionTitle || '',
+        organization: data.organization || '',
+        attachmentTypeId: data.attachmentTypeId || '',
+        startDate: this.formatDateToISOString(data.startDate ? new Date(data.startDate) : null),
+        endDate: this.formatDateToISOString(data.endDate ? new Date(data.endDate) : null),
+
+      };
+
+      // Now patch the main form with work history data
+      this.mainForm.patchValue({
+        positionTitle: workHistoryData.positionTitle,
+        organization: workHistoryData.organization,
+        attachmentTypeId: workHistoryData.attachmentTypeId,
+        startDate: workHistoryData.startDate,
+        endDate: workHistoryData.endDate,
+      });
+      console.log('Formatted Dates:', workHistoryData.startDate, workHistoryData.endDate);
+
+      // Now, if you want to set the data for the table rows as well:
+      if (this.tableData.length === 0) {
+        this.addRow();
       }
 
+      // If you need to populate the table row with the data
+      const workHistoryForm = this._fb.group(workHistoryData);
+      this.tableData.at(0).patchValue(workHistoryData);
 
-        const expenseItemForm = this._fb.group({
-          positionTitle: [data.positionTitle, [Validators.required]],
-          organization: [data.organization, [Validators.required]],
-          attachmentTypeId: [data.attachmentTypeId, [Validators.required]],
-          startDate: [data.startDate, [Validators.required]],
-          endDate: [data.endDate, [Validators.required]],
-        });
+      // Handle attachments if available
+      if (data.workHistoryAttachments && data.workHistoryAttachments.length > 0) {
+        console.log('Attachments:', data.workHistoryAttachments);
 
-        workHistoryFormArray.push(expenseItemForm);
+        // Map the attachment data to the format required by the form
+        this.attachedFiles = data.workHistoryAttachments.map((attachment: any) => ({
+          name: attachment.documentName,
+          type: 'pdf',  // Assuming the type is PDF; adjust if necessary
+          url: attachment.documentPath,
+          base64: '', // Base64 can be handled if needed
+        }));
 
-    }
-
-    // Optionally, if there are attachments or other data that need to be patched
-    this.itemAttachment = data?.attachments || [];
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+        // Call the saveItemAttachment to update the itemAttachments
+        this.saveItemAttachment();
+      }
+    } else {
+      console.error('No data found to patch');
     }
   }
+
+
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -169,16 +194,16 @@ if(this.isEdit){
   }
 
   addRow() {
-    const expenseItemForm = this._fb.group(
-      {
-        positionTitle: ['', [Validators.required]],
-        organization: ['', [Validators.required]],
-        attachmentTypeId: ['', [Validators.required]],
-        startDate: ['', [Validators.required]],
-        endDate: ['', [Validators.required]],
-      });
-    this.tableData.push(expenseItemForm);
+    const formData = this._fb.group({
+      positionTitle: [this.patchData?.positionTitle || '', [Validators.required]],
+      organization: [this.patchData?.organization || '', [Validators.required]],
+      attachmentTypeId: [this.patchData?.attachmentTypeId || '', [Validators.required]],
+      startDate: [this.patchData?.startDate || '', [Validators.required]],
+      endDate: [this.patchData?.endDate || '', [Validators.required]],
+    });
+    this.tableData.push(formData);
   }
+
 
 
   deleteRow(index: number): void {
@@ -191,6 +216,15 @@ if(this.isEdit){
 
 }
 
+private formatDateToISOString(date: Date | null): string | null {
+  if (date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 01 to 12
+    const day = date.getDate().toString().padStart(2, '0'); // 01 to 31
+    return `${year}-${month}-${day}`;
+  }
+  return null; // Return null if no date is provided
+}
 
 
   resetForm(): void {
@@ -209,7 +243,6 @@ if(this.isEdit){
   onSubmit(): void {
     if (this.mainForm.invalid) {
       this.mainForm.markAllAsTouched();
-      this._toaster.error('Please fill the form before submitting', 'Validation Error');
       return;
     }
 
