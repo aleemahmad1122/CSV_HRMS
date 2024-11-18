@@ -26,6 +26,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isAddMode: boolean = false;
   isSubmitted = false;
   selectedValue: any;
+  id: string = "";
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +36,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     private toaster: ToastrService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id']
+    });
     this.addEditForm = this.createForm();
   }
 
@@ -70,7 +74,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private loadEmployeeDesignation(id: string | null): void {
     if (id && isPlatformBrowser(this.platformId)) {
-      this.apiCalling.getData("EmployeeDesignation", `getEmployeeDesignationById/${id}`, true)
+      this.apiCalling.getData("EmployeeDesignation", `getEmployeeDesignation`, true, { employeeId: this.id })
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -143,8 +147,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("EmployeeDesignation", `updateEmployeeDesignation/${this.route.snapshot.queryParams['id']}`, body, true)
-      : this.apiCalling.postData("EmployeeDesignation", "addEmployeeDesignation", body, true);
+      ? this.apiCalling.putData("EmployeeDesignation", `updateEmployeeDesignation/${this.selectedValue.employeeDesignationId}`, body, true, this.id)
+      : this.apiCalling.postData("EmployeeDesignation", "addEmployeeDesignation", body, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
