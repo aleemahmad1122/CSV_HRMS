@@ -78,6 +78,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
+              this.isEditMode = response.data.employeeDesignationId != null ? true : false;
+              this.isAddMode = this.isEditMode ? false : true;
               this.selectedValue = response.data;
               this.patchFormValues();
             } else {
