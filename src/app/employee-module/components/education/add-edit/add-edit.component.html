@@ -1,3 +1,4 @@
+
 <div class="container-xxl flex-grow-1 container-p-y">
   <form
     novalidate
@@ -37,9 +38,7 @@
                     formControlName="attachmentTypeId"
                   >
                     <option value="">Select Type</option>
-                    <ng-container
-                      *ngFor="let type of attachmentTypes; trackBy: trackByFn"
-                    >
+                    <ng-container *ngFor="let type of attachmentTypes; trackBy: trackByFn">
                       <option [value]="type.attachmentTypeId">
                         {{ type.name }}
                       </option>
@@ -72,7 +71,7 @@
                 <td>
                   <input
                     class="form-control"
-                    type="datetime-local"
+                    type="date"
                     name="startDate"
                     formControlName="startDate"
                   />
@@ -81,11 +80,12 @@
                 <td>
                   <input
                     class="form-control"
-                    type="datetime-local"
+                    type="date"
                     name="endDate"
                     formControlName="endDate"
                   />
                 </td>
+
 
                 <td align="center">
                   <button
@@ -93,47 +93,14 @@
                     class="btn btn-icon btn-primary me-2 btn-sm"
                     (click)="openUploadModal($index)"
                   >
-                    <span class="svg-icon svg-icon-primary svg-icon-2x"
-                      ><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Files\Export.svg--><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                      >
-                        <g
-                          stroke="none"
-                          stroke-width="1"
-                          fill="none"
-                          fill-rule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24" />
-                          <path
-                            style="fill: white !important"
-                            d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z"
-                            fill="#000000"
-                            fill-rule="nonzero"
-                            opacity="0.3"
-                          />
-                          <rect
-                            fill="#000000"
-                            transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) "
-                            x="11"
-                            y="2"
-                            width="2"
-                            height="12"
-                            rx="1"
-                          />
-                          <path
-                            style="fill: white !important"
-                            d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z"
-                            fill-rule="nonzero"
-                            transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "
-                          />
-                        </g></svg
-                      ><!--end::Svg Icon--></span
-                    >
+                  <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Files\Export.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24"/>
+                        <path style="fill: white !important;" d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                        <rect fill="#000000"  transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                        <path style="fill: white !important;" d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z"  fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+                    </g>
+                </svg><!--end::Svg Icon--></span>
                   </button>
                 </td>
 
@@ -183,23 +150,19 @@
 
             <tr>
               <td colspan="5">
-                @if(!this.isEdit){
-                <button
-                  class="btn btn-primary mt-1 mb-1"
-                  type="button"
-                  (click)="addRow()"
-                >
-                  Add more
-                </button>
-                }
+    @if(!this.isEdit){
+      <button
+      class="btn btn-primary mt-1 mb-1"
+      type="button"
+      (click)="addRow()"
+    >
+      Add more
+    </button>
+    }
               </td>
               <td colspan="4" align="right">
-                <button
-                  class="btn btn-danger mt-1 mb-1 mx-3"
-                  type="button"
-                  (click)="back()"
-                >
-                  Back
+                <button class="btn btn-danger mt-1 mb-1 mx-3" type="button" (click)="back()">
+               Back
                 </button>
                 <button class="btn btn-success mt-1 mb-1" type="submit">
                   Save
@@ -213,189 +176,182 @@
   </form>
 </div>
 
+
 <div
-  class="modal fade"
-  id="uploadAttachmentModal"
-  tabindex="-1"
-  aria-hidden="true"
+class="modal fade"
+id="uploadAttachmentModal"
+tabindex="-1"
+aria-hidden="true"
 >
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">
-          {{ "language.generic.upload" | translate }}
-          {{ "language.generic.files" | translate }}
-        </h5>
-        <button
-          type="button"
-          class="btn-danger btn"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
-          X
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row align-items-center justify-content-center">
-          <div class="mb-1 w-75">
-            <ngx-file-drop
-              dropZoneLabel="Drop files here"
-              class="px-5"
-              (onFileDrop)="droppedFiles($event)"
-              [useDragEnter]="true"
-              [multiple]="true"
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel1">
+        {{ "language.generic.upload" | translate }}
+        {{ "language.generic.files" | translate }}
+      </h5>
+      <button
+        type="button"
+        class="btn-danger btn"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        X
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row align-items-center justify-content-center">
+        <div class="mb-1 w-75">
+          <ngx-file-drop
+            dropZoneLabel="Drop files here"
+            class="px-5"
+            (onFileDrop)="droppedFiles($event)"
+            [useDragEnter]="true"
+            accept="image/*, application/pdf"
+            [multiple]="true"
+          >
+            <ng-template
+              ngx-file-drop-content-tmp
+              let-openFileSelector="openFileSelector"
             >
-              <ng-template
-                ngx-file-drop-content-tmp
-                let-openFileSelector="openFileSelector"
+              <div
+                class="text-center dragfiles"
+                role="button"
+                (click)="openFileSelector()"
               >
-                <div
-                  class="text-center dragfiles"
-                  role="button"
-                  (click)="openFileSelector()"
-                >
-                  <i class="bx bxs-cloud-upload fs-xlarge"></i>
-                  <div class="d-flex flex-column">
-                    <span class="fs-14 text-gray-300 fw-500">{{
-                      "language.generic.dragandDrop" | translate
-                    }}</span>
-                    <span class="fs-20 text-dark fw-500">
-                      {{ "language.generic.upload" | translate }}</span
+                <i class="bx bxs-cloud-upload fs-xlarge"></i>
+                <div class="d-flex flex-column">
+                  <span class="fs-14 text-gray-300 fw-500">{{
+                    "language.generic.dragandDrop" | translate
+                  }}</span>
+                  <span class="fs-20 text-dark fw-500">
+                    {{ "language.generic.upload" | translate }}</span
+                  >
+                </div>
+              </div>
+            </ng-template>
+          </ngx-file-drop>
+        </div>
+        @if(this.attachedFiles.length > 0) {
+        <div class="mb-3 col-md-12">
+          <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>
+                   {{ "language.generic.actions" | translate }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="table-border-bottom-0">
+                @for(file of attachedFiles; track $index){
+                <tr>
+                  <td width="95%">
+                    <span
+                      class="underline"
+                      (click)="getSelectedFile($index)"
+                      >{{ file.name || file.fileName }}</span
                     >
-                  </div>
-                </div>
-              </ng-template>
-            </ngx-file-drop>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-icon btn-danger btn-sm"
+                      (click)="removeAttachment($index)"
+                    >
+                    <span class="bx bx-trash"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <g
+                        stroke="none"
+                        stroke-width="1"
+                        fill="none"
+                        fill-rule="evenodd"
+                      >
+                        <rect x="0" y="0" width="24" height="24"></rect>
+                        <path
+                          style="fill: rgb(255, 255, 255)"
+                          d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                          fill="#000000"
+                          fill-rule="nonzero"
+                        ></path>
+                        <path
+                          style="fill: rgb(255, 255, 255)"
+                          d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                          fill="#000000"
+                          opacity="0.3"
+                        ></path>
+                      </g></svg
+                  ></span>
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
           </div>
-          @if(this.attachedFiles.length > 0) {
-          <div class="mb-3 col-md-12">
-            <div class="table-responsive text-nowrap">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>File Name</th>
-                    <th>
-                      {{ "language.generic.actions" | translate }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                  @for(file of attachedFiles; track $index){
-                  <tr>
-                    <td width="95%">
-                      <span
-                        class="underline"
-                        (click)="getSelectedFile($index)"
-                        >{{ file.name || file.fileName }}</span
-                      >
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        class="btn btn-icon btn-danger btn-sm"
-                        (click)="removeAttachment($index)"
-                      >
-                        <span class="bx bx-trash"
-                          ><svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="24px"
-                            height="24px"
-                            viewBox="0 0 24 24"
-                            version="1.1"
-                          >
-                            <g
-                              stroke="none"
-                              stroke-width="1"
-                              fill="none"
-                              fill-rule="evenodd"
-                            >
-                              <rect x="0" y="0" width="24" height="24"></rect>
-                              <path
-                                style="fill: rgb(255, 255, 255)"
-                                d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
-                                fill="#000000"
-                                fill-rule="nonzero"
-                              ></path>
-                              <path
-                                style="fill: rgb(255, 255, 255)"
-                                d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                fill="#000000"
-                                opacity="0.3"
-                              ></path>
-                            </g></svg
-                        ></span>
-                      </button>
-                    </td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
+        </div>
+        }
+
+
+        <div class="col-md-12" style="overflow-x: auto; white-space: nowrap;">
+          <!-- Loop through attachedFiles array -->
+          <div *ngFor="let file of attachedFiles; let i = index" style="display: inline-block; margin-right: 10px;">
+            <!-- Image file preview -->
+            <div *ngIf="isImageFile(file)">
+              <img [src]="file?.url" class="img-fluid" alt="File preview" style="max-width: 150px;">
             </div>
-          </div>
-          }
 
-          <div class="col-md-12" style="overflow-x: auto; white-space: nowrap">
-            <!-- Loop through attachedFiles array -->
-            <div
-              *ngFor="let file of attachedFiles; let i = index"
-              style="display: inline-block; margin-right: 10px"
-            >
-              <!-- Image file preview -->
-              <div *ngIf="isImageFile(file)">
-                <img
-                  [src]="file?.url"
-                  class="img-fluid"
-                  alt="File preview"
-                  style="max-width: 150px"
-                />
-              </div>
+            <!-- PDF file preview -->
+            <div *ngIf="isPdfFile(file)" style="width: 150px; height: 200px;">
+              <object
+                [data]="file?.url"
+                type="application/pdf"
+                width="100%"
+                height="100%">
+                <p>Unable to display PDF file.
+                  <a [href]="file?.url" target="_blank">Download</a> instead.
+                </p>
+              </object>
+            </div>
 
-              <!-- PDF file preview -->
-              <div *ngIf="isPdfFile(file)" style="width: 150px; height: 200px">
-                <object
-                  [data]="file?.url"
-                  type="application/pdf"
-                  width="100%"
-                  height="100%"
-                >
-                  <p>
-                    Unable to display PDF file.
-                    <a [href]="file?.url" target="_blank">Download</a> instead.
-                  </p>
-                </object>
-              </div>
-
-              <!-- Other file types -->
-              <div *ngIf="!isImageFile(file) && !isPdfFile(file)">
-                <div class="alert alert-info">
-                  <i class="bx bx-info-circle me-2"></i>
-                  Preview not available for this file type. Click to download:
-                  <a [href]="file?.url" download>{{
-                    file?.name || file?.fileName
-                  }}</a>
-                </div>
+            <!-- Other file types -->
+            <div *ngIf="!isImageFile(file) && !isPdfFile(file)">
+              <div class="alert alert-info">
+                <i class="bx bx-info-circle me-2"></i>
+                Preview not available for this file type. Click to download:
+                <a [href]="file?.url" download>{{file?.name || file?.fileName}}</a>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-outline-secondary"
-          data-bs-dismiss="modal"
-        >
-          {{ "language.generic.close" | translate }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="saveItemAttachment()"
-        >
-          {{ "language.generic.save" | translate }}
-        </button>
+
+
       </div>
     </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        data-bs-dismiss="modal"
+      >
+        {{ "language.generic.close" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveItemAttachment()"
+      >
+        {{ "language.generic.save" | translate }}
+      </button>
+    </div>
   </div>
+</div>
 </div>

@@ -105,7 +105,7 @@
       <!--begin::Button-->
       <button
         routerLink="/employee/education-history/add"
-        [queryParams]="{ empId: this.id }"
+        [queryParams]="{id:this.id}"
         class="btn btn-primary font-weight-bolder"
       >
         <span class="svg-icon svg-icon-md">
@@ -146,55 +146,25 @@
       <table class="datatable-table" style="display: block; overflow-x: auto">
         <thead class="datatable-head">
           <tr class="datatable-row" style="left: 0px">
-            <th
-              data-field="RecordID"
-              class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted"
-              data-sort="asc"
-              style="text-align: center; white-space: nowrap"
-            >
-              <span>#<i class="flaticon2-arrow-up"></i></span>
+            <th data-field="RecordID"
+            class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
+            <span style="width: 40px;">#<i class="flaticon2-arrow-up"></i></span>
+          </th>
+
+
+            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+              <span style="width: 250px;"> Organization </span>
             </th>
 
-            <th
-              data-field="OrderID"
-              class="datatable-cell datatable-cell-sort"
-              style="text-align: left; white-space: nowrap"
-            >
-              <span> Education Title </span>
+
+            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+              <span style="width: 250px;"> Institution </span>
             </th>
 
-            <th
-              data-field="OrderID"
-              class="datatable-cell datatable-cell-sort"
-              style="text-align: left; white-space: nowrap"
-            >
-              <span> Institution </span>
-            </th>
 
-            <th
-              data-field="OrderID"
-              class="datatable-cell datatable-cell-sort"
-              style="text-align: center; white-space: nowrap"
-            >
-              <span> Start Date </span>
-            </th>
 
-            <th
-              data-field="OrderID"
-              class="datatable-cell datatable-cell-sort"
-              style="text-align: center; white-space: nowrap"
-            >
-              <span> End Date </span>
-            </th>
-
-            <th
-              data-field="Actions"
-              data-autohide-disabled="false"
-              class="datatable-cell datatable-cell-sort"
-              style="text-align: center; white-space: nowrap"
-            >
-              <span>{{ "language.generic.actions" | translate }}</span>
-            </th>
+            <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
+              style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
           </tr>
         </thead>
         <tbody class="datatable-body">
@@ -211,75 +181,34 @@
               data-field="RecordID"
               aria-label="1"
             >
-              <span style="width: 50px"
+              <span
                 ><span class="font-weight-bolder px-3">
                   {{ (pageNo - 1) * pageSize + $index + 1 }}
                 </span></span
               >
             </td>
 
-            <td
-              data-field="ShipDate"
-              aria-label="10/15/2017"
-              class="datatable-cell"
-            >
-              <span style="width: 60px">
-                <div class="font-weight-bolder text-primary mb-0">
-                  {{ data.educationTitle || "N/A" }}
-                </div>
-              </span>
-            </td>
-
-            <td
-              style="width: 130px"
-              data-field="OrderID"
-              aria-label="64616-103"
-              class="datatable-cell"
-            >
-              <span>
+            <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <span style="width: 250px;" >
                 <div class="d-flex align-items-center">
-                  <div
-                    class="text-dark-75 font-weight-bolder font-size-lg mb-0"
-                  >
-                    {{ data.institution || "N/A" }}
+                  <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    {{ data.educationTitle}}
                   </div>
                 </div>
               </span>
             </td>
 
-            <td
-              data-field="OrderID"
-              aria-label="64616-103"
-              class="datatable-cell"
-            >
-              <span>
+            <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <span style="width: 250px;" >
                 <div class="d-flex align-items-center">
-                  <div
-                    class="text-dark-75 font-weight-bolder font-size-lg mb-0"
-                  >
-                    {{ data.startDate | date : "yyyy-MM-dd" }}
-                    {{ data.startDate || "N/A" }}
+                  <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    {{ data.institution}}
                   </div>
                 </div>
               </span>
             </td>
 
-            <td
-              data-field="OrderID"
-              aria-label="64616-103"
-              class="datatable-cell"
-            >
-              <span>
-                <div class="d-flex align-items-center">
-                  <div
-                    class="text-dark-75 font-weight-bolder font-size-lg mb-0"
-                  >
-                    {{ data.endDate | date : "yyyy-MM-dd" }}
-                    {{ data.endDate || "N/A" }}
-                  </div>
-                </div>
-              </span>
-            </td>
+
 
             <td
               data-field="Actions"
@@ -290,10 +219,7 @@
               <span style="overflow: visible; position: relative; width: 130px">
                 <a
                   [routerLink]="['/employee/education-history/edit']"
-                  [queryParams]="{
-                    id: data.employeeEducationId,
-                    empId: this.id
-                  }"
+                  [queryParams]="{editId: data.employeeEducationId,id:this.id}"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                   title="Edit details"
                 >
@@ -380,7 +306,7 @@
 
                 <button
                   data-bs-toggle="modal"
-                  [disabled]="!data.isActive"
+
                   [attr.data-bs-target]="'#modal-' + $index"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
                   title="Delete"

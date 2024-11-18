@@ -8,14 +8,16 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { IAttachmentType, IAttachmentTypeRes } from '../../../../types';
+import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
+
+
 
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule,  TranslateModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -37,22 +39,23 @@ export class AddEditComponent {
   expenseSubDetailId = 0;
   attachmentIndex: number = -1;
   isViewOnly: boolean = false;
-  editId: string;
+  editId:string;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
-  id: string = '';
+  id:string = '';
+  patchData:any
 
   constructor(
     private _router: Router,
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
-    private _route: ActivatedRoute, private _sanitizer: DomSanitizer,
+    private _route: ActivatedRoute,private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
     this._route.queryParams.subscribe(params => {
-      this.id = params['empId']
+      this.id = params['id']
       this.selectedValues = {};
 
 
@@ -81,56 +84,91 @@ export class AddEditComponent {
   }
 
   ngOnInit(): void {
-
     if (this.isEdit) {
-      this._apiCalling.getData("EmployeeEducation", `getEmployeeEducationById/${this.editId}`, true, { employeeId: this.id }).subscribe({
-        next: (response: any) => {
-          if (response?.success) {
-            this.patchFormValues(response.data);
-          } else {
-            this._toaster.error('Error fetching Employee Education', 'Error!');
+      this._apiCalling.getData("EmployeeEducation", `getEmployeeEducationById/${this.editId}`, true, { employeeId: this.id })
+        .subscribe({
+          next: (response: any) => {
+            if (response?.success) {
+              this.patchData = response.data;
+              this.patchFormValues(this.patchData);
+            } else {
+              this._toaster.error('Error fetching Education History', 'Error!');
+            }
+          },
+          error: () => {
+            this._toaster.error('Error fetching Education History', 'Error!');
           }
-        },
-        error: () => {
-          this._toaster.error('Error fetching Employee Education', 'Error!');
-        }
-      });
+        });
     }
-
-    this.getAttachmentTypes()
+    this.getAttachmentTypes();
   }
 
 
   private patchFormValues(data: any): void {
-    console.warn(data);
-
     if (data) {
-      const workHistoryFormArray = this.mainForm.get('tableData') as FormArray;
+      console.log('API Response:', data);
 
-      while (workHistoryFormArray.length) {
-        workHistoryFormArray.removeAt(0);
+      // Patch main form values
+      const workHistoryData = {
+        educationTitle: data.educationTitle || '',
+        institution: data.institution || '',
+        attachmentTypeId: data.attachmentTypeId || '',
+        startDate: this.formatDateToISOString(data.startDate ? new Date(data.startDate) : null),
+        endDate: this.formatDateToISOString(data.endDate ? new Date(data.endDate) : null),
+
+      };
+
+      // Now patch the main form with Education History data
+      this.mainForm.patchValue({
+        educationTitle: workHistoryData.educationTitle,
+        institution: workHistoryData.institution,
+        attachmentTypeId: workHistoryData.attachmentTypeId,
+        startDate: workHistoryData.startDate,
+        endDate: workHistoryData.endDate,
+      });
+      console.log('Formatted Dates:', workHistoryData.startDate, workHistoryData.endDate);
+
+      // Now, if you want to set the data for the table rows as well:
+      if (this.tableData.length === 0) {
+        this.addRow();
       }
 
-      const expenseItemForm = this._fb.group({
-        educationTitle: [data.educationTitle, [Validators.required]],
-        institution: [data.institution, [Validators.required]],
-        attachmentTypeId: [data.attachmentTypeId, [Validators.required]],
-        startDate: [data.startDate, [Validators.required]],
-        endDate: [data.endDate, [Validators.required]],
-      });
-      workHistoryFormArray.push(expenseItemForm);
-    }
+      // If you need to populate the table row with the data
+      const workHistoryForm = this._fb.group(workHistoryData);
+      this.tableData.at(0).patchValue(workHistoryData);
 
-    // Optionally, if there are attachments or other data that need to be patched
-    this.itemAttachment = data?.attachments || [];
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+      // Handle attachments if available
+      if (data.educationAttachments && data.educationAttachments.length > 0) {
+        console.log('Attachments:', data.educationAttachments);
+
+
+
+        localStorage.setItem('attachments', JSON.stringify(
+          [
+            {
+              index:0,
+              attachments:data.educationAttachments.map((attachment: any) => ({
+                name: attachment.documentName,
+                type: attachment.documentPath.split(".").pop() == "pdf" ? "application/pdf" : ("image/" + attachment.documentPath.split(".").pop()),
+                url: attachment.documentPath
+              }))
+            }
+          ]
+      ));
+
+
+      }
+    } else {
+      console.error('No data found to patch');
     }
   }
+
+
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    localStorage.setItem('attachments', JSON.stringify([]));
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('expense');
     }
@@ -164,28 +202,37 @@ export class AddEditComponent {
   }
 
   addRow() {
-    const expenseItemForm = this._fb.group(
-      {
-        educationTitle: ['', [Validators.required]],
-        institution: ['', [Validators.required]],
-        attachmentTypeId: ['', [Validators.required]],
-        startDate: ['', [Validators.required]],
-        endDate: ['', [Validators.required]],
-      });
-    this.tableData.push(expenseItemForm);
+    const formData = this._fb.group({
+      educationTitle: [this.patchData?.educationTitle || '', [Validators.required]],
+      institution: [this.patchData?.institution || '', [Validators.required]],
+      attachmentTypeId: [this.patchData?.attachmentTypeId || '', [Validators.required]],
+      startDate: [this.patchData?.startDate || '', [Validators.required]],
+      endDate: [this.patchData?.endDate || '', [Validators.required]],
+    });
+    this.tableData.push(formData);
   }
+
 
 
   deleteRow(index: number): void {
 
     if (index >= 0 && index < this.tableData.length) {
-      const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
-      this.mainForm.setControl('tableData', this._fb.array(updatedControls));
+        const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
+        this.mainForm.setControl('tableData', this._fb.array(updatedControls));
     } else {
     }
 
-  }
+}
 
+private formatDateToISOString(date: Date | null): string | null {
+  if (date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 01 to 12
+    const day = date.getDate().toString().padStart(2, '0'); // 01 to 31
+    return `${year}-${month}-${day}`;
+  }
+  return null; // Return null if no date is provided
+}
 
 
   resetForm(): void {
@@ -201,32 +248,72 @@ export class AddEditComponent {
     return type.attachmentTypeId;
   }
 
+
   onSubmit(): void {
     if (this.mainForm.invalid) {
       this.mainForm.markAllAsTouched();
-      this._toaster.error('Please fill the form before submitting', 'Validation Error');
       return;
     }
 
     const formData = new FormData();
     const formArray = this.mainForm.get('tableData') as FormArray;
 
-    formArray.value.forEach((item: any, itemIndex: number) => {
-      // Append work history fields
-      formData.append(`educationRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
-      formData.append(`educationRequest[${itemIndex}].educationTitle`, item.educationTitle || '');
-      formData.append(`educationRequest[${itemIndex}].institution`, item.institution || '');
-      formData.append(`educationRequest[${itemIndex}].startDate`, item.startDate || '');
-      formData.append(`educationRequest[${itemIndex}].endDate`, item.endDate || '');
+    if (!this.isEdit) {
+      // Create case
+      formArray.value.forEach((item: any, itemIndex: number) => {
+        // Append Education History fields
+        formData.append(`educationRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
+        formData.append(`educationRequest[${itemIndex}].educationTitle`, item.educationTitle || '');
+        formData.append(`educationRequest[${itemIndex}].institution`, item.institution || '');
+        formData.append(`educationRequest[${itemIndex}].startDate`, item.startDate || '');
+        formData.append(`educationRequest[${itemIndex}].endDate`, item.endDate || '');
+
+        const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
+
+        if (attachmentItem?.attachments?.length > 0) {
+          attachmentItem.attachments.forEach((attachment: any) => {
+            if (attachment.url) {
+              // Extract base64 data and convert to Blob
+              const base64Data = attachment.url.split(',')[1];
+              const byteCharacters = atob(base64Data);
+              const byteArrays = [];
+
+              for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+                const slice = byteCharacters.slice(offset, offset + 1024);
+                const byteNumbers = new Array(slice.length);
+
+                for (let i = 0; i < slice.length; i++) {
+                  byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+              }
+
+              const file = new Blob(byteArrays, { type: attachment.type });
+
+              // Append the file to FormData
+              formData.append(`educationRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
+            }
+          });
+        }
+      });
+    } else {
+      const itemIndex = 0;
+      const item = formArray.value[itemIndex];
+
+      formData.append('attachmentTypeId', item.attachmentTypeId || '');
+      formData.append('educationTitle', item.educationTitle || '');
+      formData.append('institution', item.institution || '');
+      formData.append('startDate', item.startDate || '');
+      formData.append('endDate', item.endDate || '');
 
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
+
       if (attachmentItem?.attachments?.length > 0) {
         attachmentItem.attachments.forEach((attachment: any) => {
           if (attachment.url) {
-            // Extract the base64 data from the URL
             const base64Data = attachment.url.split(',')[1];
-
-            // Convert base64 string into a binary Blob
             const byteCharacters = atob(base64Data);
             const byteArrays = [];
 
@@ -244,35 +331,37 @@ export class AddEditComponent {
 
             const file = new Blob(byteArrays, { type: attachment.type });
 
-            // Append the file to FormData
-            formData.append(`educationRequest[${itemIndex}].attachment`, file, attachment.name || 'file');
+            formData.append('attachment', file, attachment.name || 'file');
           }
         });
       }
+    }
 
+// Determine API method based on create or update action
+const apiCall = this.isEdit
+  ? this._apiCalling.putData('EmployeeEducation',  `updateEmployeeEducation/${this.editId}`, formData, true, this.id)
+  : this._apiCalling.postData('EmployeeEducation', "addEmployeeEducation", formData, true, this.id);
 
-    });
+apiCall
+  .pipe(takeUntil(this.ngUnsubscribe))
+  .subscribe({
+    next: (response) => {
+      localStorage.setItem('attachments', JSON.stringify([]));
+      if (response?.success) {
+        this._toaster.success(response?.message, 'Success!');
+        this.back();
+      } else {
+        this._toaster.error(response?.message, 'Error!');
+      }
+    },
+    error: () => {
+      this._toaster.error('Internal server error occurred while processing your request', 'Error');
+    },
+  });
 
-    // Make API call
-    this._apiCalling
-      .postData("EmployeeEducation", "addEmployeeEducation", formData, true, this.id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response) => {
-          localStorage.setItem('attachments', JSON.stringify([]));
-          if (response?.success) {
-            this._toaster.success(response?.message, 'Success!');
-            $('#saveBatchConfirmationModal').modal('hide');
-            this.back();
-          } else {
-            this._toaster.error(response?.message, 'Error!');
-          }
-        },
-        error: () => {
-          this._toaster.error("Internal server error occurred while processing your request", 'Error');
-        },
-      });
   }
+
+
 
 
   openUploadModal(index: any): void {
@@ -290,8 +379,14 @@ export class AddEditComponent {
 
         if (existingAttachment) {
           this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
+
+          if(attachment.base64){
             const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
             return { ...attachment, url: sanitizedUrl };
+          }else{
+
+            return attachment
+          }
           });
         }
       }
@@ -301,15 +396,25 @@ export class AddEditComponent {
 
 
   isImageFile(file: any): boolean {
+
     if (!file) return false;
-    const fileName = file.name || file.fileName || '';
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-    return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+
+if(file && file.base64){
+  const fileName = file.name || file.fileName || '';
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+  return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+}else{
+  return file.type != 'application/pdf'
+}
+
   }
 
   isPdfFile(file: any): boolean {
-    return file?.type === 'application/pdf' ||
-      (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+if(file && file.base64){
+ return (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+}else{
+  return file.type == 'application/pdf'
+}
   }
 
   droppedFiles(files: NgxFileDropEntry[]) {
@@ -358,76 +463,66 @@ export class AddEditComponent {
     this.getSelectedFile(this.attachedFiles.length - 1);
   }
 
-  removeAttachment(index: number): void {
-    // Remove the file from the attachedFiles array
-    this.attachedFiles.splice(index, 1);
+removeAttachment(index: number): void {
+  // Remove the file from the attachedFiles array
+  this.attachedFiles.splice(index, 1);
 
-    // Update the attachments in itemAttachment for the current index
+  // Update the attachments in itemAttachment for the current index
+  const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+  if (existingIndex !== -1) {
+    // Update the attachments for this index
+    this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
+  }
+
+  // Save the updated attachments to localStorage
+  if (isPlatformBrowser(this.platformId)) {
+    localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+  }
+
+}
+
+
+
+saveItemAttachment(): void {
+  if (this.attachedFiles.length > 0) {
+
+    const updatedAttachments = this.attachedFiles.map(file => {
+      const fileUrl = file.url
+                      ? file.url.changingThisBreaksApplicationSecurity
+                      : file.url;
+
+      return {
+        name: file.name,
+        type: file.type,
+        url: fileUrl,
+        base64: file.base64
+      };
+    });
+
     const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
     if (existingIndex !== -1) {
-      // Update the attachments for this index
-      this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
+      this.itemAttachment[existingIndex].attachments = updatedAttachments;
+    } else {
+      this.itemAttachment.push({
+        index: this.attachmentIndex,
+        attachments: updatedAttachments
+      });
     }
 
-    // Save the updated attachments to localStorage
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+
     }
-
   }
 
+  // Hide modal and reset files
+  $("#uploadAttachmentModal").modal('hide');
+  this.attachedFiles = [];
+}
 
 
-  saveItemAttachment(): void {
-    if (this.attachedFiles.length > 0) {
-      // Convert files to base64 or data URL for persistence
-      const updatedAttachments = this.attachedFiles.map(file => {
-        // If the file URL is a SafeResourceUrl, convert it to a string
-        const fileUrl = file.url
-          ? file.url.changingThisBreaksApplicationSecurity // Extract the actual URL
-          : file.url;
-
-        return {
-          name: file.name,
-          type: file.type,
-          url: fileUrl, // Store the actual URL string
-          base64: file.base64 // Store base64 string directly
-        };
-      });
-
-      // Log to debug before saving
-      console.log("Updated Attachments:", updatedAttachments);
-
-      // Check if an attachment already exists for the given index
-      const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
-      if (existingIndex !== -1) {
-        // If it exists, update the existing attachment entry
-        this.itemAttachment[existingIndex].attachments = updatedAttachments;
-      } else {
-        // If it doesn't exist, add a new attachment entry
-        this.itemAttachment.push({
-          index: this.attachmentIndex,
-          attachments: updatedAttachments
-        });
-      }
-
-      // Log itemAttachment to check the structure
-      console.log("Item Attachments Before Saving:", this.itemAttachment);
-
-      // Save updated attachments to localStorage
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
-      }
-    }
-
-    // Hide modal and reset files
-    $("#uploadAttachmentModal").modal('hide');
-    this.attachedFiles = [];
-  }
-
-
-  back(): void {
-    this._router.navigate([window.history.back()]);
-  }
+back(): void {
+  this._router.navigate([window.history.back()]);
+}
 
 }

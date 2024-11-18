@@ -115,7 +115,7 @@ export class EducationComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeEducation', `deleteEmployeeEducation/${id}`, id, true)
+    this.apiService.deleteData('EmployeeEducation', `deleteEmployeeEducation/${id}`, id, true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {

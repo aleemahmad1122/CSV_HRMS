@@ -42,9 +42,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   tabList: string[] = [
     'language.sidebar.employee',
-    'language.employee.workHistory',
-    'language.employee.education',
     'language.employee.department',
+    'language.employee.education',
+    'language.employee.workHistory',
   ];
   activeTab: string = this.tabList[0];
 
