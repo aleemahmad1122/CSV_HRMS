@@ -10,6 +10,7 @@ import { ApiCallingService } from '../../../../shared/Services/api-calling.servi
 import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 declare const $: any;
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 
 
@@ -48,9 +49,7 @@ export class AddEditComponent {
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
-    private _cdRef: ChangeDetectorRef,
-    private _route: ActivatedRoute,
-    private _sanitizer: DomSanitizer,
+    private _route: ActivatedRoute,private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
@@ -136,7 +135,7 @@ export class AddEditComponent {
   }
 
 
-  deleteLesson(index: number): void {
+  deleteRow(index: number): void {
 
     if (index >= 0 && index < this.tableData.length) {
         const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
@@ -162,43 +161,66 @@ export class AddEditComponent {
   }
 
   onSubmit(): void {
+    if (this.mainForm.invalid) {
+      this.mainForm.markAllAsTouched();
+      this._toaster.error('Please fill the form before submitting', 'Validation Error');
+      return;
+    }
 
-      if (this.mainForm.invalid) {
-        this.mainForm.markAllAsTouched();
-    this._toaster.error('Please fill the form before submitting', 'Validation Error');
-    return;
-  }
-
-
-    var formData = new FormData();
-    var formArray = this.mainForm.get('tableData') as FormArray;
+    const formData = new FormData();
+    const formArray = this.mainForm.get('tableData') as FormArray;
 
     formArray.value.forEach((item: any, itemIndex: number) => {
-
-
+      // Append work history fields
       formData.append(`workHistoryRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
       formData.append(`workHistoryRequest[${itemIndex}].positionTitle`, item.positionTitle || '');
       formData.append(`workHistoryRequest[${itemIndex}].organization`, item.organization || '');
-      formData.append(`workHistoryRequest[${itemIndex}].startDate`, item.startDate);
-      formData.append(`workHistoryRequest[${itemIndex}].endDate`, item.endDate );
+      formData.append(`workHistoryRequest[${itemIndex}].startDate`, item.startDate || '');
+      formData.append(`workHistoryRequest[${itemIndex}].endDate`, item.endDate || '');
 
-      // Find attachments for this index
+
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
-      if (attachmentItem?.attachments?.length > 0) {
-        attachmentItem.attachments.forEach((attachment: any) => {
-          formData.append(`workHistoryRequest[${itemIndex}].attachment`, attachment.file);
-        });
+
+if (attachmentItem?.attachments?.length > 0) {
+  attachmentItem.attachments.forEach((attachment: any) => {
+    if (attachment.url) {
+      // Extract the base64 data from the URL
+      const base64Data = attachment.url.split(',')[1];
+
+      // Convert base64 string into a binary Blob
+      const byteCharacters = atob(base64Data);
+      const byteArrays = [];
+
+      for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+        const slice = byteCharacters.slice(offset, offset + 1024);
+        const byteNumbers = new Array(slice.length);
+
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
       }
 
+      const file = new Blob(byteArrays, { type: attachment.type });
+
+      // Append the file to FormData
+      formData.append(`workHistoryRequest[${itemIndex}].attachments`, file, attachment.name || 'file');
+    }
+  });
+}
 
 
     });
 
-
-    this._apiCalling.postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true,this.id)
-      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    // Make API call
+    this._apiCalling
+      .postData("EmployeeWorkHistory", "addEmployeeWorkHistory", formData, true, this.id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
         next: (response) => {
-          localStorage.setItem('attachments',JSON.stringify([]));
+          localStorage.setItem('attachments', JSON.stringify([]));
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
             $('#saveBatchConfirmationModal').modal('hide');
@@ -207,11 +229,12 @@ export class AddEditComponent {
             this._toaster.error(response?.message, 'Error!');
           }
         },
-        error: (error) => {
-          this._toaster.error("Internal server error occured while processing your request")
-        }
-      })
+        error: () => {
+          this._toaster.error("Internal server error occurred while processing your request", 'Error');
+        },
+      });
   }
+
 
   openUploadModal(index: any): void {
     this.attachedFiles = [];
@@ -220,31 +243,23 @@ export class AddEditComponent {
     // Retrieve the attachments from localStorage
     if (isPlatformBrowser(this.platformId)) {
       const storedAttachments = localStorage.getItem('attachments');
-
       if (storedAttachments) {
-        // Parse the stored attachments from localStorage
         const parsedAttachments = JSON.parse(storedAttachments);
 
         // Find the attachment entry for the given index
         const existingAttachment = parsedAttachments?.find((attachment: any) => attachment.index === index);
 
         if (existingAttachment) {
-          // Map over the attachments and load their URLs for preview
           this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
-            // Recreate the URL using the stored base64
             const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
-            return {
-              ...attachment,
-              url: sanitizedUrl, // Trust the resource URL for preview
-            };
+            return { ...attachment, url: sanitizedUrl };
           });
         }
       }
     }
-
-    // Show the modal
     $("#uploadAttachmentModal").modal('show');
   }
+
 
   isImageFile(file: any): boolean {
     if (!file) return false;
@@ -322,18 +337,27 @@ removeAttachment(index: number): void {
 
 }
 
+
+
 saveItemAttachment(): void {
   if (this.attachedFiles.length > 0) {
     // Convert files to base64 or data URL for persistence
     const updatedAttachments = this.attachedFiles.map(file => {
-      const fileDetails = {
+      // If the file URL is a SafeResourceUrl, convert it to a string
+      const fileUrl = file.url
+                      ? file.url.changingThisBreaksApplicationSecurity // Extract the actual URL
+                      : file.url;
+
+      return {
         name: file.name,
         type: file.type,
-        url: file.url, // already a safe URL created by _sanitizer
-        base64: file.url.changingThisBreaksApplicationSecurity // Store the URL string
+        url: fileUrl, // Store the actual URL string
+        base64: file.base64 // Store base64 string directly
       };
-      return fileDetails;
     });
+
+    // Log to debug before saving
+    console.log("Updated Attachments:", updatedAttachments);
 
     // Check if an attachment already exists for the given index
     const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
@@ -348,6 +372,9 @@ saveItemAttachment(): void {
       });
     }
 
+    // Log itemAttachment to check the structure
+    console.log("Item Attachments Before Saving:", this.itemAttachment);
+
     // Save updated attachments to localStorage
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
@@ -359,8 +386,9 @@ saveItemAttachment(): void {
   this.attachedFiles = [];
 }
 
+
 back(): void {
-  this._router.navigate([`${'/employee/employee-list'}`]);
+  this._router.navigate([window.history.back()]);
 }
 
 }
