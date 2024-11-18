@@ -260,6 +260,7 @@
     },
     "employee": {
       "employee": "Employee",
+      "shift": "Shift",
       "workHistory": "Work History",
       "department": "Department & Team",
       "employeeWorkHistroyManagement": "Employee work history management",

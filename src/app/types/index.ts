@@ -68,6 +68,22 @@ export interface IEmployeeWorkHistoryRes extends ICommonRes {
 
 }
 
+
+export interface IShiftWorkHistory extends ICommon {
+  shiftId:string;
+  description:string;
+}
+
+
+export interface IShiftWorkHistoryRes extends ICommonRes {
+
+  data: {
+    shiftDetails: IShiftWorkHistory[]
+    pagination: IPagination
+  };
+
+}
+
 export interface IEmployeeEducation extends ICommon {
   employeeEducationId: string;
   employeeId: string;

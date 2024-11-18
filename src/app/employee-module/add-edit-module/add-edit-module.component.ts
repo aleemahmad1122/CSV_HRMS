@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EducationComponent } from '../components/education/education.component';
 import { WorkHistoryComponent } from '../components/work-history/work-history.component';
 import { AddEditComponent } from '../components/department-team/add-edit/add-edit.component';
+import { ShiftHistoryComponent } from '../components/shift/shift-history.component';
 
 @Component({
   selector: 'app-add-edit-module',
@@ -19,7 +20,8 @@ import { AddEditComponent } from '../components/department-team/add-edit/add-edi
     TranslateModule,
     EducationComponent,
     WorkHistoryComponent,
-    AddEditComponent
+    AddEditComponent,
+    ShiftHistoryComponent,
   ],
   templateUrl: './add-edit-module.component.html',
   styleUrls: ['./add-edit-module.component.css'],
@@ -42,6 +44,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   tabList: string[] = [
     'language.sidebar.employee',
+    'language.employee.shift',
     'language.employee.department',
     'language.employee.education',
     'language.employee.workHistory',

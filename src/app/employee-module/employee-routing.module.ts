@@ -36,6 +36,18 @@ const routes: Routes = [
         title: 'Add Department & Team',
         canActivate: [ProtectedGuard]
       },
+      {
+        path: 'shift-history/:action',
+        loadComponent: () => import(`./components/education/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+        title: 'Add Shift',
+        canActivate: [ProtectedGuard]
+      },
+      {
+        path: 'shift-history/:action',
+        loadComponent: () => import(`./components/department-team/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+        title: 'Add Shift',
+        canActivate: [ProtectedGuard]
+      },
     ]
   },
 ];
