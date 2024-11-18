@@ -219,9 +219,9 @@ export interface IEmployeeWorkHistoryRes extends ICommonRes {
 export interface IEmployeeDesignation extends ICommon {
   employeeDesignationId: string;
   employeeId: string;
-  designationId?: string;
-  departmentId?: string;
-  teamId?: string;
+  designationName?: string;
+  departmentName?: string;
+  teamName?: string;
 }
 
 export interface IEmployeeDesignationRes extends ICommonRes {

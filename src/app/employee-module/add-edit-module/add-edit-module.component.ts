@@ -6,10 +6,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
-import { DeactivatedComponent } from '../components/deactivated/deactivated.component';
 import { EducationComponent } from '../components/education/education.component';
 import { WorkHistoryComponent } from '../components/work-history/work-history.component';
-import { DepartmentTeamComponent } from './../components/department-team/department-team.component';
+import { AddEditComponent } from '../components/department-team/add-edit/add-edit.component';
 
 @Component({
   selector: 'app-add-edit-module',
@@ -18,10 +17,9 @@ import { DepartmentTeamComponent } from './../components/department-team/departm
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
-    DeactivatedComponent,
     EducationComponent,
     WorkHistoryComponent,
-    DepartmentTeamComponent,
+    AddEditComponent
   ],
   templateUrl: './add-edit-module.component.html',
   styleUrls: ['./add-edit-module.component.css'],

@@ -2,7 +2,7 @@ import { IDepartment, IDepartmentRes, IDesignationRes, IDesignations, IEmployee,
 import { ApiCallingService } from './../../../shared/Services/api-calling.service';
 import { ExportService } from './../../../shared/Services/export.service';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -30,12 +30,18 @@ export class DepartmentTeamComponent {
   pageSize = 10;
   pageNo = 1;
   totalPages = 0;
+  id: string = "";
 
   constructor(
     private apiService: ApiCallingService,
+    private route: ActivatedRoute,
     private exportService: ExportService
   ) {
     this.initializeSearch();
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      this.id = params['id']; // Ensure 'id' is present in the URL
+      console.log('Query Parameter ID:', this.id); // Debugging line
+    });
     this.getData();
     this.getDepartments();
     this.getDesignations();
@@ -77,28 +83,28 @@ export class DepartmentTeamComponent {
 
 
 
-    // Handles status change from the dropdown
-    onStatusChange(event: Event): void {
-      const selectedValue = (event.target as HTMLSelectElement).value;
-      this.selectedStatus = selectedValue;
-      this.getActiveStatusData('', selectedValue);
-    }
+  // Handles status change from the dropdown
+  onStatusChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStatus = selectedValue;
+    this.getActiveStatusData('', selectedValue);
+  }
 
-    // Fetch data filtered by active status
-    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+  // Fetch data filtered by active status
+  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
-      // Call the API with the active status filter
-      this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm, activeStatus: isActive })
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (res: IEmployeeDesignationRes) => this.handleResponse(res),
-          error: () => (this.dataList = []),
-        });
-    }
+    // Call the API with the active status filter
+    this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm, activeStatus: isActive })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IEmployeeDesignationRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm })
+    this.apiService.getData('EmployeeDesignation', 'getEmployeeDesignations', true, { searchQuery: searchTerm, employeeId: this.id })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: IEmployeeDesignationRes) => this.handleResponse(res),

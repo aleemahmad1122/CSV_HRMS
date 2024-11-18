@@ -105,7 +105,7 @@
       <!--begin::Button-->
       <button
         routerLink="/employee/education-history/add"
-        [queryParams]="{ id: this.id }"
+        [queryParams]="{ empId: this.id }"
         class="btn btn-primary font-weight-bolder"
       >
         <span class="svg-icon svg-icon-md">
@@ -150,40 +150,50 @@
               data-field="RecordID"
               class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted"
               data-sort="asc"
+              style="text-align: center; white-space: nowrap"
             >
-              <span style="width: 40px"
-                >#<i class="flaticon2-arrow-up"></i
-              ></span>
+              <span>#<i class="flaticon2-arrow-up"></i></span>
             </th>
 
             <th
-              style="width: 130px"
               data-field="OrderID"
               class="datatable-cell datatable-cell-sort"
+              style="text-align: left; white-space: nowrap"
             >
               <span> Education Title </span>
             </th>
 
-            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+            <th
+              data-field="OrderID"
+              class="datatable-cell datatable-cell-sort"
+              style="text-align: left; white-space: nowrap"
+            >
               <span> Institution </span>
             </th>
 
-            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+            <th
+              data-field="OrderID"
+              class="datatable-cell datatable-cell-sort"
+              style="text-align: center; white-space: nowrap"
+            >
               <span> Start Date </span>
             </th>
 
-            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-              <span style="width: 250px"> End Date </span>
+            <th
+              data-field="OrderID"
+              class="datatable-cell datatable-cell-sort"
+              style="text-align: center; white-space: nowrap"
+            >
+              <span> End Date </span>
             </th>
 
             <th
               data-field="Actions"
               data-autohide-disabled="false"
               class="datatable-cell datatable-cell-sort"
+              style="text-align: center; white-space: nowrap"
             >
-              <span style="width: 130px">
-                {{ "language.generic.actions" | translate }}</span
-              >
+              <span>{{ "language.generic.actions" | translate }}</span>
             </th>
           </tr>
         </thead>

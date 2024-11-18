@@ -12,8 +12,8 @@ export class ApiCallingService {
 
 
 
-  companyId:string | null = null;
-  employeeId:string | null = null;
+  companyId: string | null = null;
+  employeeId: string | null = null;
 
 
   constructor(
@@ -39,7 +39,7 @@ export class ApiCallingService {
       activeStatus?: string | number;
     }
   ): Observable<any> {
-    if(showLoader) {
+    if (showLoader) {
       this._loader.show();
     }
     const staticQueryParams = {
@@ -50,16 +50,16 @@ export class ApiCallingService {
     return this._httpClient.get<any>(`${environment.baseUrl}${controllerName}/${methodName}`, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
-  postData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean,employeeId?:string): Observable<any> {
-    if(showLoader) {
+  postData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean, employeeId?: string): Observable<any> {
+    if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId:employeeId};
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
   fileUpload<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
-    if(showLoader) {
+    if (showLoader) {
       this._loader.show();
     }
     const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
@@ -67,7 +67,7 @@ export class ApiCallingService {
   }
 
   putData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
-    if(showLoader) {
+    if (showLoader) {
       this._loader.show();
     }
     const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
@@ -75,7 +75,7 @@ export class ApiCallingService {
   }
 
   deleteData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean): Observable<any> {
-    if(showLoader) {
+    if (showLoader) {
       this._loader.show();
     }
 
@@ -91,7 +91,8 @@ export class ApiCallingService {
     return catchError(error => {
       this._loader.hide();
       return throwError(() =>
-      this._toaster.error("Internal server error occurred while processing your request")
-    )})
+        this._toaster.error("Internal server error occurred while processing your request")
+      )
+    })
   }
 }
