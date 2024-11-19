@@ -1,131 +1,148 @@
-import { Component } from '@angular/core';
-import { IShiftWorkHistory,IShiftWorkHistoryRes } from '../../../types/index';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { IEmployeeShift, IEmployeeShiftRes, IShift, IShiftRes } from '../../../types/index';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ExportService } from '../../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-shift-history',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './shift-history.component.html',
   styleUrl: './shift-history.component.css'
 })
-export class ShiftHistoryComponent {
+export class ShiftHistoryComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  private searchSubject = new Subject<string>();
-
-  dataList: IShiftWorkHistory[] = [];
-  dropDownList = [10, 50, 75, 100];
-  searchTerm = '';
-  selectedStatus: number | string = 1;
-  totalCount = 0;
-  pageSize = 10;
-  pageNo = 1;
-  totalPages = 0;
-  id:string = "";
+  employeeShifList: IEmployeeShift[] = [];
+  shiftList: IShift[] = [];
+  addEditForm: FormGroup;
+  isEditMode: boolean = false;
+  isViewMode: boolean = false;
+  isAddMode: boolean = false;
+  isSubmitted = false;
+  selectedValue: any;
+  id: string = "";
 
   constructor(
-    private apiService: ApiCallingService,
+    private fb: FormBuilder,
+    private router: Router,
     private route: ActivatedRoute,
-    private exportService: ExportService
+    private apiCalling: ApiCallingService,
+    private toaster: ToastrService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.initializeSearch();
-
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(_ => this.id = _['id']);
-    this.getData();
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id']
+    });
+    this.addEditForm = this.createForm();
   }
 
-  private initializeSearch(): void {
-    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
-      .subscribe((term) => this.getData(term));
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const action = params.get('action');
+      const id = this.route.snapshot.queryParams['id'];
+
+      // Determine the mode based on the :action parameter
+      this.isEditMode = action === 'edit';
+      this.isViewMode = action === 'view';
+      this.isAddMode = action === 'add';
+
+      if (this.isEditMode || this.isViewMode) {
+        this.loadEmployeeShift(id);
+      }
+
+      // Disable the form in view mode
+      if (this.isViewMode) {
+        this.addEditForm.disable();
+      }
+    });
+    this.getShifts();
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
-    // Handles status change from the dropdown
-    onStatusChange(event: Event): void {
-      const selectedValue = (event.target as HTMLSelectElement).value;
-      this.selectedStatus = selectedValue;
-      this.getActiveStatusData('', selectedValue);
-    }
+  getShifts(): void {
+    this.apiCalling.getData('Shift', 'getShifts', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IShiftRes) => this.shiftList = res.data.shifts,
+        error: () => this.toaster.error('Failed to load departments', 'Error'),
+      });
+  }
 
-    // Fetch data filtered by active status
-    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
-
-      // Call the API with the active status filter
-      this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (res: IShiftWorkHistoryRes) => this.handleResponse(res),
-          error: () => (this.dataList = []),
+  private loadEmployeeShift(id: string | null): void {
+    if (id && isPlatformBrowser(this.platformId)) {
+      this.apiCalling.getData("EmployeeShift", `getEmployeeShift`, true, { employeeId: this.id })
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+              this.isEditMode = response.data.employeeShiftId != null ? true : false;
+              this.isAddMode = this.isEditMode ? false : true;
+              this.selectedValue = response.data;
+              this.patchFormValues();
+            } else {
+              this.selectedValue = null;
+              this.toaster.error('Failed to load data', 'Error');
+            }
+          },
+          error: () => {
+            this.toaster.error('Error loading data', 'Error');
+          }
         });
     }
+  }
 
+  private createForm(): FormGroup {
+    return this.fb.group({
+      shiftId: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+  }
 
-  private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm,employeeId:this.id  })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: IShiftWorkHistoryRes) => this.handleResponse(res),
-        error: () => (this.dataList = []),
+  private patchFormValues(): void {
+    if (this.selectedValue) {
+      this.addEditForm.patchValue({
+        shiftId: this.selectedValue.shiftId,
+        description: this.selectedValue.description
       });
-  }
-
-  private handleResponse(response: IShiftWorkHistoryRes): void {
-    if (response?.success) {
-      const { shiftDetails, pagination } = response.data;
-      Object.assign(this, {
-        dataList: shiftDetails,
-        pageNo: pagination.pageNo,
-        pageSize: pagination.pageSize,
-        totalCount: pagination.totalCount,
-        totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
-      });
-    } else this.dataList = [];
-  }
-
-  search(event: Event): void {
-    this.searchSubject.next((event.target as HTMLInputElement).value);
-  }
-
-  changePage(newPage: number): void {
-    if (newPage > 0 && newPage <= this.totalPages) {
-      this.pageNo = newPage;
-      this.getPaginatedData();
     }
   }
 
-  changePageSize(size: number): void {
-    Object.assign(this, { pageSize: size, pageNo: 1 });
-    this.getPaginatedData();
+  submitForm(): void {
+    this.isSubmitted = true;
+    if (this.addEditForm.invalid) {
+      return;
+    }
+
+    const body = this.addEditForm.value;
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData("EmployeeShift", `updateEmployeeShift/${this.selectedValue.employeeShiftId}`, body, true, this.id)
+      : this.apiCalling.postData("EmployeeShift", "addEmployeeShift", body, true, this.id);
+
+    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.toaster.success(response.message, 'Success!');
+          this.goBack();
+        } else {
+          this.toaster.error(response?.message || 'An error occurred', 'Error!');
+        }
+      },
+      error: () => {
+        this.toaster.error('An error occurred while processing your request', 'Error');
+      }
+    });
   }
 
-  private getPaginatedData(): void {
-    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize,employeeId:this.id  };
-    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, params)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res) => this.handleResponse(res),
-        error: (err) => console.error('Error fetching data:', err),
-      });
-  }
-
-  onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeWorkHistory', `deleteEmployeeWorkHistory/${id}`, {},true,this.id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.shiftId !== id);
-        },
-        error: (err) => console.error('Error deleting Employee Work Histories:', err),
-      });
-  }
-
-  exportData(format: string): void {
-    this.exportService.exportData(format, this.dataList);
+  goBack(): void {
+    this.router.navigate(['/employee/employee-list']);
   }
 }
