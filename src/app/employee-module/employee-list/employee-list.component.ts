@@ -7,12 +7,13 @@ import { ExportService } from '../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,HighlightPipe],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })
@@ -87,7 +88,9 @@ private getActiveStatusData(searchTerm = '', isActive: number | string = 0): voi
   }
 
   search(event: Event): void {
-    this.searchSubject.next((event.target as HTMLInputElement).value);
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerm = term; // Update the bound search term for highlight pipe
+    this.searchSubject.next(term); // Debounce the API call
   }
 
   changePage(newPage: number): void {

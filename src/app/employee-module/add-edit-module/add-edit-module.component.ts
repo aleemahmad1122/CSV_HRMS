@@ -97,7 +97,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      employeeImage: ['', Validators.required],
+      employeeImage: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -166,6 +166,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.isSubmitted = true;
+    console.log(this.addEditForm.invalid);
+
     if (this.addEditForm.invalid) {
       return;
     }

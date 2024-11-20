@@ -1,0 +1,53 @@
+
+<div class="d-flex flex-column-fluid">
+  <div class="container">
+    <div class="card card-custom">
+      <form>
+        <div class="card-body">
+          <div class="form-group row   ">
+            <div class="mb-1 w-75 mx-auto">
+              <ngx-file-drop
+              dropZoneLabel="Drop Excel files here"
+                class="px-5"
+                (onFileDrop)="droppedFiles($event)"
+                [useDragEnter]="true"
+                accept=".xlsx, .xls"
+                [multiple]="false"
+              >
+                <ng-template
+                  ngx-file-drop-content-tmp
+                  let-openFileSelector="openFileSelector"
+                >
+                  <div
+                    class="text-center dragfiles"
+                    role="button"
+                    (click)="openFileSelector()"
+                  >
+                    <i class="bx bxs-cloud-upload fs-xlarge"></i>
+                    <div class="d-flex flex-column">
+                      <span class="fs-14 text-gray-300 fw-500">{{
+                        "language.generic.dragandDrop" | translate
+                      }}</span>
+                      <span class="fs-20 text-dark fw-500">
+                        {{ "language.generic.upload" | translate }}</span
+                      >
+                    </div>
+                  </div>
+                </ng-template>
+              </ngx-file-drop>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="card-footer  d-flex align-items-center justify-content-end">
+          <button   class="btn btn-light-danger mr-2" (click)="this.back()">Back</button>
+              <button type="submit" class="btn btn-primary" (click)="this.onSubmit()" >Submit</button>
+        </div>
+      </form>
+      </div>
+  </div>
+</div>
+
+

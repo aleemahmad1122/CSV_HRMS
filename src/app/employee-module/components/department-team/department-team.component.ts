@@ -126,7 +126,9 @@ export class DepartmentTeamComponent {
   }
 
   search(event: Event): void {
-    this.searchSubject.next((event.target as HTMLInputElement).value);
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerm = term; // Update the bound search term for highlight pipe
+    this.searchSubject.next(term); // Debounce the API call
   }
 
   changePage(newPage: number): void {

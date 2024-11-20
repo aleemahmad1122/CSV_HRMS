@@ -131,11 +131,15 @@
                       {{ (pageNo - 1) * pageSize + $index + 1 }}
                     </span></span>
                 </td>
-                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                  <span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.name || "N/A"}}</div>
+                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0"
+                           [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
+                      </div>
                     </div>
-                  </span></td>
+                  </span>
+                </td>
 
                 <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
                     <div class="font-weight-bolder text-primary mb-0">{{data.description.slice(0,15) || "N/A"}}

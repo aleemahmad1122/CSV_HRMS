@@ -46,6 +46,14 @@ export const routes: Routes = [
         canActivate: [ProtectedGuard]
     },
 
+
+    {
+        path: 'attendance',
+        loadChildren: () => import('./attendance-module/attendance.module').then(m => m.AttendanceModuleModule),
+        data:{ breadcrumb: 'Attendance' },
+        canActivate: [ProtectedGuard]
+    },
+
     {
         path: '**',
         redirectTo:"",

@@ -37,14 +37,17 @@
       "report": "Report",
       "permission": "Permission",
       "role": "Role",
-      "shift": "Shift"
+      "shift": "Shift",
+      "attendanceImport": "Attendance Import"
     },
     "form": {
-      "designationId":"Designation Id",
-      "departmentId":"Department Id",
-      "selectDepartment":"Select Department",
-      "selectDesignation":"Select Designation",
-      "teamId":"Team Id",
+      "comment": "Comment",
+      "selectstatus": "Select Status",
+      "designationId": "Designation Id",
+      "departmentId": "Department Id",
+      "selectDepartment": "Select Department",
+      "selectDesignation": "Select Designation",
+      "teamId": "Team Id",
       "companyEmail": "admin@csv.com",
       "firstAddress": "First address",
       "selectCountry": "Select Country",
@@ -88,6 +91,7 @@
     "placeholders": {
       "name": "Name",
       "description": "Description",
+      "comment": "Comment",
       "parentItem": "Parent Item",
       "website": "https://www.example.com/",
       "contactNumber": "03000000000",
@@ -110,7 +114,11 @@
       "edit": "Edit"
     },
     "errors": {
+      "dateequired": "Date is Required",
+      "commentRequired": "Comment is Required",
       "maxFileSize": "Max file size",
+      "checkInequired": "Check In is Required",
+      "checkOutRequired": "Check Out is Required",
       "allowedFormats": "Allowed formats",
       "nameRequired": "Name is required",
       "parentItemRequired": "Parent Item is required",
@@ -133,6 +141,11 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
+      "date": "Date",
+      "add": "Add",
+      "attendance": "Attendance",
+      "checkOut": "Check Out",
+      "checkIn": "Check In",
       "save": "Save",
       "close": "Close",
       "upload": "Upload",
@@ -217,8 +230,8 @@
       "projectManagement": "Project Management",
       "projectHeading": "Project management made easy"
     },
-    "workHistory":{
-        "workHistoryManagement": "Work History Management",
+    "workHistory": {
+      "workHistoryManagement": "Work History Management",
       "workHistoryHeading": "Work History management made easy"
     },
     "qualification": {

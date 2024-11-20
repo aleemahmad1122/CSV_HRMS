@@ -69,6 +69,17 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
   ]
 
+  attendanceItems: Sidebar[] = [
+    {
+      name: 'language.sidebar.attendance',
+      route: '/attendance/attendance-list'
+    },
+    {
+      name: 'language.sidebar.attendanceImport',
+      route: '/attendance/import'
+    },
+  ]
+
   manageItems: Sidebar[] = [
     {
       name: 'language.sidebar.document',
