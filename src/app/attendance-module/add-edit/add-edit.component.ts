@@ -20,7 +20,7 @@ export class AddEditComponent  implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
 
-  id:string = "344f3029-029a-4baf-8ae4-5b7888bd2d5c";
+  id:string;
 
   constructor(
     private fb: FormBuilder,
@@ -30,33 +30,34 @@ export class AddEditComponent  implements OnInit, OnDestroy {
     private toaster: ToastrService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      this.id = params['id'];
+      const editId = params['editId'];
+      this.isEditMode = editId;
+
+      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+        this.apiCalling.getData("Attendance", `getAttendanceById/${editId}`,  true,{employeeId:this.id})
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+                this.selectedValue = response?.data;
+                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
+            } else {
+              this.selectedValue = [];
+            }
+          },
+          error: (error) => {
+            this.selectedValue = [];
+          }
+        });
+        // this.patchFormValues(); // Removed this line
+      }
+    });
     this.addEditForm = this.createForm();
   }
 
   ngOnInit(): void {
-    window.origin = "hacked by hacker"
-    // this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-    //   const id = params['id'];
-    //   this.isEditMode = id;
 
-    //   if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-    //     this.apiCalling.getData("Attendance", `getJobById/${id}`,  true)
-    //     .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-    //       next: (response) => {
-    //         if (response?.success) {
-    //             this.selectedValue = response?.data;
-    //             this.patchFormValues(); // Call patchFormValues here after setting selectedValue
-    //         } else {
-    //           this.selectedValue = [];
-    //         }
-    //       },
-    //       error: (error) => {
-    //         this.selectedValue = [];
-    //       }
-    //     });
-    //     // this.patchFormValues(); // Removed this line
-    //   }
-    // });
   }
 
   ngOnDestroy(): void {
@@ -103,11 +104,10 @@ export class AddEditComponent  implements OnInit, OnDestroy {
       checkOut: new Date(`${formValue.date}T${formValue.checkOut}`).toISOString(),
     };
 
-    console.log("Payload:", payload);
 
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Attendance", `updateAttendance/${this.id}`, payload, true)
+      ? this.apiCalling.putData("Attendance", `updateAttendance/${this.isEditMode}`, payload, true,this.id)
       : this.apiCalling.postData("Attendance", "addAttendance", payload, true,this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({

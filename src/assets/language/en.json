@@ -141,6 +141,10 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
+      "applyFilter":"Apply Filter",
+      "stateDate":"State Date",
+      "addAttendance":"Add Attendance",
+      "comment":"Comment",
       "date": "Date",
       "add": "Add",
       "attendance": "Attendance",
@@ -222,6 +226,10 @@
     "job": {
       "jobManagement": "Job Management",
       "jobHeading": "Job management made easy"
+    },
+    "attendance": {
+      "attendanceManagement": "Attendance Management",
+      "attendanceHeading": "Attendance management made easy"
     },
     "permission": {
       "permission": "Permission"

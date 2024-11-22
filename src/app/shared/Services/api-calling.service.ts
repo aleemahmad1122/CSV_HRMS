@@ -37,11 +37,16 @@ export class ApiCallingService {
       limit?: number;
       searchQuery?: string;
       activeStatus?: string | number;
+      startDate?:string;
+      endDate?:string;
     }
   ): Observable<any> {
     if (showLoader) {
       this._loader.show();
     }
+
+    console.log(paginationParams);
+
     const staticQueryParams = {
       companyId: this._localStorage.getCompanyDetail().companyId,
       activeStatus: paginationParams?.activeStatus ?? 1,

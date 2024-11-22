@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IEmployee,IEmployeeRes } from '../../types/index';
-import { RouterModule } from '@angular/router';
+import { IAttendanceList, IAttendanceListRes } from '../../types/index';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ExportService } from '../../shared/Services/export.service';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
@@ -12,16 +12,15 @@ import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
   templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+  styleUrls: ['./list.component.css'],
 })
-export class ListComponent   {
+export class ListComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-
-  dataList: IEmployee[] = [];
+  dataList: IAttendanceList[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -30,66 +29,169 @@ export class ListComponent   {
   pageNo = 1;
   totalPages = 0;
 
+  msg:string = '';
+
+  startDate = '';
+  endDate = new Date().toISOString();
+
+  id: string;
+
   constructor(
     private apiService: ApiCallingService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private route: ActivatedRoute
   ) {
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
+      this.id = params['id'];
+    });
+
+    // Set default dates for Month to Date (MTD)
+    const today = new Date();
+    this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+    this.endDate = today.toISOString().split('T')[0];
+
     this.initializeSearch();
     this.getData();
   }
 
-  private initializeSearch(): void {
-    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
-      .subscribe((term) => this.getData(term));
+
+  setFilter(option: string): void {
+    const today = new Date();
+    switch (option) {
+      case 'YTD': // Year to Date
+        this.startDate = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+        break;
+      case 'MTD': // Month to Date
+        this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+        break;
+      case 'QTD': // Quarter to Date
+        const currentQuarter = Math.floor(today.getMonth() / 3);
+        this.startDate = new Date(today.getFullYear(), currentQuarter * 3, 1).toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+        break;
+      case 'PreviousYear':
+        const lastYear = today.getFullYear() - 1;
+        this.startDate = new Date(lastYear, 0, 1).toISOString().split('T')[0];
+        this.endDate = new Date(lastYear, 11, 31).toISOString().split('T')[0];
+        break;
+      case 'PreviousMonth':
+        const firstDayPrevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const lastDayPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        this.startDate = firstDayPrevMonth.toISOString().split('T')[0];
+        this.endDate = lastDayPrevMonth.toISOString().split('T')[0];
+        break;
+      case 'Last7Days':
+        const lastWeek = new Date(today);
+        lastWeek.setDate(today.getDate() - 6); // Go back 6 days from today
+        this.startDate = lastWeek.toISOString().split('T')[0];
+        this.endDate = today.toISOString().split('T')[0];
+        break;
+      default:
+        break;
+    }
   }
 
 
- // Handles status change from the dropdown
- onStatusChange(event: Event): void {
-  const selectedValue = (event.target as HTMLSelectElement).value;
-  this.selectedStatus = selectedValue;
-  this.getActiveStatusData('', selectedValue);
-}
+  dateTime(date:string):string{
+    return new Date(date).toISOString().split('T')[1].split('Z')[0];
+  }
 
-// Fetch data filtered by active status
-private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+  onStartDateChange(event: Event): void {
+    const selectedDate = (event.target as HTMLInputElement).value;
+    this.startDate = selectedDate; // Update local state
+  }
 
-  // Call the API with the active status filter
-  this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm, activeStatus: isActive })
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (res: IEmployeeRes) => this.handleResponse(res),
-      error: () => (this.dataList = []),
-    });
-}
+  onEndDateChange(event: Event): void {
+    const selectedDate = (event.target as HTMLInputElement).value;
+    this.endDate = selectedDate; // Update local state
+  }
 
+  applyDateFilter(): void {
+    if (this.startDate && this.endDate) {
+      this.msg = ''
+      const params = {
+        searchQuery: this.searchTerm,
+        employeeId: this.id,
+        startDate: this.startDate,
+        endDate: this.endDate,
+      };
+      this.apiService
+        .getData('Attendance', 'getAttendanceByDateRange', true, params)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (res: IAttendanceListRes) => this.handleResponse(res),
+          error: () => (this.dataList = []),
+        });
+    } else {
+      this.msg = "Both start Date and end Date must be selected before applying the filter."
+    }
+  }
+  private initializeSearch(): void {
+    this.searchSubject
+      .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
+      .subscribe((term) => this.getData(term));
+  }
 
-  private getData(searchTerm = ''): void {
-    this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm })
+  onStatusChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStatus = selectedValue;
+    this.getActiveStatusData('', selectedValue);
+  }
+
+  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+    const params = {
+      searchQuery: searchTerm,
+      activeStatus: isActive,
+      employeeId: this.id,
+      endDate: this.endDate,
+    };
+
+    this.apiService
+      .getData('Attendance', 'getAttendanceByDateRange', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeRes) => this.handleResponse(res),
+        next: (res: IAttendanceListRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IEmployeeRes): void {
+  private getData(searchTerm = ''): void {
+    const params = {
+      searchQuery: searchTerm,
+      employeeId: this.id,
+      endDate: this.endDate,
+    };
+
+    this.apiService
+      .getData('Attendance', 'getAttendanceByDateRange', true, params)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IAttendanceListRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
+
+  private handleResponse(response: IAttendanceListRes): void {
     if (response?.success) {
-      const {employeeDetails, pagination } = response.data;
+      const { attendances, pagination } = response.data;
       Object.assign(this, {
-        dataList: employeeDetails,
+        dataList: attendances,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
         totalPages: Math.ceil(pagination.totalCount / pagination.pageSize),
       });
-    } else this.dataList = [];
+    } else {
+      this.dataList = [];
+    }
   }
 
   search(event: Event): void {
     const term = (event.target as HTMLInputElement).value;
-    this.searchTerm = term; // Update the bound search term for highlight pipe
-    this.searchSubject.next(term); // Debounce the API call
+    this.searchTerm = term;
+    this.searchSubject.next(term);
   }
 
   changePage(newPage: number): void {
@@ -105,8 +207,16 @@ private getActiveStatusData(searchTerm = '', isActive: number | string = 0): voi
   }
 
   private getPaginatedData(): void {
-    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Employee', 'getEmployees', true, params)
+    const params = {
+      searchQuery: this.searchTerm,
+      pageNo: this.pageNo,
+      pageSize: this.pageSize,
+      employeeId: this.id,
+      endDate: this.endDate,
+    };
+
+    this.apiService
+      .getData('Attendance', 'getAttendanceByDateRange', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -115,21 +225,21 @@ private getActiveStatusData(searchTerm = '', isActive: number | string = 0): voi
   }
 
   onDelete(id: string): void {
-    console.log(id);
-
-    this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
+    alert('API not available');
+    this.apiService
+      .deleteData('Project', `deleteProject/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeId !== id);
+          if (res?.success) {
+            this.dataList = this.dataList.filter((d) => d.attendanceId !== id);
+          }
         },
-        error: (err) => console.error('Error deleting Employee:', err),
+        error: (err) => console.error('Error deleting project:', err),
       });
   }
 
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
   }
-
-
 }

@@ -323,6 +323,27 @@ export interface IEmployeeRes extends ICommonRes {
 }
 
 
+export interface IAttendanceList extends ICommon {
+  attendanceId: string;
+  employeeId: string;
+  date: null | string;
+  checkIn: null | string;
+  checkOut: null | string;
+  offSet: null | string;
+  comment: null | string;
+}
+
+
+export interface IAttendanceListRes extends ICommonRes {
+
+  data: {
+    attendances: IAttendanceList[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IClientRes extends ICommonRes {
 
   data: {

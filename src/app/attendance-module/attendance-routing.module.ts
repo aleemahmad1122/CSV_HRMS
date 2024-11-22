@@ -4,6 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'employee',
+    loadComponent: () => import(`./components/employee/employee.component`).then(c => c.EmployeeComponent),
+    data: { breadcrumb: 'Attendances List' },
+    title: 'Attendances Employee List',
+  },
+  {
     path: 'attendance-list',
     loadComponent: () => import(`./list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Attendances List' },

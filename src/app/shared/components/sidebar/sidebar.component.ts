@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   attendanceItems: Sidebar[] = [
     {
       name: 'language.sidebar.attendance',
-      route: '/attendance/attendance-list'
+      route: '/attendance/employee'
     },
     {
       name: 'language.sidebar.attendanceImport',
