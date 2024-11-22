@@ -6,6 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { DpDatePickerModule } from 'ng2-date-picker';
+
 
 interface Status {
   statusId: number | string;
@@ -15,12 +17,15 @@ interface Status {
 @Component({
   selector: 'app-add-edit-project',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
   templateUrl: './add-edit-project.component.html',
   styleUrls: ['./add-edit-project.component.css']
 })
 export class AddEditProjectComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
+  datePickerConfig = {
+    format: 'DD-MM-YYYY',
+  };
   addEditForm: FormGroup;
   currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
 
@@ -75,7 +80,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      startDate: ['', Validators.required],
+      startDate: [`${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`, Validators.required],
       endDate: ['', Validators.required],
       statusId: ['1', Validators.required],
       description: ['', Validators.required],

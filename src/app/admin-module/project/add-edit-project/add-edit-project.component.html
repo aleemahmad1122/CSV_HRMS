@@ -44,9 +44,17 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label class="form-label">{{ 'language.form.startDate' | translate }} <span class="text-danger">*</span></label>
+        <dp-date-picker 
+        class="form-control"
+        formControlName="startDate"
+        [config]="datePickerConfig"
+        theme="dp-material"
+        (change)="onStartDateChange($event)"
+        [ngClass]="{'is-invalid': (addEditForm.get('startDate')?.invalid && (addEditForm.get('startDate')?.touched || isSubmitted))}" ></dp-date-picker>  
+      <!-- 
         <input type="datetime-local" class="form-control" formControlName="startDate"
           [placeholder]="'language.placeholders.startDate' | translate" (change)="onStartDateChange($event)"
-          [ngClass]="{'is-invalid': (addEditForm.get('startDate')?.invalid && (addEditForm.get('startDate')?.touched || isSubmitted))}" />
+          [ngClass]="{'is-invalid': (addEditForm.get('startDate')?.invalid && (addEditForm.get('startDate')?.touched || isSubmitted))}" /> -->
 
         <div *ngIf="addEditForm.get('startDate')?.invalid && (addEditForm.get('startDate')?.touched || isSubmitted)"
           class="invalid-feedback">
