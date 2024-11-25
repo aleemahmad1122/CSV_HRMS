@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,AfterViewInit } from '@angular/core';
 import { IAttendanceList, IAttendanceListRes } from '../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -8,6 +8,7 @@ import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-list',
@@ -16,7 +17,7 @@ import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })
-export class ListComponent {
+export class ListComponent implements AfterViewInit {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
@@ -52,6 +53,15 @@ export class ListComponent {
 
     this.initializeSearch();
     this.getData();
+  }
+
+
+  ngAfterViewInit(): void {
+    // Initialize Bootstrap tooltips
+    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
   }
 
 
@@ -134,28 +144,6 @@ export class ListComponent {
       .subscribe((term) => this.getData(term));
   }
 
-  onStatusChange(event: Event): void {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.selectedStatus = selectedValue;
-    this.getActiveStatusData('', selectedValue);
-  }
-
-  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
-    const params = {
-      searchQuery: searchTerm,
-      activeStatus: isActive,
-      employeeId: this.id,
-      endDate: this.endDate,
-    };
-
-    this.apiService
-      .getData('Attendance', 'getAttendanceByDateRange', true, params)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: IAttendanceListRes) => this.handleResponse(res),
-        error: () => (this.dataList = []),
-      });
-  }
 
   private getData(searchTerm = ''): void {
     const params = {
@@ -188,11 +176,6 @@ export class ListComponent {
     }
   }
 
-  search(event: Event): void {
-    const term = (event.target as HTMLInputElement).value;
-    this.searchTerm = term;
-    this.searchSubject.next(term);
-  }
 
   changePage(newPage: number): void {
     if (newPage > 0 && newPage <= this.totalPages) {
@@ -224,20 +207,6 @@ export class ListComponent {
       });
   }
 
-  onDelete(id: string): void {
-    alert('API not available');
-    this.apiService
-      .deleteData('Project', `deleteProject/${id}`, id, true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res) => {
-          if (res?.success) {
-            this.dataList = this.dataList.filter((d) => d.attendanceId !== id);
-          }
-        },
-        error: (err) => console.error('Error deleting project:', err),
-      });
-  }
 
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);

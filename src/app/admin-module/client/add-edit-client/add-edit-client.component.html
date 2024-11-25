@@ -39,7 +39,7 @@
 
       <div class="col-md-6 mb-3">
           <label class="form-label">{{'language.form.contactNumber' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="contactNumber"
+          <input type="number" class="form-control" formControlName="contactNumber"
               [placeholder]="'language.placeholders.contactNumber' | translate"
               [ngClass]="{'is-invalid': (addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted))}" />
           <div *ngIf="addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted)"

@@ -125,115 +125,55 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.phoneNumber" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="tel"
-          class="form-control"
-          formControlName="phoneNumber"
-          [placeholder]="'language.placeholders.phoneNumber' | translate"
-          [ngClass]="{
-            'is-invalid':
-              companyForm.get('phoneNumber')?.invalid &&
-              (companyForm.get('phoneNumber')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
-            companyForm.get('phoneNumber')?.invalid &&
-            (companyForm.get('phoneNumber')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.phoneNumberRequired" | translate }}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.phoneNumber' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="number" class="form-control" formControlName="phoneNumber"
+                    [placeholder]="'language.placeholders.phoneNumber' | translate"
+                    [ngClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}" />
+                <div *ngIf="companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.phoneNumberRequired' | translate}}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.faxNumber' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="number" class="form-control" formControlName="faxNumber"
+                    [placeholder]="'language.placeholders.faxNumber' | translate"
+                    [ngClass]="{'is-invalid': (companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted))}" />
+                <div *ngIf="companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.faxNumberRequired' | translate}}
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.faxNumber" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="tel"
-          class="form-control"
-          formControlName="faxNumber"
-          [placeholder]="'language.placeholders.faxNumber' | translate"
-          [ngClass]="{
-            'is-invalid':
-              companyForm.get('faxNumber')?.invalid &&
-              (companyForm.get('faxNumber')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
-            companyForm.get('faxNumber')?.invalid &&
-            (companyForm.get('faxNumber')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.faxNumberRequired" | translate }}
-        </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.website" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="url"
-          class="form-control"
-          formControlName="website"
-          [placeholder]="'language.placeholders.website' | translate"
-          [ngClass]="{
-            'is-invalid':
-              companyForm.get('website')?.invalid &&
-              (companyForm.get('website')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
-            companyForm.get('website')?.invalid &&
-            (companyForm.get('website')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.websiteRequired" | translate }}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.website' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="url" class="form-control" formControlName="website"
+                    [placeholder]="'language.placeholders.website' | translate"
+                    [ngClass]="{'is-invalid': (companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted))}" />
+                <div *ngIf="companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.websiteRequired' | translate}}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.registrationNumber' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="registrationNumber"
+                    [placeholder]="'language.placeholders.registrationNumber' | translate"
+                    [ngClass]="{'is-invalid': (companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted))}" />
+                <div *ngIf="companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.registrationNumberRequired' | translate}}
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.registrationNumber" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          class="form-control"
-          formControlName="registrationNumber"
-          [placeholder]="'language.placeholders.registrationNumber' | translate"
-          [ngClass]="{
-            'is-invalid':
-              companyForm.get('registrationNumber')?.invalid &&
-              (companyForm.get('registrationNumber')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
-            companyForm.get('registrationNumber')?.invalid &&
-            (companyForm.get('registrationNumber')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.registrationNumberRequired" | translate }}
-        </div>
-      </div>
-    </div>
 
     <div class="row">
       <div class="col-md-6 mb-3">

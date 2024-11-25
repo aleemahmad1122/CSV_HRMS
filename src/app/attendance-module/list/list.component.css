@@ -23,3 +23,30 @@
   bottom: -14px;
   font-size: 10px;
 }
+
+
+.custom-btn-group {
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f8f9fa; /* Light background for the group */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-btn {
+  border: 1px solid #6c757d; /* Button border */
+  border-radius: 4px; /* Rounded edges for buttons */
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-btn:hover {
+  background-color: #5a6268; /* Darker background on hover */
+  color: #fff; /* White text on hover */
+  transform: translateY(-2px); /* Lift effect on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
+}
+
+.custom-btn:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5); /* Add focus ring */
+}

@@ -7,13 +7,13 @@
         path: 'report',
         loadComponent: () => import(`./reports/list/list.component`).then(c => c.ListComponent),
         title:'Report',
-        canActivate: [ProtectedGuard]
+       // canActivate: [ProtectedGuard]
       },
       {
         path: 'report/:action',
         loadComponent: () => import(`./reports/add-edit/add-edit.component`).then(c => c.AddEditComponent),
         title:'Add Report',
-        canActivate: [ProtectedGuard]
+       // canActivate: [ProtectedGuard]
       }
   ];
 
