@@ -7,18 +7,23 @@ import { ExportService } from '../../../../shared/Services/export.service';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 import * as bootstrap from 'bootstrap';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule, DpDatePickerModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
 export class ListComponent  implements AfterViewInit {
+
+  datePickerConfig = {
+    format: 'YYYY-MM-DD',
+  };
+
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 

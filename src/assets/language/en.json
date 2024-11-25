@@ -142,6 +142,8 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
+      "emyloyee":"Emyloyee",
+      "type":"Type",
       "applyFilter":"Apply Filter",
       "stateDate":"State Date",
       "addAttendance":"Add Attendance",

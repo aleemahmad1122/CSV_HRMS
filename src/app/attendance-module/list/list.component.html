@@ -18,24 +18,26 @@
 
       <div class="mr-2 w-25 mb-3">
         <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
-        <input
-          type="date"
-          class="form-control"
-          [value]="startDate"
-          [placeholder]="'language.placeholders.time' | translate"
-          (change)="onStartDateChange($event)"
-        />
+        <dp-date-picker
+        class="form-control"
+        placeholder="00/00/00"
+        [(ngModel)]="startDate"
+      [config]="datePickerConfig"
+        theme="dp-material"
+        (change)="onStartDateChange($event)"
+      ></dp-date-picker>
       </div>
 
       <div class="mr-2 w-25 mb-3">
         <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
-        <input
-          type="date"
-          class="form-control"
-          [value]="endDate.split('T')[0]"
-          [placeholder]="'language.placeholders.time' | translate"
-          (change)="onEndDateChange($event)"
-        />
+        <dp-date-picker
+        class="form-control"
+        placeholder="00/00/00"
+        [(ngModel)]="endDate.split('T')[0]"
+      [config]="datePickerConfig"
+        theme="dp-material"
+        (change)="onEndDateChange($event)"
+      ></dp-date-picker>
       </div>
       <div class="btn-group mt-5 flex-wrap gap-3 custom-btn-group">
         <button
