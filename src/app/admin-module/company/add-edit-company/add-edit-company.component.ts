@@ -8,6 +8,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { DataShareService } from '../../../shared/Services/data-share.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 interface Typess {
   typeId: string;
@@ -17,12 +18,15 @@ interface Typess {
 @Component({
   selector: 'app-add-edit-company',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule, DpDatePickerModule],
   templateUrl: './add-edit-company.component.html',
   styleUrl: './add-edit-company.component.css'
 })
 
 export class AddEditCompanyComponent implements OnInit, OnDestroy {
+  datePickerConfig = {
+    format: 'DD-MM-YYYY',
+  };
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
   isEditMode: boolean | string = false;
@@ -133,7 +137,24 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
 
   }
 
+  private convertToDatetimeLocalFormat(dateString: string): string {
+    // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
+  }
+
+  onDateChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
+      this.companyForm.patchValue({ foundedDate: formattedValue });
+    }
+  }
+
+
   submitForm() {
+    console.log(this.companyForm.value);
+
     this.isSubmitted = true;
     if (!this.companyForm.valid) {
       return;

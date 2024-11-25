@@ -6,15 +6,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
   selector: 'app-shift-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
   templateUrl: './shift-add-edit.component.html',
   styleUrl: './shift-add-edit.component.css'
 })
-export class ShiftAddEditComponent  implements OnInit, OnDestroy {
+export class ShiftAddEditComponent implements OnInit, OnDestroy {
+
+
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
@@ -42,20 +45,20 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Shift", `getShiftById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Shift", `getShiftById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedAddEditValue = response?.data;
                 this.patchFormValues();
-            } else {
+              } else {
+                this.selectedAddEditValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedAddEditValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedAddEditValue = [];
-          }
-        });
+          });
       }
     });
   }
@@ -68,8 +71,8 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      startTime: ['', [Validators.required ]],
-      endTime: ['', [Validators.required ]],
+      startTime: ['', [Validators.required]],
+      endTime: ['', [Validators.required]],
       graceMinutes: [0],
       earlyMinutes: [0],
       description: ['']
@@ -89,7 +92,57 @@ export class ShiftAddEditComponent  implements OnInit, OnDestroy {
     }
   }
 
+
+  // Converts the selected date/time into the format 'yyyy-MM-ddTHH:mm'
+  private convertToTimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+
+    // Ensure that the time is formatted as `HH:mm` and in the 'yyyy-MM-ddTHH:mm' format
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');  // Month is zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Return formatted date as `yyyy-MM-ddTHH:mm`
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  onStartTimeChange(event: any): void {
+    const inputValue = event.target.value;
+
+    if (inputValue) {
+      // Convert the selected time into the desired format
+      const formattedValue = this.convertToTimeLocalFormat(inputValue);
+
+      // Update the form control with the formatted value
+      this.addEditForm.patchValue({ startTime: formattedValue });
+    }
+  }
+
+  onEndTimeChange(event: any): void {
+    const inputValue = event.target.value;
+
+    if (inputValue) {
+      // Convert the selected time into the desired format
+      const formattedValue = this.convertToTimeLocalFormat(inputValue);
+
+      // Update the form control with the formatted value
+      this.addEditForm.patchValue({ endTime: formattedValue });
+    }
+  }
+
+  // Date picker configuration to support 24-hour format and time selection
+  datePickerConfig = {
+    hour12: false,  // Use 24-hour format
+    timePicker: true,  // Enable time picker
+    format: 'HH:mm',  // Set the time format for the picker
+  };
+
+
   submitForm(): void {
+    console.log(this.addEditForm.value);
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;

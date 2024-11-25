@@ -80,7 +80,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      startDate: [`${new Date().getDate()}-${new Date().getMonth()+1}-${new Date().getFullYear()}`, Validators.required],
+      startDate: [`${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}`, Validators.required],
       endDate: ['', Validators.required],
       statusId: ['1', Validators.required],
       description: ['', Validators.required],
@@ -131,6 +131,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
     }
   }
 
+
   onEndDateChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.value) {
@@ -140,6 +141,8 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
+    console.log(this.addEditForm.value);
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;

@@ -1,102 +1,200 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom py-5">
-  <h1 class="font-weight-bold text-center" style="font-size: 30px;">
-      {{isEditMode ? 'language.generic.edit' : 'language.generic.create'| translate }}
-      {{ 'language.shift.shift'| translate }}
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom py-5"
+>
+  <h1 class="font-weight-bold text-center" style="font-size: 30px">
+    {{
+      isEditMode
+        ? "language.generic.edit"
+        : ("language.generic.create" | translate)
+    }}
+    {{ "language.shift.shift" | translate }}
   </h1>
 
-  <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
-      <div class="row">
-          <div class="col-md-12 mb-3">
-              <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="name"
-                  [placeholder]="'language.placeholders.name' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.nameRequired' | translate}}
-              </div>
-          </div>
-
-
-      </div>
-
-
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.generic.startTime' | translate}} <span class="text-danger">*</span></label>
-              <input type="time" class="form-control" formControlName="startTime"
-                  [placeholder]="'language.placeholders.time' | translate"  step="1"
-                  [ngClass]="{'is-invalid': (addEditForm.get('startTime')?.invalid && (addEditForm.get('startTime')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('startTime')?.invalid && (addEditForm.get('startTime')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.startTimeequired' | translate}}
-              </div>
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.generic.endTime' | translate}} <span class="text-danger">*</span></label>
-              <input type="time" class="form-control" formControlName="endTime"  step="1"
-                  [placeholder]="'language.placeholders.time' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('endTime')?.invalid && (addEditForm.get('endTime')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('endTime')?.invalid && (addEditForm.get('endTime')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.endTimeRequired' | translate}}
-              </div>
-          </div>
-
-
-      </div>
-
-
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ 'language.generic.earlyMinutes' | translate }} <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" formControlName="earlyMinutes"
-              [placeholder]="'language.placeholders.time' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('earlyMinutes')?.invalid && (addEditForm.get('earlyMinutes')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('earlyMinutes')?.invalid && (addEditForm.get('earlyMinutes')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{ 'language.errors.earlyMinutesRequired' | translate }}
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ 'language.generic.graceMinutes' | translate }} <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" formControlName="graceMinutes"
-              [placeholder]="'language.placeholders.time' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('graceMinutes')?.invalid && (addEditForm.get('graceMinutes')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('graceMinutes')?.invalid && (addEditForm.get('graceMinutes')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{ 'language.errors.graceMinutesRequired' | translate }}
-          </div>
+  <form
+    [formGroup]="addEditForm"
+    class="form w-100 py-5"
+    id="kt_form_1"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <label class="form-label"
+          >{{ "language.form.name" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          class="form-control"
+          formControlName="name"
+          [placeholder]="'language.placeholders.name' | translate"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('name')?.invalid &&
+              (addEditForm.get('name')?.touched || isSubmitted)
+          }"
+        />
+        <div
+          *ngIf="
+            addEditForm.get('name')?.invalid &&
+            (addEditForm.get('name')?.touched || isSubmitted)
+          "
+          class="invalid-feedback"
+        >
+          {{ "language.errors.nameRequired" | translate }}
         </div>
       </div>
+    </div>
 
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label"
+          >{{ "language.generic.startTime" | translate }}
+          <span class="text-danger">*</span></label
+        >
 
+        <dp-date-picker
+          class="form-control"
+          [mode]="'time'"
+          formControlName="startTime"
+          placeholder="00:00"
+          [config]="datePickerConfig"
+          theme="dp-material"
+          (change)="onStartTimeChange($event)"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('startTime')?.invalid &&
+              (addEditForm.get('startTime')?.touched || isSubmitted)
+          }"
+        ></dp-date-picker>
 
-
-      <div class="row">
-        <div class="col-md-12 mb-3">
-          <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
-          <textarea class="form-control" formControlName="description"
-              [placeholder]="'language.placeholders.description' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted))}"></textarea>
-          <div *ngIf="addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.descriptionRequired' | translate}}
-          </div>
+        <div
+          *ngIf="
+            addEditForm.get('startTime')?.invalid &&
+            (addEditForm.get('startTime')?.touched || isSubmitted)
+          "
+          class="invalid-feedback"
+        >
+          {{ "language.errors.startTimeequired" | translate }}
+        </div>
       </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label"
+          >{{ "language.generic.endTime" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <dp-date-picker
+          class="form-control"
+          [mode]="'time'"
+          formControlName="endTime"
+          placeholder="00:00"
+          [config]="datePickerConfig"
+          theme="dp-material"
+          (change)="onEndTimeChange($event)"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('endTime')?.invalid &&
+              (addEditForm.get('endTime')?.touched || isSubmitted)
+          }"
+        ></dp-date-picker>
       </div>
+    </div>
 
-
-      <div class="row mt-3">
-          <div class="col-12 text-right">
-              <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
-                  {{ 'language.generic.back'| translate }}
-              </button>
-              <button type="submit" class="btn btn-primary font-weight-bold me-3">
-                  {{ 'language.generic.submit'| translate }}
-              </button>
-          </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label"
+          >{{ "language.generic.earlyMinutes" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          formControlName="earlyMinutes"
+          [placeholder]="'language.placeholders.time' | translate"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('earlyMinutes')?.invalid &&
+              (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
+          }"
+        />
+        <div
+          *ngIf="
+            addEditForm.get('earlyMinutes')?.invalid &&
+            (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
+          "
+          class="invalid-feedback"
+        >
+          {{ "language.errors.earlyMinutesRequired" | translate }}
+        </div>
       </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label"
+          >{{ "language.generic.graceMinutes" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <input
+          type="number"
+          class="form-control"
+          formControlName="graceMinutes"
+          [placeholder]="'language.placeholders.time' | translate"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('graceMinutes')?.invalid &&
+              (addEditForm.get('graceMinutes')?.touched || isSubmitted)
+          }"
+        />
+        <div
+          *ngIf="
+            addEditForm.get('graceMinutes')?.invalid &&
+            (addEditForm.get('graceMinutes')?.touched || isSubmitted)
+          "
+          class="invalid-feedback"
+        >
+          {{ "language.errors.graceMinutesRequired" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <label class="form-label"
+          >{{ "language.form.description" | translate }}
+          <span class="text-danger">*</span></label
+        >
+        <textarea
+          class="form-control"
+          formControlName="description"
+          [placeholder]="'language.placeholders.description' | translate"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('description')?.invalid &&
+              (addEditForm.get('description')?.touched || isSubmitted)
+          }"
+        ></textarea>
+        <div
+          *ngIf="
+            addEditForm.get('description')?.invalid &&
+            (addEditForm.get('description')?.touched || isSubmitted)
+          "
+          class="invalid-feedback"
+        >
+          {{ "language.errors.descriptionRequired" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+        <button
+          type="button"
+          class="btn btn-light-danger font-weight-bold button-spacing mr-3"
+          (click)="goBack()"
+        >
+          {{ "language.generic.back" | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary font-weight-bold me-3">
+          {{ "language.generic.submit" | translate }}
+        </button>
+      </div>
+    </div>
   </form>
 </div>
