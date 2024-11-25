@@ -1,0 +1,398 @@
+<div class="d-flex flex-column-fluid px-3">
+
+  <div class="card card-custom mx-auto">
+    <!--begin::Header-->
+    <div class="card-header flex-wrap border-0 pt-6 pb-0">
+      <div class="card-title">
+        <h3 class="card-label">
+          {{ "language.leave.leaveManagement" | translate }}
+          <span class="d-block text-muted pt-2 font-size-sm">
+            {{ "language.leave.leaveHeading" | translate }}</span
+          >
+        </h3>
+      </div>
+    </div>
+
+
+    <div class="d-flex flex-wrap align-items-center gap-4 card-header justify-content-between py-5 position-relative " >
+
+      <div class="mr-2 w-25 mb-3">
+        <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
+        <input
+          type="date"
+          class="form-control"
+          [value]="startDate"
+          [placeholder]="'language.placeholders.time' | translate"
+          (change)="onStartDateChange($event)"
+        />
+      </div>
+
+      <div class="mr-2 w-25 mb-3">
+        <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
+        <input
+          type="date"
+          class="form-control"
+          [value]="endDate.split('T')[0]"
+          [placeholder]="'language.placeholders.time' | translate"
+          (change)="onEndDateChange($event)"
+        />
+      </div>
+      <div class="btn-group mt-5 flex-wrap gap-3 custom-btn-group">
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('YTD')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data from the start of the current year to today">
+          YTD
+        </button>
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('MTD')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data from the start of the current month to today">
+          MTD
+        </button>
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('QTD')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data from the start of the current quarter to today">
+          QTD
+        </button>
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('PreviousYear')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data for the entire previous year">
+          Previous Year
+        </button>
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('PreviousMonth')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data for the entire previous month">
+          Previous Month
+        </button>
+        <button
+          class="btn btn-secondary custom-btn"
+          (click)="setFilter('Last7Days')"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Filter data for the last 7 days">
+          Last 7 Days
+        </button>
+      </div>
+
+
+
+      <button class="btn btn-primary mt-5" (click)="applyDateFilter()">
+        {{ 'language.generic.applyFilter' | translate }}
+      </button>
+
+      @if(!this.startDate || !this.endDate){
+        <p  class="error position-absolute " >{{this.msg}}</p>
+      }
+    </div>
+    <!--end::Header-->
+    <!--begin::Body-->
+    <div class="card-body" style="overflow-x: auto">
+      <!--begin: Datatable-->
+      <div
+        class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
+        id="kt_datatable"
+      >
+        <table
+          class="datatable-table"
+          style="display: block; overflow-x: auto"
+        >
+          <thead class="datatable-head">
+            <tr class="datatable-row" style="left: 0px">
+              <th
+                data-field="RecordID"
+                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted"
+                data-sort="asc"
+              >
+                <span style="width: 40px"
+                  >#<i class="flaticon2-arrow-up"></i
+                ></span>
+              </th>
+
+              <th
+                data-field="OrderID"
+                class="datatable-cell datatable-cell-sort"
+              >
+                <span style="width: 250px">
+                  {{ "language.generic.date" | translate }}
+                </span>
+              </th>
+
+              <th
+                data-field="OrderID"
+                class="datatable-cell datatable-cell-sort"
+              >
+                <span style="width: 250px">
+                  {{ "language.generic.checkIn" | translate }}
+                </span>
+              </th>
+
+              <th
+                data-field="OrderID"
+                class="datatable-cell datatable-cell-sort"
+              >
+                <span style="width: 250px">
+                  {{ "language.generic.checkOut" | translate }}
+                </span>
+              </th>
+
+              <th
+                data-field="OrderID"
+                class="datatable-cell datatable-cell-sort"
+              >
+                <span style="width: 250px">
+                  {{ "language.generic.comment" | translate }}
+                </span>
+              </th>
+
+
+              <th
+                data-field="CompanyName"
+                class="datatable-cell datatable-cell-sort"
+              >
+                <span style="width: 124px">
+                  {{ "language.generic.actions" | translate }}
+                </span>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="datatable-body">
+            @for (data of dataList; track $index) {
+            <tr
+              data-row="0"
+              class="datatable-row"
+              style="left: 0px"
+            >
+              <td
+                class="datatable-cell-sorted datatable-cell-left datatable-cell"
+                data-field="RecordID"
+                aria-label="1"
+              >
+                <span style="width: 40px"
+                  ><span class="font-weight-bolder px-3">
+                    {{ (pageNo - 1) * pageSize + $index + 1 }}
+                  </span></span
+                >
+              </td>
+
+            <td
+                data-field="OrderID"
+                aria-label="64616-103"
+                class="datatable-cell"
+              >
+                <span style="width: 250px">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="text-dark-75 font-weight-bolder font-size-lg mb-0" >
+                      {{data.date || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+            <td
+                data-field="OrderID"
+                aria-label="64616-103"
+                class="datatable-cell"
+              >
+                <span style="width: 250px">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="text-dark-75 font-weight-bolder font-size-lg mb-0" >
+                      {{this.dateTime(data.checkIn) || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+            <td
+                data-field="OrderID"
+                aria-label="64616-103"
+                class="datatable-cell"
+              >
+                <span style="width: 250px">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="text-dark-75 font-weight-bolder font-size-lg mb-0" >
+                      {{this.dateTime(data.checkOut )|| 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+            <td
+                data-field="OrderID"
+                aria-label="64616-103"
+                class="datatable-cell"
+              >
+                <span style="width: 250px">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="text-dark-75 font-weight-bolder font-size-lg mb-0" >
+                      {{data.comment || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+              <td
+                data-field="Actions"
+                data-autohide-disabled="false"
+                aria-label="null"
+                class="datatable-cell"
+              >
+                <span
+                  style="overflow: visible; position: relative; width: 130px"
+                >
+                  <a
+                    [routerLink]="['/attendance/attendance/edit']"
+                    [queryParams]="{ editId: data.attendanceId,id:this.id }"
+                    class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
+                    title="Edit details"
+                  >
+                    <span class="svg-icon svg-icon-md">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        version="1.1"
+                      >
+                        <g
+                          stroke="none"
+                          stroke-width="1"
+                          fill="none"
+                          fill-rule="evenodd"
+                        >
+                          <rect x="0" y="0" width="24" height="24"></rect>
+                          <path
+                            style="fill: #0095ff"
+                            d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
+                            fill="#000000"
+                            fill-rule="nonzero"
+                            transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953) "
+                          ></path>
+                          <path
+                            d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
+                            fill="#000000"
+                            fill-rule="nonzero"
+                            opacity="0.3"
+                          ></path>
+                        </g>
+                      </svg>
+                    </span>
+                  </a>
+
+                </span>
+              </td>
+            </tr>
+            } @if(this.dataList.length < 1){
+            <tr
+              data-row="0"
+              class="datatable-row text-center fw-bold text-capitalize"
+              style="left: 0px"
+            >
+              {{
+                "language.generic.noRecords" | translate
+              }}
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        <!--begin::Pagination-->
+        <div
+          class="d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div class="d-flex flex-wrap py-2 mr-3">
+            <a
+              class="btn btn-icon btn-sm btn-light mr-2 my-1"
+              (click)="changePage(1)"
+              [class.disabled]="pageNo === 1"
+            >
+              <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+            </a>
+
+            <a
+              class="btn btn-icon btn-sm btn-light mr-2 my-1"
+              (click)="changePage(pageNo - 1)"
+              [class.disabled]="pageNo === 1"
+            >
+              <i class="ki ki-bold-arrow-back icon-xs"></i>
+            </a>
+
+            <span
+              *ngFor="let page of [].constructor(totalPages); let i = index"
+              [hidden]="i > 4 && i < totalPages - 5"
+            >
+              <a
+                class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1"
+                [class.active]="i + 1 === pageNo"
+                (click)="changePage(i + 1)"
+              >
+                {{ i + 1 }}
+              </a>
+            </span>
+
+            <a
+              class="btn btn-icon btn-sm btn-light mr-2 my-1"
+              (click)="changePage(pageNo + 1)"
+              [class.disabled]="pageNo === totalPages"
+            >
+              <i class="ki ki-bold-arrow-next icon-xs"></i>
+            </a>
+
+            <a
+              class="btn btn-icon btn-sm btn-light mr-2 my-1"
+              (click)="changePage(totalPages)"
+              [class.disabled]="pageNo === totalPages"
+            >
+              <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+            </a>
+          </div>
+
+          <div class="d-flex align-items-center py-3">
+            <select
+              class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+              style="width: 75px"
+              [(ngModel)]="pageSize"
+              (change)="changePageSize(pageSize)"
+            >
+              <option
+                *ngFor="let size of [10, 20, 30, 50, 100]"
+                [value]="size"
+              >
+                {{ size }}
+              </option>
+            </select>
+
+            <span class="text-muted">
+              {{ "language.generic.totalRecords" | translate }}
+              {{ totalCount }}
+            </span>
+          </div>
+        </div>
+
+        <!--end:: Pagination-->
+      </div>
+      <!--end: Datatable-->
+    </div>
+    <!--end::Body-->
+  </div>
+
+</div>

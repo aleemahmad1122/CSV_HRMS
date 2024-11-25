@@ -10,6 +10,7 @@
       "admin": "Admin"
     },
     "sidebar": {
+      "leave":"Leave",
       "dashboard": "Dashboard",
       "job": "Job",
       "project": "Project",
@@ -230,6 +231,10 @@
     "attendance": {
       "attendanceManagement": "Attendance Management",
       "attendanceHeading": "Attendance management made easy"
+    },
+    "leave": {
+      "leaveManagement": "Leave Management",
+      "leaveHeading": "Leave management made easy"
     },
     "permission": {
       "permission": "Permission"

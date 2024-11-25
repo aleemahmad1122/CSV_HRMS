@@ -16,6 +16,18 @@ const routes: Routes = [
     title: 'Attendances List',
   },
   {
+    path: 'leave/:action',
+    loadComponent: () => import(`./components/leave/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+    data: { breadcrumb: 'Leave Detail' },
+    title: 'Leave',
+  },
+  {
+    path: 'leave-list',
+    loadComponent: () => import(`./components/leave/list/list.component`).then(c => c.ListComponent),
+    data: { breadcrumb: 'Leave List' },
+    title: 'Leave List',
+  },
+  {
     path: 'attendance/:action',
     loadComponent: () => import(`./add-edit/add-edit.component`).then(c => c.AddEditComponent),
     data: { breadcrumb: 'Attendances Detail' },
