@@ -1,7 +1,7 @@
 <div
     class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom p-5">
     <h1 class="font-weight-bold text-center" style="font-size: 30px;">
-        {{isEditMode ? 'language.generic.edit' : 'language.generic.add'| translate }}
+        {{isEditMode ? ('language.generic.edit' | translate ): 'language.generic.apply'| translate }}
         {{ 'language.generic.leave'| translate }}
     </h1>
 
@@ -10,14 +10,19 @@
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.generic.date' | translate}} <span
-                        class="text-danger">*</span></label>
-                <input type="date" class="form-control" formControlName="date"
-                    [placeholder]="'language.placeholders.time' | translate" step="1"
-                    [ngClass]="{'is-invalid': (addEditForm.get('date')?.invalid && (addEditForm.get('date')?.touched || isSubmitted))}" />
-                <div *ngIf="addEditForm.get('date')?.invalid && (addEditForm.get('date')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.dateequired' | translate}}
+                <label class="form-label">{{ "language.form.leaveDate" | translate }}
+                    <span class="text-danger">*</span></label>
+                <dp-date-picker class="form-control" formControlName="leaveDate" placeholder="00/00/00"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateChange($event)" [ngClass]="{
+                    'is-invalid':
+                      addEditForm.get('leaveDate')?.invalid &&
+                      (addEditForm.get('leaveDate')?.touched || isSubmitted)
+                  }"></dp-date-picker>
+                <div *ngIf="
+                    addEditForm.get('leaveDate')?.invalid &&
+                    (addEditForm.get('leaveDate')?.touched || isSubmitted)
+                  " class="invalid-feedback">
+                    {{ "language.errors.leaveDateRequired" | translate }}
                 </div>
             </div>
 
@@ -25,19 +30,25 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label">{{ "language.form.type" | translate }}
                     <span class="text-danger">*</span></label>
-                <select class="form-control custom-select" formControlName="type" [ngClass]="{
+                <select class="form-control custom-select" formControlName="leaveTypeId" [ngClass]="{
                     'is-invalid':
-                      addEditForm.get('type')?.invalid &&
-                      (addEditForm.get('type')?.touched || isSubmitted)
+                      addEditForm.get('leaveTypeId')?.invalid &&
+                      (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
                   }">
-                    <option value="">
+                    <option selected>
                         {{ "language.form.selectType" | translate }}
                     </option>
 
+                    @for(item of leaveType; track $index){
+                    <option [value]="item.leaveTypeId">
+                        {{item.name}}
+                    </option>
+                    }
+
                 </select>
                 <div *ngIf="
-                    addEditForm.get('type')?.invalid &&
-                    (addEditForm.get('type')?.touched || isSubmitted)
+                    addEditForm.get('leaveTypeId')?.invalid &&
+                    (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
                   " class="invalid-feedback">
                     {{ "language.errors.typeRequired" | translate }}
                 </div>
@@ -48,14 +59,14 @@
 
         <div class="row">
             <div class="col-md-12 mb-3">
-                <label class="form-label">{{'language.form.comment' | translate}} <span
+                <label class="form-label">{{'language.form.leaveReason' | translate}} <span
                         class="text-danger"></span></label>
-                <textarea class="form-control" formControlName="comment"
-                    [placeholder]="'language.placeholders.comment' | translate" rows="3"
-                    [ngClass]="{'is-invalid': (addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted))}"></textarea>
-                <div *ngIf="addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted)"
+                <textarea class="form-control" formControlName="leaveReason"
+                    [placeholder]="'language.placeholders.leaveReason' | translate" rows="3"
+                    [ngClass]="{'is-invalid': (addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted))}"></textarea>
+                <div *ngIf="addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted)"
                     class="invalid-feedback">
-                    {{'language.errors.commentRequired' | translate}}
+                    {{'language.errors.leaveReasonRequired' | translate}}
                 </div>
             </div>
         </div>

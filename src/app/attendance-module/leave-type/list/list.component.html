@@ -1,13 +1,13 @@
-<div class="d-flex flex-column-fluid px-3 container mx-auto w-75">
+<div class="d-flex flex-column-fluid px-3">
 
     <div class="card card-custom">
         <!--begin::Header-->
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
                 <h3 class="card-label">
-                    {{ "language.leave.leaveManagement" | translate }}
+                    {{ "language.leaveType.leaveTypesManagement" | translate }}
                     <span class="d-block text-muted pt-2 font-size-sm">
-                        {{ "language.leave.leaveHeading" | translate }}</span>
+                        {{ "language.leaveType.leaveTypeHeading" | translate }}</span>
                 </h3>
             </div>
             <form class="d-flex mt-2 w-25" role="search">
@@ -77,8 +77,7 @@
                 </div>
                 <!--end::Dropdown-->
                 <!--begin::Button-->
-                <button routerLink="/attendance/leave/add" [queryParams]="{ id: this.empId }"
-                    class="btn btn-primary font-weight-bolder">
+                <button routerLink="/attendance/leave-type/add" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -93,7 +92,7 @@
                         </svg>
                         <!--end::Svg Icon-->
                     </span>
-                    {{ "language.generic.addLeave" | translate }}
+                    {{ "language.generic.addLeaveType" | translate }}
                 </button>
                 <!--end::Button-->
             </div>
@@ -115,13 +114,26 @@
 
                             <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                                 <span style="width: 250px">
-                                    {{ "language.generic.date" | translate }}
+                                    {{ "language.generic.name" | translate }}
+                                </span>
+                            </th>
+
+
+                            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                                <span style="width: 250px">
+                                    {{ "language.generic.amount" | translate }}
                                 </span>
                             </th>
 
                             <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                                 <span style="width: 250px">
-                                    {{ "language.generic.reason" | translate }}
+                                    {{ "language.generic.description" | translate }}
+                                </span>
+                            </th>
+
+                            <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                                <span style="width: 250px">
+                                    {{ "language.generic.isPaid" | translate }}
                                 </span>
                             </th>
 
@@ -148,17 +160,34 @@
                                 <span style="width: 250px">
                                     <div class="d-flex align-items-center">
                                         <div class="text-dark-75 font-weight-bolder font-size-lg mb-0"
-                                            [innerHTML]="data.leaveDate || 'N/A' | highlight: searchTerm">
+                                            [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
                                         </div>
                                     </div>
                                 </span>
                             </td>
-
                             <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
                                 <span style="width: 250px">
                                     <div class="d-flex align-items-center">
-                                        <div class="text-dark-75 font-weight-bolder font-size-lg mb-0"
-                                            [innerHTML]="data.leaveReason || 'N/A' | highlight: searchTerm">
+                                        <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                                            {{data.amount || 'N/A'}}
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                                <span style="width: 250px">
+                                    <div class="d-flex align-items-center">
+                                        <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                                            {{data.description || 'N/A'}}
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                            <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                                <span style="width: 250px">
+                                    <div class="d-flex align-items-center">
+                                        <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                                            {{data.isPaid ? 'Yes' : 'No'}}
                                         </div>
                                     </div>
                                 </span>
@@ -167,8 +196,8 @@
                             <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                                 class="datatable-cell">
                                 <span style="overflow: visible; position: relative; width: 130px">
-                                    <a [routerLink]="['/attendance/leave/edit']"
-                                        [queryParams]="{ id: this.empId,editId:data.leaveId }"
+                                    <a [routerLink]="['/attendance/leave-type/edit']"
+                                        [queryParams]="{ id: data.leaveTypeId }"
                                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                                         title="Edit details">
                                         <span class="svg-icon svg-icon-md">
@@ -189,6 +218,8 @@
                                             </svg>
                                         </span>
                                     </a>
+
+
                                     <!-- Modal -->
                                     <div class="modal fade" [id]="'modal-' + $index" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -213,7 +244,7 @@
                                                         data-bs-dismiss="modal">
                                                         {{ "language.generic.cancel" | translate }}
                                                     </button>
-                                                    <button type="button" (click)="onDelete(data.leaveId)"
+                                                    <button type="button" (click)="onDelete(data.leaveTypeId)"
                                                         data-bs-dismiss="modal" class="btn btn-danger">
                                                         {{ "language.generic.continue" | translate }}
                                                     </button>

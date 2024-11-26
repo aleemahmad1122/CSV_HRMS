@@ -1,171 +1,110 @@
-<div
-  class="container d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5"
->
-  <h1 class="font-weight-bold text-center" style="font-size: 30px">
-    {{ isEditMode ? "Edit" : isAddMode ? "Add" : "View" }} Employee Department &
-    Team
-  </h1>
+<h1 class="font-weight-bold text-center" style="font-size: 30px">
+  {{ isEditMode ? "Edit" : isAddMode ? "Add" : "View" }} Employee Department &
+  Team
+</h1>
 
-  <form
-    [formGroup]="addEditForm"
-    class="form w-100"
-    id="kt_form_1"
-    (ngSubmit)="submitForm()"
-  >
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.departmentId" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <select
-          class="form-control custom-select"
-          formControlName="departmentId"
-          [ngClass]="{
-            'is-invalid':
-              addEditForm.get('departmentId')?.invalid &&
-              (addEditForm.get('departmentId')?.touched || isSubmitted)
-          }"
-          [disabled]="isViewMode"
-        >
-          <option value="">
-            {{ "language.form.selectDepartment" | translate }}
-          </option>
-          <option
-            *ngFor="let department of departmentList"
-            [value]="department.departmentId"
-          >
-            {{ department.name }}
-          </option>
-        </select>
-        <div
-          *ngIf="
+<form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.departmentId" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="departmentId" [ngClass]="{
+          'is-invalid':
             addEditForm.get('departmentId')?.invalid &&
             (addEditForm.get('departmentId')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.departmentRequired" | translate }}
-        </div>
+        }" [disabled]="isViewMode">
+        <option value="">
+          {{ "language.form.selectDepartment" | translate }}
+        </option>
+        <option *ngFor="let department of departmentList" [value]="department.departmentId">
+          {{ department.name }}
+        </option>
+      </select>
+      <div *ngIf="
+          addEditForm.get('departmentId')?.invalid &&
+          (addEditForm.get('departmentId')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.departmentRequired" | translate }}
       </div>
+    </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.designationId" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <select
-          class="form-control custom-select"
-          formControlName="designationId"
-          [ngClass]="{
-            'is-invalid':
-              addEditForm.get('designationId')?.invalid &&
-              (addEditForm.get('designationId')?.touched || isSubmitted)
-          }"
-          [disabled]="isViewMode"
-        >
-          <option value="">
-            {{ "language.form.selectDesignation" | translate }}
-          </option>
-          <option
-            *ngFor="let designation of designationList"
-            [value]="designation.designationId"
-          >
-            {{ designation.designationTitle }}
-          </option>
-        </select>
-        <div
-          *ngIf="
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.designationId" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="designationId" [ngClass]="{
+          'is-invalid':
             addEditForm.get('designationId')?.invalid &&
             (addEditForm.get('designationId')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.designationRequired" | translate }}
-        </div>
+        }" [disabled]="isViewMode">
+        <option value="">
+          {{ "language.form.selectDesignation" | translate }}
+        </option>
+        <option *ngFor="let designation of designationList" [value]="designation.designationId">
+          {{ designation.designationTitle }}
+        </option>
+      </select>
+      <div *ngIf="
+          addEditForm.get('designationId')?.invalid &&
+          (addEditForm.get('designationId')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.designationRequired" | translate }}
       </div>
+    </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.teamId" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <select
-          class="form-control custom-select"
-          formControlName="teamId"
-          [ngClass]="{
-            'is-invalid':
-              addEditForm.get('teamId')?.invalid &&
-              (addEditForm.get('teamId')?.touched || isSubmitted)
-          }"
-          [disabled]="isViewMode"
-        >
-          <option value="">{{ "language.form.selectTeam" | translate }}</option>
-          <option *ngFor="let team of teamList" [value]="team.teamId">
-            {{ team.name }}
-          </option>
-        </select>
-        <div
-          *ngIf="
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.teamId" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="teamId" [ngClass]="{
+          'is-invalid':
             addEditForm.get('teamId')?.invalid &&
             (addEditForm.get('teamId')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.teamRequired" | translate }}
-        </div>
+        }" [disabled]="isViewMode">
+        <option value="">{{ "language.form.selectTeam" | translate }}</option>
+        <option *ngFor="let team of teamList" [value]="team.teamId">
+          {{ team.name }}
+        </option>
+      </select>
+      <div *ngIf="
+          addEditForm.get('teamId')?.invalid &&
+          (addEditForm.get('teamId')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.teamRequired" | translate }}
       </div>
+    </div>
 
-      <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.description" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          class="form-control"
-          formControlName="description"
-          type="text"
-          [placeholder]="'language.placeholders.description' | translate"
-          rows="3"
-          [ngClass]="{
-            'is-invalid':
-              addEditForm.get('description')?.invalid &&
-              (addEditForm.get('description')?.touched || isSubmitted)
-          }"
-          [disabled]="isViewMode"
-        />
-        <div
-          *ngIf="
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.description" | translate }}
+        <span class="text-danger">*</span></label>
+      <input class="form-control" formControlName="description" type="text"
+        [placeholder]="'language.placeholders.description' | translate" rows="3" [ngClass]="{
+          'is-invalid':
             addEditForm.get('description')?.invalid &&
             (addEditForm.get('description')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
-          {{ "language.errors.descriptionRequired" | translate }}
-        </div>
+        }" [disabled]="isViewMode" />
+      <div *ngIf="
+          addEditForm.get('description')?.invalid &&
+          (addEditForm.get('description')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.descriptionRequired" | translate }}
       </div>
     </div>
+  </div>
 
-    <!-- Form submission buttons -->
-    @if(!isViewMode){
-    <div class="row mt-3">
-      <div class="col-12 text-right">
-        <button
-          type="button"
-          class="btn btn-light-danger font-weight-bold button-spacing mx-4"
-          (click)="goBack()"
-        >
-          {{ "language.generic.back" | translate }}
-        </button>
-        <button type="submit" class="btn btn-primary font-weight-bold me-3">
-          {{
-            isEditMode
-              ? ("language.generic.update" | translate)
-              : ("language.generic.submit" | translate)
-          }}
-        </button>
-      </div>
+  <!-- Form submission buttons -->
+  @if(!isViewMode){
+  <div class="row mt-3">
+    <div class="col-12 text-right">
+      <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mx-4" (click)="goBack()">
+        {{ "language.generic.back" | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary font-weight-bold me-3">
+        {{
+        isEditMode
+        ? ("language.generic.update" | translate)
+        : ("language.generic.submit" | translate)
+        }}
+      </button>
     </div>
-    }
-  </form>
-</div>
+  </div>
+  }
+</form>

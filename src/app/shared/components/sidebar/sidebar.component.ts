@@ -79,6 +79,10 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       route: '/attendance/leave-employee'
     },
     {
+      name: 'language.sidebar.leaveType',
+      route: '/attendance/leave-type-list'
+    },
+    {
       name: 'language.sidebar.attendanceImport',
       route: '/attendance/import'
     },

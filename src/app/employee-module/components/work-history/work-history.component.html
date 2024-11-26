@@ -1,10 +1,12 @@
-<div class="card card-custom container p-5">
+<div
+  class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
   <!--begin::Header-->
   <div class="card-header flex-wrap border-0 pt-6 pb-0">
     <div class="card-title">
       <h3 class="card-label">
         {{'language.workHistory.workHistoryManagement' | translate}}
-        <span class="d-block text-muted pt-2 font-size-sm"> {{'language.workHistory.workHistoryHeading' | translate}}</span>
+        <span class="d-block text-muted pt-2 font-size-sm"> {{'language.workHistory.workHistoryHeading' |
+          translate}}</span>
       </h3>
     </div>
     <form class="d-flex  mt-2 w-25" role="search">
@@ -23,8 +25,8 @@
       </div>
       <!--begin::Dropdown-->
       <div class="dropdown dropdown-inline mr-2">
-        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle"
-          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
           <span class="svg-icon svg-icon-md">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -64,11 +66,12 @@
       </div>
       <!--end::Dropdown-->
       <!--begin::Button-->
-      <button routerLink="/employee/work-history/add" [queryParams]="{id:this.id}"  class="btn btn-primary font-weight-bolder">
+      <button routerLink="/employee/work-history/add" [queryParams]="{id:this.id}"
+        class="btn btn-primary font-weight-bolder">
         <span class="svg-icon svg-icon-md">
           <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-            height="24px" viewBox="0 0 24 24" version="1.1">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+            viewBox="0 0 24 24" version="1.1">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
               <rect x="0" y="0" width="24" height="24"></rect>
               <circle fill="#000000" cx="9" cy="15" r="6"></circle>
@@ -86,8 +89,7 @@
   <!--begin::Body-->
   <div class="card-body" style="overflow-x: auto;">
     <!--begin: Datatable-->
-    <div
-      class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
+    <div class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
       id="kt_datatable">
       <table class="datatable-table" style="display: block; overflow-x: auto;">
         <thead class="datatable-head">
@@ -115,15 +117,15 @@
           @for (data of dataList; track $index) {
 
           <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
-            <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-              aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder px-3">
+            <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
+              <span style="width: 40px;"><span class="font-weight-bolder px-3">
                   {{ (pageNo - 1) * pageSize + $index + 1 }}
                 </span></span>
             </td>
 
 
             <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-              <span style="width: 250px;" >
+              <span style="width: 250px;">
                 <div class="d-flex align-items-center">
                   <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
                     {{ data.positionTitle}}
@@ -148,9 +150,10 @@
 
 
 
-                <a [routerLink]="['/employee/work-history/edit']" [queryParams]="{editId: data.employeeWorkHistoryId,id:this.id}"
-                  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
-                  title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
+                <a [routerLink]="['/employee/work-history/edit']"
+                  [queryParams]="{editId: data.employeeWorkHistoryId,id:this.id}"
+                  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2" title="Edit details">
+                  <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                       xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
                       version="1.1">
                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -193,8 +196,7 @@
                   </div>
                 </div>
 
-                <button data-bs-toggle="modal"
-                  [attr.data-bs-target]="'#modal-' + $index"
+                <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                     class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                       xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -224,8 +226,7 @@
       <!--begin::Pagination-->
       <div class="d-flex justify-content-between align-items-center flex-wrap">
         <div class="d-flex flex-wrap py-2 mr-3">
-          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)"
-            [class.disabled]="pageNo === 1">
+          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
             <i class="ki ki-bold-double-arrow-back icon-xs"></i>
           </a>
 
@@ -234,8 +235,7 @@
             <i class="ki ki-bold-arrow-back icon-xs"></i>
           </a>
 
-          <span *ngFor="let page of [].constructor(totalPages); let i = index"
-            [hidden]="i > 4 && i < totalPages - 5">
+          <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
             <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="i + 1 === pageNo"
               (click)="changePage(i + 1)">
               {{ i + 1 }}

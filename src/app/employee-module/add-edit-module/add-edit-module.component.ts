@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
@@ -18,6 +18,7 @@ import { ShiftHistoryComponent } from '../components/shift/shift-history.compone
     CommonModule,
     ReactiveFormsModule,
     TranslateModule,
+    RouterModule,
     EducationComponent,
     WorkHistoryComponent,
     AddEditComponent,
@@ -31,6 +32,9 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   addEditForm: FormGroup;
   isEditMode: boolean | string = false;
   isSubmitted = false;
+  activRoute: string = '';
+
+
   isView: boolean = false;
   selectedValue: any;
   defaultImagePath =
@@ -57,8 +61,13 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+
+    this.router.events.subscribe(() => {
+      this.activRoute = this.router.url;
+    });
     this.addEditForm = this.createForm();
   }
 

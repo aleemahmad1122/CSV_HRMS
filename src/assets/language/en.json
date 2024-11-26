@@ -10,6 +10,7 @@
       "admin": "Admin"
     },
     "sidebar": {
+      "leaveType": "Leave Type",
       "leave": "Leave",
       "dashboard": "Dashboard",
       "job": "Job",
@@ -42,6 +43,11 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "leaveDate": "Leave Date",
+      "leaveReason": "Leave Reason",
+      "amount": "Amount",
+      "isPaid": "Is Paid",
+      "selectIsPaid": "Select Is Paid",
       "comment": "Comment",
       "selectstatus": "Select Status",
       "designationId": "Designation Id",
@@ -91,6 +97,8 @@
     },
     "placeholders": {
       "name": "Name",
+      "leaveReason": "Leave Reason",
+      "amount": "Amount",
       "description": "Description",
       "comment": "Comment",
       "parentItem": "Parent Item",
@@ -115,6 +123,8 @@
       "edit": "Edit"
     },
     "errors": {
+      "leaveReasonRequired": "Leave Reason is Required",
+      "leaveDateRequired": "Leave Date is Required",
       "dateequired": "Date is Required",
       "commentRequired": "Comment is Required",
       "maxFileSize": "Max file size",
@@ -142,6 +152,10 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
+      "apply": "Apply",
+      "reason": "Reason",
+      "amount": "Amount",
+      "isPaid": "Is Paid",
       "leave": "Leave",
       "employee": "Employee",
       "type": "Type",
@@ -162,6 +176,8 @@
       "addCompany": "Add Company",
       "addJob": "Add Job",
       "addEmployee": "Add Employee",
+      "addLeaveType": "Add Leave Type",
+      "addLeave": "Add Leave",
       "addEducation": "Add Education",
       "addWorkHistory": "Add Work History",
       "addQualification": "Add Qualification",
@@ -286,6 +302,11 @@
       "shift": "Shift",
       "shiftsManagement": "Shifts Management",
       "shiftHeading": "Shifts management made easy"
+    },
+    "leaveType": {
+      "leaveType": "Leave Type",
+      "leaveTypesManagement": "Leave Types Management",
+      "leaveTypeHeading": "Leave Types management made easy"
     },
     "employee": {
       "employee": "Employee",

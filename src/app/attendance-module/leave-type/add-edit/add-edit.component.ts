@@ -4,10 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
-import { ILeaveType, ILeaveTypeRes } from '../../../../types';
 
 @Component({
   selector: 'app-add-edit',
@@ -17,41 +16,36 @@ import { ILeaveType, ILeaveTypeRes } from '../../../../types';
   styleUrl: './add-edit.component.css'
 })
 export class AddEditComponent implements OnInit, OnDestroy {
-
-  datePickerConfig = {
-    format: 'YYYY-MM-DDTHH:mm',
-  };
-
   private ngUnsubscribe = new Subject<void>();
+
   addEditForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
 
-  leaveType: ILeaveType[]
-
-  id: string;
-
   constructor(
     private fb: FormBuilder,
-    private _router: Router,
+    private router: Router,
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      this.id = params['id'];
-      const editId = params['editId'];
-      this.isEditMode = editId;
+    this.addEditForm = this.createForm();
+  }
 
-      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Leave", `getLeaveById/${editId}`, true, { employeeId: this.id })
+  ngOnInit(): void {
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const id = params['id'];
+      this.isEditMode = id;
+
+      if (this.isEditMode) {
+        this.apiCalling.getData("LeaveType", `getLeaveTypeById/${id}`, true)
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
                 this.selectedValue = response?.data;
-                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
+                this.patchFormValues();
               } else {
                 this.selectedValue = [];
               }
@@ -60,46 +54,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             }
           });
-        // this.patchFormValues(); // Removed this line
       }
     });
-    this.addEditForm = this.createForm();
-  }
-
-  ngOnInit(): void {
-    this.getLeaveTypes()
-  }
-
-  private getLeaveTypes(searchTerm = ''): void {
-    this.apiCalling.getData('LeaveType', 'getLeaveTypes', true, { searchQuery: searchTerm })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: ILeaveTypeRes) => {
-          if (res.success) {
-            this.leaveType = res.data.leaveType;
-          } else {
-            this.leaveType = [];
-          }
-        },
-        error: () => {
-          this.leaveType = [];
-        },
-      });
-  }
-
-
-  private convertToDatetimeLocalFormat(dateString: string): string {
-    // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
-  }
-
-  onDateChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
-      this.addEditForm.patchValue({ leaveDate: formattedValue });
-    }
   }
 
   ngOnDestroy(): void {
@@ -109,42 +65,38 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      leaveTypeId: ['', [Validators.required]],
-      leaveDate: ['', [Validators.required]],
-      leaveReason: ['', [Validators.required]],
-      offset: [new Date().getTimezoneOffset().toString()]
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      amount: ['', Validators.required],
+      isPaid: ['', Validators.required],
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
-
       this.addEditForm.patchValue({
-        leaveTypeId: this.selectedValue.leaveTypeId,
-        leaveDate: this.convertToDatetimeLocalFormat(this.selectedValue.leaveDate),
-        leaveReason: this.selectedValue.leaveReason,
-        offset: this.selectedValue.offset,
+        name: this.selectedValue.name,
+        description: this.selectedValue.description,
+        amount: this.selectedValue.amount,
+        isPaid: this.selectedValue.isPaid
       });
     }
   }
 
   submitForm(): void {
+    console.log(this.addEditForm.value);
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
     }
 
-    const formValue = this.addEditForm.value;
-
-    const payload = {
-      ...formValue
-    };
-
+    const body = { ...this.addEditForm.value };
 
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Leave", `updateLeave/${this.isEditMode}`, payload, true, this.id)
-      : this.apiCalling.postData("Leave", "addLeave", payload, true, this.id);
+      ? this.apiCalling.putData("LeaveType", `updateLeaveType/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("LeaveType", "addLeaveType", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
@@ -163,6 +115,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate([window.history.back()]);
+    this.router.navigate([window.history.back()]);
   }
 }
+
+

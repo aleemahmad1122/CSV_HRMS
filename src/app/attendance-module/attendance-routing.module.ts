@@ -40,6 +40,18 @@ const routes: Routes = [
     title: 'Attendances',
   },
   {
+    path: 'leave-type-list',
+    loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
+    data: { breadcrumb: 'Attendances Detail' },
+    title: 'Leave Type List',
+  },
+  {
+    path: 'leave-type/:action',
+    loadComponent: () => import(`./leave-type/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+    data: { breadcrumb: 'Attendances Detail' },
+    title: 'Leave Type Detail',
+  },
+  {
     path: 'import',
     loadComponent: () => import(`./components/import/import.component`).then(c => c.ImportComponent),
     data: { breadcrumb: 'Attendances Detail' },

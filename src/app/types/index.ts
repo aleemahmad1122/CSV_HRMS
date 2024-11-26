@@ -323,6 +323,48 @@ export interface IEmployeeRes extends ICommonRes {
 }
 
 
+export interface ILeaveType extends ICommon {
+  leaveTypeId: string;
+  companyId: string;
+  name: string;
+  amount: number,
+  description: string;
+  isPaid: boolean;
+  isActive: boolean;
+}
+
+
+export interface ILeaveTypeRes extends ICommonRes {
+
+  data: {
+    leaveType: ILeaveType[]
+    pagination: IPagination
+  };
+
+}
+
+
+
+export interface ILeave extends ICommon {
+  leaveId: string;
+  employeeId: string;
+  leaveTypeId: string;
+  leaveDate: string;
+  offSet: string;
+  leaveReason: string;
+}
+
+
+export interface ILeaveRes extends ICommonRes {
+
+  data: {
+    leaves: ILeave[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IAttendanceList extends ICommon {
   attendanceId: string;
   employeeId: string;

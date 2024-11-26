@@ -154,6 +154,7 @@ export class ListComponent implements AfterViewInit {
     const params = {
       searchQuery: searchTerm,
       employeeId: this.id,
+      startDate: this.startDate,
       endDate: this.endDate,
     };
 
