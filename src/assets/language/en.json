@@ -10,7 +10,7 @@
       "admin": "Admin"
     },
     "sidebar": {
-      "leave":"Leave",
+      "leave": "Leave",
       "dashboard": "Dashboard",
       "job": "Job",
       "project": "Project",
@@ -142,12 +142,13 @@
       "endTimeRequired": "End time is required"
     },
     "generic": {
-      "emyloyee":"Emyloyee",
-      "type":"Type",
-      "applyFilter":"Apply Filter",
-      "stateDate":"State Date",
-      "addAttendance":"Add Attendance",
-      "comment":"Comment",
+      "leave": "Leave",
+      "employee": "Employee",
+      "type": "Type",
+      "applyFilter": "Apply Filter",
+      "stateDate": "State Date",
+      "addAttendance": "Add Attendance",
+      "comment": "Comment",
       "date": "Date",
       "add": "Add",
       "attendance": "Attendance",

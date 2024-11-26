@@ -1,9 +1,9 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { IAttendanceList, IAttendanceListRes } from '../../types/index';
+import { IAttendanceList, IAttendanceListRes } from '../../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ApiCallingService } from '../../shared/Services/api-calling.service';
-import { ExportService } from '../../shared/Services/export.service';
+import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
+import { ExportService } from '../../../../shared/Services/export.service';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,13 +11,13 @@ import * as bootstrap from 'bootstrap';
 import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
-  selector: 'app-list',
+  selector: 'app-leave',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DpDatePickerModule],
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css'],
+  templateUrl: './leave.component.html',
+  styleUrl: './leave.component.css'
 })
-export class ListComponent implements AfterViewInit {
+export class LeaveComponent implements AfterViewInit {
 
   datePickerConfig = {
     format: 'YYYY-MM-DD',

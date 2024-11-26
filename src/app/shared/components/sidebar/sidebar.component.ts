@@ -76,7 +76,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'language.sidebar.leave',
-      route: '/attendance/leave-list'
+      route: '/attendance/leave-employee'
     },
     {
       name: 'language.sidebar.attendanceImport',
@@ -124,7 +124,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     private _document: Document,
     private _route: Router,
     public translate: TranslateService
-    ) {
+  ) {
     _route.events.subscribe((val) =>
       this.activRoute = _route.url
     )
