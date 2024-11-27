@@ -3,16 +3,17 @@
   <div class="card card-custom">
     <!--begin::Header-->
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
-      <div class="card-title">
-        <h3 class="card-label">
-          {{'language.company.companyManagement' | translate}}
-          <span class="d-block text-muted pt-2 font-size-sm"> {{'language.company.companyManagementMadeEasy' |
-            translate}}</span>
-        </h3>
-      </div>
       <form class="d-flex  mt-2 w-25" role="search">
-        <input class="form-control" type="search" [placeholder]="'language.placeholders.searchByName' | translate"
-          aria-label="Search" name="searchTerm" (input)="search($event)">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate" name="searchTerm" (input)="search($event)">
+          </div>
+        </div>
       </form>
 
 
@@ -150,11 +151,6 @@
               <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.registrationNumber' | translate}} </span>
               </th>
-
-
-
-
-
 
               <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
                   style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
@@ -295,8 +291,12 @@
             </tr>
 
             }
-            @if(this.dataList.length < 1){ <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize"
-              style="left: 0px;">{{'language.generic.noRecords' | translate}}</tr>
+            @if(this.dataList.length < 1){ 
+              <tr class="datatable-row text-center fw-bold text-capitalize">
+                <td colspan="10">
+                  {{'language.generic.noRecords' | translate}}
+                </td>
+            </tr>
               }
           </tbody>
         </table>
