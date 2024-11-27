@@ -4,13 +4,13 @@
   <form [formGroup]="qualificationForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
           <div class="col-md-12 mb-3">
-              <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
+              <label class="form-label">{{'language.form.title' | translate}} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="name"
-                  [placeholder]="'language.placeholders.name' | translate"
+                  [placeholder]="'language.placeholders.title' | translate"
                   [ngClass]="{'is-invalid': (qualificationForm.get('name')?.invalid && (qualificationForm.get('name')?.touched || isSubmitted))}" />
               <div *ngIf="qualificationForm.get('name')?.invalid && (qualificationForm.get('name')?.touched || isSubmitted)"
                   class="invalid-feedback">
-                  {{'language.errors.nameRequired' | translate}}
+                  {{'language.errors.titleRequired' | translate}}
               </div>
           </div>
 

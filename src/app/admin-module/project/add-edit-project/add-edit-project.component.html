@@ -10,14 +10,14 @@
     <div class="row py-5">
       <div class="col-md-6 mb-3">
         <label class="form-label"
-          >{{ "language.form.name" | translate }}
+          >{{ "language.form.title" | translate }}
           <span class="text-danger">*</span></label
         >
         <input
           type="text"
           class="form-control"
           formControlName="name"
-          [placeholder]="'language.placeholders.name' | translate"
+          [placeholder]="'language.placeholders.title' | translate"
           [ngClass]="{
             'is-invalid':
               addEditForm.get('name')?.invalid &&
@@ -31,7 +31,7 @@
           "
           class="invalid-feedback"
         >
-          {{ "language.errors.nameRequired" | translate }}
+          {{ "language.errors.titleRequired" | translate }}
         </div>
       </div>
 
@@ -179,7 +179,7 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-12 mb-3">
         <label class="form-label"
           >{{ "language.form.description" | translate }}
           <span class="text-danger">*</span></label
