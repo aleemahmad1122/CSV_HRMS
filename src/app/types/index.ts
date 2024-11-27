@@ -327,7 +327,7 @@ export interface ILeaveType extends ICommon {
   leaveTypeId: string;
   companyId: string;
   name: string;
-  amount: number,
+  noOfDays: number,
   description: string;
   isPaid: boolean;
   isActive: boolean;

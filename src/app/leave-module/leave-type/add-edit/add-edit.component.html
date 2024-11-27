@@ -32,19 +32,19 @@
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.form.amount" | translate }}
+                <label class="form-label">{{ "language.form.noOfDays" | translate }}
                     <span class="text-danger">*</span></label>
-                <input type="number" class="form-control" formControlName="amount"
-                    [placeholder]="'language.placeholders.amount' | translate" [ngClass]="{
+                <input type="number" class="form-control" formControlName="noOfDays"
+                    [placeholder]="'language.placeholders.noOfDays' | translate" [ngClass]="{
             'is-invalid':
-              addEditForm.get('amount')?.invalid &&
-              (addEditForm.get('amount')?.touched || isSubmitted)
+              addEditForm.get('noOfDays')?.invalid &&
+              (addEditForm.get('noOfDays')?.touched || isSubmitted)
           }" />
                 <div *ngIf="
-            addEditForm.get('amount')?.invalid &&
-            (addEditForm.get('amount')?.touched || isSubmitted)
+            addEditForm.get('noOfDays')?.invalid &&
+            (addEditForm.get('noOfDays')?.touched || isSubmitted)
           " class="invalid-feedback">
-                    {{ "language.errors.amountRequired" | translate }}
+                    {{ "language.errors.noOfDaysRequired" | translate }}
                 </div>
             </div>
 

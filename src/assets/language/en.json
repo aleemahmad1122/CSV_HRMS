@@ -104,7 +104,8 @@
       "address": "Address",
       "category": "Category",
       "selectCategory": "Select Category",
-      "searchByNameNumberAddress": "Search by Name, Address and Number"
+      "searchByNameNumberAddress": "Search by Name, Address and Number",
+      "noOfDays": "No Of Days"
     },
     "placeholders": {
       "name": "Name",
@@ -147,7 +148,8 @@
       "selectCategory": "Select Category",
       "searchByName": "Search by Name",
       "time": "08:00:00",
-      "edit": "Edit"
+      "edit": "Edit",
+      "noOfDays": "No Of Days"
     },
     "errors": {
       "endTimeequired": "End Time is Required",
@@ -197,7 +199,8 @@
       "startDateRequired": "Start Date is required",
       "statusRequired": "Status is required",
       "startTimeequired": "Start time is required",
-      "endTimeRequired": "End time is required"
+      "endTimeRequired": "End time is required",
+      "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
       "earlyMinutes": "Early Minutes",
@@ -274,7 +277,8 @@
       "endDate": "End Date",
       "startTime": "Start Time",
       "endTime": "End Time",
-      "edit": "Edit"
+      "edit": "Edit",
+      "noOfDays": "No Of Days"
     },
     "company": {
       "companyManagement": "Company Management",

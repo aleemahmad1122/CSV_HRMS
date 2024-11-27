@@ -67,7 +67,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      amount: ['', Validators.required],
+      noOfDays: ['', Validators.required],
       isPaid: ['', Validators.required],
     });
   }
@@ -77,7 +77,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.addEditForm.patchValue({
         name: this.selectedValue.name,
         description: this.selectedValue.description,
-        amount: this.selectedValue.amount,
+        noOfDays: this.selectedValue.noOfDays,
         isPaid: this.selectedValue.isPaid
       });
     }
