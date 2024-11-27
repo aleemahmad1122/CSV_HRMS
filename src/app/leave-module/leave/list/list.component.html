@@ -1,6 +1,6 @@
 <div class="d-flex flex-column-fluid px-3">
 
-  <div class="card card-custom mx-auto">
+  <div class="card card-custom mx-auto w-100">
     <!--begin::Header-->
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
       <div class="card-title">
@@ -90,10 +90,10 @@
             <tr class="datatable-row" style="left: 0px">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px">#<i class="flaticon2-arrow-up"></i></span>
+                <span style="width: 40px">#     </span>
               </th>
 
-              <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+              <th      class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px">
                   {{ "language.generic.name" | translate }}
                 </span>
@@ -142,47 +142,47 @@
                   </span></span>
               </td>
 
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <td      aria-label="64616-103" class="datatable-cell">
                 <span style="width: 250px">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75 font-weight-bolder font-size-lg mb-0"
+                    <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.firstName + ' ' + data.lastName || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
               </td>
 
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <td      aria-label="64616-103" class="datatable-cell">
                 <span style="width: 224px">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.email || "N/A" }}
                     </div>
                   </div>
                 </span>
               </td>
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <td      aria-label="64616-103" class="datatable-cell">
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.city || "N/A" }}
                     </div>
                   </div>
                 </span>
               </td>
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <td      aria-label="64616-103" class="datatable-cell">
                 <span style="width: 324px">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.address || "N/A" }}
                     </div>
                   </div>
                 </span>
               </td>
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+              <td      aria-label="64616-103" class="datatable-cell">
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                    <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.role || "N/A" }}
                     </div>
                   </div>

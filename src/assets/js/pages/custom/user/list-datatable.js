@@ -66,7 +66,7 @@ var KTAppsUsersListDatatable = function() {
 									<img class="" src="assets/media/users/' + user_img + '" alt="photo">\
 								</div>\
 								<div class="ml-4">\
-									<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + data.CompanyAgent + '</div>\
+									<div class="text-dark-75   font-size-lg mb-0">' + data.CompanyAgent + '</div>\
 									<a href="#" class="text-muted font-weight-bold text-hover-primary">' + data.CompanyEmail + '</a>\
 								</div>\
 							</div>';
@@ -89,7 +89,7 @@ var KTAppsUsersListDatatable = function() {
 									<span class="symbol-label font-size-h4 font-weight-bold">' + data.CompanyAgent.substring(0, 1) + '</span>\
 								</div>\
 								<div class="ml-4">\
-									<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + data.CompanyAgent + '</div>\
+									<div class="text-dark-75   font-size-lg mb-0">' + data.CompanyAgent + '</div>\
 									<a href="#" class="text-muted font-weight-bold text-hover-primary">' + data.CompanyEmail + '</a>\
 								</div>\
 							</div>';

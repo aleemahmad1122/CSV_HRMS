@@ -78,7 +78,7 @@ var KTEcommerceMyOrders = function () {
                             </div>\
                         </div>\
                         <div class="ml-4">\
-                            <a href="#" class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + productName[number] + '</a>\
+                            <a href="#" class="text-dark-75   font-size-lg mb-0">' + productName[number] + '</a>\
                         </div>\
                     </div>';
 

@@ -41,7 +41,7 @@ var KTAppsEducationSchoolTeacher = function() {
 					width: 250,
                     template: function(data) {
                         var number = KTUtil.getRandomInt(1, 10);
-                        
+
                         var avatarsGirl = {
                             1: {'file': '002-girl.svg'},
                             2: {'file': '003-girl-1.svg'},
@@ -82,7 +82,7 @@ var KTAppsEducationSchoolTeacher = function() {
                                 </div>\
                             </div>\
                             <div class="ml-4">\
-                                <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + data.CompanyAgent + '</div>\
+                                <div class="text-dark-75   font-size-lg mb-0">' + data.CompanyAgent + '</div>\
                                 <a href="#" class="text-muted font-weight-bold text-hover-primary">' + data.CompanyEmail + '</a>\
                             </div>\
                         </div>';

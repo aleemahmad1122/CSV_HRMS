@@ -76,7 +76,7 @@ var KTAppsProjectsListDatatable = function() {
 									<img class="" src="assets/media/project-logos/' + img + '" alt="photo"/>\
 								</div>\
 								<div class="ml-3">\
-									<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + data.CompanyAgent + '</div>\
+									<div class="text-dark-75   font-size-lg mb-0">' + data.CompanyAgent + '</div>\
 									<a href="#" class="text-muted font-weight-bold text-hover-primary">' +
                             		skills[number -1] + '</a>\
 								</div>\
@@ -100,7 +100,7 @@ var KTAppsProjectsListDatatable = function() {
 									<span class="symbol-label font-size-h4">' + data.CompanyAgent.substring(0, 1) + '</span>\
 								</div>\
 								<div class="ml-3">\
-									<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + data.CompanyAgent + '</div>\
+									<div class="text-dark-75   font-size-lg mb-0">' + data.CompanyAgent + '</div>\
 									<a href="#" class="text-muted font-weight-bold text-hover-primary">' +
                             skills[number - 4] + '</a>\
 								</div>\

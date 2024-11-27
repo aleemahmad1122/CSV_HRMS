@@ -1,8 +1,7 @@
-<div class="d-flex flex-column-fluid">
+<div class="d-flex flex-column-fluid px-3">
   <!--begin::Container-->
-  <div class="container">
-    <!--begin::Card-->
-    <div class="card card-custom">
+
+    <div class="card card-custom w-100">
       <!--begin::Header-->
       <div class="card-header flex-wrap border-0 pt-6 pb-0">
         <div class="card-title">
@@ -98,10 +97,10 @@
               <tr class="datatable-row" style="left: 0px;">
                 <th data-field="RecordID"
                   class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                  <span style="width: 40px;">#<i class="flaticon2-arrow-up"></i></span>
+                  <span style="width: 40px;">#     </span>
                 </th>
 
-                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                <th      class="datatable-cell datatable-cell-sort">
                   <span style="width: 250px;"> {{'language.generic.name' | translate}} </span>
                 </th>
 
@@ -111,17 +110,17 @@
                     {{'language.form.details' | translate}} </span></th>
 
 
-                <th style="width: 130px;" data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                <th style="width: 130px;"      class="datatable-cell datatable-cell-sort">
                   <span> {{'language.generic.budget' | translate}} </span>
                 </th>
 
 
-                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                <th      class="datatable-cell datatable-cell-sort">
                   <span> {{'language.generic.startDate' | translate}} </span>
                 </th>
 
 
-                <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
+                <th      class="datatable-cell datatable-cell-sort">
                   <span> {{'language.generic.endDate' | translate}} </span>
                 </th>
 
@@ -138,10 +137,10 @@
                       {{ (pageNo - 1) * pageSize + $index + 1 }}
                     </span></span>
                 </td>
-                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <td      aria-label="64616-103" class="datatable-cell">
                   <span style="width: 250px;">
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0"
+                      <div class="text-dark-75   font-size-lg mb-0"
                            [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
                       </div>
                     </div>
@@ -154,27 +153,27 @@
                   </span></td>
 
 
-                <td style="width: 130px;" data-field="OrderID" aria-label="64616-103" class="datatable-cell"><span>
+                <td style="width: 130px;"      aria-label="64616-103" class="datatable-cell"><span>
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">{{data.budget || "N/A"}} </div>
+                      <div class="text-dark-75   font-size-lg mb-0">{{data.budget || "N/A"}} </div>
                     </div>
                   </span></td>
 
 
-                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <td      aria-label="64616-103" class="datatable-cell">
                   <span>
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                      <div class="text-dark-75   font-size-lg mb-0">
                         {{ data.startDate | date: 'yyyy-MM-dd' }} {{ data.startDate || "N/A" }}
                       </div>
                     </div>
                   </span>
                 </td>
 
-                <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <td      aria-label="64616-103" class="datatable-cell">
                   <span>
                     <div class="d-flex align-items-center">
-                      <div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                      <div class="text-dark-75   font-size-lg mb-0">
                         {{ data.endDate | date: 'yyyy-MM-dd' }} {{ data.endDate || "N/A" }}
                       </div>
                     </div>
@@ -314,7 +313,6 @@
       </div>
       <!--end::Body-->
     </div>
-    <!--end::Card-->
-  </div>
+
   <!--end::Container-->
 </div>
