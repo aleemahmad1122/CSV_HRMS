@@ -1,8 +1,5 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom p-5">
-  <h1 class="font-weight-bold text-center" style="font-size: 30px;">
-      {{isEditMode ? 'language.generic.edit' : 'language.generic.add'| translate }}
-      {{ 'language.generic.attendance'| translate }}
-  </h1>
+
 
   <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 

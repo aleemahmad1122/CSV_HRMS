@@ -1,15 +1,6 @@
 <div
   class="container d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom"
 >
-  <h1 class="font-weight-bold text-center py-5" style="font-size: 30px">
-    {{
-      isEditMode
-        ? ("language.generic.edit" | translate)
-        : ("language.generic.create" | translate)
-    }}
-    {{ "language.sidebar.project" | translate }}
-  </h1>
-
   <form
     [formGroup]="addEditForm"
     class="form w-100 py-5"

@@ -1,5 +1,4 @@
 <div class="d-flex justify-content-between gap-5">
-  @if(this.isEditMode){
   <div class="d-flex flex-column-fluid col-md-3">
     <!--begin::Container-->
     <div class="container">
@@ -157,20 +156,10 @@
     </div>
     <!--end::Container-->
   </div>
-  }
   @if(this.activeTab == "language.sidebar.employee"){
   <div
     class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    <h1 class="font-weight-bold text-center py-5" style="font-size: 30px">
-      {{
-      isView
-      ? ("language.generic.view" | translate)
-      : isEditMode
-      ? ("language.generic.edit" | translate)
-      : ("language.generic.create" | translate)
-      }}
-      {{ "language.employee.employee" | translate }}
-    </h1>
+
 
     <form [formGroup]="addEditForm" class="form w-100 px-5" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
