@@ -60,6 +60,11 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       name: 'language.sidebar.attachmentType',
       route: '/admin/attachmentType'
     },
+
+    {
+      name: 'language.sidebar.leaveType',
+      route: '/admin/leave-type-list'
+    },
   ]
 
   employeeItems: Sidebar[] = [
@@ -84,11 +89,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.manageLeave',
       route: '/leave/leave-employee'
-    },
-    {
-      name: 'language.sidebar.leaveType',
-      route: '/leave/leave-type-list'
-    },
+    }
   ]
 
   toggleSidebar() {

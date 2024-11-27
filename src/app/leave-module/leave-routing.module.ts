@@ -21,18 +21,6 @@ const routes: Routes = [
         data: { breadcrumb: 'Leave Detail' },
         title: 'Leave',
     },
-    {
-        path: 'leave-type-list',
-        loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
-        data: { breadcrumb: 'Attendances Detail' },
-        title: 'Leave Type List',
-    },
-    {
-        path: 'leave-type/:action',
-        loadComponent: () => import(`./leave-type/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-        data: { breadcrumb: 'Attendances Detail' },
-        title: 'Leave Type Detail',
-    },
 ];
 
 @NgModule({
