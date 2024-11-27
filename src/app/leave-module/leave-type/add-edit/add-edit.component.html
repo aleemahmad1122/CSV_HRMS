@@ -34,7 +34,7 @@
             <div class="col-md-6 mb-3">
                 <label class="form-label">{{ "language.form.amount" | translate }}
                     <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="amount"
+                <input type="number" class="form-control" formControlName="amount"
                     [placeholder]="'language.placeholders.amount' | translate" [ngClass]="{
             'is-invalid':
               addEditForm.get('amount')?.invalid &&
@@ -59,13 +59,8 @@
                     <option value="">
                         {{ "language.form.selectIsPaid" | translate }}
                     </option>
-
-                    <option value="true">
-                        Yes
-                    </option>
-                    <option value="false">
-                        No
-                    </option>
+                    <option [value]="true">Yes</option>
+                    <option [value]="false">No</option>
                 </select>
                 <div *ngIf="
                     addEditForm.get('isPaid')?.invalid &&

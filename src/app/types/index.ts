@@ -103,7 +103,7 @@ export interface IEmployeeEducation extends ICommon {
 export interface IEmployeeEducationRes extends ICommonRes {
 
   data: {
-    employeeEducationDetails: IEmployeeWorkHistory[]
+    employeeEducationDetails: IEmployeeEducation[]
     pagination: IPagination
   };
 

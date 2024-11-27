@@ -91,8 +91,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const body = { ...this.addEditForm.value };
-
+    const body = {
+      ...this.addEditForm.value,
+      isPaid: this.addEditForm.value.isPaid === 'true'
+    };
 
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("LeaveType", `updateLeaveType/${this.isEditMode}`, body, true)
