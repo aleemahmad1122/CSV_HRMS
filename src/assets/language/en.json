@@ -313,6 +313,10 @@
       "projectManagement": "Project Management",
       "projectHeading": "Project management made easy"
     },
+    "education": {
+      "educationManagement": "Education Management",
+      "educationHeading": "Education management made easy"
+    },
     "workHistory": {
       "workHistoryManagement": "Work History Management",
       "workHistoryHeading": "Work History management made easy"
@@ -360,6 +364,7 @@
       "leaveTypeHeading": "Leave Types management made easy"
     },
     "employee": {
+      "reportTo":"Report To",
       "employee": "Employee",
       "shift": "Shift",
       "workHistory": "Work History",

@@ -48,6 +48,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   tabList: string[] = [
     'language.sidebar.employee',
+    'language.employee.reportTo',
     'language.employee.shift',
     'language.employee.department',
     'language.employee.education',

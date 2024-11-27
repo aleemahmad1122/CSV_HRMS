@@ -1,4 +1,4 @@
-<div class="row">
+<div class="d-flex justify-content-between gap-5">
   @if(this.isEditMode){
   <div class="d-flex flex-column-fluid col-md-3">
     <!--begin::Container-->
@@ -93,14 +93,18 @@
               <!--begin::User-->
               <div class="d-flex align-items-center">
                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-                  <div class="symbol-label" style="background-image:url('assets/media/users/300_21.jpg')">
+
+
+                  <div class="symbol-label" [style.backgroundImage]="'url(' + (addEditForm.get('employeeImage').value || imagePreview) + ')'">
                   </div>
+
                   <i class="symbol-badge bg-success"></i>
                 </div>
                 <div>
-                  <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">James
-                    Jones</a>
-                  <div class="text-muted">Application Developer</div>
+                  <a  class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
+                      {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
+                     </a>
+                  <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
                   <div class="mt-2">
                     <a href="#" class="btn btn-sm btn-primary font-weight-bold mr-2 py-2 px-3 px-xxl-5 my-1">Chat</a>
                     <a href="#" class="btn btn-sm btn-success font-weight-bold py-2 px-3 px-xxl-5 my-1">Follow</a>
@@ -112,15 +116,15 @@
               <div class="py-9">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                   <span class="font-weight-bold mr-2">Email:</span>
-                  <a href="#" class="text-muted text-hover-primary">matt fifestudios.com</a>
+                  <a   class="text-muted text-hover-primary">{{addEditForm.get('email').value || 'N/A'}}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                   <span class="font-weight-bold mr-2">Phone:</span>
-                  <span class="text-muted">44(76)34254578</span>
+                  <span class="text-muted">{{addEditForm.get('phoneNumber').value || 'N/A'}}</span>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <span class="font-weight-bold mr-2">Location:</span>
-                  <span class="text-muted">Melbourne</span>
+                  <span class="text-muted">{{addEditForm.get('city').value || 'N/A'}}</span>
                 </div>
               </div>
               <!--end::Contact-->
@@ -386,6 +390,12 @@
       </div>
       }
     </form>
+  </div>
+  }
+  @if(this.activeTab === 'language.employee.reportTo' ){
+    <div
+    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
+report to
   </div>
   }
   @if(this.activeTab === 'language.employee.shift' ){

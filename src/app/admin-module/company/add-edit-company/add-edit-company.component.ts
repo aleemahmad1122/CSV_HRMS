@@ -25,7 +25,7 @@ interface Typess {
 
 export class AddEditCompanyComponent implements OnInit, OnDestroy {
   datePickerConfig = {
-    format: 'DD-MM-YYYY',
+    format: 'YYYY-MM-DD',
   };
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
@@ -89,6 +89,8 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const currentDate = new Date().toString()
+    const defaultFoundedDate = this.convertToDatetimeLocalFormat(currentDate);
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
@@ -104,9 +106,12 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       firstAddress: ['', Validators.required],
       secondAddress: [''],
       employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      foundedDate: ['', Validators.required],
+      foundedDate: [defaultFoundedDate, Validators.required],
       companyType: [2]
     });
+
+    console.log(defaultFoundedDate);
+
   }
 
   ngOnDestroy(): void {
@@ -128,7 +133,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
         firstAddress: this.selectedCompany.firstAddress,
         secondAddress: this.selectedCompany.secondAddress,
         employeesCount: this.selectedCompany.employeesCount,
-        foundedDate: this.selectedCompany.foundedDate,
+        foundedDate:this.convertToDatetimeLocalFormat(this.selectedCompany.foundedDate),
         companyType: this.selectedCompany.companyType || 2,
       });
       this.imagePreview = this.selectedCompany.companyImage || this.defaultImagePath
@@ -138,12 +143,14 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   private convertToDatetimeLocalFormat(dateString: string): string {
-    // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
     const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
-
-
+    // Extract the year, month, and day to form the 'YYYY-MM-DD' format
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based, so add 1
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
+
 
   onDateChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -175,6 +182,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
     formData.append('countryId', this.companyForm.get('country')?.value);
     formData.append('industryId', this.companyForm.get('industry')?.value);
+    formData.append('foundedDate', this.companyForm.get('foundedDate')?.value);
     formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
     formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
     formData.append('companyType', this.companyForm.get('companyType')?.value || 2);
