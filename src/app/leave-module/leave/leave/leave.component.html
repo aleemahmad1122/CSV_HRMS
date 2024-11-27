@@ -77,7 +77,7 @@
                 </div>
                 <!--end::Dropdown-->
                 <!--begin::Button-->
-                <button routerLink="/attendance/leave/add" [queryParams]="{ id: this.empId }"
+                <button routerLink="/leave/leave/add" [queryParams]="{ id: this.empId }"
                     class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
@@ -167,7 +167,7 @@
                             <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                                 class="datatable-cell">
                                 <span style="overflow: visible; position: relative; width: 130px">
-                                    <a [routerLink]="['/attendance/leave/edit']"
+                                    <a [routerLink]="['/leave/leave/edit']"
                                         [queryParams]="{ id: this.empId,editId:data.leaveId }"
                                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                                         title="Edit details">

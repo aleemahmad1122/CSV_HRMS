@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
-import { ILeaveType, ILeaveTypeRes } from '../../../../types';
+import { ILeaveType, ILeaveTypeRes } from '../../../types';
 
 @Component({
   selector: 'app-add-edit',

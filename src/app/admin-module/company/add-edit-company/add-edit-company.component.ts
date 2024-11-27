@@ -141,6 +141,8 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
     const date = new Date(dateString);
     return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
+
+
   }
 
   onDateChange(event: Event): void {

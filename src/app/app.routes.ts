@@ -43,7 +43,7 @@ export const routes: Routes = [
         path: 'employee',
         loadChildren: () => import('./employee-module/employee.module').then(m => m.EmployeeModuleModule),
         data: { breadcrumb: 'Employee' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
 
@@ -51,6 +51,14 @@ export const routes: Routes = [
         path: 'attendance',
         loadChildren: () => import('./attendance-module/attendance.module').then(m => m.AttendanceModuleModule),
         data: { breadcrumb: 'Attendance' },
+        canActivate: [ProtectedGuard]
+    },
+
+
+    {
+        path: 'leave',
+        loadChildren: () => import('./leave-module/leave-module.module').then(m => m.LeaveModuleModule),
+        data: { breadcrumb: 'Leave' },
         canActivate: [ProtectedGuard]
     },
 

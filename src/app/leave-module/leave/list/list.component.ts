@@ -1,28 +1,28 @@
 import { Component } from '@angular/core';
-import { ILeave, ILeaveRes } from '../../../../types/index';
+import { IEmployee, IEmployeeRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
-import { ExportService } from '../../../../shared/Services/export.service';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
+import { ExportService } from '../../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
+import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+
 
 @Component({
-  selector: 'app-leave',
+  selector: 'app-list',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
-  templateUrl: './leave.component.html',
-  styleUrl: './leave.component.css'
+  templateUrl: './list.component.html',
+  styleUrl: './list.component.css'
 })
-export class LeaveComponent {
+export class ListComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
 
-  dataList: ILeave[] = [];
+  dataList: IEmployee[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -30,22 +30,13 @@ export class LeaveComponent {
   pageSize = 10;
   pageNo = 1;
   totalPages = 0;
-  empId: string = '';
 
   constructor(
     private apiService: ApiCallingService,
-    private route: ActivatedRoute,
     private exportService: ExportService
   ) {
     this.initializeSearch();
-    this.initializeEmpId();
     this.getData();
-  }
-
-  private initializeEmpId(): void {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      this.empId = params['id'];
-    });
   }
 
   private initializeSearch(): void {
@@ -65,29 +56,29 @@ export class LeaveComponent {
   private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
     // Call the API with the active status filter
-    this.apiService.getData('Leave', 'getAllLeaves', true, { searchQuery: searchTerm, activeStatus: isActive, employeeId: this.empId })
+    this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: ILeaveRes) => this.handleResponse(res),
+        next: (res: IEmployeeRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Leave', 'getAllLeaves', true, { searchQuery: searchTerm, employeeId: this.empId })
+    this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: ILeaveRes) => this.handleResponse(res),
+        next: (res: IEmployeeRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: ILeaveRes): void {
+  private handleResponse(response: IEmployeeRes): void {
     if (response?.success) {
-      const { leaves, pagination } = response.data;
+      const { employeeDetails, pagination } = response.data;
       Object.assign(this, {
-        dataList: leaves,
+        dataList: employeeDetails,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -115,8 +106,8 @@ export class LeaveComponent {
   }
 
   private getPaginatedData(): void {
-    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize, employeeId: this.empId };
-    this.apiService.getData('Leave', 'getAllLeaves', true, params)
+    const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
+    this.apiService.getData('Employee', 'getEmployees', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -127,13 +118,13 @@ export class LeaveComponent {
   onDelete(id: string): void {
     console.log(id);
 
-    this.apiService.deleteData('Leave', `deleteLeave/${id}`, id, true)
+    this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.leaveId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeId !== id);
         },
-        error: (err) => console.error('Error deleting Leave :', err),
+        error: (err) => console.error('Error deleting Employee:', err),
       });
   }
 

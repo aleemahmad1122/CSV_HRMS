@@ -64,23 +64,15 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   employeeItems: Sidebar[] = [
     {
-      name: 'language.sidebar.employee',
+      name: 'language.sidebar.manageEmployee',
       route: '/employee/employee-list'
     },
   ]
 
   attendanceItems: Sidebar[] = [
     {
-      name: 'language.sidebar.attendance',
+      name: 'language.sidebar.manageAttendance',
       route: '/attendance/employee'
-    },
-    {
-      name: 'language.sidebar.leave',
-      route: '/attendance/leave-employee'
-    },
-    {
-      name: 'language.sidebar.leaveType',
-      route: '/attendance/leave-type-list'
     },
     {
       name: 'language.sidebar.attendanceImport',
@@ -88,33 +80,14 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
   ]
 
-  manageItems: Sidebar[] = [
+  leaveItems: Sidebar[] = [
     {
-      name: 'language.sidebar.document',
-      route: '/manage/document'
+      name: 'language.sidebar.manageLeave',
+      route: '/leave/leave-employee'
     },
     {
-      name: 'language.sidebar.attendance',
-      route: '/manage/attendance'
-    },
-    {
-      name: 'language.sidebar.travel',
-      route: '/manage/travel'
-    },
-    {
-      name: 'language.sidebar.overtime',
-      route: '/manage/overtime'
-    },
-    {
-      name: 'language.sidebar.loans',
-      route: '/manage/loans'
-    },
-  ]
-
-  adminReportItems: Sidebar[] = [
-    {
-      name: 'language.sidebar.report',
-      route: '/admin-report/report'
+      name: 'language.sidebar.leaveType',
+      route: '/leave/leave-type-list'
     },
   ]
 
