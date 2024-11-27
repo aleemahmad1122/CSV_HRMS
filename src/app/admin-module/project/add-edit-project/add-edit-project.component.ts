@@ -24,7 +24,7 @@ interface Status {
 export class AddEditProjectComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   datePickerConfig = {
-    format: 'DD-MM-YYYY',
+    format: 'YYYY-MM-DDTHH:mm',
   };
   addEditForm: FormGroup;
   currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
@@ -86,6 +86,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
       description: ['', Validators.required],
       budget: ['', Validators.required],
       currency: ['', Validators.required],
+      offset: [new Date().getTimezoneOffset().toString()]
     });
   }
 
@@ -98,6 +99,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
         statusId: this.selectedValue.statusId,
         description: this.selectedValue.description,
         budget: this.selectedValue.budget,
+        offset:this.selectedValue.offset,
         currency: this.selectedValue.currency
       });
     }

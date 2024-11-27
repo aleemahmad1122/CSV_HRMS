@@ -15,7 +15,7 @@
 
           <div class="col-md-6 mb-3">
               <label class="form-label">{{'language.form.designationCode' | translate}} <span class="text-danger">*</span></label>
-              <input type="number" class="form-control" formControlName="designationCode"
+              <input type="text" class="form-control" formControlName="designationCode"
                   [placeholder]="'language.placeholders.designationCode' | translate"
                   [ngClass]="{'is-invalid': (qualificationForm.get('designationCode')?.invalid && (qualificationForm.get('designationCode')?.touched || isSubmitted))}" />
               <div *ngIf="qualificationForm.get('designationCode')?.invalid && (qualificationForm.get('designationCode')?.touched || isSubmitted)"

@@ -15,7 +15,7 @@
       </div>
 
       <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.details' | translate}} <span class="text-danger">*</span></label>
+          <label class="form-label">{{'language.form.emailDetails' | translate}} <span class="text-danger"></span></label>
           <input type="text" class="form-control" formControlName="details"
               [placeholder]="'language.placeholders.details' | translate"
               [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}" />
@@ -38,7 +38,7 @@
 
       <div class="col-md-6 mb-3">
           <label class="form-label">{{'language.form.contactNumber' | translate}} <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" formControlName="contactNumber"
+          <input type="text" class="form-control" formControlName="contactNumber"
               [placeholder]="'language.placeholders.contactNumber' | translate"
               [ngClass]="{'is-invalid': (addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted))}" />
           <div *ngIf="addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted)"

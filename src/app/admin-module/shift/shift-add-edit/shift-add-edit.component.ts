@@ -75,7 +75,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       endTime: ['', [Validators.required]],
       graceMinutes: [0],
       earlyMinutes: [0],
-      description: ['']
+      description: [''],
+      offset: [new Date().getTimezoneOffset().toString()]
     });
   }
 
@@ -88,6 +89,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         graceMinutes: this.selectedAddEditValue.graceMinutes,
         earlyMinutes: this.selectedAddEditValue.earlyMinutes,
         description: this.selectedAddEditValue.description,
+        offset: this.selectedAddEditValue.offset,
       });
     }
   }

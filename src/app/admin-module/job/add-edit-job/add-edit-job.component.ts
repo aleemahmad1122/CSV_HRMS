@@ -68,7 +68,6 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
       jobCode: ['', Validators.required],
       jobTitle: ['', Validators.required],
       jobDescription: ['', Validators.required],
-      specification: ['', Validators.required]
     });
   }
 
@@ -78,7 +77,6 @@ export class AddEditJobComponent implements OnInit, OnDestroy {
         jobCode: this.selectedValue.jobCode,
         jobTitle: this.selectedValue.jobTitle,
         jobDescription: this.selectedValue.jobDescription,
-        specification: this.selectedValue.specification
       });
     }
   }

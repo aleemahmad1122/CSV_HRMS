@@ -27,27 +27,21 @@
               </div>
           </div>
 
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
-              <textarea class="form-control" formControlName="jobDescription"
-                  [placeholder]="'language.placeholders.description' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('jobDescription')?.invalid && (addEditForm.get('jobDescription')?.touched || isSubmitted))}"></textarea>
-              <div *ngIf="addEditForm.get('jobDescription')?.invalid && (addEditForm.get('jobDescription')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.descriptionRequired' | translate}}
-              </div>
-          </div>
 
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.generic.specification' | translate}} <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="specification"
-                  [placeholder]="'language.placeholders.specification' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('specification')?.invalid && (addEditForm.get('specification')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('specification')?.invalid && (addEditForm.get('specification')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.specificationRequired' | translate}}
-              </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
+          <textarea class="form-control" formControlName="jobDescription"
+              [placeholder]="'language.placeholders.description' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('jobDescription')?.invalid && (addEditForm.get('jobDescription')?.touched || isSubmitted))}"></textarea>
+          <div *ngIf="addEditForm.get('jobDescription')?.invalid && (addEditForm.get('jobDescription')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.descriptionRequired' | translate}}
           </div>
+      </div>
       </div>
 
     <div class="row mt-3">

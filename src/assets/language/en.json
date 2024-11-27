@@ -46,6 +46,7 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "emailDetails":"(Email) Details",
       "selectTeam": "Select Team",
       "shiftId": "Shift",
       "selectShift": "Select Shift",

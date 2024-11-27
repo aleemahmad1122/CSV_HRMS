@@ -132,6 +132,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
         industry: this.selectedCompany.industryId,
         firstAddress: this.selectedCompany.firstAddress,
         secondAddress: this.selectedCompany.secondAddress,
+        offset: this.selectedCompany.offset,
         employeesCount: this.selectedCompany.employeesCount,
         foundedDate:this.convertToDatetimeLocalFormat(this.selectedCompany.foundedDate),
         companyType: this.selectedCompany.companyType || 2,
@@ -187,7 +188,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
     formData.append('companyType', this.companyForm.get('companyType')?.value || 2);
     formData.append('employeesCount', this.companyForm.get('employeesCount')?.value);
-
+    formData.append('offset', new Date().getTimezoneOffset().toString());
     const apiCall = this.isEditMode
       ? this._apiCalling.putData("Company", "updateCompany/" + this.selectedCompany?.companyId, formData, true)
       : this._apiCalling.postData("Company", "addCompany", formData, true);

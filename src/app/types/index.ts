@@ -431,7 +431,6 @@ export interface Job extends ICommon {
   jobTitle: string;
   jobCode: string;
   jobDescription: string;
-  specification: string;
 }
 
 export interface Qualification extends ICommon {
@@ -524,6 +523,7 @@ export interface EmployeeDetail {
 
 
 export interface ICompany {
+  offset:string | number;
   companyId: string;
   companyImage: string;
   name: string;

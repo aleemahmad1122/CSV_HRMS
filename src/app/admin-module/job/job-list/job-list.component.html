@@ -115,10 +115,6 @@
                     {{'language.form.details' | translate}} </span></th>
 
 
-                <th      class="datatable-cell datatable-cell-sort">
-                  <span style="width: 250px;"> {{'language.generic.specification' | translate}}</span>
-                </th>
-
                 <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
                     style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
               </tr>
@@ -146,13 +142,6 @@
                       {{data.jobDescription.length > 15 ? '...' : ''}}</div>
                   </span></td>
 
-
-                <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                    <div class="d-flex align-items-center">
-                      <div class="text-dark-75   font-size-lg mb-0">{{data.specification.slice(0,30) ||
-                        "N/A"}} {{data.specification.length > 30 ? '...' : ''}}</div>
-                    </div>
-                  </span></td>
 
 
                 <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell"><span
