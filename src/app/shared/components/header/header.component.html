@@ -7,7 +7,7 @@
                 @for(item of this.breadcrumbs; track $index){
                 <li class="breadcrumb-item">
                     @if($index === 0){
-                    <span style="color: gray; cursor: pointer;" (click)="this.goBack()">{{item.label }}</span>
+                    <span style="color: gray;">{{item.label }}</span>
                     }
                     @if($index !== 0){
                     <a [routerLinkActive]="'active'">{{ item.label }}</a>

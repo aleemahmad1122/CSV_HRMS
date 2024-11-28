@@ -9,11 +9,12 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 
 @Component({
   selector: 'app-leave',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe, ConvertTimePipe],
   templateUrl: './leave.component.html',
   styleUrl: './leave.component.css'
 })

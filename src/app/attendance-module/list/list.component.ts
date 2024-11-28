@@ -8,12 +8,13 @@ import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import * as bootstrap from 'bootstrap';
+import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })
@@ -108,10 +109,6 @@ export class ListComponent implements AfterViewInit {
     }
   }
 
-
-  dateTime(date: string): string {
-    return new Date(date).toISOString().split('T')[1].split('Z')[0];
-  }
 
   onStartDateChange(event: Event): void {
     const selectedDate = (event.target as HTMLInputElement).value;

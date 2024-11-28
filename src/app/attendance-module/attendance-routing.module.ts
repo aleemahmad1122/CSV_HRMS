@@ -6,13 +6,13 @@ const routes: Routes = [
   {
     path: 'employee',
     loadComponent: () => import(`./components/employee/employee.component`).then(c => c.EmployeeComponent),
-    data: { breadcrumb: 'Attendances List' },
+    data: { breadcrumb: 'Attendances Employee' },
     title: 'Attendances Employee List',
   },
   {
     path: 'attendance-list',
     loadComponent: () => import(`./list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Attendances List' },
+    data: { breadcrumb: 'Manage Attendances' },
     title: 'Attendances List',
   },
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
   {
     path: 'import',
     loadComponent: () => import(`./components/import/import.component`).then(c => c.ImportComponent),
-    data: { breadcrumb: 'Attendances Detail' },
+    data: { breadcrumb: 'Attendances Import' },
     title: 'Attendances',
   },
 ];
