@@ -16,9 +16,9 @@ export class ConvertTimePipe implements PipeTransform {
 
       // Map custom format patterns to Angular's date pipe syntax
       const formatMappings: Record<string, string> = {
-        date: 'yyyy-MM-dd',
-        time: 'HH:mm:ss',
-        dateTime: 'yyyy-MM-dd HH:mm:ss',
+        date: 'MMM-d-y',
+        time: 'HH:mm a',
+        dateTime: 'MMM-d-y HH:mm a',
       };
 
       // Fetch the format from the mappings
