@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
-export class AddEditComponent  implements OnInit, OnDestroy {
+export class AddEditComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   qualificationForm: FormGroup;
   isEditMode = false;
@@ -38,20 +38,20 @@ export class AddEditComponent  implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Department", `getDepartmentById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Department", `getDepartmentById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedValue = response?.data;
                 this.patchFormValues();
-            } else {
+              } else {
+                this.selectedValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedValue = [];
-          }
-        });
+          });
       }
     });
   }
@@ -64,7 +64,7 @@ export class AddEditComponent  implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
+      description: [''],
     });
   }
 

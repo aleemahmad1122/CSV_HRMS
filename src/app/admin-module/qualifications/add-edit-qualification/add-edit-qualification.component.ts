@@ -38,20 +38,20 @@ export class AddEditQualificationComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Qualification", `getQualificationById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Qualification", `getQualificationById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedQualification = response?.data;
                 this.patchFormValues(); // Call patchFormValues here after setting selectedQualification
-            } else {
+              } else {
+                this.selectedQualification = [];
+              }
+            },
+            error: (error) => {
               this.selectedQualification = [];
             }
-          },
-          error: (error) => {
-            this.selectedQualification = [];
-          }
-        });
+          });
         // this.patchFormValues(); // Removed this line
       }
     });
@@ -65,7 +65,7 @@ export class AddEditQualificationComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
+      description: [''],
     });
   }
 

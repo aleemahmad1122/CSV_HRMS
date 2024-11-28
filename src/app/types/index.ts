@@ -274,6 +274,8 @@ export interface ICompany extends ICommon {
   industryId: string;
   name: string;
   phoneNumber: string;
+  cnic: string;
+  dob: string;
   registrationNumber: string;
   isActive: boolean;
 }
@@ -523,7 +525,7 @@ export interface EmployeeDetail {
 
 
 export interface ICompany {
-  offset:string | number;
+  offset: string | number;
   companyId: string;
   companyImage: string;
   name: string;

@@ -94,15 +94,16 @@
                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
 
 
-                  <div class="symbol-label" [style.backgroundImage]="'url(' + (addEditForm.get('employeeImage').value || imagePreview) + ')'">
+                  <div class="symbol-label"
+                    [style.backgroundImage]="'url(' + (addEditForm.get('employeeImage').value || imagePreview) + ')'">
                   </div>
 
                   <i class="symbol-badge bg-success"></i>
                 </div>
                 <div>
-                  <a  class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
-                      {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
-                     </a>
+                  <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
+                    {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
+                  </a>
                   <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
                   <div class="mt-2">
                     <a href="#" class="btn btn-sm btn-primary font-weight-bold mr-2 py-2 px-3 px-xxl-5 my-1">Chat</a>
@@ -115,7 +116,7 @@
               <div class="py-9">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                   <span class="font-weight-bold mr-2">Email:</span>
-                  <a   class="text-muted text-hover-primary">{{addEditForm.get('email').value || 'N/A'}}</a>
+                  <a class="text-muted text-hover-primary">{{addEditForm.get('email').value || 'N/A'}}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-between mb-2">
                   <span class="font-weight-bold mr-2">Phone:</span>
@@ -366,6 +367,38 @@
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.form.dob" | translate }}
+            <span class="text-danger">*</span></label>
+          <dp-date-picker class="form-control" formControlName="dob" placeholder="00/00/00" [config]="datePickerConfig"
+            theme="dp-material" (change)="onDateTimeChange($event,'dob')" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('dob')?.invalid &&
+                (addEditForm.get('dob')?.touched || isSubmitted)
+            }"></dp-date-picker>
+          <div *ngIf="
+              addEditForm.get('dob')?.invalid &&
+              (addEditForm.get('dob')?.touched || isSubmitted)
+            " class="invalid-feedback">
+            {{ "language.errors.dobRequired" | translate }}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{'language.form.cnic' | translate}} <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="cnic"
+            [placeholder]="'language.placeholders.cnic' | translate"
+            [ngClass]="{'is-invalid': (addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted)"
+            class="invalid-feedback">
+            {{'language.errors.cnicRequired' | translate}}
+          </div>
+        </div>
+
+      </div>
+
       @if(!this.isView){
       <div class="row mt-3 py-5">
         <div class="col-12 text-right">
@@ -382,9 +415,9 @@
   </div>
   }
   @if(this.activeTab === 'language.employee.reportTo' ){
-    <div
+  <div
     class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-report to
+    report to
   </div>
   }
   @if(this.activeTab === 'language.employee.shift' ){

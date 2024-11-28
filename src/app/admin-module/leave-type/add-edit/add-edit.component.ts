@@ -66,7 +66,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       noOfDays: ['', Validators.required],
       isPaid: ['', Validators.required],
     });

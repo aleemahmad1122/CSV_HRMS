@@ -38,20 +38,20 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Designation", `getDesignationById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Designation", `getDesignationById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedValue = response?.data;
                 this.patchFormValues();
-            } else {
+              } else {
+                this.selectedValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedValue = [];
-          }
-        });
+          });
       }
     });
   }
@@ -65,7 +65,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return this.fb.group({
       designationTitle: ['', [Validators.required, Validators.maxLength(100)]],
       designationCode: ['', [Validators.required, Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]],
+      description: [''],
     });
   }
 

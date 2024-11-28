@@ -83,7 +83,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
       startDate: [`${environment.defaultDate}`, Validators.required],
       endDate: [`${environment.defaultDate}`, Validators.required],
       statusId: ['1', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       budget: ['', Validators.required],
       currency: ['', Validators.required],
       offset: [new Date().getTimezoneOffset().toString()]

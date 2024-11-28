@@ -1,9 +1,11 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
+<div
+    class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
 
     <form [formGroup]="qualificationForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
         <div class="row">
             <div class="col-md-12 mb-3">
-                <label class="form-label">{{'language.form.title' | translate}} <span class="text-danger">*</span></label>
+                <label class="form-label">{{'language.form.title' | translate}} <span
+                        class="text-danger">*</span></label>
                 <input type="text" class="form-control" formControlName="name"
                     [placeholder]="'language.placeholders.title' | translate"
                     [ngClass]="{'is-invalid': (qualificationForm.get('name')?.invalid && (qualificationForm.get('name')?.touched || isSubmitted))}" />
@@ -17,16 +19,17 @@
         </div>
 
         <div class="row">
-          <div class="col-md-12 mb-3">
-            <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
-            <textarea class="form-control" formControlName="description"
-                [placeholder]="'language.placeholders.description' | translate"
-                [ngClass]="{'is-invalid': (qualificationForm.get('description')?.invalid && (qualificationForm.get('description')?.touched || isSubmitted))}"></textarea>
-            <div *ngIf="qualificationForm.get('description')?.invalid && (qualificationForm.get('description')?.touched || isSubmitted)"
-                class="invalid-feedback">
-                {{'language.errors.descriptionRequired' | translate}}
+            <div class="col-md-12 mb-3">
+                <label class="form-label">{{'language.form.description' | translate}} <span
+                        class="text-danger"></span></label>
+                <textarea class="form-control" formControlName="description"
+                    [placeholder]="'language.placeholders.description' | translate"
+                    [ngClass]="{'is-invalid': (qualificationForm.get('description')?.invalid && (qualificationForm.get('description')?.touched || isSubmitted))}"></textarea>
+                <div *ngIf="qualificationForm.get('description')?.invalid && (qualificationForm.get('description')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.descriptionRequired' | translate}}
+                </div>
             </div>
-        </div>
         </div>
 
         <div class="row mt-3">

@@ -10,6 +10,8 @@ import { EducationComponent } from '../components/education/education.component'
 import { WorkHistoryComponent } from '../components/work-history/work-history.component';
 import { AddEditComponent } from '../components/department-team/add-edit/add-edit.component';
 import { ShiftHistoryComponent } from '../components/shift/shift-history.component';
+import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-add-edit-module',
@@ -22,12 +24,20 @@ import { ShiftHistoryComponent } from '../components/shift/shift-history.compone
     EducationComponent,
     WorkHistoryComponent,
     AddEditComponent,
+    DpDatePickerModule,
     ShiftHistoryComponent,
   ],
   templateUrl: './add-edit-module.component.html',
   styleUrls: ['./add-edit-module.component.css'],
 })
 export class AddEditModuleComponent implements OnInit, OnDestroy {
+
+
+  datePickerConfig = {
+    format: environment.dateFormat,
+  };
+
+
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode: boolean | string = false;
@@ -117,6 +127,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       role: ['', Validators.required],
+      dob: [`${environment.defaultDate}`, Validators.required],
+      cnic: ['', Validators.required],
     });
   }
 
@@ -132,11 +144,32 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         city: this.selectedValue.city,
         address: this.selectedValue.address,
         phoneNumber: this.selectedValue.phoneNumber,
+        cnic: this.selectedValue.cnic,
+        dob: this.convertToDatetimeLocalFormat(this.selectedValue.dob),
         role: this.selectedValue.role,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;
     }
   }
+
+  private convertToDatetimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]
+  }
+
+  onDateTimeChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
+    }
+  }
+
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+  }
+
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -185,15 +218,21 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     // Create a FormData instance
     const formData = new FormData();
 
-    // Append each form control's value to FormData
     Object.keys(this.addEditForm.controls).forEach((key) => {
       const value = this.addEditForm.get(key)?.value;
-      if (key === 'employeeImage' && this.selectedFile) {
-        formData.append(key, this.selectedFile); // Append file if selected
+
+      if (key === 'dob') {
+        // Append the formatted date for 'dob'
+        formData.append(key, this.formatDateForSubmission(value));
+      } else if (key === 'employeeImage' && this.selectedFile) {
+        // Append file if 'employeeImage' is the key and file is selected
+        formData.append(key, this.selectedFile);
       } else {
-        formData.append(key, value); // Append other form values
+        // Append other form control values
+        formData.append(key, value ?? ''); // Ensure no null/undefined values are appended
       }
     });
+
 
     // Determine API call based on mode
     const apiCall = this.isEditMode
