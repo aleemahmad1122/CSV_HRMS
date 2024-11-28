@@ -46,6 +46,9 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "reportsTo": "Reports To",
+      "selectReportTo": "Select Report to",
+      "selectrole": "Select Role",
       "cnic": "CNIC",
       "dob": "Date of Birth",
       "emailDetails": "(Email) Details",

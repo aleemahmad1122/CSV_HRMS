@@ -22,6 +22,12 @@ interface ICommonRes {
 }
 
 
+export interface IReportTo {
+  employeeId: string;
+  companyId: string;
+  fullName: string;
+}
+
 
 export interface IShift extends ICommon {
   shiftId: string;

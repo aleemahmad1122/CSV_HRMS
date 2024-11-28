@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ApiCallingService } from './../../../../shared/Services/api-calling.service';
-import { IDepartmentRes, IDepartment, ITeam, IDesignations, IDesignationRes, ITeamRes } from '../../../../types';
+import { IDepartmentRes, IDepartment, ITeam, IDesignations, IDesignationRes, ITeamRes, IReportTo } from '../../../../types';
 
 @Component({
   selector: 'app-add-edit',
@@ -19,6 +19,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   departmentList: IDepartment[] = [];
   teamList: ITeam[] = [];
+  reportList: IReportTo[] = [];
   designationList: IDesignations[] = [];
   addEditForm: FormGroup;
   isEditMode: boolean = false;
@@ -65,6 +66,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     this.getDepartments();
     this.getDesignations();
     this.getTeams();
+    this.getSeniorEmployees();
   }
 
   ngOnDestroy(): void {
@@ -101,7 +103,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       departmentId: ['', Validators.required],
       designationId: ['', Validators.required],
       teamId: ['', Validators.required],
-      description: ['', Validators.required],
+      reportsTo: ['', Validators.required],
     });
   }
 
@@ -111,7 +113,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         departmentId: this.selectedValue.departmentId,
         designationId: this.selectedValue.designationId,
         teamId: this.selectedValue.teamId,
-        description: this.selectedValue.description
+        reportsTo: this.selectedValue.reportsTo
       });
     }
   }
@@ -139,6 +141,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: ITeamRes) => this.teamList = res.data.teams,
+        error: () => this.toaster.error('Failed to load teams', 'Error'),
+      });
+  }
+
+  getSeniorEmployees(): void {
+    this.apiCalling.getData('Employee', 'getSeniorEmployees', true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: any) => this.reportList = res.data,
         error: () => this.toaster.error('Failed to load teams', 'Error'),
       });
   }

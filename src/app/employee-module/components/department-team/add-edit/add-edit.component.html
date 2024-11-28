@@ -73,21 +73,28 @@
     </div>
 
     <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.description" | translate }}
+      <label class="form-label">{{ "language.form.reportsTo" | translate }}
         <span class="text-danger">*</span></label>
-      <input class="form-control" formControlName="description" type="text"
-        [placeholder]="'language.placeholders.description' | translate" rows="3" [ngClass]="{
+      <select class="form-control custom-select" formControlName="reportsTo" [ngClass]="{
           'is-invalid':
-            addEditForm.get('description')?.invalid &&
-            (addEditForm.get('description')?.touched || isSubmitted)
-        }" [disabled]="isViewMode" />
+            addEditForm.get('reportsTo')?.invalid &&
+            (addEditForm.get('reportsTo')?.touched || isSubmitted)
+        }" [disabled]="isViewMode">
+        <option value="">{{ "language.form.selectReportTo" | translate }}</option>
+        <option *ngFor="let report of reportList" [value]="report.employeeId">
+          {{ report.fullName }}
+        </option>
+      </select>
       <div *ngIf="
-          addEditForm.get('description')?.invalid &&
-          (addEditForm.get('description')?.touched || isSubmitted)
+          addEditForm.get('reportsTo')?.invalid &&
+          (addEditForm.get('reportsTo')?.touched || isSubmitted)
         " class="invalid-feedback">
-        {{ "language.errors.descriptionRequired" | translate }}
+        {{ "language.errors.teamRequired" | translate }}
       </div>
     </div>
+
+
+
   </div>
 
   <!-- Form submission buttons -->

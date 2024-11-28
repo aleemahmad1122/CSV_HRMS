@@ -43,7 +43,13 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   isEditMode: boolean | string = false;
   isSubmitted = false;
   activRoute: string = '';
+  rolesList: {
+    roleId: string;
+    name: string;
+    isActive: boolean;
+  }[
 
+  ] = []
 
   isView: boolean = false;
   selectedValue: any;
@@ -58,7 +64,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   tabList: string[] = [
     'language.sidebar.employee',
-    'language.employee.reportTo',
     'language.employee.shift',
     'language.employee.department',
     'language.employee.education',
@@ -76,13 +81,35 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
+
+
     this.router.events.subscribe(() => {
       this.activRoute = this.router.url;
     });
     this.addEditForm = this.createForm();
   }
 
+  private getRoles(): void {
+    this.apiCalling
+      .getData('Role', `getRoles`, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.rolesList = response?.data?.roles;
+            this.patchFormValues();
+          } else {
+            this.rolesList = [];
+          }
+        },
+        error: () => {
+          this.rolesList = [];
+        },
+      });
+  }
+
   ngOnInit(): void {
+    this.getRoles()
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
       this.isEditMode = id;
@@ -127,7 +154,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       role: ['', Validators.required],
-      dob: [`${environment.defaultDate}`, Validators.required],
+      dateOfBirth: [`${environment.defaultDate}`, Validators.required],
       cnic: ['', Validators.required],
     });
   }
@@ -145,7 +172,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         address: this.selectedValue.address,
         phoneNumber: this.selectedValue.phoneNumber,
         cnic: this.selectedValue.cnic,
-        dob: this.convertToDatetimeLocalFormat(this.selectedValue.dob),
+        dateOfBirth: this.convertToDatetimeLocalFormat(this.selectedValue.dateOfBirth),
         role: this.selectedValue.role,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;

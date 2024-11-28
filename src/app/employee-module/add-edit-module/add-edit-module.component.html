@@ -348,39 +348,21 @@
           </div>
         </div>
 
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.role" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="role"
-            [placeholder]="'language.placeholders.role' | translate" [readOnly]="isView" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('role')?.invalid &&
-                  (addEditForm.get('role')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('role')?.invalid &&
-                (addEditForm.get('role')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.roleRequired" | translate }}
-          </div>
-        </div>
       </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.form.dob" | translate }}
             <span class="text-danger">*</span></label>
-          <dp-date-picker class="form-control" formControlName="dob" placeholder="00/00/00" [config]="datePickerConfig"
-            theme="dp-material" (change)="onDateTimeChange($event,'dob')" [ngClass]="{
+          <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
+            [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
               'is-invalid':
-                addEditForm.get('dob')?.invalid &&
-                (addEditForm.get('dob')?.touched || isSubmitted)
+                addEditForm.get('dateOfBirth')?.invalid &&
+                (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
             }"></dp-date-picker>
           <div *ngIf="
-              addEditForm.get('dob')?.invalid &&
-              (addEditForm.get('dob')?.touched || isSubmitted)
+              addEditForm.get('dateOfBirth')?.invalid &&
+              (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.dobRequired" | translate }}
           </div>
@@ -399,6 +381,32 @@
 
       </div>
 
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.form.role" | translate }}
+            <span class="text-danger">*</span></label>
+          <select class="form-control custom-select" formControlName="role" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('role')?.invalid &&
+                (addEditForm.get('role')?.touched || isSubmitted)
+            }">
+            <option value="">
+              {{ "language.form.selectrole" | translate }}
+            </option>
+            @for(role of rolesList; track role) {
+            <option [value]="role.roleId">{{ role.name }}</option>
+            }
+          </select>
+          <div *ngIf="
+              addEditForm.get('role')?.invalid &&
+              (addEditForm.get('role')?.touched || isSubmitted)
+            " class="invalid-feedback">
+            {{ "language.errors.roleRequired" | translate }}
+          </div>
+        </div>
+      </div>
+
       @if(!this.isView){
       <div class="row mt-3 py-5">
         <div class="col-12 text-right">
@@ -412,12 +420,6 @@
       </div>
       }
     </form>
-  </div>
-  }
-  @if(this.activeTab === 'language.employee.reportTo' ){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    report to
   </div>
   }
   @if(this.activeTab === 'language.employee.shift' ){
