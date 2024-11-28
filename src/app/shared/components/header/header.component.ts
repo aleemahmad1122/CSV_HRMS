@@ -6,7 +6,7 @@ import { DOCUMENT } from '@angular/common';
 import { DataShareService } from '../../Services/data-share.service';
 import { BreadcrumbService } from '../../Services/breadcrumb.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
     private _userAuth: UserAuthenticationService,
     public _translateService: TranslateService,
     @Inject(DOCUMENT) private _document: Document,
+    private _router: Router,
     private breadcrumbService: BreadcrumbService,
     private _dataShare: DataShareService
   ) {
@@ -60,6 +61,10 @@ export class HeaderComponent implements OnInit {
     setTimeout(() => {
       window.location.reload();
     }, 500);
+  }
+
+  goBack(): void {
+    this._router.navigate([window.history.back()]);
   }
 
 }

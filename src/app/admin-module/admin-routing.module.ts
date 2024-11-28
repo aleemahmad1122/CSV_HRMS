@@ -13,13 +13,13 @@ const routes: Routes = [
   {
     path: 'company/:action',
     loadComponent: () => import(`./company/add-edit-company/add-edit-company.component`).then(c => c.AddEditCompanyComponent),
-    data: { breadcrumb: (params) => params.action === 'add' ? 'Add Company' : 'Edit Company' },
+    data: { breadcrumb: 'Company' },
     title: 'Company',
   },
   {
     path: 'job-detail',
     loadComponent: () => import(`./job/job-list/job-list.component`).then(c => c.JobListComponent),
-    data: { breadcrumb: 'Job Detail' },
+    data: { breadcrumb: 'Job' },
     title: 'Job Detail',
   },
   {
@@ -55,7 +55,7 @@ const routes: Routes = [
   {
     path: 'qualifications/:action',
     loadComponent: () => import(`./qualifications/add-edit-qualification/add-edit-qualification.component`).then(c => c.AddEditQualificationComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Qualifications' },
     title: 'Qualifications',
   },
   {
@@ -123,7 +123,7 @@ const routes: Routes = [
   {
     path: 'team/:action',
     loadComponent: () => import(`./team/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Team' },
     title: 'Team',
   },
   {
@@ -135,21 +135,21 @@ const routes: Routes = [
   {
     path: 'attachmentType/:action',
     loadComponent: () => import(`./attachmentFile/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Company Structure' },
+    data: { breadcrumb: 'Attachment Type' },
     title: 'Attachment File',
   },
 
   {
     path: 'leave-type-list',
     loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Attendances Detail' },
+    data: { breadcrumb: 'Leave Type List' },
     title: 'Leave Type List',
   },
   {
     path: 'leave-type/:action',
     loadComponent: () => import(`./leave-type/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Attendances Detail' },
-    title: 'Leave Type Detail',
+    data: { breadcrumb: 'Leave Type' },
+    title: 'Leave Type',
   },
 ];
 

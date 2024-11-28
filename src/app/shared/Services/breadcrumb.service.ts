@@ -37,7 +37,15 @@ export class BreadcrumbService {
       }
 
       if (child.snapshot.data['breadcrumb']) {
-        breadcrumbs.push({ label: child.snapshot.data['breadcrumb'], url });
+        let breadcrumbLabel = child.snapshot.data['breadcrumb'];
+
+        // Check if there's an 'action' parameter in the route and append it to the breadcrumb
+        if (child.snapshot.params['action']) {
+          const action = child.snapshot.params['action'];
+          breadcrumbLabel = `${breadcrumbLabel} - ${action.charAt(0).toUpperCase() + action.slice(1)}`; // Capitalize the action
+        }
+
+        breadcrumbs.push({ label: breadcrumbLabel, url });
       }
 
       this.createBreadcrumbs(child, url, breadcrumbs); // Continue without returning early
