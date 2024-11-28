@@ -1,73 +1,102 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom p-5">
+<div
+    class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom p-5">
 
 
-  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+    <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
 
-    <div class="row">
-      <div class="col-md-12 mb-3">
-        <label class="form-label">{{'language.generic.date' | translate}} <span class="text-danger">*</span></label>
-        <input type="date" class="form-control" formControlName="date"
-            [placeholder]="'language.placeholders.time' | translate"  step="1"
-            [ngClass]="{'is-invalid': (addEditForm.get('date')?.invalid && (addEditForm.get('date')?.touched || isSubmitted))}" />
-        <div *ngIf="addEditForm.get('date')?.invalid && (addEditForm.get('date')?.touched || isSubmitted)"
-            class="invalid-feedback">
-            {{'language.errors.dateequired' | translate}}
+        <div class="row">
+
+            <div class="col-md-12 mb-3">
+                <label class="form-label">{{ "language.generic.date" | translate }}
+                    <span class="text-danger">*</span></label>
+                <dp-date-picker class="form-control" formControlName="date" placeholder="00/00/00"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'date')"
+                    [ngClass]="{
+                'is-invalid':
+                  addEditForm.get('date')?.invalid &&
+                  (addEditForm.get('date')?.touched || isSubmitted)
+              }"></dp-date-picker>
+                <div *ngIf="
+                addEditForm.get('date')?.invalid &&
+                (addEditForm.get('date')?.touched || isSubmitted)
+              " class="invalid-feedback">
+                    {{ "language.errors.dateequired" | translate }}
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
 
 
-      <div class="row">
+        <div class="row">
 
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.generic.checkIn' | translate}} <span class="text-danger">*</span></label>
-              <input type="time" class="form-control" formControlName="checkIn"
-                  [placeholder]="'language.placeholders.time' | translate"  step="1"
-                  [ngClass]="{'is-invalid': (addEditForm.get('checkIn')?.invalid && (addEditForm.get('checkIn')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('checkIn')?.invalid && (addEditForm.get('checkIn')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.checkInequired' | translate}}
-              </div>
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">{{'language.generic.checkOut' | translate}} <span class="text-danger">*</span></label>
-              <input type="time" class="form-control" formControlName="checkOut"  step="1"
-                  [placeholder]="'language.placeholders.time' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('checkOut')?.invalid && (addEditForm.get('checkOut')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('checkOut')?.invalid && (addEditForm.get('checkOut')?.touched || isSubmitted)"
-                  class="invalid-feedback">
-                  {{'language.errors.checkOutRequired' | translate}}
-              </div>
-          </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{ "language.generic.checkIn" | translate }}
+                    <span class="text-danger">*</span></label>
 
+                <dp-date-picker class="form-control" [mode]="'time'" formControlName="checkIn" placeholder="00:00"
+                    [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkIn')"
+                    [ngClass]="{
+                    'is-invalid':
+                      addEditForm.get('checkIn')?.invalid &&
+                      (addEditForm.get('checkIn')?.touched || isSubmitted)
+                  }"></dp-date-picker>
+
+                <div *ngIf="
+                    addEditForm.get('checkIn')?.invalid &&
+                    (addEditForm.get('checkIn')?.touched || isSubmitted)
+                  " class="invalid-feedback">
+                    {{ "language.errors.checkInequired" | translate }}
+                </div>
+            </div>
 
 
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{ "language.generic.checkOut" | translate }}
+                    <span class="text-danger">*</span></label>
 
-      <div class="row">
-        <div class="col-md-12 mb-3">
-          <label class="form-label">{{'language.form.comment' | translate}} <span
-                  class="text-danger"></span></label>
-          <textarea class="form-control" formControlName="comment"
-              [placeholder]="'language.placeholders.comment' | translate" rows="3"
-              [ngClass]="{'is-invalid': (addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted))}"></textarea>
-          <div *ngIf="addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.commentRequired' | translate}}
-          </div>
-      </div>
-      </div>
+                <dp-date-picker class="form-control" [mode]="'time'" formControlName="checkOut" placeholder="00:00"
+                    [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOut')"
+                    [ngClass]="{
+                    'is-invalid':
+                      addEditForm.get('checkOut')?.invalid &&
+                      (addEditForm.get('checkOut')?.touched || isSubmitted)
+                  }"></dp-date-picker>
 
-    <div class="row mt-3">
-          <div class="col-12 text-right">
-              <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
-                  {{ 'language.generic.back'| translate }}
-              </button>
-              <button type="submit" class="btn btn-primary font-weight-bold me-3">
-                  {{ 'language.generic.submit'| translate }}
-              </button>
-          </div>
-      </div>
-  </form>
+                <div *ngIf="
+                    addEditForm.get('checkOut')?.invalid &&
+                    (addEditForm.get('checkOut')?.touched || isSubmitted)
+                  " class="invalid-feedback">
+                    {{ "language.errors.checkOutRequired" | translate }}
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label class="form-label">{{'language.form.comment' | translate}} <span
+                        class="text-danger"></span></label>
+                <textarea class="form-control" formControlName="comment"
+                    [placeholder]="'language.placeholders.comment' | translate" rows="3"
+                    [ngClass]="{'is-invalid': (addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted))}"></textarea>
+                <div *ngIf="addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.commentRequired' | translate}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3"
+                    (click)="goBack()">
+                    {{ 'language.generic.back'| translate }}
+                </button>
+                <button type="submit" class="btn btn-primary font-weight-bold me-3">
+                    {{ 'language.generic.submit'| translate }}
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

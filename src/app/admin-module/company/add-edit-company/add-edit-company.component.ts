@@ -9,6 +9,7 @@ import { DataShareService } from '../../../shared/Services/data-share.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from '../../../../environments/environment.prod';
 
 interface Typess {
   typeId: string;
@@ -25,7 +26,7 @@ interface Typess {
 
 export class AddEditCompanyComponent implements OnInit, OnDestroy {
   datePickerConfig = {
-    format: 'YYYY-MM-DD',
+    format: environment.dateFormat,
   };
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
@@ -89,8 +90,6 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const currentDate = new Date().toString()
-    const defaultFoundedDate = this.convertToDatetimeLocalFormat(currentDate);
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
@@ -106,11 +105,9 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       firstAddress: ['', Validators.required],
       secondAddress: [''],
       employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      foundedDate: [defaultFoundedDate, Validators.required],
+      foundedDate: [`${environment.defaultDate}`, Validators.required],
       companyType: [2]
     });
-
-    console.log(defaultFoundedDate);
 
   }
 
@@ -134,7 +131,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
         secondAddress: this.selectedCompany.secondAddress,
         offset: this.selectedCompany.offset,
         employeesCount: this.selectedCompany.employeesCount,
-        foundedDate:this.convertToDatetimeLocalFormat(this.selectedCompany.foundedDate),
+        foundedDate: this.convertToDatetimeLocalFormat(this.selectedCompany.foundedDate),
         companyType: this.selectedCompany.companyType || 2,
       });
       this.imagePreview = this.selectedCompany.companyImage || this.defaultImagePath
@@ -145,22 +142,19 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
 
   private convertToDatetimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);
-    // Extract the year, month, and day to form the 'YYYY-MM-DD' format
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-based, so add 1
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    return date.toISOString().split("T")[0]
   }
-
-
-  onDateChange(event: Event): void {
+  onDateTimeChange(event: Event, valueName: string): void {
     const input = event.target as HTMLInputElement;
     if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
-      this.companyForm.patchValue({ foundedDate: formattedValue });
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.companyForm.patchValue({ valueName: formattedValue });
     }
   }
-
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+  }
 
   submitForm() {
     console.log(this.companyForm.value);
@@ -183,7 +177,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
     formData.append('countryId', this.companyForm.get('country')?.value);
     formData.append('industryId', this.companyForm.get('industry')?.value);
-    formData.append('foundedDate', this.companyForm.get('foundedDate')?.value);
+    formData.append('foundedDate', this.formatDateForSubmission(this.companyForm.get('foundedDate')?.value));
     formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
     formData.append('secondAddress', this.companyForm.get('secondAddress')?.value);
     formData.append('companyType', this.companyForm.get('companyType')?.value || 2);

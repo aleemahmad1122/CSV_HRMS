@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-shift-add-edit',
@@ -36,7 +37,6 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
 
 
 
@@ -71,8 +71,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      startTime: ['', [Validators.required]],
-      endTime: ['', [Validators.required]],
+      startTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      endTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       graceMinutes: [0],
       earlyMinutes: [0],
       description: [''],
@@ -84,8 +84,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     if (this.selectedAddEditValue) {
       this.addEditForm.patchValue({
         name: this.selectedAddEditValue.name,
-        startTime: this.selectedAddEditValue.startTime,
-        endTime: this.selectedAddEditValue.endTime,
+        startTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.startTime),
+        endTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.endTime),
         graceMinutes: this.selectedAddEditValue.graceMinutes,
         earlyMinutes: this.selectedAddEditValue.earlyMinutes,
         description: this.selectedAddEditValue.description,
@@ -95,62 +95,85 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  // Converts the selected date/time into the format 'yyyy-MM-ddTHH:mm'
   private convertToTimeLocalFormat(dateString: string): string {
-    const date = new Date(dateString);
+    const date = new Date(dateString); // Parse the input string into a Date object
 
-    // Ensure that the time is formatted as `HH:mm` and in the 'yyyy-MM-ddTHH:mm' format
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');  // Month is zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    // Extract local time components
+    const hours = date.getHours(); // Get the hour in local time
+    const minutes = date.getMinutes(); // Get the minutes in local time
+    const seconds = date.getSeconds(); // Get the seconds in local time
 
-    // Return formatted date as `yyyy-MM-ddTHH:mm`
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+    // Format the time with leading zeros for consistency
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    return formattedTime;
   }
 
-  onStartTimeChange(event: any): void {
-    const inputValue = event.target.value;
 
-    if (inputValue) {
-      // Convert the selected time into the desired format
-      const formattedValue = this.convertToTimeLocalFormat(inputValue);
-
-      // Update the form control with the formatted value
-      this.addEditForm.patchValue({ startTime: formattedValue });
-    }
-  }
-
-  onEndTimeChange(event: any): void {
-    const inputValue = event.target.value;
-
-    if (inputValue) {
-      // Convert the selected time into the desired format
-      const formattedValue = this.convertToTimeLocalFormat(inputValue);
-
-      // Update the form control with the formatted value
-      this.addEditForm.patchValue({ endTime: formattedValue });
-    }
-  }
-
-  // Date picker configuration to support 24-hour format and time selection
   datePickerConfig = {
     hour12: false,  // Use 24-hour format
     timePicker: true,  // Enable time picker
-    format: 'HH:mm',  // Set the time format for the picker
+    format: environment.timeFormat,  // Set the time format for the picker
   };
 
 
+  onDateTimeChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToTimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
+    }
+  }
+
+  private formatDateForSubmission(timeString: string): string {
+    // Split the timeString into hours, minutes, and seconds
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+
+    if (
+      isNaN(hours) ||
+      isNaN(minutes) ||
+      isNaN(seconds) ||
+      hours < 0 || hours > 23 ||
+      minutes < 0 || minutes > 59 ||
+      seconds < 0 || seconds > 59
+    ) {
+      throw new Error("Invalid time format. Expected HH:mm:ss");
+    }
+
+    // Create a new Date object with today's date and the provided time
+    const now = new Date();
+    const localDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      seconds
+    );
+
+    // Return the ISO string in local time format, without fractional seconds and 'Z'
+    return localDate.toISOString();
+  }
+
+
+
+
   submitForm(): void {
-    console.log(this.addEditForm.value);
 
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
     }
+    const formValue = this.addEditForm.value;
+    const values = {
+      ...formValue,
+      startTime: this.formatDateForSubmission(formValue.startTime),
+      endTime: this.formatDateForSubmission(formValue.endTime)
+    };
 
-    const body = this.addEditForm.value;
+
+
+    const body = { ...values };
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Shift", "addShift", body, true);

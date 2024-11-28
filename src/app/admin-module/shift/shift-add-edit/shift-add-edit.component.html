@@ -28,7 +28,7 @@
           <span class="text-danger">*</span></label>
 
         <dp-date-picker class="form-control" [mode]="'time'" formControlName="startTime" placeholder="00:00"
-          [config]="datePickerConfig" theme="dp-material" (change)="onStartTimeChange($event)" [ngClass]="{
+          [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'startTime')" [ngClass]="{
             'is-invalid':
               addEditForm.get('startTime')?.invalid &&
               (addEditForm.get('startTime')?.touched || isSubmitted)
@@ -45,7 +45,7 @@
         <label class="form-label">{{ "language.generic.endTime" | translate }}
           <span class="text-danger">*</span></label>
         <dp-date-picker class="form-control" [mode]="'time'" formControlName="endTime" placeholder="00:00"
-          [config]="datePickerConfig" theme="dp-material" (change)="onEndTimeChange($event)" [ngClass]="{
+          [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'endTime')" [ngClass]="{
             'is-invalid':
               addEditForm.get('endTime')?.invalid &&
               (addEditForm.get('endTime')?.touched || isSubmitted)

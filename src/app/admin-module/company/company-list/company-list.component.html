@@ -11,7 +11,8 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
               </span>
             </div>
-            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate" name="searchTerm" (input)="search($event)">
+            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate"
+              name="searchTerm" (input)="search($event)">
           </div>
         </div>
       </form>
@@ -32,8 +33,8 @@
 
 
         <div class="dropdown dropdown-inline mr-2">
-          <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
             <span class="svg-icon svg-icon-md">
               <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -108,47 +109,47 @@
             <tr class="datatable-row" style="left: 0px;">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px;">#     </span>
+                <span style="width: 40px;"># </span>
               </th>
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.generic.name' | translate}} </span>
               </th>
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.generic.companyImage' | translate}} </span>
               </th>
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.employeesCount' | translate}} </span>
               </th>
 
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.faxNumber' | translate}} </span>
               </th>
 
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.firstAddress' | translate}} </span>
               </th>
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.foundedDate' | translate}} </span>
               </th>
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.phoneNumber' | translate}} </span>
               </th>
 
 
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px;"> {{'language.company.registrationNumber' | translate}} </span>
               </th>
 
@@ -160,57 +161,57 @@
             @for (data of dataList; track $index) {
             <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
 
-              <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID"
-                aria-label="1"><span style="width: 40px;"><span class="font-weight-bolder px-3">
+              <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
+                <span style="width: 40px;"><span class="font-weight-bolder px-3">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
 
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
-                         [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
+                      [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
               </td>
 
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <figure class="symbol-label companyImage">
                     <img
                       [src]="data.companyImage || 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg'"
                       alt="" />
                   </figure>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.employeesCount || "N/A"}}
                     </div>
                   </div>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.faxNumber || "N/A"}}</div>
                   </div>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.firstAddress || "N/A"}}
                     </div>
                   </div>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.foundedDate || "N/A"}}</div>
                   </div>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.phoneNumber || "N/A"}}</div>
                   </div>
                 </span></td>
-              <td      aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.registrationNumber ||
                       "N/A"}}</div>
@@ -270,8 +271,7 @@
                     </div>
                   </div>
 
-                  <button data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#modal-' + $index"
+                  <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                       class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -291,22 +291,20 @@
             </tr>
 
             }
-            @if(this.dataList.length < 1){
-              <tr class="datatable-row text-center fw-bold text-capitalize">
-                <td colspan="10">
-                  {{'language.generic.noRecords' | translate}}
-                </td>
-            </tr>
+            @if(this.dataList.length < 1){ <tr class="datatable-row text-center fw-bold text-capitalize">
+              <td colspan="10">
+                {{'language.generic.noRecords' | translate}}
+              </td>
+              </tr>
               }
           </tbody>
         </table>
 
 
         <!--begin::Pagination-->
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
+        @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
           <div class="d-flex flex-wrap py-2 mr-3">
-            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)"
-              [class.disabled]="pageNo === 1">
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
               <i class="ki ki-bold-double-arrow-back icon-xs"></i>
             </a>
 
@@ -315,8 +313,7 @@
               <i class="ki ki-bold-arrow-back icon-xs"></i>
             </a>
 
-            <span *ngFor="let page of [].constructor(totalPages); let i = index"
-              [hidden]="i > 4 && i < totalPages - 5">
+            <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
               <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="i + 1 === pageNo"
                 (click)="changePage(i + 1)">
                 {{ i + 1 }}
@@ -345,7 +342,7 @@
             </span>
           </div>
 
-        </div>
+        </div>}
 
         <!--end:: Pagination-->
 

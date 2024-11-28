@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
-
+import { environment } from '../../../../environments/environment.prod';
 
 interface Status {
   statusId: number | string;
@@ -24,7 +24,7 @@ interface Status {
 export class AddEditProjectComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   datePickerConfig = {
-    format: 'YYYY-MM-DDTHH:mm',
+    format: environment.dateFormat,
   };
   addEditForm: FormGroup;
   currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
@@ -80,8 +80,8 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      startDate: [`${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}`, Validators.required],
-      endDate: ['', Validators.required],
+      startDate: [`${environment.defaultDate}`, Validators.required],
+      endDate: [`${environment.defaultDate}`, Validators.required],
       statusId: ['1', Validators.required],
       description: ['', Validators.required],
       budget: ['', Validators.required],
@@ -99,51 +99,29 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
         statusId: this.selectedValue.statusId,
         description: this.selectedValue.description,
         budget: this.selectedValue.budget,
-        offset:this.selectedValue.offset,
+        offset: this.selectedValue.offset,
         currency: this.selectedValue.currency
       });
     }
   }
 
   private convertToDatetimeLocalFormat(dateString: string): string {
-    // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
     const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
+    return date.toISOString().split("T")[0]
   }
-
-  formatStartDate(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.addEditForm.patchValue({
-      startDate: new Date(input.value).toISOString()
-    });
-  }
-
-  formatEndDate(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.addEditForm.patchValue({
-      endDate: new Date(input.value).toISOString()
-    });
-  }
-
-  onStartDateChange(event: Event): void {
+  onDateTimeChange(event: Event, valueName: string): void {
     const input = event.target as HTMLInputElement;
     if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
-      this.addEditForm.patchValue({ startDate: formattedValue });
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
     }
   }
-
-
-  onEndDateChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
-      this.addEditForm.patchValue({ endDate: formattedValue });
-    }
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
 
   submitForm(): void {
-    console.log(this.addEditForm.value);
 
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
@@ -152,7 +130,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
 
     const body = { ...this.addEditForm.value };
 
-    // Format startDate and endDate to the desired format
+
     body.startDate = this.formatDateForSubmission(body.startDate);
     body.endDate = this.formatDateForSubmission(body.endDate);
 
@@ -176,10 +154,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  private formatDateForSubmission(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
-  }
+
 
   goBack(): void {
     this.router.navigate(['/admin/projects']);

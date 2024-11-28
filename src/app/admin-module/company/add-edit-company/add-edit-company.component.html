@@ -1,58 +1,32 @@
 <div
-  class="container d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom"
->
+  class="container d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom">
 
-  <form
-    [formGroup]="companyForm"
-    class="form w-100"
-    id="kt_form_1"
-    (ngSubmit)="submitForm()"
-  >
+  <form [formGroup]="companyForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
     <div class="row">
       <div class="col-md-12">
-        <div
-          class="image-input image-input-outline"
-          style="background-size: cover; background-position: center"
-          id="kt_image_5"
-          [style.background-image]="'url(' + imagePreview + ')'"
-        >
+        <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
+          id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
           <div class="image-input-wrapper"></div>
 
-          <label
-            class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-            data-action="change"
-            data-toggle="tooltip"
-            title="Change avatar"
-          >
+          <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change"
+            data-toggle="tooltip" title="Change avatar">
             <i class="fa fa-pen icon-sm text-muted"></i>
-            <input
-              type="file"
-              formControlName="companyImage"
-              name="profile_avatar"
-              accept=".png, .jpg, .jpeg"
-              (change)="onFileSelected($event)"
-            />
+            <input type="file" formControlName="companyImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
+              (change)="onFileSelected($event)" />
           </label>
 
-          <span
-            *ngIf="imagePreview !== defaultImagePath"
-            class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-            data-action="remove"
-            data-toggle="tooltip"
-            title="Remove avatar"
-            (click)="removeImage()"
-          >
+          <span *ngIf="imagePreview !== defaultImagePath"
+            class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
+            data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
             <i class="ki ki-bold-close icon-xs text-muted"></i>
           </span>
         </div>
       </div>
       @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
       <div class="text-muted mb-4 mx-4 small">
-        <span
-          >{{ "language.errors.maxFileSize" | translate }} 1 MB.
+        <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
           {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
-          JPEG</span
-        >
+          JPEG</span>
       </div>
       }
       <div class="text-danger mx-4 small">
@@ -64,124 +38,96 @@
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.name" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          class="form-control"
-          formControlName="name"
-          [placeholder]="'language.placeholders.name' | translate"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.name" | translate }}
+          <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="name"
+          [placeholder]="'language.placeholders.name' | translate" [ngClass]="{
             'is-invalid':
               companyForm.get('name')?.invalid &&
               (companyForm.get('name')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
+          }" />
+        <div *ngIf="
             companyForm.get('name')?.invalid &&
             (companyForm.get('name')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.nameRequired" | translate }}
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.email" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="email"
-          class="form-control"
-          formControlName="email"
-          [placeholder]="'language.placeholders.email' | translate"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.email" | translate }}
+          <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" formControlName="email"
+          [placeholder]="'language.placeholders.email' | translate" [ngClass]="{
             'is-invalid':
               companyForm.get('email')?.invalid &&
               (companyForm.get('email')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
+          }" />
+        <div *ngIf="
             companyForm.get('email')?.invalid &&
             (companyForm.get('email')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.emailRequired" | translate }}
         </div>
       </div>
     </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.phoneNumber' | translate}} <span
-                        class="text-danger">*</span></label>
-                <input type="number" class="form-control" formControlName="phoneNumber"
-                    [placeholder]="'language.placeholders.phoneNumber' | translate"
-                    [ngClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}" />
-                <div *ngIf="companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.phoneNumberRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.faxNumber' | translate}} <span
-                        class="text-danger">*</span></label>
-                <input type="number" class="form-control" formControlName="faxNumber"
-                    [placeholder]="'language.placeholders.faxNumber' | translate"
-                    [ngClass]="{'is-invalid': (companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted))}" />
-                <div *ngIf="companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.faxNumberRequired' | translate}}
-                </div>
-            </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{'language.form.phoneNumber' | translate}} <span class="text-danger">*</span></label>
+        <input type="number" class="form-control" formControlName="phoneNumber"
+          [placeholder]="'language.placeholders.phoneNumber' | translate"
+          [ngClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}" />
+        <div *ngIf="companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted)"
+          class="invalid-feedback">
+          {{'language.errors.phoneNumberRequired' | translate}}
         </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.website' | translate}} <span
-                        class="text-danger">*</span></label>
-                <input type="url" class="form-control" formControlName="website"
-                    [placeholder]="'language.placeholders.website' | translate"
-                    [ngClass]="{'is-invalid': (companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted))}" />
-                <div *ngIf="companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.websiteRequired' | translate}}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{'language.form.registrationNumber' | translate}} <span
-                        class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="registrationNumber"
-                    [placeholder]="'language.placeholders.registrationNumber' | translate"
-                    [ngClass]="{'is-invalid': (companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted))}" />
-                <div *ngIf="companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.registrationNumberRequired' | translate}}
-                </div>
-            </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{'language.form.faxNumber' | translate}} <span class="text-danger">*</span></label>
+        <input type="number" class="form-control" formControlName="faxNumber"
+          [placeholder]="'language.placeholders.faxNumber' | translate"
+          [ngClass]="{'is-invalid': (companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted))}" />
+        <div *ngIf="companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted)"
+          class="invalid-feedback">
+          {{'language.errors.faxNumberRequired' | translate}}
         </div>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.country" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <select
-          class="form-control custom-select"
-          formControlName="country"
-          [ngClass]="{
+        <label class="form-label">{{'language.form.website' | translate}} <span class="text-danger">*</span></label>
+        <input type="url" class="form-control" formControlName="website"
+          [placeholder]="'language.placeholders.website' | translate"
+          [ngClass]="{'is-invalid': (companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted))}" />
+        <div *ngIf="companyForm.get('website')?.invalid && (companyForm.get('website')?.touched || isSubmitted)"
+          class="invalid-feedback">
+          {{'language.errors.websiteRequired' | translate}}
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{'language.form.registrationNumber' | translate}} <span
+            class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="registrationNumber"
+          [placeholder]="'language.placeholders.registrationNumber' | translate"
+          [ngClass]="{'is-invalid': (companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted))}" />
+        <div
+          *ngIf="companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted)"
+          class="invalid-feedback">
+          {{'language.errors.registrationNumberRequired' | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.form.country" | translate }}
+          <span class="text-danger">*</span></label>
+        <select class="form-control custom-select" formControlName="country" [ngClass]="{
             'is-invalid':
               companyForm.get('country')?.invalid &&
               (companyForm.get('country')?.touched || isSubmitted)
-          }"
-        >
+          }">
           <option value="">
             {{ "language.form.selectCountry" | translate }}
           </option>
@@ -189,30 +135,21 @@
           <option [value]="country.id">{{ country.name }}</option>
           }
         </select>
-        <div
-          *ngIf="
+        <div *ngIf="
             companyForm.get('country')?.invalid &&
             (companyForm.get('country')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.countryRequired" | translate }}
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.industry" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <select
-          class="form-control custom-select"
-          formControlName="industry"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.industry" | translate }}
+          <span class="text-danger">*</span></label>
+        <select class="form-control custom-select" formControlName="industry" [ngClass]="{
             'is-invalid':
               companyForm.get('industry')?.invalid &&
               (companyForm.get('industry')?.touched || isSubmitted)
-          }"
-        >
+          }">
           <option value="">
             {{ "language.form.selectIndustry" | translate }}
           </option>
@@ -220,13 +157,10 @@
           <option [value]="industry.typeId">{{ industry.typeName }}</option>
           }
         </select>
-        <div
-          *ngIf="
+        <div *ngIf="
             companyForm.get('industry')?.invalid &&
             (companyForm.get('industry')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.industryRequired" | translate }}
         </div>
       </div>
@@ -234,96 +168,60 @@
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.firstAddress" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <textarea
-          class="form-control"
-          formControlName="firstAddress"
-          [placeholder]="'language.placeholders.firstAddress' | translate"
-          rows="3"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.firstAddress" | translate }}
+          <span class="text-danger">*</span></label>
+        <textarea class="form-control" formControlName="firstAddress"
+          [placeholder]="'language.placeholders.firstAddress' | translate" rows="3" [ngClass]="{
             'is-invalid':
               companyForm.get('firstAddress')?.invalid &&
               (companyForm.get('firstAddress')?.touched || isSubmitted)
-          }"
-        ></textarea>
-        <div
-          *ngIf="
+          }"></textarea>
+        <div *ngIf="
             companyForm.get('firstAddress')?.invalid &&
             (companyForm.get('firstAddress')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.firstAddressRequired" | translate }}
         </div>
       </div>
       <div class="col-md-6 mb-3">
         <label class="form-label">{{
           "language.form.secondAddress" | translate
-        }}</label>
-        <textarea
-          class="form-control"
-          formControlName="secondAddress"
-          [placeholder]="'language.placeholders.secondAddress' | translate"
-          rows="3"
-        ></textarea>
+          }}</label>
+        <textarea class="form-control" formControlName="secondAddress"
+          [placeholder]="'language.placeholders.secondAddress' | translate" rows="3"></textarea>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.employeesCount" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <input
-          type="number"
-          class="form-control"
-          formControlName="employeesCount"
-          [placeholder]="'language.placeholders.employeesCount' | translate"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.employeesCount" | translate }}
+          <span class="text-danger">*</span></label>
+        <input type="number" class="form-control" formControlName="employeesCount"
+          [placeholder]="'language.placeholders.employeesCount' | translate" [ngClass]="{
             'is-invalid':
               companyForm.get('employeesCount')?.invalid &&
               (companyForm.get('employeesCount')?.touched || isSubmitted)
-          }"
-        />
-        <div
-          *ngIf="
+          }" />
+        <div *ngIf="
             companyForm.get('employeesCount')?.invalid &&
             (companyForm.get('employeesCount')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.employeesCountRequired" | translate }}
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label"
-          >{{ "language.form.foundedDate" | translate }}
-          <span class="text-danger">*</span></label
-        >
-        <dp-date-picker
-          class="form-control"
-          formControlName="foundedDate"
-          placeholder="00/00/00"
-        [config]="datePickerConfig"
-          theme="dp-material"
-          (change)="onDateChange($event)"
-          [ngClass]="{
+        <label class="form-label">{{ "language.form.foundedDate" | translate }}
+          <span class="text-danger">*</span></label>
+        <dp-date-picker class="form-control" formControlName="foundedDate" placeholder="00/00/00"
+          [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'foundedDate')" [ngClass]="{
             'is-invalid':
               companyForm.get('foundedDate')?.invalid &&
               (companyForm.get('foundedDate')?.touched || isSubmitted)
-          }"
-        ></dp-date-picker>
-        <div
-          *ngIf="
+          }"></dp-date-picker>
+        <div *ngIf="
             companyForm.get('foundedDate')?.invalid &&
             (companyForm.get('foundedDate')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.foundedDateRequired" | translate }}
         </div>
       </div>
@@ -331,11 +229,7 @@
 
     <div class="row mt-3">
       <div class="col-12 text-right">
-        <button
-          type="button"
-          class="btn btn-light-danger font-weight-bold button-spacing"
-          (click)="goBack()"
-        >
+        <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
           {{ "language.generic.back" | translate }}
         </button>
         <button type="submit" class="btn btn-primary font-weight-bold me-3">

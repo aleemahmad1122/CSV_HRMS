@@ -10,7 +10,8 @@
                 <label class="form-label">{{ "language.form.leaveDate" | translate }}
                     <span class="text-danger">*</span></label>
                 <dp-date-picker class="form-control" formControlName="leaveDate" placeholder="00/00/00"
-                    [config]="datePickerConfig" theme="dp-material" (change)="onDateChange($event)" [ngClass]="{
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'leaveDate')"
+                    [ngClass]="{
                     'is-invalid':
                       addEditForm.get('leaveDate')?.invalid &&
                       (addEditForm.get('leaveDate')?.touched || isSubmitted)

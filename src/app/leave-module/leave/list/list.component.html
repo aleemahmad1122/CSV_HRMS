@@ -11,7 +11,8 @@
                 <i class="fa fa-search" aria-hidden="true"></i>
               </span>
             </div>
-            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate" name="searchTerm" (input)="search($event)">
+            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate"
+              name="searchTerm" (input)="search($event)">
           </div>
         </div>
       </form>
@@ -91,10 +92,10 @@
             <tr class="datatable-row" style="left: 0px">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px">#     </span>
+                <span style="width: 40px"># </span>
               </th>
 
-              <th      class="datatable-cell datatable-cell-sort">
+              <th class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px">
                   {{ "language.generic.name" | translate }}
                 </span>
@@ -143,7 +144,7 @@
                   </span></span>
               </td>
 
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 250px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
@@ -153,7 +154,7 @@
                 </span>
               </td>
 
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 224px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
@@ -162,7 +163,7 @@
                   </div>
                 </span>
               </td>
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
@@ -171,7 +172,7 @@
                   </div>
                 </span>
               </td>
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 324px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
@@ -180,7 +181,7 @@
                   </div>
                 </span>
               </td>
-              <td      aria-label="64616-103" class="datatable-cell">
+              <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
@@ -256,7 +257,7 @@
         </table>
 
         <!--begin::Pagination-->
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
+        @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
           <div class="d-flex flex-wrap py-2 mr-3">
             <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
               <i class="ki ki-bold-double-arrow-back icon-xs"></i>
@@ -286,19 +287,17 @@
           </div>
 
           <div class="d-flex align-items-center py-3">
-            <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px"
+            <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
               [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
-              <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">
-                {{ size }}
-              </option>
+              <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
             </select>
 
             <span class="text-muted">
-              {{ "language.generic.totalRecords" | translate }}
-              {{ totalCount }}
+              {{'language.generic.totalRecords' | translate}} {{ totalCount }}
             </span>
           </div>
-        </div>
+
+        </div>}
 
         <!--end:: Pagination-->
       </div>

@@ -13,7 +13,7 @@ const routes: Routes = [
     path: 'report/:action',
     loadComponent: () => import(`./reports/add-edit/add-edit.component`).then(c => c.AddEditComponent),
     title: 'Add Report',
-    canActivate: [ProtectedGuard]
+    // canActivate: [ProtectedGuard]
   }
 ];
 

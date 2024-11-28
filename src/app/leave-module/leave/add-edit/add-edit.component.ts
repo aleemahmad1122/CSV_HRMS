@@ -8,6 +8,7 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { ILeaveType, ILeaveTypeRes } from '../../../types';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-add-edit',
@@ -19,7 +20,7 @@ import { ILeaveType, ILeaveTypeRes } from '../../../types';
 export class AddEditComponent implements OnInit, OnDestroy {
 
   datePickerConfig = {
-    format: 'YYYY-MM-DDTHH:mm',
+    format: environment.dateFormat,
   };
 
   private ngUnsubscribe = new Subject<void>();
@@ -88,19 +89,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  private convertToDatetimeLocalFormat(dateString: string): string {
-    // Convert to 'yyyy-MM-ddTHH:mm' format for `datetime-local` input type
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);  // 'YYYY-MM-DDTHH:mm'
-  }
 
-  onDateChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value); // Use the conversion function
-      this.addEditForm.patchValue({ leaveDate: formattedValue });
-    }
-  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -110,7 +99,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       leaveTypeId: ['', [Validators.required]],
-      leaveDate: ['', [Validators.required]],
+      leaveDate: [`${environment.defaultDate}`, [Validators.required]],
       leaveReason: ['', [Validators.required]],
       offset: [new Date().getTimezoneOffset().toString()]
     });
@@ -128,6 +117,23 @@ export class AddEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  private convertToDatetimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]
+  }
+  onDateTimeChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
+    }
+  }
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+  }
+
+
   submitForm(): void {
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
@@ -136,10 +142,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const formValue = this.addEditForm.value;
 
-    const payload = {
-      ...formValue
+
+
+
+    const values = {
+      ...formValue,
+      leaveDate: this.formatDateForSubmission(formValue.leaveDate)
     };
 
+
+    const payload = { ...values }
 
 
     const apiCall = this.isEditMode

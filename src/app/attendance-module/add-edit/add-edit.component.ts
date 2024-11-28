@@ -6,21 +6,37 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from '../../../environments/environment.prod';
+
+
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
-export class AddEditComponent  implements OnInit, OnDestroy {
+export class AddEditComponent implements OnInit, OnDestroy {
+
+  datePickerConfig = {
+    format: environment.dateFormat,
+  };
+
+  timePickerConfig = {
+    hour12: false,  // Use 24-hour format
+    timePicker: true,  // Enable time picker
+    format: environment.timeFormat,  // Set the time format for the picker
+  };
+
+
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
 
-  id:string;
+  id: string;
 
   constructor(
     private fb: FormBuilder,
@@ -36,20 +52,20 @@ export class AddEditComponent  implements OnInit, OnDestroy {
       this.isEditMode = editId;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Attendance", `getAttendanceById/${editId}`,  true,{employeeId:this.id})
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Attendance", `getAttendanceById/${editId}`, true, { employeeId: this.id })
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedValue = response?.data;
                 this.patchFormValues(); // Call patchFormValues here after setting selectedValue
-            } else {
+              } else {
+                this.selectedValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedValue = [];
-          }
-        });
+          });
         // this.patchFormValues(); // Removed this line
       }
     });
@@ -67,27 +83,83 @@ export class AddEditComponent  implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      checkIn: ['', [Validators.required ]],
-      checkOut: ['', [Validators.required ]],
-      date: ['', [Validators.required ]],
+      checkIn: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      date: [`${environment.defaultDate}`, [Validators.required]],
       comment: [''],
-      offset:[new Date().getTimezoneOffset().toString()]
+      offset: [new Date().getTimezoneOffset().toString()]
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
-
-      const formatTime = (_ :string):string=> new Date(_).toTimeString().substr(0, 8);
-
       this.addEditForm.patchValue({
-        checkIn: formatTime(this.selectedValue.checkIn),
-        checkOut: formatTime(this.selectedValue.checkOut),
-        date: this.selectedValue.date,
+        checkIn: this.convertToTimeLocalFormat(this.selectedValue.checkIn),
+        checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
+        date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
         comment: this.selectedValue.comment,
         offset: this.selectedValue.offset,
       });
     }
+  }
+
+
+  private convertToTimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString); // Parse the input string into a Date object
+
+    // Extract local time components
+    const hours = date.getHours(); // Get the hour in local time
+    const minutes = date.getMinutes(); // Get the minutes in local time
+    const seconds = date.getSeconds(); // Get the seconds in local time
+
+    // Format the time with leading zeros for consistency
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    return formattedTime;
+  }
+  private convertToDatetimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]
+  }
+  onDateTimeChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
+    }
+  }
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+  }
+  private formatTimeForSubmission(timeString: string): string {
+    // Split the timeString into hours, minutes, and seconds
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+
+    if (
+      isNaN(hours) ||
+      isNaN(minutes) ||
+      isNaN(seconds) ||
+      hours < 0 || hours > 23 ||
+      minutes < 0 || minutes > 59 ||
+      seconds < 0 || seconds > 59
+    ) {
+      throw new Error("Invalid time format. Expected HH:mm:ss");
+    }
+
+    // Create a new Date object with today's date and the provided time
+    const now = new Date();
+    const localDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      seconds
+    );
+
+    // Return the ISO string in local time format, without fractional seconds and 'Z'
+    return localDate.toISOString();
   }
 
   submitForm(): void {
@@ -98,17 +170,20 @@ export class AddEditComponent  implements OnInit, OnDestroy {
 
     const formValue = this.addEditForm.value;
 
-    const payload = {
+    const values = {
       ...formValue,
-      checkIn: new Date(`${formValue.date}T${formValue.checkIn}`).toISOString(),
-      checkOut: new Date(`${formValue.date}T${formValue.checkOut}`).toISOString(),
+      date: this.formatDateForSubmission(formValue.date),
+      checkIn: this.formatTimeForSubmission(formValue.checkIn),
+      checkOut: this.formatTimeForSubmission(formValue.checkOut)
     };
 
 
 
+    const payload = { ...values };
+
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Attendance", `updateAttendance/${this.isEditMode}`, payload, true,this.id)
-      : this.apiCalling.postData("Attendance", "addAttendance", payload, true,this.id);
+      ? this.apiCalling.putData("Attendance", `updateAttendance/${this.isEditMode}`, payload, true, this.id)
+      : this.apiCalling.postData("Attendance", "addAttendance", payload, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
