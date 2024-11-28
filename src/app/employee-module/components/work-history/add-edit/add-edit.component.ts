@@ -121,8 +121,8 @@ export class AddEditComponent {
         positionTitle: data.positionTitle || '',
         organization: data.organization || '',
         attachmentTypeId: data.attachmentTypeId || '',
-        startDate: this.formatDateForSubmission(data.startDate),
-        endDate: this.formatDateForSubmission(data.endDate),
+        startDate: this.convertToDatetimeLocalFormat(data.startDate),
+        endDate: this.convertToDatetimeLocalFormat(data.endDate),
 
       };
 
@@ -131,10 +131,9 @@ export class AddEditComponent {
         positionTitle: workHistoryData.positionTitle,
         organization: workHistoryData.organization,
         attachmentTypeId: workHistoryData.attachmentTypeId,
-        startDate: this.formatDateForSubmission(workHistoryData.startDate),
-        endDate: this.formatDateForSubmission(workHistoryData.endDate),
+        startDate: workHistoryData.startDate,
+        endDate: workHistoryData.endDate,
       });
-      console.log('Formatted Dates:', workHistoryData.startDate, workHistoryData.endDate);
 
       // Now, if you want to set the data for the table rows as well:
       if (this.tableData.length === 0) {

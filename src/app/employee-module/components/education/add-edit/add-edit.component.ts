@@ -122,8 +122,8 @@ export class AddEditComponent {
         educationTitle: data.educationTitle || '',
         institution: data.institution || '',
         attachmentTypeId: data.attachmentTypeId || '',
-        startDate: this.formatDateForSubmission(data.startDate),
-        endDate: this.formatDateForSubmission(data.endDate),
+        startDate: this.convertToDatetimeLocalFormat(data.startDate),
+        endDate: this.convertToDatetimeLocalFormat(data.endDate),
 
       };
 
@@ -132,8 +132,8 @@ export class AddEditComponent {
         educationTitle: workHistoryData.educationTitle,
         institution: workHistoryData.institution,
         attachmentTypeId: workHistoryData.attachmentTypeId,
-        startDate: this.formatDateForSubmission(workHistoryData.startDate),
-        endDate: this.formatDateForSubmission(workHistoryData.endDate),
+        startDate: workHistoryData.startDate,
+        endDate: workHistoryData.endDate,
       });
       console.log('Formatted Dates:', workHistoryData.startDate, workHistoryData.endDate);
 
