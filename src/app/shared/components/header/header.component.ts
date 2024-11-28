@@ -4,22 +4,30 @@ import { UserAuthenticationService } from '../../Services/user-authentication.se
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { DataShareService } from '../../Services/data-share.service';
+import { BreadcrumbService } from '../../Services/breadcrumb.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [TranslateModule, Components.TopbarComponent],
+  imports: [TranslateModule, Components.TopbarComponent, RouterModule, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 
 export class HeaderComponent implements OnInit {
+
+  breadcrumbs: Array<{ label: string, url: string }> = [];
+
   user: any;
   Lang = 'en';
   constructor(
     private _userAuth: UserAuthenticationService,
     public _translateService: TranslateService,
     @Inject(DOCUMENT) private _document: Document,
+    private breadcrumbService: BreadcrumbService,
     private _dataShare: DataShareService
   ) {
     this.user = _userAuth.getUser();
@@ -40,9 +48,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    // Subscribe to the breadcrumbs observable to get updates
+    this.breadcrumbService.breadcrumbs$.subscribe(breadcrumbs => {
+      this.breadcrumbs = breadcrumbs;
+      console.log('Breadcrumbs updated:', this.breadcrumbs);
+    });
   }
-
   logout(): void {
     this._userAuth.logout();
     this._dataShare.updateLoginStatus(false);

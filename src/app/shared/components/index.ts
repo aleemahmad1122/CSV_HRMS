@@ -8,6 +8,5 @@ export { ScrolltopComponent } from './scrolltop/scrolltop.component';
 export { SidebarComponent } from './sidebar/sidebar.component';
 export { UserPanelComponent } from './user-panel/user-panel.component';
 export { TopbarComponent } from './topbar/topbar.component';
-export { SubheaderComponent } from './subheader/subheader.component';
 export { QuickPanelComponent } from './quick-panel/quick-panel.component';
 export { QuickCartComponent } from './quick-cart/quick-cart.component';

@@ -14,12 +14,10 @@
 <div class="d-flex flex-column flex-root">
     <div class="d-flex flex-row flex-column-fluid page">
         <app-sidebar></app-sidebar>
-        <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+        <div class="d-flex flex-column flex-row-fluid wrapper" style="padding-top: 50px !important;" id="kt_wrapper">
             <app-header></app-header>
-            <div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="min-height: 100dvh;">
-                <app-subheader></app-subheader>
+            <div class="content d-flex flex-column flex-column-fluid " id="kt_content" style="min-height: 100dvh;">
                 <router-outlet />
-
             </div>
             <app-footer></app-footer>
         </div>

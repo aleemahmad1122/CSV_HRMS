@@ -21,7 +21,6 @@ import { DataShareService } from './shared/Services/data-share.service';
     Components.ScrolltopComponent,
     Components.SidebarComponent,
     Components.TopbarComponent,
-    Components.SubheaderComponent,
     Components.QuickPanelComponent,
     Components.QuickCartComponent,
     Components.UserPanelComponent

@@ -9,6 +9,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
+import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from '../../../../../environments/environment.prod';
 declare const $: any;
 
 
@@ -17,11 +19,18 @@ declare const $: any;
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule,  TranslateModule],
+  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
 export class AddEditComponent {
+
+
+
+  datePickerConfig = {
+    format: environment.dateTimePatterns.date,
+  };
+
   files: NgxFileDropEntry[] = [];
   imageObject: any = [];
   ngUnsubscribe = new Subject<void>();
@@ -39,18 +48,18 @@ export class AddEditComponent {
   expenseSubDetailId = 0;
   attachmentIndex: number = -1;
   isViewOnly: boolean = false;
-  editId:string;
+  editId: string;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
-  id:string = '';
-  patchData:any
+  id: string = '';
+  patchData: any
 
   constructor(
     private _router: Router,
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
-    private _route: ActivatedRoute,private _sanitizer: DomSanitizer,
+    private _route: ActivatedRoute, private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
@@ -113,8 +122,8 @@ export class AddEditComponent {
         educationTitle: data.educationTitle || '',
         institution: data.institution || '',
         attachmentTypeId: data.attachmentTypeId || '',
-        startDate: this.formatDateToISOString(data.startDate ? new Date(data.startDate) : null),
-        endDate: this.formatDateToISOString(data.endDate ? new Date(data.endDate) : null),
+        startDate: this.formatDateForSubmission(data.startDate),
+        endDate: this.formatDateForSubmission(data.endDate),
 
       };
 
@@ -123,8 +132,8 @@ export class AddEditComponent {
         educationTitle: workHistoryData.educationTitle,
         institution: workHistoryData.institution,
         attachmentTypeId: workHistoryData.attachmentTypeId,
-        startDate: workHistoryData.startDate,
-        endDate: workHistoryData.endDate,
+        startDate: this.formatDateForSubmission(workHistoryData.startDate),
+        endDate: this.formatDateForSubmission(workHistoryData.endDate),
       });
       console.log('Formatted Dates:', workHistoryData.startDate, workHistoryData.endDate);
 
@@ -146,15 +155,15 @@ export class AddEditComponent {
         localStorage.setItem('attachments', JSON.stringify(
           [
             {
-              index:0,
-              attachments:data.educationAttachments.map((attachment: any) => ({
+              index: 0,
+              attachments: data.educationAttachments.map((attachment: any) => ({
                 name: attachment.documentName,
                 type: attachment.documentPath.split(".").pop() == "pdf" ? "application/pdf" : ("image/" + attachment.documentPath.split(".").pop()),
                 url: attachment.documentPath
               }))
             }
           ]
-      ));
+        ));
 
 
       }
@@ -206,8 +215,8 @@ export class AddEditComponent {
       educationTitle: [this.patchData?.educationTitle || '', [Validators.required]],
       institution: [this.patchData?.institution || '', [Validators.required]],
       attachmentTypeId: [this.patchData?.attachmentTypeId || '', [Validators.required]],
-      startDate: [this.patchData?.startDate || '', [Validators.required]],
-      endDate: [this.patchData?.endDate || '', [Validators.required]],
+      startDate: [this.patchData?.startDate || `${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      endDate: [this.patchData?.endDate || `${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
     });
     this.tableData.push(formData);
   }
@@ -217,22 +226,12 @@ export class AddEditComponent {
   deleteRow(index: number): void {
 
     if (index >= 0 && index < this.tableData.length) {
-        const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
-        this.mainForm.setControl('tableData', this._fb.array(updatedControls));
+      const updatedControls = this.tableData.controls.filter((_, i) => i !== index);
+      this.mainForm.setControl('tableData', this._fb.array(updatedControls));
     } else {
     }
 
-}
-
-private formatDateToISOString(date: Date | null): string | null {
-  if (date) {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 01 to 12
-    const day = date.getDate().toString().padStart(2, '0'); // 01 to 31
-    return `${year}-${month}-${day}`;
   }
-  return null; // Return null if no date is provided
-}
 
 
   resetForm(): void {
@@ -246,6 +245,22 @@ private formatDateToISOString(date: Date | null): string | null {
 
   trackByFn(index: number, type: any): any {
     return type.attachmentTypeId;
+  }
+
+  private convertToDatetimeLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]
+  }
+  onDateTimeChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+      this.mainForm.patchValue({ valueName: formattedValue });
+    }
+  }
+  private formatDateForSubmission(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
 
 
@@ -265,8 +280,9 @@ private formatDateToISOString(date: Date | null): string | null {
         formData.append(`educationRequest[${itemIndex}].attachmentTypeId`, item.attachmentTypeId || '');
         formData.append(`educationRequest[${itemIndex}].educationTitle`, item.educationTitle || '');
         formData.append(`educationRequest[${itemIndex}].institution`, item.institution || '');
-        formData.append(`educationRequest[${itemIndex}].startDate`, item.startDate || '');
-        formData.append(`educationRequest[${itemIndex}].endDate`, item.endDate || '');
+        formData.append(`educationRequest[${itemIndex}].startDate`, this.formatDateForSubmission(item.startDate) || '');
+        formData.append(`educationRequest[${itemIndex}].endDate`, this.formatDateForSubmission(item.endDate) || '');
+        formData.append(`educationRequest[${itemIndex}].offset`, new Date().getTimezoneOffset().toString());
 
         const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
 
@@ -305,8 +321,9 @@ private formatDateToISOString(date: Date | null): string | null {
       formData.append('attachmentTypeId', item.attachmentTypeId || '');
       formData.append('educationTitle', item.educationTitle || '');
       formData.append('institution', item.institution || '');
-      formData.append('startDate', item.startDate || '');
-      formData.append('endDate', item.endDate || '');
+      formData.append(`startDate`, this.formatDateForSubmission(item.startDate) || '');
+      formData.append(`endDate`, this.formatDateForSubmission(item.endDate) || '');
+      formData.append(`offset`, new Date().getTimezoneOffset().toString());
 
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
 
@@ -337,27 +354,27 @@ private formatDateToISOString(date: Date | null): string | null {
       }
     }
 
-// Determine API method based on create or update action
-const apiCall = this.isEdit
-  ? this._apiCalling.putData('EmployeeEducation',  `updateEmployeeEducation/${this.editId}`, formData, true, this.id)
-  : this._apiCalling.postData('EmployeeEducation', "addEmployeeEducation", formData, true, this.id);
+    // Determine API method based on create or update action
+    const apiCall = this.isEdit
+      ? this._apiCalling.putData('EmployeeEducation', `updateEmployeeEducation/${this.editId}`, formData, true, this.id)
+      : this._apiCalling.postData('EmployeeEducation', "addEmployeeEducation", formData, true, this.id);
 
-apiCall
-  .pipe(takeUntil(this.ngUnsubscribe))
-  .subscribe({
-    next: (response) => {
-      localStorage.setItem('attachments', JSON.stringify([]));
-      if (response?.success) {
-        this._toaster.success(response?.message, 'Success!');
-        this.back();
-      } else {
-        this._toaster.error(response?.message, 'Error!');
-      }
-    },
-    error: () => {
-      this._toaster.error('Internal server error occurred while processing your request', 'Error');
-    },
-  });
+    apiCall
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response) => {
+          localStorage.setItem('attachments', JSON.stringify([]));
+          if (response?.success) {
+            this._toaster.success(response?.message, 'Success!');
+            this.back();
+          } else {
+            this._toaster.error(response?.message, 'Error!');
+          }
+        },
+        error: () => {
+          this._toaster.error('Internal server error occurred while processing your request', 'Error');
+        },
+      });
 
   }
 
@@ -380,13 +397,13 @@ apiCall
         if (existingAttachment) {
           this.attachedFiles = existingAttachment.attachments.map((attachment: any) => {
 
-          if(attachment.base64){
-            const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
-            return { ...attachment, url: sanitizedUrl };
-          }else{
+            if (attachment.base64) {
+              const sanitizedUrl = this._sanitizer.bypassSecurityTrustResourceUrl(attachment.base64);
+              return { ...attachment, url: sanitizedUrl };
+            } else {
 
-            return attachment
-          }
+              return attachment
+            }
           });
         }
       }
@@ -399,22 +416,22 @@ apiCall
 
     if (!file) return false;
 
-if(file && file.base64){
-  const fileName = file.name || file.fileName || '';
-  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-  return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
-}else{
-  return file.type != 'application/pdf'
-}
+    if (file && file.base64) {
+      const fileName = file.name || file.fileName || '';
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+      return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+    } else {
+      return file.type != 'application/pdf'
+    }
 
   }
 
   isPdfFile(file: any): boolean {
-if(file && file.base64){
- return (file?.name && file.name.toLowerCase().endsWith('.pdf'));
-}else{
-  return file.type == 'application/pdf'
-}
+    if (file && file.base64) {
+      return (file?.name && file.name.toLowerCase().endsWith('.pdf'));
+    } else {
+      return file.type == 'application/pdf'
+    }
   }
 
   droppedFiles(files: NgxFileDropEntry[]) {
@@ -463,66 +480,66 @@ if(file && file.base64){
     this.getSelectedFile(this.attachedFiles.length - 1);
   }
 
-removeAttachment(index: number): void {
-  // Remove the file from the attachedFiles array
-  this.attachedFiles.splice(index, 1);
+  removeAttachment(index: number): void {
+    // Remove the file from the attachedFiles array
+    this.attachedFiles.splice(index, 1);
 
-  // Update the attachments in itemAttachment for the current index
-  const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
-  if (existingIndex !== -1) {
-    // Update the attachments for this index
-    this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
-  }
-
-  // Save the updated attachments to localStorage
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
-  }
-
-}
-
-
-
-saveItemAttachment(): void {
-  if (this.attachedFiles.length > 0) {
-
-    const updatedAttachments = this.attachedFiles.map(file => {
-      const fileUrl = file.url
-                      ? file.url.changingThisBreaksApplicationSecurity
-                      : file.url;
-
-      return {
-        name: file.name,
-        type: file.type,
-        url: fileUrl,
-        base64: file.base64
-      };
-    });
-
+    // Update the attachments in itemAttachment for the current index
     const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
     if (existingIndex !== -1) {
-      this.itemAttachment[existingIndex].attachments = updatedAttachments;
-    } else {
-      this.itemAttachment.push({
-        index: this.attachmentIndex,
-        attachments: updatedAttachments
-      });
+      // Update the attachments for this index
+      this.itemAttachment[existingIndex].attachments = [...this.attachedFiles];
     }
 
+    // Save the updated attachments to localStorage
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
-
     }
+
   }
 
-  // Hide modal and reset files
-  $("#uploadAttachmentModal").modal('hide');
-  this.attachedFiles = [];
-}
 
 
-back(): void {
-  this._router.navigate([window.history.back()]);
-}
+  saveItemAttachment(): void {
+    if (this.attachedFiles.length > 0) {
+
+      const updatedAttachments = this.attachedFiles.map(file => {
+        const fileUrl = file.url
+          ? file.url.changingThisBreaksApplicationSecurity
+          : file.url;
+
+        return {
+          name: file.name,
+          type: file.type,
+          url: fileUrl,
+          base64: file.base64
+        };
+      });
+
+      const existingIndex = this.itemAttachment.findIndex(x => x.index === this.attachmentIndex);
+      if (existingIndex !== -1) {
+        this.itemAttachment[existingIndex].attachments = updatedAttachments;
+      } else {
+        this.itemAttachment.push({
+          index: this.attachmentIndex,
+          attachments: updatedAttachments
+        });
+      }
+
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('attachments', JSON.stringify(this.itemAttachment));
+
+      }
+    }
+
+    // Hide modal and reset files
+    $("#uploadAttachmentModal").modal('hide');
+    this.attachedFiles = [];
+  }
+
+
+  back(): void {
+    this._router.navigate([window.history.back()]);
+  }
 
 }

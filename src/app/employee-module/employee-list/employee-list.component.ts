@@ -8,12 +8,11 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
-import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe, ConvertTimePipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })
