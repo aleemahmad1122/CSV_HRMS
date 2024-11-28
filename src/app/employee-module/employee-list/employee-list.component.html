@@ -115,15 +115,10 @@
 
               <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
                 <span style="width: 250px">
-                  {{ "language.generic.title" | translate }}
+                  {{ "language.generic.name" | translate }}
                 </span>
               </th>
 
-              <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
-                <span style="width: 224px">
-                  {{ "language.form.email" | translate }}
-                </span>
-              </th>
 
               <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
                 <span style="width: 124px">
@@ -137,11 +132,6 @@
                 </span>
               </th>
 
-              <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
-                <span style="width: 324px">
-                  {{ "language.form.address" | translate }}
-                </span>
-              </th>
 
               <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
                 <span style="width: 124px">
@@ -174,23 +164,24 @@
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
                 <span style="width: 250px">
+
+                  <figure class="symbol-label companyImage"
+                    style="overflow: hidden; border-radius: 20%; width: 50px; height: 50px;">
+                    <img [src]="data.imagePath || this.defaultImagePath"
+                      style="width: 100%; height: 100%; object-fit: cover;" alt="" />
+                  </figure>
+
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.firstName + ' ' + data.lastName || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
-                </span>
-              </td>
-
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 224px">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.email || "N/A" }}
-                    </div>
+                  <div style="color:gray;">
+                    {{ data.email || "N/A" }}
                   </div>
                 </span>
               </td>
+
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
@@ -205,15 +196,6 @@
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.city || "N/A" }}
-                    </div>
-                  </div>
-                </span>
-              </td>
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 324px">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.address || "N/A" }}
                     </div>
                   </div>
                 </span>
