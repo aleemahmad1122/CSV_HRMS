@@ -227,37 +227,6 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">{{ "language.form.dob" | translate }}
-          <span class="text-danger">*</span></label>
-        <dp-date-picker class="form-control" formControlName="dob" placeholder="00/00/00" [config]="datePickerConfig"
-          theme="dp-material" (change)="onDateTimeChange($event,'dob')" [ngClass]="{
-            'is-invalid':
-              companyForm.get('dob')?.invalid &&
-              (companyForm.get('dob')?.touched || isSubmitted)
-          }"></dp-date-picker>
-        <div *ngIf="
-            companyForm.get('dob')?.invalid &&
-            (companyForm.get('dob')?.touched || isSubmitted)
-          " class="invalid-feedback">
-          {{ "language.errors.dobRequired" | translate }}
-        </div>
-      </div>
-
-      <div class="col-md-6 mb-3">
-        <label class="form-label">{{'language.form.cnic' | translate}} <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" formControlName="cnic"
-          [placeholder]="'language.placeholders.cnic' | translate"
-          [ngClass]="{'is-invalid': (companyForm.get('cnic')?.invalid && (companyForm.get('cnic')?.touched || isSubmitted))}" />
-        <div *ngIf="companyForm.get('cnic')?.invalid && (companyForm.get('cnic')?.touched || isSubmitted)"
-          class="invalid-feedback">
-          {{'language.errors.cnicRequired' | translate}}
-        </div>
-      </div>
-
-    </div>
-
     <div class="row mt-3">
       <div class="col-12 text-right">
         <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">

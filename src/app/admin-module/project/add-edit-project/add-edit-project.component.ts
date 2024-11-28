@@ -99,7 +99,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
         statusId: this.selectedValue.statusId,
         description: this.selectedValue.description,
         budget: this.selectedValue.budget,
-        offset: this.selectedValue.offset,
+        offset: this.selectedValue.offSet,
         currency: this.selectedValue.currency
       });
     }

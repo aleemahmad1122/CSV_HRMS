@@ -89,7 +89,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         graceMinutes: this.selectedAddEditValue.graceMinutes,
         earlyMinutes: this.selectedAddEditValue.earlyMinutes,
         description: this.selectedAddEditValue.description,
-        offset: this.selectedAddEditValue.offset,
+        offset: this.selectedAddEditValue.offSet,
       });
     }
   }
@@ -170,6 +170,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       startTime: this.formatDateForSubmission(formValue.startTime),
       endTime: this.formatDateForSubmission(formValue.endTime)
     };
+    console.log(formValue);
 
 
 
