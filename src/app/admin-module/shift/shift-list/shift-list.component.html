@@ -105,7 +105,7 @@
               </th>
 
               <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.name' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
               </th>
 
 
@@ -165,11 +165,11 @@
               </td>
 
               <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
-                  <div class="font-weight-bolder text-primary mb-0">{{data.startTime || "N/A"}} </div>
+                  <div class="font-weight-bolder text-primary mb-0">{{data.startTime | convertTime: 'time'}} </div>
                 </span></td>
 
               <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
-                  <div class="font-weight-bolder text-primary mb-0">{{data.endTime || "N/A"}} </div>
+                  <div class="font-weight-bolder text-primary mb-0">{{data.endTime | convertTime: 'time'}} </div>
                 </span></td>
 
               <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">

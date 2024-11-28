@@ -20,13 +20,13 @@ import { environment } from '../../../environments/environment.prod';
 export class AddEditComponent implements OnInit, OnDestroy {
 
   datePickerConfig = {
-    format: environment.dateFormat,
+    format: environment.dateTimePatterns.date,
   };
 
   timePickerConfig = {
     hour12: false,  // Use 24-hour format
     timePicker: true,  // Enable time picker
-    format: environment.timeFormat,  // Set the time format for the picker
+    format: environment.dateTimePatterns.time,  // Set the time format for the picker
   };
 
 
@@ -85,7 +85,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return this.fb.group({
       checkIn: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      date: [`${environment.defaultDate}`, [Validators.required]],
+      date: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       comment: [''],
       offset: [new Date().getTimezoneOffset().toString()]
     });

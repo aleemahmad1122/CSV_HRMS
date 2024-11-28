@@ -104,7 +104,7 @@
               </th>
 
               <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.name' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
               </th>
 
 
@@ -167,7 +167,7 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.startDate | date: 'yyyy-MM-dd' }} {{ data.startDate || "N/A" }}
+                      {{ data.startDate | convertTime: 'date' }}
                     </div>
                   </div>
                 </span>
@@ -177,7 +177,7 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.endDate | date: 'yyyy-MM-dd' }} {{ data.endDate || "N/A" }}
+                      {{ data.endDate | convertTime: 'date' }}
                     </div>
                   </div>
                 </span>

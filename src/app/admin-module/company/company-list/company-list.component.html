@@ -113,29 +113,9 @@
               </th>
 
               <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.name' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.companyImage' | translate}} </span>
-              </th>
-
-
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.employeesCount' | translate}} </span>
-              </th>
-
-
-
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.faxNumber' | translate}} </span>
-              </th>
-
-
-
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.firstAddress' | translate}} </span>
-              </th>
 
 
               <th class="datatable-cell datatable-cell-sort">
@@ -169,6 +149,11 @@
 
               <td aria-label="64616-103" class="datatable-cell">
                 <span style="width: 250px;">
+                  <figure class="symbol-label companyImage">
+                    <img
+                      [src]="data.companyImage || 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg'"
+                      alt="" />
+                  </figure>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
@@ -177,33 +162,12 @@
                 </span>
               </td>
 
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                  <figure class="symbol-label companyImage">
-                    <img
-                      [src]="data.companyImage || 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg'"
-                      alt="" />
-                  </figure>
-                </span></td>
+
               <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">{{data.employeesCount || "N/A"}}
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{ data.foundedDate | convertTime: 'date' }}
                     </div>
-                  </div>
-                </span></td>
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">{{data.faxNumber || "N/A"}}</div>
-                  </div>
-                </span></td>
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">{{data.firstAddress || "N/A"}}
-                    </div>
-                  </div>
-                </span></td>
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">{{data.foundedDate || "N/A"}}</div>
                   </div>
                 </span></td>
               <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">

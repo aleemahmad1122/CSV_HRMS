@@ -1,86 +1,93 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
+<div
+    class="container d-flex justify-content-center align-items-center min-vh-50   rounded flex-column shadow-sm card card-custom">
 
-  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+    <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.title' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="name"
-              [placeholder]="'language.placeholders.title' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.titleRequired' | translate}}
-          </div>
-      </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.title' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="name"
+                    [placeholder]="'language.placeholders.title' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.titleRequired' | translate}}
+                </div>
+            </div>
 
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.emailDetails' | translate}} <span class="text-danger"></span></label>
-          <input type="text" class="form-control" formControlName="details"
-              [placeholder]="'language.placeholders.details' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.detailsRequired' | translate}}
-          </div>
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.description' | translate}} <span
+                        class="text-danger"></span></label>
+                <input type="text" class="form-control" formControlName="details"
+                    [placeholder]="'language.form.description' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('details')?.invalid && (addEditForm.get('details')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.detailsRequired' | translate}}
+                </div>
+            </div>
 
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.address' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="address"
-              [placeholder]="'language.placeholders.address' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.addressRequired' | translate}}
-          </div>
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.address' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="address"
+                    [placeholder]="'language.placeholders.address' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('address')?.invalid && (addEditForm.get('address')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.addressRequired' | translate}}
+                </div>
+            </div>
 
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.contactNumber' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="contactNumber"
-              [placeholder]="'language.placeholders.contactNumber' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.contactNumberRequired' | translate}}
-          </div>
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.contactNumber' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="contactNumber"
+                    [placeholder]="'language.placeholders.contactNumber' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('contactNumber')?.invalid && (addEditForm.get('contactNumber')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.contactNumberRequired' | translate}}
+                </div>
+            </div>
 
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.email' | translate}} <span class="text-danger">*</span></label>
-          <input type="email" class="form-control" formControlName="email"
-              [placeholder]="'language.placeholders.email' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.emailRequired' | translate}}
-          </div>
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.email' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="email" class="form-control" formControlName="email"
+                    [placeholder]="'language.placeholders.email' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('email')?.invalid && (addEditForm.get('email')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.emailRequired' | translate}}
+                </div>
+            </div>
 
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.website' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="website"
-              [placeholder]="'language.placeholders.website' | translate"
-              [ngClass]="{'is-invalid': (addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted)"
-              class="invalid-feedback">
-              {{'language.errors.websiteRequired' | translate}}
-          </div>
-      </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">{{'language.form.website' | translate}} <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="website"
+                    [placeholder]="'language.placeholders.website' | translate"
+                    [ngClass]="{'is-invalid': (addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted))}" />
+                <div *ngIf="addEditForm.get('website')?.invalid && (addEditForm.get('website')?.touched || isSubmitted)"
+                    class="invalid-feedback">
+                    {{'language.errors.websiteRequired' | translate}}
+                </div>
+            </div>
 
-    </div>
+        </div>
 
-    <!-- Form submission buttons -->
-    <div class="row mt-3">
-      <div class="col-12 text-right">
-          <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
-              {{ 'language.generic.back'| translate }}
-          </button>
-          <button type="submit" class="btn btn-primary font-weight-bold me-3">
-              {{ 'language.generic.submit'| translate }}
-          </button>
-      </div>
-    </div>
-  </form>
+        <!-- Form submission buttons -->
+        <div class="row mt-3">
+            <div class="col-12 text-right">
+                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
+                    {{ 'language.generic.back'| translate }}
+                </button>
+                <button type="submit" class="btn btn-primary font-weight-bold me-3">
+                    {{ 'language.generic.submit'| translate }}
+                </button>
+            </div>
+        </div>
+    </form>
 </div>

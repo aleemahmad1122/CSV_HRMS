@@ -34,7 +34,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
 
   datePickerConfig = {
-    format: environment.dateFormat,
+    format: environment.dateTimePatterns.date,
   };
 
 
@@ -154,7 +154,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       address: ['', Validators.required],
       phoneNumber: ['', Validators.required],
       role: ['', Validators.required],
-      dateOfBirth: [`${environment.defaultDate}`, Validators.required],
+      dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       cnic: ['', Validators.required],
     });
   }

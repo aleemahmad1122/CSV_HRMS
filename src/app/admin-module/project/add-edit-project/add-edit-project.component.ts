@@ -24,7 +24,7 @@ interface Status {
 export class AddEditProjectComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   datePickerConfig = {
-    format: environment.dateFormat,
+    format: environment.dateTimePatterns.date,
   };
   addEditForm: FormGroup;
   currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
@@ -80,8 +80,8 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],
-      startDate: [`${environment.defaultDate}`, Validators.required],
-      endDate: [`${environment.defaultDate}`, Validators.required],
+      startDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
+      endDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       statusId: ['1', Validators.required],
       description: [''],
       budget: ['', Validators.required],

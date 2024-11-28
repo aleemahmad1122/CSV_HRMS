@@ -26,7 +26,7 @@ interface Typess {
 
 export class AddEditCompanyComponent implements OnInit, OnDestroy {
   datePickerConfig = {
-    format: environment.dateFormat,
+    format: environment.dateTimePatterns.date,
   };
   private ngUnsubscribe = new Subject<void>();
   companyForm!: FormGroup;
@@ -105,7 +105,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       firstAddress: ['', Validators.required],
       secondAddress: [''],
       employeesCount: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      foundedDate: [`${environment.defaultDate}`, Validators.required],
+      foundedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       companyType: [2]
     });
 

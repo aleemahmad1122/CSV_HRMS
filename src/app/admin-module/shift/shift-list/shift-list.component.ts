@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {  IShift,IShiftRes } from '../../../types/index';
+import { IShift, IShiftRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -8,11 +8,12 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 
 @Component({
   selector: 'app-shift-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe, ConvertTimePipe],
   templateUrl: './shift-list.component.html',
   styleUrl: './shift-list.component.css'
 })
@@ -46,24 +47,24 @@ export class ShiftListComponent {
 
 
 
-    // Handles status change from the dropdown
-    onStatusChange(event: Event): void {
-      const selectedValue = (event.target as HTMLSelectElement).value;
-      this.selectedStatus = selectedValue;
-      this.getActiveStatusData('', selectedValue);
-    }
+  // Handles status change from the dropdown
+  onStatusChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedStatus = selectedValue;
+    this.getActiveStatusData('', selectedValue);
+  }
 
-    // Fetch data filtered by active status
-    private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
+  // Fetch data filtered by active status
+  private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
-      // Call the API with the active status filter
-      this.apiService.getData('Shift', 'getShifts', true, { searchQuery: searchTerm, activeStatus: isActive })
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (res: IShiftRes) => this.handleResponse(res),
-          error: () => (this.dataList = []),
-        });
-    }
+    // Call the API with the active status filter
+    this.apiService.getData('Shift', 'getShifts', true, { searchQuery: searchTerm, activeStatus: isActive })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: IShiftRes) => this.handleResponse(res),
+        error: () => (this.dataList = []),
+      });
+  }
 
 
   private getData(searchTerm = ''): void {

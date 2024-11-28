@@ -20,7 +20,7 @@ import { environment } from '../../../../environments/environment.prod';
 export class AddEditComponent implements OnInit, OnDestroy {
 
   datePickerConfig = {
-    format: environment.dateFormat,
+    format: environment.dateTimePatterns.date,
   };
 
   private ngUnsubscribe = new Subject<void>();
@@ -99,7 +99,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       leaveTypeId: ['', [Validators.required]],
-      leaveDate: [`${environment.defaultDate}`, [Validators.required]],
+      leaveDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       leaveReason: ['', [Validators.required]],
       offset: [new Date().getTimezoneOffset().toString()]
     });

@@ -113,7 +113,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   datePickerConfig = {
     hour12: false,  // Use 24-hour format
     timePicker: true,  // Enable time picker
-    format: environment.timeFormat,  // Set the time format for the picker
+    format: environment.dateTimePatterns.time,  // Set the time format for the picker
   };
 
 

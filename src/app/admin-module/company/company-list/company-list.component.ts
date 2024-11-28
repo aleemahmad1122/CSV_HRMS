@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ICompany,ICompanyRes } from '../../../types/index';
+import { ICompany, ICompanyRes } from '../../../types/index';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -8,15 +8,16 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from "../../../shared/pipes/highlight.pipe";
+import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe, ConvertTimePipe],
   templateUrl: './company-list.component.html',
   styleUrl: './company-list.component.css'
 })
-export class CompanyListComponent  {
+export class CompanyListComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
@@ -115,7 +116,6 @@ export class CompanyListComponent  {
   }
 
   onDelete(id: string): void {
-    console.log(id);
 
     this.apiService.deleteData('Company', `deleteCompany/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
