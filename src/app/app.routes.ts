@@ -14,28 +14,28 @@ export const routes: Routes = [
         path: 'admin',
         loadChildren: () => import('./admin-module/admin-module.module').then(m => m.AdminModuleModule),
         data: { breadcrumb: 'Admin' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
     {
         path: 'admin-report',
         loadChildren: () => import('./admin-report-module/admin-report.module').then(m => m.AdminReportModuleModule),
         data: { breadcrumb: 'Admin Report' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
     {
         path: 'dashboard',
         loadChildren: () => import('./dashboard-module/dashboard.module').then(m => m.DashboardModule),
         data: { breadcrumb: 'Dashboard' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
     {
         path: 'profile',
         loadChildren: () => import('./profile-module/profile.module').then(m => m.ProfileModule),
         data: { breadcrumb: 'Profile' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
 
@@ -43,7 +43,7 @@ export const routes: Routes = [
         path: 'employee',
         loadChildren: () => import('./employee-module/employee.module').then(m => m.EmployeeModuleModule),
         data: { breadcrumb: 'Employee' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
 
@@ -51,7 +51,7 @@ export const routes: Routes = [
         path: 'attendance',
         loadChildren: () => import('./attendance-module/attendance.module').then(m => m.AttendanceModuleModule),
         data: { breadcrumb: 'Attendance' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
 
@@ -59,7 +59,7 @@ export const routes: Routes = [
         path: 'leave',
         loadChildren: () => import('./leave-module/leave-module.module').then(m => m.LeaveModuleModule),
         data: { breadcrumb: 'Leave' },
-        // canActivate: [ProtectedGuard]
+        canActivate: [ProtectedGuard]
     },
 
     {

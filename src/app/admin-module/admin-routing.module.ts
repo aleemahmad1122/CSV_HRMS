@@ -9,6 +9,13 @@ const routes: Routes = [
     data: { breadcrumb: 'Company Structure' },
     title: 'Company Structure',
   },
+
+  {
+    path: 'company/:action',
+    loadComponent: () => import(`./company/add-edit-company/add-edit-company.component`).then(c => c.AddEditCompanyComponent),
+    data: { breadcrumb: (params) => params.action === 'add' ? 'Add Company' : 'Edit Company' },
+    title: 'Company',
+  },
   {
     path: 'job-detail',
     loadComponent: () => import(`./job/job-list/job-list.component`).then(c => c.JobListComponent),
@@ -44,12 +51,6 @@ const routes: Routes = [
     loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
     data: { breadcrumb: 'Client' },
     title: 'Client',
-  },
-  {
-    path: 'company/:action',
-    loadComponent: () => import(`./company/add-edit-company/add-edit-company.component`).then(c => c.AddEditCompanyComponent),
-    data: { breadcrumb: 'Company Structure' },
-    title: 'Company',
   },
   {
     path: 'qualifications/:action',
@@ -143,13 +144,13 @@ const routes: Routes = [
     loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Attendances Detail' },
     title: 'Leave Type List',
-},
-{
+  },
+  {
     path: 'leave-type/:action',
     loadComponent: () => import(`./leave-type/add-edit/add-edit.component`).then(c => c.AddEditComponent),
     data: { breadcrumb: 'Attendances Detail' },
     title: 'Leave Type Detail',
-},
+  },
 ];
 
 @NgModule({

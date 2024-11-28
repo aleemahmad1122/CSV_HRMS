@@ -17,28 +17,28 @@
         <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
           [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
       </div>
-      <div class="btn-group mt-5 flex-wrap gap-3 custom-btn-group">
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('YTD')" data-bs-toggle="tooltip"
+      <div class="btn-group mt-5 flex-wrap gap-3 ">
+        <button class="btn btn-primary custom-btn" (click)="setFilter('YTD')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data from the start of the current year to today">
           YTD
         </button>
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('MTD')" data-bs-toggle="tooltip"
+        <button class="btn btn-primary custom-btn" (click)="setFilter('MTD')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data from the start of the current month to today">
           MTD
         </button>
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('QTD')" data-bs-toggle="tooltip"
+        <button class="btn btn-primary custom-btn" (click)="setFilter('QTD')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data from the start of the current quarter to today">
           QTD
         </button>
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('PreviousYear')" data-bs-toggle="tooltip"
+        <button class="btn btn-primary custom-btn" (click)="setFilter('PreviousYear')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data for the entire previous year">
           Previous Year
         </button>
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('PreviousMonth')" data-bs-toggle="tooltip"
+        <button class="btn btn-primary custom-btn" (click)="setFilter('PreviousMonth')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data for the entire previous month">
           Previous Month
         </button>
-        <button class="btn btn-secondary custom-btn" (click)="setFilter('Last7Days')" data-bs-toggle="tooltip"
+        <button class="btn btn-primary custom-btn" (click)="setFilter('Last7Days')" data-bs-toggle="tooltip"
           data-bs-placement="top" title="Filter data for the last 7 days">
           Last 7 Days
         </button>
