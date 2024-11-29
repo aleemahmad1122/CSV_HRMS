@@ -98,7 +98,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
         date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
         comment: this.selectedValue.comment,
-        offSet: this.selectedValue.offSet,
+        offSet: this.selectedValue.offSet || new Date().getTimezoneOffset().toString(),
       });
     }
   }
