@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   leaveItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageLeave',
-      route: '/leave/leave-employee'
+      route: '/leave/leave-list'
     }
   ]
 
