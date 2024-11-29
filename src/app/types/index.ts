@@ -356,10 +356,15 @@ export interface ILeaveTypeRes extends ICommonRes {
 export interface ILeave extends ICommon {
   leaveId: string;
   employeeId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   leaveTypeId: string;
   leaveDate: string;
   offSet: string;
   leaveReason: string;
+  leaveStatus: number;
+  isActive: boolean;
 }
 
 

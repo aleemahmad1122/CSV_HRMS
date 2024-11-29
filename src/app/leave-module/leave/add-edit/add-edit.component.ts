@@ -100,7 +100,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return this.fb.group({
       leaveTypeId: ['', [Validators.required]],
       leaveDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      leaveReason: ['', [Validators.required]],
+      leaveReason: [''],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
