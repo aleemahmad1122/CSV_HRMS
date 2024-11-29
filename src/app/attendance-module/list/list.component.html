@@ -50,7 +50,7 @@
         {{ 'language.generic.applyFilter' | translate }}
       </button>
 
-      <button routerLink="/attendance/attendance/add" [queryParams]="{id:this.id}" class="btn btn-primary mt-5">
+      <button routerLink="/attendance/attendance/add" [queryParams]="{id:this.empId}" class="btn btn-primary mt-5">
         {{ 'language.generic.addAttendance' | translate }}
       </button>
 
@@ -158,7 +158,7 @@
               <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell">
                 <span style="overflow: visible; position: relative; width: 130px">
                   <a [routerLink]="['/attendance/attendance/edit']"
-                    [queryParams]="{ editId: data.attendanceId,id:this.id }"
+                    [queryParams]="{ id:this.empId,editId: data.attendanceId,}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                     title="Edit details">
                     <span class="svg-icon svg-icon-md">

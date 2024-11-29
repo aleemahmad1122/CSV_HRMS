@@ -526,13 +526,15 @@ export interface CompanyDetail {
 
 export interface EmployeeDetail {
   employeeId: string;
+  companyId: string;
   email: string;
   employeeName: string;
+  role?: string;
 }
 
 
 export interface ICompany {
-  offset: string | number;
+  offSet: string | number;
   companyId: string;
   companyImage: string;
   name: string;

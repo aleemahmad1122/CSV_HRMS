@@ -101,7 +101,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       leaveTypeId: ['', [Validators.required]],
       leaveDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       leaveReason: ['', [Validators.required]],
-      offset: [new Date().getTimezoneOffset().toString()]
+      offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
 
@@ -112,7 +112,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         leaveTypeId: this.selectedValue.leaveTypeId,
         leaveDate: this.convertToDatetimeLocalFormat(this.selectedValue.leaveDate),
         leaveReason: this.selectedValue.leaveReason,
-        offset: this.selectedValue.offset,
+        offSet: this.selectedValue.offSet,
       });
     }
   }

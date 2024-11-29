@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -20,7 +20,7 @@ declare var $: any;
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent  {
+export class LoginComponent {
   private ngUnsubscribe = new Subject<void>();
   loginForm!: FormGroup;
   companyList: CompanyDetail[] = [];
@@ -43,12 +43,32 @@ export class LoginComponent  {
     });
   }
 
+
   selectCompany(company: CompanyDetail): void {
+    // Update login status
     this._dataShare.updateLoginStatus(true);
+
+    // Store selected company details in LocalStorage
     this._localStorageService.setCompanyDetail(company);
+
+    // Filter employees related to the selected company
+    const relatedEmployees = this._localStorageService.getEmployeeDetail().filter(
+      (employee: any) => employee.companyId === company.companyId
+    );
+
+    console.log("=====================>", relatedEmployees);
+
+
+    // Store the filtered employees in LocalStorage
+    this._localStorageService.setEmployeeDetail(relatedEmployees);
+
+    // Close the modal
     $('#selectCompanyModal').modal('hide');
+
+    // Navigate to the dashboard
     this._router.navigateByUrl('dashboard');
   }
+
 
   submitLoginForm(): void {
     if (!this.loginForm.valid) {
@@ -66,7 +86,7 @@ export class LoginComponent  {
           this.companyList = response.data.companyDetail
           if (response.data.companyDetail.length > 1) {
 
-            console.log("arbabzafar4444@gmail.com");
+            console.log(response);
 
             $('#selectCompanyModal').modal('show');
 
@@ -75,7 +95,7 @@ export class LoginComponent  {
             this._dataShare.updateLoginStatus(true);
           }
           this._authService.setToken(response.data.token);
-                    this._localStorageService.setEmployeeDetail(response.data.employeeDetail);
+          this._localStorageService.setEmployeeDetail(response.data.employeeDetail);
 
         },
         error: (error) => {

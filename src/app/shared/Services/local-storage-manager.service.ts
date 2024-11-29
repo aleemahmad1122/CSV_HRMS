@@ -1,28 +1,28 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { CompanyDetail,EmployeeDetail } from "../../types/index";
+import { CompanyDetail, EmployeeDetail } from "../../types/index";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageManagerService {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
-  saveUserToStorage(data:any): boolean {
+  saveUserToStorage(data: any): boolean {
     this.removeUser();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('user',JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(data));
     }
 
     return true;
   }
 
 
-  savePermissionsToStorage(data:any): boolean {
+  savePermissionsToStorage(data: any): boolean {
     this.removePermissions();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('permissions',JSON.stringify(data));
+      localStorage.setItem('permissions', JSON.stringify(data));
     }
     return true;
   }
@@ -34,14 +34,14 @@ export class LocalStorageManagerService {
   saveAdminUserToStorage(): void {
     this.removeAdmin();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('isAdmin','1');
+      localStorage.setItem('isAdmin', '1');
     }
   }
 
-  updateUserToStorage(data:any): void {
+  updateUserToStorage(data: any): void {
     this.removeUser();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('user',JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(data));
     }
 
   }
@@ -56,31 +56,31 @@ export class LocalStorageManagerService {
   getUserRole(): number {
     let role = 0;
     if (isPlatformBrowser(this.platformId)) {
-      role =  Number(localStorage.getItem('role'));
+      role = Number(localStorage.getItem('role'));
     }
     return role;
   }
 
-  getTokenFromStorage(): string{
+  getTokenFromStorage(): string {
     let token = '';
     if (isPlatformBrowser(this.platformId)) {
-      token =  localStorage.getItem('token') || '{}';
+      token = localStorage.getItem('token') || '{}';
     }
     return token;
 
   }
 
-  setCompanyDetail(companyDetail:CompanyDetail): void {
+  setCompanyDetail(companyDetail: CompanyDetail): void {
     this.removeCompanyDetail();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('companyDetail',JSON.stringify(companyDetail));
+      localStorage.setItem('companyDetail', JSON.stringify(companyDetail));
     }
   }
 
-  getCompanyDetail(): CompanyDetail{
-    let companyDetail :CompanyDetail;
+  getCompanyDetail(): CompanyDetail {
+    let companyDetail: CompanyDetail;
     if (isPlatformBrowser(this.platformId)) {
-      companyDetail =  JSON.parse(localStorage.getItem('companyDetail')) || {};
+      companyDetail = JSON.parse(localStorage.getItem('companyDetail')) || {};
     }
     return companyDetail;
 
@@ -98,17 +98,17 @@ export class LocalStorageManagerService {
 
 
 
-  setEmployeeDetail(employeeDetail:EmployeeDetail[]): void {
+  setEmployeeDetail(employeeDetail: EmployeeDetail[]): void {
     this.removeEmployeeDetail();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('employeeDetail',JSON.stringify(employeeDetail));
+      localStorage.setItem('employeeDetail', JSON.stringify(employeeDetail));
     }
   }
 
-  getEmployeeDetail(): EmployeeDetail[]{
-    let employeeDetail :EmployeeDetail[] = [];
+  getEmployeeDetail(): EmployeeDetail[] {
+    let employeeDetail: EmployeeDetail[] = [];
     if (isPlatformBrowser(this.platformId)) {
-      employeeDetail =  JSON.parse(localStorage.getItem('employeeDetail')) || [];
+      employeeDetail = JSON.parse(localStorage.getItem('employeeDetail')) || [];
     }
     return employeeDetail;
 
@@ -126,10 +126,10 @@ export class LocalStorageManagerService {
 
 
 
-  setTokenToStorage(token:string): void {
+  setTokenToStorage(token: string): void {
     this.removeToken();
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('token',token);
+      localStorage.setItem('token', token);
     }
   }
 
@@ -139,7 +139,7 @@ export class LocalStorageManagerService {
       token = localStorage.getItem('token') || '';
     }
 
-    return token !== '' ?  true : false;
+    return token !== '' ? true : false;
   }
 
   isAdminValidationFromStorage(): boolean {

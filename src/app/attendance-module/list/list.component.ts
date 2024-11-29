@@ -3,6 +3,7 @@ import { IAttendanceList, IAttendanceListRes } from '../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
+import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
 import { ExportService } from '../../shared/Services/export.service';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import * as bootstrap from 'bootstrap';
 import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { environment } from "../../../environments/environment.prod"
 
 @Component({
   selector: 'app-list',
@@ -21,7 +23,7 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 export class ListComponent implements AfterViewInit {
 
   datePickerConfig = {
-    format: 'YYYY-MM-DD',
+    format: environment.dateTimePatterns.date,
   };
 
   private ngUnsubscribe = new Subject<void>();
@@ -36,21 +38,24 @@ export class ListComponent implements AfterViewInit {
   pageNo = 1;
   totalPages = 0;
 
+  empId: string;
+
   msg: string = '';
 
   startDate = '';
   endDate = new Date().toISOString();
 
-  id: string;
 
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private _localStorage: LocalStorageManagerService,
     private route: ActivatedRoute
   ) {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
-      this.id = params['id'];
-    });
+
+    this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
+
+
 
     // Set default dates for Month to Date (MTD)
     const today = new Date();
@@ -125,7 +130,7 @@ export class ListComponent implements AfterViewInit {
       this.msg = ''
       const params = {
         searchQuery: this.searchTerm,
-        employeeId: this.id,
+        employeeId: this.empId,
         startDate: this.startDate,
         endDate: this.endDate,
       };
@@ -150,7 +155,7 @@ export class ListComponent implements AfterViewInit {
   private getData(searchTerm = ''): void {
     const params = {
       searchQuery: searchTerm,
-      employeeId: this.id,
+      employeeId: this.empId,
       startDate: this.startDate,
       endDate: this.endDate,
     };
@@ -197,7 +202,7 @@ export class ListComponent implements AfterViewInit {
       searchQuery: this.searchTerm,
       pageNo: this.pageNo,
       pageSize: this.pageSize,
-      employeeId: this.id,
+      employeeId: this.empId,
       endDate: this.endDate,
     };
 

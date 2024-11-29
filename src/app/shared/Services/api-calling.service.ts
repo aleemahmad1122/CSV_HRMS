@@ -45,7 +45,6 @@ export class ApiCallingService {
       this._loader.show();
     }
 
-    console.log(paginationParams);
 
     const staticQueryParams = {
       companyId: this._localStorage.getCompanyDetail().companyId,

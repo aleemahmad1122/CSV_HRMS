@@ -87,7 +87,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       date: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       comment: [''],
-      offset: [new Date().getTimezoneOffset().toString()]
+      offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
 
@@ -98,7 +98,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
         date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
         comment: this.selectedValue.comment,
-        offset: this.selectedValue.offset,
+        offSet: this.selectedValue.offSet,
       });
     }
   }
@@ -172,6 +172,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const values = {
       ...formValue,
+      offSet: formValue.offSet,
       date: this.formatDateForSubmission(formValue.date),
       checkIn: this.formatTimeForSubmission(formValue.checkIn),
       checkOut: this.formatTimeForSubmission(formValue.checkOut)

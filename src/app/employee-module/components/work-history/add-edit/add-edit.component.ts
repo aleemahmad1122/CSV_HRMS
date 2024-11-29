@@ -280,7 +280,7 @@ export class AddEditComponent {
         formData.append(`workHistoryRequest[${itemIndex}].organization`, item.organization || '');
         formData.append(`workHistoryRequest[${itemIndex}].startDate`, this.formatDateForSubmission(item.startDate) || '');
         formData.append(`workHistoryRequest[${itemIndex}].endDate`, this.formatDateForSubmission(item.endDate) || '');
-        formData.append(`workHistoryRequest[${itemIndex}].offset`, new Date().getTimezoneOffset().toString());
+        formData.append(`workHistoryRequest[${itemIndex}].offSet`, new Date().getTimezoneOffset().toString());
 
         const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
         if (attachmentItem?.attachments?.length > 0) {
@@ -291,8 +291,8 @@ export class AddEditComponent {
               const byteCharacters = atob(base64Data);
               const byteArrays = [];
 
-              for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-                const slice = byteCharacters.slice(offset, offset + 1024);
+              for (let offSet = 0; offSet < byteCharacters.length; offSet += 1024) {
+                const slice = byteCharacters.slice(offSet, offSet + 1024);
                 const byteNumbers = new Array(slice.length);
 
                 for (let i = 0; i < slice.length; i++) {
@@ -320,7 +320,7 @@ export class AddEditComponent {
       formData.append('organization', item.organization || '');
       formData.append('startDate', this.formatDateForSubmission(item.startDate) || '');
       formData.append('endDate', this.formatDateForSubmission(item.endDate) || '');
-      formData.append('offset', new Date().getTimezoneOffset().toString());
+      formData.append('offSet', new Date().getTimezoneOffset().toString());
 
       const attachmentItem = this.itemAttachment.find(x => x.index === itemIndex);
 
@@ -331,8 +331,8 @@ export class AddEditComponent {
             const byteCharacters = atob(base64Data);
             const byteArrays = [];
 
-            for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-              const slice = byteCharacters.slice(offset, offset + 1024);
+            for (let offSet = 0; offSet < byteCharacters.length; offSet += 1024) {
+              const slice = byteCharacters.slice(offSet, offSet + 1024);
               const byteNumbers = new Array(slice.length);
 
               for (let i = 0; i < slice.length; i++) {

@@ -86,7 +86,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
       description: [''],
       budget: ['', Validators.required],
       currency: ['', Validators.required],
-      offset: [new Date().getTimezoneOffset().toString()]
+      offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
 
@@ -99,7 +99,7 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
         statusId: this.selectedValue.statusId,
         description: this.selectedValue.description,
         budget: this.selectedValue.budget,
-        offset: this.selectedValue.offSet,
+        offSet: this.selectedValue.offSet,
         currency: this.selectedValue.currency
       });
     }
