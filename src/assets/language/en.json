@@ -214,6 +214,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "user": "User",
+      "selectUser": "Select User",
       "earlyMinutes": "Early Minutes",
       "graceMinutes": "Grace Minutes",
       "update": "Update",

@@ -46,6 +46,21 @@
 
 
 
+
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.generic.user" | translate }}
+          <span class="text-danger"></span></label>
+        <select [(ngModel)]="selectedEmpId" (change)="onUserSelect($event)" class="form-control custom-select">
+          <option [value]="this.empId">
+            {{ "language.generic.selectUser" | translate }}
+          </option>
+          @for (item of userReporting; track $index) {
+          <option [value]="item.employeeId">{{item.fullName}}</option>
+          }
+        </select>
+      </div>
+
       <button class="btn btn-primary mt-5" (click)="applyDateFilter()">
         {{ 'language.generic.applyFilter' | translate }}
       </button>

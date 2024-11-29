@@ -40,10 +40,17 @@ export class ListComponent implements AfterViewInit {
 
   empId: string;
 
+  selectedEmpId: string;
+
   msg: string = '';
 
   startDate = '';
   endDate = new Date().toISOString();
+
+  userReporting: {
+    employeeId: string;
+    fullName: string;
+  }[] = []
 
 
   constructor(
@@ -54,8 +61,9 @@ export class ListComponent implements AfterViewInit {
   ) {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
+    this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
-
+    this.getUserReporting()
 
     // Set default dates for Month to Date (MTD)
     const today = new Date();
@@ -73,6 +81,32 @@ export class ListComponent implements AfterViewInit {
     tooltipTriggerList.forEach((tooltipTriggerEl) => {
       new bootstrap.Tooltip(tooltipTriggerEl);
     });
+  }
+
+
+  onUserSelect(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedEmpId = selectElement.value;
+  }
+
+  getUserReporting(): void {
+    this.apiService
+      .getData('Attendance', 'getUserReportings', true, {
+        employeeId: this.empId
+      })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.userReporting = response.data;
+          } else {
+            this.userReporting = []; // Handle case when response is not successful
+          }
+        },
+        error: () => {
+          this.userReporting = []; // Handle error scenario
+        },
+      });
   }
 
 
@@ -130,7 +164,7 @@ export class ListComponent implements AfterViewInit {
       this.msg = ''
       const params = {
         searchQuery: this.searchTerm,
-        employeeId: this.empId,
+        employeeId: this.selectedEmpId,
         startDate: this.startDate,
         endDate: this.endDate,
       };
@@ -155,7 +189,7 @@ export class ListComponent implements AfterViewInit {
   private getData(searchTerm = ''): void {
     const params = {
       searchQuery: searchTerm,
-      employeeId: this.empId,
+      employeeId: this.selectedEmpId,
       startDate: this.startDate,
       endDate: this.endDate,
     };
@@ -202,7 +236,7 @@ export class ListComponent implements AfterViewInit {
       searchQuery: this.searchTerm,
       pageNo: this.pageNo,
       pageSize: this.pageSize,
-      employeeId: this.empId,
+      employeeId: this.selectedEmpId,
       endDate: this.endDate,
     };
 
