@@ -63,27 +63,27 @@ export class SidebarComponent implements OnInit, OnDestroy {
       {
         name: 'language.sidebar.employee',
         path: "/employee/profile/employee/edit",
-        image: "/assets/media/svg/icons/Design/Layers.svg"
+        image: "assets/media/svg/icons/Design/Layers.svg"
       },
       {
         name: 'language.employee.shift',
         path: "/employee/profile/shift/edit",
-        image: "/assets/media/svg/icons/Design/Layers.svg"
+        image: "assets/media/svg/icons/Design/Layers.svg"
       },
       {
         name: 'language.employee.department',
         path: "/employee/profile/department-team/edit",
-        image: "/assets/media/svg/icons/Design/Layers.svg"
+        image: "assets/media/svg/icons/Design/Layers.svg"
       },
       {
         name: 'language.employee.education',
         path: "/employee/profile/education-history",
-        image: "/assets/media/svg/icons/Design/Layers.svg"
+        image: "assets/media/svg/icons/Design/Layers.svg"
       },
       {
         name: 'language.employee.workHistory',
         path: "/employee/profile/work-history",
-        image: "/assets/media/svg/icons/Design/Layers.svg"
+        image: "assets/media/svg/icons/Design/Layers.svg"
       },
     ];
   // activeTab: string = this.tabList[0];

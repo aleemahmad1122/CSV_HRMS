@@ -36,7 +36,7 @@
           @for(item of tabList; track item){
           <div class="navi-item mb-2">
             <a class="navi-link py-4" [routerLinkActive]="'active'"  [routerLink]="item.path" [queryParams]="{id:this.isEditMode}">
-              <img  class="mx-3" width="24px" height="24px" [alt]="item.name" [src]="item.path">
+              <img  class="mx-3" style="opacity: .5;" width="24px" height="24px" [alt]="item.name" [src]="item.image">
               <span class="navi-text font-size-lg"> {{ item.name| translate }}</span>
             </a>
           </div>
