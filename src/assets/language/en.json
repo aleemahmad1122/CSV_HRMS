@@ -46,6 +46,9 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "selectStatus":"Select Status",
+      "joiningStatus":"Joining Status",
+      "joiningDate":"Joining Date",
       "reportsTo": "Reports To",
       "selectReportTo": "Select Report to",
       "selectrole": "Select Role",
@@ -160,6 +163,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "joiningStatusRequired":"Joining Status is Required",
+      "joiningDateRequired":"Joining Date is Required",
       "isPaidRequired": "Is Paid is Required",
       "cnicRequired": "CNIC is Required",
       "dobRequired": "Date of birth is Required",

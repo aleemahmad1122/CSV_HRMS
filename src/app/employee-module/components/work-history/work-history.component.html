@@ -65,7 +65,7 @@
       </div>
       <!--end::Dropdown-->
       <!--begin::Button-->
-      <button routerLink="/employee/work-history/add" [queryParams]="{id:this.id}"
+      <button routerLink="/employee/profile/work-history/add" [queryParams]="{id:this.id}"
         class="btn btn-primary font-weight-bolder">
         <span class="svg-icon svg-icon-md">
           <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
@@ -149,7 +149,7 @@
 
 
 
-                <a [routerLink]="['/employee/work-history/edit']"
+                <a [routerLink]="['/employee/profile/work-history/edit']"
                   [queryParams]="{editId: data.employeeWorkHistoryId,id:this.id}"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2" title="Edit details">
                   <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"

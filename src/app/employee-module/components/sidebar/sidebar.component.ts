@@ -4,13 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ApiCallingService } from '../../shared/Services/api-calling.service';
+import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
-  selector: 'app-add-edit-module',
+  selector: 'app-sidebar',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,10 +20,10 @@ import { environment } from '../../../environments/environment.prod';
     RouterOutlet,
     DpDatePickerModule,
   ],
-  templateUrl: './add-edit-module.component.html',
-  styleUrls: ['./add-edit-module.component.css'],
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.css'
 })
-export class AddEditModuleComponent implements OnInit, OnDestroy {
+export class SidebarComponent  implements OnInit, OnDestroy {
 
 
   datePickerConfig = {
@@ -59,7 +59,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     path:string;
     name:string;
   }[] = [
-    {name:'language.sidebar.employee',path:"/employee/profile/employee/edit?id=be4c7b56-c8ac-420e-8926-252b092edcad"},
+    {name:'language.sidebar.employee',path:"/employee/profile/employee/add"},
     {name:'language.employee.shift',path:"/employee/profile/shift"},
     {name:'language.employee.department',path:"/employee/profile/department-team"},
     {name:'language.employee.education',path:"/employee/profile/education-history"},

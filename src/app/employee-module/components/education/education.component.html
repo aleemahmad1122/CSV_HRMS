@@ -104,7 +104,7 @@
       <!--end::Dropdown-->
       <!--begin::Button-->
       <button
-        routerLink="/employee/education-history/add"
+        routerLink="/employee/profile/education-history//add"
         [queryParams]="{id:this.id}"
         class="btn btn-primary font-weight-bolder"
       >
@@ -218,7 +218,7 @@
             >
               <span style="overflow: visible; position: relative; width: 130px">
                 <a
-                  [routerLink]="['/employee/education-history/edit']"
+                  [routerLink]="['/employee/profile/education-history//edit']"
                   [queryParams]="{editId: data.employeeEducationId,id:this.id}"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                   title="Edit details"

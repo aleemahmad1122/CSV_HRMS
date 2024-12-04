@@ -1,375 +1,305 @@
-<div class="d-flex justify-content-between gap-5">
-  <div class="d-flex flex-column-fluid col-md-3">
-    <!--begin::Container-->
-    <div class="container">
-      <!--begin::Profile Personal Information-->
-      <div class="d-flex flex-row">
-        <!--begin::Aside-->
-        <div class="flex-row-auto offcanvas-mobile w-250px w-xxl-350px" id="kt_profile_aside">
-          <!--begin::Profile Card-->
-          <div class="card card-custom card-stretch">
-            <!--begin::Body-->
-            <div class="card-body pt-4">
-              <!--begin::Toolbar-->
+<form [formGroup]="addEditForm" class="form w-100 px-5" id="kt_form_1" (ngSubmit)="submitForm()">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
+        id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
+        <div class="image-input-wrapper"></div>
 
+        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+          data-action="change" data-toggle="tooltip" title="Change avatar">
+          <i class="fa fa-pen icon-sm text-muted"></i>
+          <input type="file" formControlName="employeeImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
+            (change)="onFileSelected($event)" />
+        </label>
 
-              <!--end::Toolbar-->
-              <!--begin::User-->
-              <div class="d-flex align-items-center">
-                <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-
-
-                  <div class="symbol-label"
-                    [style.backgroundImage]="'url(' + (addEditForm.get('employeeImage').value || imagePreview) + ')'">
-                  </div>
-
-                  <i class="symbol-badge bg-success"></i>
-                </div>
-                <div>
-                  <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
-                    {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
-                  </a>
-                  <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
-                  <div class="mt-2">
-                    <a href="#" class="btn btn-sm btn-primary font-weight-bold mr-2 py-2 px-3 px-xxl-5 my-1">Chat</a>
-                    <a href="#" class="btn btn-sm btn-success font-weight-bold py-2 px-3 px-xxl-5 my-1">Follow</a>
-                  </div>
-                </div>
-              </div>
-              <!--end::User-->
-              <!--begin::Contact-->
-              <div class="py-9">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                  <span class="font-weight-bold mr-2">Email:</span>
-                  <a class="text-muted text-hover-primary">{{addEditForm.get('email').value || 'N/A'}}</a>
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                  <span class="font-weight-bold mr-2">Phone:</span>
-                  <span class="text-muted">{{addEditForm.get('phoneNumber').value || 'N/A'}}</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                  <span class="font-weight-bold mr-2">Location:</span>
-                  <span class="text-muted">{{addEditForm.get('city').value || 'N/A'}}</span>
-                </div>
-              </div>
-              <!--end::Contact-->
-              <!--begin::Nav-->
-              <div class="navi navi-bold navi-hover navi-active navi-link-rounded">
-
-                @for(item of tabList; track item){
-                <div class="navi-item mb-2">
-                  <a class="navi-link py-4" [ngClass]="{ active: this.activeTab == item }" (click)="setActiveTab(item)">
-
-                    <span class="navi-text font-size-lg"> {{ item | translate }}</span>
-                  </a>
-                </div>
-                }
-
-
-              </div>
-              <!--end::Nav-->
-            </div>
-            <!--end::Body-->
-          </div>
-          <!--end::Profile Card-->
-        </div>
-        <!--end::Aside-->
-        <!--begin::Content-->
-        <router-outlet />
-        <!--end::Content-->
+        <span *ngIf="imagePreview !== defaultImagePath"
+          class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
+          data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+          <i class="ki ki-bold-close icon-xs text-muted"></i>
+        </span>
       </div>
-      <!--end::Profile Personal Information-->
     </div>
-    <!--end::Container-->
-  </div>
-  @if(this.activeTab == "language.sidebar.employee"){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-
-
-    <form [formGroup]="addEditForm" class="form w-100 px-5" id="kt_form_1" (ngSubmit)="submitForm()">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
-            id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
-            <div class="image-input-wrapper"></div>
-
-            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-              data-action="change" data-toggle="tooltip" title="Change avatar">
-              <i class="fa fa-pen icon-sm text-muted"></i>
-              <input type="file" formControlName="employeeImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
-                (change)="onFileSelected($event)" />
-            </label>
-
-            <span *ngIf="imagePreview !== defaultImagePath"
-              class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
-              data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
-              <i class="ki ki-bold-close icon-xs text-muted"></i>
-            </span>
-          </div>
-        </div>
-        @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
-        <div class="text-muted mb-4 mx-4 small">
-          <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
-            {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
-            JPEG</span>
-        </div>
-        }
-        <div class="text-danger mx-4 small">
-          @if(imageSizeExceeded) {
-          <span>{{ "language.errors.maxFileSize" | translate }} 1 MB</span>
-          }
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.firstName" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="firstName" [readOnly]="isView"
-            [placeholder]="'language.placeholders.firstName' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('firstName')?.invalid &&
-                  (addEditForm.get('firstName')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('firstName')?.invalid &&
-                (addEditForm.get('firstName')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.firstNameRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.lastName" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="lastName" [readOnly]="isView"
-            [placeholder]="'language.placeholders.lastName' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('lastName')?.invalid &&
-                  (addEditForm.get('lastName')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('lastName')?.invalid &&
-                (addEditForm.get('lastName')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.lastNameRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.email" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="email" class="form-control" formControlName="email" [readOnly]="isView"
-            [placeholder]="'language.placeholders.email' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('email')?.invalid &&
-                  (addEditForm.get('email')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('email')?.invalid &&
-                (addEditForm.get('email')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.emailRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.password" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="password" class="form-control" formControlName="password" [readOnly]="isView"
-            [placeholder]="'language.placeholders.password' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('password')?.invalid &&
-                  (addEditForm.get('password')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('password')?.invalid &&
-                (addEditForm.get('password')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.passwordRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.country" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="country" [readOnly]="isView"
-            [placeholder]="'language.placeholders.country' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('country')?.invalid &&
-                  (addEditForm.get('country')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('country')?.invalid &&
-                (addEditForm.get('country')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.countryRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.city" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="city" [readOnly]="isView"
-            [placeholder]="'language.placeholders.city' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('city')?.invalid &&
-                  (addEditForm.get('city')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('city')?.invalid &&
-                (addEditForm.get('city')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.cityRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.address" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="address" [readOnly]="isView"
-            [placeholder]="'language.placeholders.address' | translate" [ngClass]="{
-                'is-invalid':
-                  addEditForm.get('address')?.invalid &&
-                  (addEditForm.get('address')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                addEditForm.get('address')?.invalid &&
-                (addEditForm.get('address')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.addressRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.phoneNumber" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" formControlName="phoneNumber" [readOnly]="isView"
-            [placeholder]="'language.placeholders.phoneNumber' | translate" [ngClass]="{
-                'is-invalid':
-                  !this.isView &&
-                  addEditForm.get('phoneNumber')?.invalid &&
-                  (addEditForm.get('phoneNumber')?.touched || isSubmitted)
-              }" />
-          <div *ngIf="
-                !this.isView &&
-                addEditForm.get('phoneNumber')?.invalid &&
-                (addEditForm.get('phoneNumber')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.phoneNumberRequired" | translate }}
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.dob" | translate }}
-            <span class="text-danger">*</span></label>
-          <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
-            [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
-              'is-invalid':
-                addEditForm.get('dateOfBirth')?.invalid &&
-                (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
-            }"></dp-date-picker>
-          <div *ngIf="
-              addEditForm.get('dateOfBirth')?.invalid &&
-              (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
-            " class="invalid-feedback">
-            {{ "language.errors.dobRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{'language.form.cnic' | translate}} <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="cnic"
-            [placeholder]="'language.placeholders.cnic' | translate"
-            [ngClass]="{'is-invalid': (addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted))}" />
-          <div *ngIf="addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted)"
-            class="invalid-feedback">
-            {{'language.errors.cnicRequired' | translate}}
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row">
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.role" | translate }}
-            <span class="text-danger">*</span></label>
-          <select class="form-control custom-select" formControlName="role" [ngClass]="{
-              'is-invalid':
-                addEditForm.get('role')?.invalid &&
-                (addEditForm.get('role')?.touched || isSubmitted)
-            }">
-            <option value="">
-              {{ "language.form.selectrole" | translate }}
-            </option>
-            @for(role of rolesList; track role) {
-            <option [value]="role.roleId">{{ role.name }}</option>
-            }
-          </select>
-          <div *ngIf="
-              addEditForm.get('role')?.invalid &&
-              (addEditForm.get('role')?.touched || isSubmitted)
-            " class="invalid-feedback">
-            {{ "language.errors.roleRequired" | translate }}
-          </div>
-        </div>
-      </div>
-
-      @if(!this.isView){
-      <div class="row mt-3 py-5">
-        <div class="col-12 text-right">
-          <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
-            {{ "language.generic.back" | translate }}
-          </button>
-          <button type="submit" class="btn btn-primary font-weight-bold me-3">
-            {{ "language.generic.submit" | translate }}
-          </button>
-        </div>
-      </div>
+    @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
+    <div class="text-muted mb-4 mx-4 small">
+      <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
+        {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
+        JPEG</span>
+    </div>
+    }
+    <div class="text-danger mx-4 small">
+      @if(imageSizeExceeded) {
+      <span>{{ "language.errors.maxFileSize" | translate }} 1 MB</span>
       }
-    </form>
+    </div>
   </div>
-  }
-  @if(this.activeTab === 'language.employee.shift' ){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    <app-shift-history></app-shift-history>
-  </div>
-  }
-  @if(this.activeTab === 'language.employee.department' ){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    <app-add-edit></app-add-edit>
-  </div>
-  }
-  @if(this.activeTab === 'language.employee.education' ){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    <app-education></app-education>
-  </div>
-  }
-  @if(this.activeTab === 'language.employee.workHistory' ){
-  <div
-    class="container col-md-6 d-flex justify-content-center align-items-center min-vh-50 rounded flex-column shadow-sm card card-custom p-5">
-    <app-work-history></app-work-history>
-  </div>
-  }
 
-</div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.firstName" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="firstName" [readOnly]="isView"
+        [placeholder]="'language.placeholders.firstName' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('firstName')?.invalid &&
+              (addEditForm.get('firstName')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('firstName')?.invalid &&
+            (addEditForm.get('firstName')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.firstNameRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.lastName" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="lastName" [readOnly]="isView"
+        [placeholder]="'language.placeholders.lastName' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('lastName')?.invalid &&
+              (addEditForm.get('lastName')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('lastName')?.invalid &&
+            (addEditForm.get('lastName')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.lastNameRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.email" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="email" class="form-control" formControlName="email" [readOnly]="isView"
+        [placeholder]="'language.placeholders.email' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('email')?.invalid &&
+              (addEditForm.get('email')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('email')?.invalid &&
+            (addEditForm.get('email')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.emailRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.password" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="password" class="form-control" formControlName="password" [readOnly]="isView"
+        [placeholder]="'language.placeholders.password' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('password')?.invalid &&
+              (addEditForm.get('password')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('password')?.invalid &&
+            (addEditForm.get('password')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.passwordRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.country" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="country" [readOnly]="isView"
+        [placeholder]="'language.placeholders.country' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('country')?.invalid &&
+              (addEditForm.get('country')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('country')?.invalid &&
+            (addEditForm.get('country')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.countryRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.city" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="city" [readOnly]="isView"
+        [placeholder]="'language.placeholders.city' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('city')?.invalid &&
+              (addEditForm.get('city')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('city')?.invalid &&
+            (addEditForm.get('city')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.cityRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.address" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="address" [readOnly]="isView"
+        [placeholder]="'language.placeholders.address' | translate" [ngClass]="{
+            'is-invalid':
+              addEditForm.get('address')?.invalid &&
+              (addEditForm.get('address')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            addEditForm.get('address')?.invalid &&
+            (addEditForm.get('address')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.addressRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.phoneNumber" | translate }}
+        <span class="text-danger">*</span></label>
+      <input type="number" class="form-control" formControlName="phoneNumber" [readOnly]="isView"
+        [placeholder]="'language.placeholders.phoneNumber' | translate" [ngClass]="{
+            'is-invalid':
+              !this.isView &&
+              addEditForm.get('phoneNumber')?.invalid &&
+              (addEditForm.get('phoneNumber')?.touched || isSubmitted)
+          }" />
+      <div *ngIf="
+            !this.isView &&
+            addEditForm.get('phoneNumber')?.invalid &&
+            (addEditForm.get('phoneNumber')?.touched || isSubmitted)
+          " class="invalid-feedback">
+        {{ "language.errors.phoneNumberRequired" | translate }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+
+    <div class="col-md-6 mb-3" style="overflow: hidden;">
+      <label class="form-label">{{ "language.form.joiningDate" | translate }}
+        <span class="text-danger">*</span></label>
+      <dp-date-picker class="form-control" formControlName="joiningDate" placeholder="00/00/00"
+        [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'joiningDate')" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('joiningDate')?.invalid &&
+            (addEditForm.get('joiningDate')?.touched || isSubmitted)
+        }"></dp-date-picker>
+      <div *ngIf="
+          addEditForm.get('joiningDate')?.invalid &&
+          (addEditForm.get('joiningDate')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.joiningDateRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{'language.form.cnic' | translate}} <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" formControlName="cnic"
+        [placeholder]="'language.placeholders.cnic' | translate"
+        [ngClass]="{'is-invalid': (addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted))}" />
+      <div *ngIf="addEditForm.get('cnic')?.invalid && (addEditForm.get('cnic')?.touched || isSubmitted)"
+        class="invalid-feedback">
+        {{'language.errors.cnicRequired' | translate}}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-6 mb-3" style="overflow: hidden;">
+      <label class="form-label">{{ "language.form.dob" | translate }}
+        <span class="text-danger">*</span></label>
+      <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
+        [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('dateOfBirth')?.invalid &&
+            (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        }"></dp-date-picker>
+      <div *ngIf="
+          addEditForm.get('dateOfBirth')?.invalid &&
+          (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.dobRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.role" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="role" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('role')?.invalid &&
+            (addEditForm.get('role')?.touched || isSubmitted)
+        }">
+        <option value="">
+          {{ "language.form.selectrole" | translate }}
+        </option>
+        @for(role of rolesList; track role) {
+        <option [value]="role.roleId">{{ role.name }}</option>
+        }
+      </select>
+      <div *ngIf="
+          addEditForm.get('role')?.invalid &&
+          (addEditForm.get('role')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.roleRequired" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.joiningStatus" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="joiningStatus" [ngClass]="{
+    'is-invalid':
+      addEditForm.get('joiningStatus')?.invalid &&
+      (addEditForm.get('joiningStatus')?.touched || isSubmitted)
+  }">
+          <option selected [value]="true">
+            Yes
+          </option>
+        <option [value]="false">
+          No
+        </option>
+
+      </select>
+      <div *ngIf="
+    addEditForm.get('joiningStatus')?.invalid &&
+    (addEditForm.get('joiningStatus')?.touched || isSubmitted)
+  " class="invalid-feedback">
+        {{ "language.errors.joiningStatusRequired" | translate }}
+      </div>
+    </div>
+
+  </div>
+
+  @if(!this.isView){
+  <div class="row mt-3 py-5">
+    <div class="col-12 text-right">
+      <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
+        {{ "language.generic.back" | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary font-weight-bold me-3">
+        {{ "language.generic.submit" | translate }}
+      </button>
+    </div>
+  </div>
+  }
+</form>
