@@ -110,7 +110,7 @@
             <tr class="datatable-row" style="left: 0px">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px">#<i class="flaticon2-arrow-up"></i></span>
+                <span style="width: 40px">#     </span>
               </th>
 
               <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
@@ -122,15 +122,10 @@
 
               <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
                 <span style="width: 124px">
-                  {{ "language.form.country" | translate }}
+                  {{ "language.form.country" | translate }} / {{ "language.form.city" | translate }}
                 </span>
               </th>
 
-              <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
-                <span style="width: 124px">
-                  {{ "language.form.city" | translate }}
-                </span>
-              </th>
 
 
               <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
@@ -186,16 +181,7 @@
                 <span style="width: 124px">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.country || "N/A" }}
-                    </div>
-                  </div>
-                </span>
-              </td>
-              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 124px">
-                  <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.city || "N/A" }}
+                      {{ data.country || "N/A" }}{{data.city && ','}}{{ data.city && data.city  }}
                     </div>
                   </div>
                 </span>

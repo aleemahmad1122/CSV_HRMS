@@ -78,6 +78,14 @@ export class ApiCallingService {
     return this._httpClient.put<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
+  patchData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean, employeeId?: string): Observable<any> {
+    if (showLoader) {
+      this._loader.show();
+    }
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
+    return this._httpClient.patch<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
+  }
+
   deleteData<T>(controllerName: string, methodName: string, body: any, showLoader: boolean, employeeId?: string): Observable<any> {
     if (showLoader) {
       this._loader.show();

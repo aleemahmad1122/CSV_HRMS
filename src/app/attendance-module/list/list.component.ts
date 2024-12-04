@@ -6,17 +6,18 @@ import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
 import { ExportService } from '../../shared/Services/export.service';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import * as bootstrap from 'bootstrap';
 import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
+import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe,HighlightPipe],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })
@@ -38,7 +39,11 @@ export class ListComponent implements AfterViewInit {
   pageNo = 1;
   totalPages = 0;
 
+  isSubmitted = false;
   empId: string;
+
+
+  submitForm!: FormGroup;
 
   selectedEmpId: string;
 
@@ -57,7 +62,7 @@ export class ListComponent implements AfterViewInit {
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private _localStorage: LocalStorageManagerService,
-    private route: ActivatedRoute
+    private fb: FormBuilder
   ) {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -72,6 +77,16 @@ export class ListComponent implements AfterViewInit {
 
     this.initializeSearch();
     this.getData();
+
+
+    this.submitForm = this.fb.group({
+      attendanceStatus: [0],
+      comment: ['', Validators.required ],
+    });
+  }
+
+  setStatus(status: number): void {
+    this.submitForm.patchValue({ attendanceStatus: status });
   }
 
 
@@ -83,10 +98,28 @@ export class ListComponent implements AfterViewInit {
     });
   }
 
+  getAttendanceStatusText(status: number): string {
+    switch (status) {
+      case 0:
+        return 'Pending';
+      case 1:
+        return 'Approved';
+      case 2:
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
+  }
 
   onUserSelect(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedEmpId = selectElement.value;
+  }
+
+  search(event: Event): void {
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerm = term; // Update the bound search term for highlight pipe
+    this.searchSubject.next(term); // Debounce the API call
   }
 
   getUserReporting(): void {
@@ -219,6 +252,30 @@ export class ListComponent implements AfterViewInit {
   }
 
 
+  onSubmit(id:string){
+    this.isSubmitted = true;
+    if (!this.submitForm.valid) {
+      return;
+    }
+
+    this.apiService
+    .patchData('Attendance', `processAttendance/${id}`,this.submitForm.value, true)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe({
+      next: (response: any) => {
+        if (response?.success) {
+          this.getData()
+
+        }
+      },
+      error: () => {
+        this.userReporting = []; // Handle error scenario
+      },
+    });
+
+  }
+
+
   changePage(newPage: number): void {
     if (newPage > 0 && newPage <= this.totalPages) {
       this.pageNo = newPage;
@@ -230,6 +287,7 @@ export class ListComponent implements AfterViewInit {
     Object.assign(this, { pageSize: size, pageNo: 1 });
     this.getPaginatedData();
   }
+
 
   private getPaginatedData(): void {
     const params = {

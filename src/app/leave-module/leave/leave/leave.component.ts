@@ -6,17 +6,18 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
 import { ExportService } from '../../../shared/Services/export.service';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import * as bootstrap from 'bootstrap';
 import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../../environments/environment.prod"
+import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 
 @Component({
   selector: 'app-leave',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe,HighlightPipe],
   templateUrl: './leave.component.html',
   styleUrl: './leave.component.css'
 })
@@ -38,11 +39,15 @@ export class LeaveComponent implements AfterViewInit {
   pageNo = 1;
   totalPages = 0;
 
+  submitForm!: FormGroup;
+
+
   empId: string;
 
   selectedEmpId: string;
 
   msg: string = '';
+  isSubmitted = false;
 
   startDate = '';
   endDate = new Date().toISOString();
@@ -56,8 +61,8 @@ export class LeaveComponent implements AfterViewInit {
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private fb: FormBuilder,
     private _localStorage: LocalStorageManagerService,
-    private route: ActivatedRoute
   ) {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -72,6 +77,17 @@ export class LeaveComponent implements AfterViewInit {
 
     this.initializeSearch();
     this.getData();
+
+    this.submitForm = this.fb.group({
+      leaveStatus: [0],
+      comment: ['', Validators.required ],
+    });
+
+  }
+
+
+  setStatus(status: number): void {
+    this.submitForm.patchValue({ leaveStatus: status });
   }
 
 
@@ -83,6 +99,23 @@ export class LeaveComponent implements AfterViewInit {
     });
   }
 
+  getLeaveStatusText(status: number): string {
+  switch (status) {
+    case 0:
+      return 'Pending';
+    case 1:
+      return 'Approved';
+    case 2:
+      return 'Rejected';
+    default:
+      return 'Unknown';
+  }
+}
+search(event: Event): void {
+  const term = (event.target as HTMLInputElement).value;
+  this.searchTerm = term; // Update the bound search term for highlight pipe
+  this.searchSubject.next(term); // Debounce the API call
+}
 
   onUserSelect(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -106,6 +139,20 @@ export class LeaveComponent implements AfterViewInit {
         error: () => {
           this.userReporting = []; // Handle error scenario
         },
+      });
+  }
+
+
+
+  onDelete(id: string): void {
+
+    this.apiService.deleteData('Leave', `deleteLeave/${id}`, id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.leaveId !== id);
+        },
+        error: (err) => console.error('Error deleting Company:', err),
       });
   }
 
@@ -216,6 +263,29 @@ export class LeaveComponent implements AfterViewInit {
     } else {
       this.dataList = [];
     }
+  }
+
+  onSubmit(id:string){
+    this.isSubmitted = true;
+    if (!this.submitForm.valid) {
+      return;
+    }
+
+    this.apiService
+    .patchData('Leave', `processLeave/${id}`,this.submitForm.value, true)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe({
+      next: (response: any) => {
+        if (response?.success) {
+          this.getData()
+
+        }
+      },
+      error: () => {
+        this.userReporting = []; // Handle error scenario
+      },
+    });
+
   }
 
 

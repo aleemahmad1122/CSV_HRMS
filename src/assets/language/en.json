@@ -214,6 +214,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "status":"Status",
+      "selectFilter":"Select Filter",
       "empName": "Employee Name",
       "user": "User",
       "applyLeave": "Apply Leave",
