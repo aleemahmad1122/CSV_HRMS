@@ -357,6 +357,9 @@ export interface ILeave extends ICommon {
   leaveId: string;
   employeeId: string;
   firstName: string;
+  approvedBy: string;
+  approvedDate: string;
+  approvedComment: string;
   lastName: string;
   email: string;
   leaveTypeId: string;

@@ -219,6 +219,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "approvedDate":"Approved Date",
+      "approvedBy":"Approved by",
       "organization":"Organization",
       "institution":"Institution",
       "status":"Status",

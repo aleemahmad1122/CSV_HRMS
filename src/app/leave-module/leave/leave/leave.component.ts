@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ILeave, ILeaveRes } from '../../../types/index';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {  RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
@@ -278,10 +278,11 @@ search(event: Event): void {
       next: (response: any) => {
         if (response?.success) {
           this.getData()
-
+          this.submitForm.reset()
         }
       },
       error: () => {
+        this.submitForm.reset()
         this.userReporting = []; // Handle error scenario
       },
     });
