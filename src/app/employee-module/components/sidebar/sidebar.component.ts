@@ -23,7 +23,7 @@ import { environment } from '../../../../environments/environment.prod';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent  implements OnInit, OnDestroy {
+export class SidebarComponent implements OnInit, OnDestroy {
 
 
   datePickerConfig = {
@@ -56,15 +56,36 @@ export class SidebarComponent  implements OnInit, OnDestroy {
   allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
   tabList: {
-    path:string;
-    name:string;
+    path: string;
+    name: string;
+    image: string;
   }[] = [
-    {name:'language.sidebar.employee',path:"/employee/profile/employee/edit"},
-    {name:'language.employee.shift',path:"/employee/profile/shift/edit"},
-    {name:'language.employee.department',path:"/employee/profile/department-team/edit"},
-    {name:'language.employee.education',path:"/employee/profile/education-history"},
-    {name:'language.employee.workHistory',path:"/employee/profile/work-history"},
-  ];
+      {
+        name: 'language.sidebar.employee',
+        path: "/employee/profile/employee/edit",
+        image: "/assets/media/svg/icons/Design/Layers.svg"
+      },
+      {
+        name: 'language.employee.shift',
+        path: "/employee/profile/shift/edit",
+        image: "/assets/media/svg/icons/Design/Layers.svg"
+      },
+      {
+        name: 'language.employee.department',
+        path: "/employee/profile/department-team/edit",
+        image: "/assets/media/svg/icons/Design/Layers.svg"
+      },
+      {
+        name: 'language.employee.education',
+        path: "/employee/profile/education-history",
+        image: "/assets/media/svg/icons/Design/Layers.svg"
+      },
+      {
+        name: 'language.employee.workHistory',
+        path: "/employee/profile/work-history",
+        image: "/assets/media/svg/icons/Design/Layers.svg"
+      },
+    ];
   // activeTab: string = this.tabList[0];
 
   constructor(

@@ -92,25 +92,6 @@
     </div>
 
     <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.password" | translate }}
-        <span class="text-danger">*</span></label>
-      <input type="password" class="form-control" formControlName="password" [readOnly]="isView"
-        [placeholder]="'language.placeholders.password' | translate" [ngClass]="{
-            'is-invalid':
-              !this.isView &&
-              addEditForm.get('password')?.invalid &&
-              (addEditForm.get('password')?.touched || isSubmitted)
-          }" />
-      <div *ngIf="
-            !this.isView &&
-            addEditForm.get('password')?.invalid &&
-            (addEditForm.get('password')?.touched || isSubmitted)
-          " class="invalid-feedback">
-        {{ "language.errors.passwordRequired" | translate }}
-      </div>
-    </div>
-
-    <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.country" | translate }}
         <span class="text-danger">*</span></label>
       <input type="text" class="form-control" formControlName="country" [readOnly]="isView"
@@ -184,6 +165,30 @@
       </div>
     </div>
 
+
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ "language.form.role" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="role" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('role')?.invalid &&
+            (addEditForm.get('role')?.touched || isSubmitted)
+        }">
+        <option value="">
+          {{ "language.form.selectrole" | translate }}
+        </option>
+        @for(role of rolesList; track role) {
+        <option [value]="role.roleId">{{ role.name }}</option>
+        }
+      </select>
+      <div *ngIf="
+          addEditForm.get('role')?.invalid &&
+          (addEditForm.get('role')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.roleRequired" | translate }}
+      </div>
+    </div>
+
   </div>
 
   <div class="row">
@@ -219,48 +224,6 @@
 
   </div>
 
-  <div class="row">
-
-    <div class="col-md-6 mb-3" style="overflow: hidden;">
-      <label class="form-label">{{ "language.form.dob" | translate }}
-        <span class="text-danger">*</span></label>
-      <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
-        [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
-          'is-invalid':
-            addEditForm.get('dateOfBirth')?.invalid &&
-            (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
-        }"></dp-date-picker>
-      <div *ngIf="
-          addEditForm.get('dateOfBirth')?.invalid &&
-          (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
-        " class="invalid-feedback">
-        {{ "language.errors.dobRequired" | translate }}
-      </div>
-    </div>
-
-    <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.role" | translate }}
-        <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="role" [ngClass]="{
-          'is-invalid':
-            addEditForm.get('role')?.invalid &&
-            (addEditForm.get('role')?.touched || isSubmitted)
-        }">
-        <option value="">
-          {{ "language.form.selectrole" | translate }}
-        </option>
-        @for(role of rolesList; track role) {
-        <option [value]="role.roleId">{{ role.name }}</option>
-        }
-      </select>
-      <div *ngIf="
-          addEditForm.get('role')?.invalid &&
-          (addEditForm.get('role')?.touched || isSubmitted)
-        " class="invalid-feedback">
-        {{ "language.errors.roleRequired" | translate }}
-      </div>
-    </div>
-  </div>
 
   <div class="row">
 
@@ -285,6 +248,23 @@
     (addEditForm.get('joiningStatus')?.touched || isSubmitted)
   " class="invalid-feedback">
         {{ "language.errors.joiningStatusRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3" style="overflow: hidden;">
+      <label class="form-label">{{ "language.form.dob" | translate }}
+        <span class="text-danger">*</span></label>
+      <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
+        [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('dateOfBirth')?.invalid &&
+            (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        }"></dp-date-picker>
+      <div *ngIf="
+          addEditForm.get('dateOfBirth')?.invalid &&
+          (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.dobRequired" | translate }}
       </div>
     </div>
 
