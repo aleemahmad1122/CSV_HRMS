@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
@@ -17,7 +17,6 @@ import { environment } from '../../../environments/environment.prod';
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
-    RouterOutlet,
     DpDatePickerModule,
   ],
   templateUrl: './add-edit-module.component.html',

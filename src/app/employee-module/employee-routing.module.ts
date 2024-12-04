@@ -13,6 +13,7 @@ const routes: Routes = [
   {
     path:"profile",
     loadComponent: () => import(`./components/sidebar/sidebar.component`).then(c => c.SidebarComponent),
+    data: { breadcrumb: 'Profile' },
     children:[
       {
         path: 'employee/:action',
@@ -49,14 +50,14 @@ const routes: Routes = [
         canActivate: [ProtectedGuard]
       },
       {
-        path: 'department-team',
+        path: 'department-team/:action',
         loadComponent: () => import(`./components/department-team/add-edit/add-edit.component`).then(c => c.AddEditComponent),
         title: 'Add Department & Team',
         data: { breadcrumb: 'Department & Team' },
         canActivate: [ProtectedGuard]
       },
       {
-        path: 'shift',
+        path: 'shift/:action',
         loadComponent: () => import(`./components/shift/shift-history.component`).then(c => c.ShiftHistoryComponent),
         title: 'Add Shift',
         data: { breadcrumb: 'Shift' },

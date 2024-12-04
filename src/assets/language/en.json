@@ -219,6 +219,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "organization":"Organization",
+      "institution":"Institution",
       "status":"Status",
       "selectFilter":"Select Filter",
       "empName": "Employee Name",

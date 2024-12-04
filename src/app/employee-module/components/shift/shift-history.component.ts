@@ -44,6 +44,8 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const action = params.get('action');
+      console.log("====",action);
+
       const id = this.route.snapshot.queryParams['id'];
 
       // Determine the mode based on the :action parameter
@@ -91,7 +93,6 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
               this.isEditMode = false;
               this.isAddMode = true;
               this.selectedValue = null;
-              this.toaster.info(response.data, '');
             }
           },
           error: () => {

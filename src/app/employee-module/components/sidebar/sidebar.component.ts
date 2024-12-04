@@ -59,9 +59,9 @@ export class SidebarComponent  implements OnInit, OnDestroy {
     path:string;
     name:string;
   }[] = [
-    {name:'language.sidebar.employee',path:"/employee/profile/employee/add"},
-    {name:'language.employee.shift',path:"/employee/profile/shift"},
-    {name:'language.employee.department',path:"/employee/profile/department-team"},
+    {name:'language.sidebar.employee',path:"/employee/profile/employee/edit"},
+    {name:'language.employee.shift',path:"/employee/profile/shift/edit"},
+    {name:'language.employee.department',path:"/employee/profile/department-team/edit"},
     {name:'language.employee.education',path:"/employee/profile/education-history"},
     {name:'language.employee.workHistory',path:"/employee/profile/work-history"},
   ];

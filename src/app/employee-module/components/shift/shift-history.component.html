@@ -1,11 +1,8 @@
-<h1 class="font-weight-bold text-center mb-5" style="font-size: 30px">
-  {{ isEditMode ? "Edit" : isAddMode ? "Add" : "View" }} Employee Department &
-  Team
-</h1>
+
 
 <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
   <div class="row">
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
       <label class="form-label">{{ "language.form.shiftId" | translate }}
         <span class="text-danger">*</span></label>
       <select class="form-control custom-select" formControlName="shiftId" [ngClass]="{
@@ -28,20 +25,23 @@
       </div>
     </div>
 
-    <div class="col-md-6 mb-3">
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 mb-3">
       <label class="form-label">{{ "language.form.description" | translate }}
         <span class="text-danger">*</span></label>
-      <input class="form-control" formControlName="description" type="text"
+      <textarea class="form-control" formControlName="description"
         [placeholder]="'language.placeholders.description' | translate" rows="3" [ngClass]="{
           'is-invalid':
             addEditForm.get('description')?.invalid &&
             (addEditForm.get('description')?.touched || isSubmitted)
-        }" [disabled]="isViewMode" />
+        }"></textarea>
       <div *ngIf="
           addEditForm.get('description')?.invalid &&
           (addEditForm.get('description')?.touched || isSubmitted)
         " class="invalid-feedback">
-        {{ "language.errors.descriptionRequired" | translate }}
+      {{ "language.errors.descriptionRequired" | translate }}
       </div>
     </div>
   </div>
