@@ -54,17 +54,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   readonly maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
   allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-  tabList: {
-    path:string;
-    name:string;
-  }[] = [
-    {name:'language.sidebar.employee',path:"/employee/profile/employee/edit?id=be4c7b56-c8ac-420e-8926-252b092edcad"},
-    {name:'language.employee.shift',path:"/employee/profile/shift"},
-    {name:'language.employee.department',path:"/employee/profile/department-team"},
-    {name:'language.employee.education',path:"/employee/profile/education-history"},
-    {name:'language.employee.workHistory',path:"/employee/profile/work-history"},
-  ];
-  // activeTab: string = this.tabList[0];
 
   constructor(
     private fb: FormBuilder,
@@ -143,7 +132,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['',   Validators.required],
       country: ['', Validators.required],
       city: ['', Validators.required],
       address: ['', Validators.required],
@@ -172,7 +161,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         joiningStatus: this.selectedValue.joiningStatus,
         dateOfBirth: this.convertToDatetimeLocalFormat(this.selectedValue.dateOfBirth),
         joiningDate: this.convertToDatetimeLocalFormat(this.selectedValue.joiningDate),
-        role: this.selectedValue.role,
+        role: this.selectedValue.roleId,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;
     }
