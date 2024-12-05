@@ -165,6 +165,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private patchFormValues(): void {
+    if(this.selectedValue.imagePath){
+
+      this.defaultImagePath = this.selectedValue.imagePath
+    }
     if (this.selectedValue) {
       this.addEditForm.patchValue({
         firstName: this.selectedValue.firstName,
@@ -182,7 +186,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         role: this.selectedValue.role,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;
-      this.defaultImagePath
+
     }
   }
 
