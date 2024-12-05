@@ -145,6 +145,6 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/employee/employee-list']);
+    this.router.navigate([window.history.back()]);
   }
 }

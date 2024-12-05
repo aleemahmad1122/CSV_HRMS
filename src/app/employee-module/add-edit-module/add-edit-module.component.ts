@@ -270,7 +270,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
 
   goBack(): void {
-    this.router.navigate(['/employee/employee-list']);
+    this.router.navigate([window.history.back()]);
   }
 
   // setActiveTab(tab: string) {

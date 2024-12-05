@@ -15,7 +15,7 @@ export class BreadcrumbService {
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       const breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-      this.breadcrumbsSubject.next(breadcrumbs); // Emit the new breadcrumbs
+      this.breadcrumbsSubject.next(breadcrumbs);
     });
   }
 

@@ -52,7 +52,6 @@ export class HeaderComponent implements OnInit {
     // Subscribe to the breadcrumbs observable to get updates
     this.breadcrumbService.breadcrumbs$.subscribe(breadcrumbs => {
       this.breadcrumbs = breadcrumbs;
-      console.log('Breadcrumbs updated:', this.breadcrumbs);
     });
   }
   logout(): void {

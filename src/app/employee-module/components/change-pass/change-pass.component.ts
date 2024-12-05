@@ -1,8 +1,8 @@
 import { ToastrService } from 'ngx-toastr';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { IEmployeeShift, IShift, IShiftRes } from '../../../types/index';
+import { IEmployeeShift, IShift} from '../../../types/index';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule  } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
@@ -28,6 +28,11 @@ export class ChangePassComponent  implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
   id: string = "";
+  passwordMismatch = false;
+  showOldPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -41,30 +46,12 @@ export class ChangePassComponent  implements OnInit, OnDestroy {
       this.id = params['id']
     });
     this.addEditForm = this.createForm();
+    this.addEditForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+      this.checkPasswordMismatch();
+    });
   }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      const action = params.get('action');
-      console.log("====",action);
-
-      const id = this.route.snapshot.queryParams['id'];
-
-      // Determine the mode based on the :action parameter
-      this.isEditMode = action === 'edit';
-      this.isViewMode = action === 'view';
-      this.isAddMode = action === 'add';
-
-      if (this.isEditMode || this.isViewMode) {
-        this.loadEmployeeShift(id);
-      }
-
-      // Disable the form in view mode
-      if (this.isViewMode) {
-        this.addEditForm.disable();
-      }
-    });
-    this.getShifts();
   }
 
   ngOnDestroy(): void {
@@ -72,81 +59,90 @@ export class ChangePassComponent  implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  getShifts(): void {
-    this.apiCalling.getData('Shift', 'getShifts', true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: IShiftRes) => this.shiftList = res.data.shifts,
-        error: () => this.toaster.error('Failed to load departments', 'Error'),
-      });
-  }
-
-  private loadEmployeeShift(id: string | null): void {
-    if (id && isPlatformBrowser(this.platformId)) {
-      this.apiCalling.getData('EmployeeShift', 'getEmployeeShift', true, { employeeId: this.id })
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-              this.isEditMode = response.data.employeeShiftId != null;
-              this.isAddMode = !this.isEditMode;
-              this.selectedValue = response.data;
-              this.patchFormValues();
-            } else {
-              this.isEditMode = false;
-              this.isAddMode = true;
-              this.selectedValue = null;
-            }
-          },
-          error: () => {
-            this.toaster.error('Error loading data', 'Error');
-          }
-        });
-    }
-  }
-
   private createForm(): FormGroup {
     return this.fb.group({
-      shiftId: ['', Validators.required],
-      description: ['', Validators.required],
-    });
+      oldPassword: ['', Validators.required],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      ]],
+      confirmPassword: ['', Validators.required]
+    }, { validators: this.passwordMatchValidator });
   }
 
-  private patchFormValues(): void {
-    if (this.selectedValue) {
-      this.addEditForm.patchValue({
-        shiftId: this.selectedValue.shiftId,
-        description: this.selectedValue.description
-      });
+  private passwordMatchValidator(form: FormGroup) {
+    const newPassword = form.get('newPassword')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return newPassword === confirmPassword ? null : { passwordMismatch: true };
+  }
+  getPasswordErrors(): string[] {
+    const control = this.addEditForm.get('newPassword');
+    const errors: string[] = [];
+
+    if (control?.errors && (control.touched || this.isSubmitted)) {
+      if (control.errors['required']) {
+        errors.push('language.errors.newPasswordRequired');
+      }
+      if (control.errors['minlength']) {
+        errors.push('language.errors.passwordMinLength');
+      }
+      if (control.errors['pattern']) {
+        if (!/(?=.*[A-Z])/.test(control.value)) {
+          errors.push('language.errors.passwordUppercase');
+        }
+        if (!/(?=.*[a-z])/.test(control.value)) {
+          errors.push('language.errors.passwordLowercase');
+        }
+        if (!/(?=.*\d)/.test(control.value)) {
+          errors.push('language.errors.passwordNumber');
+        }
+        if (!/(?=.*[@$!%*?&])/.test(control.value)) {
+          errors.push('language.errors.passwordSpecial');
+        }
+      }
     }
+    return errors;
   }
 
   submitForm(): void {
+   const {confirmPassword,...rest} =  this.addEditForm.value
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
     }
 
-    const body = this.addEditForm.value;
-    const apiCall = this.isEditMode
-      ? this.apiCalling.putData("EmployeeShift", `updateEmployeeShift/${this.selectedValue.employeeShiftId}`, body, true, this.id)
-      : this.apiCalling.postData("EmployeeShift", "addEmployeeShift", body, true, this.id);
-
-    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.toaster.success(response.message, 'Success!');
-          this.goBack();
-        } else {
-          this.toaster.error(response?.message || 'An error occurred', 'Error!');
+    this.apiCalling.postData("Auth", "updatePassword", rest, true, this.id)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this.toaster.success(response.message, 'Success!');
+            this.goBack();
+          } else {
+            this.toaster.error(response?.message || 'An error occurred', 'Error!');
+          }
+        },
+        error: () => {
+          this.toaster.error('An error occurred while processing your request', 'Error');
         }
-      },
-      error: () => {
-        this.toaster.error('An error occurred while processing your request', 'Error');
-      }
-    });
+      });
   }
 
   goBack(): void {
-    this.router.navigate(['/employee/employee-list']);
+    this.router.navigate([window.history.back()]);
+  }
+
+  private checkPasswordMismatch(): void {
+    this.passwordMismatch = this.addEditForm.hasError('mismatch');
+  }
+
+  togglePasswordVisibility(field: string): void {
+    if (field === 'oldPassword') {
+      this.showOldPassword = !this.showOldPassword;
+    } else if (field === 'newPassword') {
+      this.showNewPassword = !this.showNewPassword;
+    } else if (field === 'confirmPassword') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
   }
 }
