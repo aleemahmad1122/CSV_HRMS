@@ -21,8 +21,8 @@
 
 
               <span *ngIf="imagePreview !== defaultImagePath" style="bottom: -7px; left: -7px;"
-                class="btn btn-xs btn-icon btn-circle btn-success btn-shadow position-absolute" data-action="confirm"
-                data-toggle="tooltip" title="Confirm avatar" (click)="confirmImage()">
+                class="btn btn-xs btn-icon btn-circle btn-success btn-shadow position-absolute" data-action="remove"
+                data-toggle="tooltip" title="Confirm avatar" (click)="submitForm()">
                 <i class="fa-duotone fa-solid fa-check"></i>
               </span>
               <span *ngIf="imagePreview !== defaultImagePath"

@@ -34,6 +34,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode: boolean | string = false;
+  id:string;
   isSubmitted = false;
   activRoute: string = '';
   rolesList: {
@@ -110,30 +111,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.addEditForm = this.createForm();
   }
 
-  private getRoles(): void {
-    this.apiCalling
-      .getData('Role', `getRoles`, true)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response) => {
-          if (response) {
-            this.rolesList = response?.data?.roles;
-            this.patchFormValues();
-          } else {
-            this.rolesList = [];
-          }
-        },
-        error: () => {
-          this.rolesList = [];
-        },
-      });
-  }
-
   ngOnInit(): void {
-    this.getRoles()
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
       this.isEditMode = id;
+      this.id = id;
       const view = params['view'];
       this.isView = view === 'true';
 
@@ -166,18 +148,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       employeeImage: [''],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      role: ['', Validators.required],
-      joiningStatus: [true, Validators.required],
-      dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
-      joiningDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
+      firstName: ['',],
+      lastName: ['',],
+      email: ['' ],
+      password: ['',],
+      country: ['',],
+      city: ['',],
+      address: ['',],
+      phoneNumber: ['',],
+      role: ['',],
+      joiningStatus: [true,],
+      dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,],
+      joiningDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,],
       cnic: ['', Validators.required],
     });
   }
@@ -185,7 +167,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        employeeImage: this.selectedValue.employeeImage,
         firstName: this.selectedValue.firstName,
         lastName: this.selectedValue.lastName,
         email: this.selectedValue.email,
@@ -201,6 +182,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         role: this.selectedValue.role,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;
+      this.defaultImagePath
     }
   }
 
@@ -215,11 +197,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
       this.addEditForm.patchValue({ valueName: formattedValue });
     }
-  }
-
-  private formatDateForSubmission(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
 
 
@@ -256,48 +233,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.imageSizeExceeded = false;
   }
 
-  confirmImage(){
-
-  }
 
   submitForm(): void {
     this.isSubmitted = true;
-    console.log(this.addEditForm.invalid);
-
-    if (this.addEditForm.invalid) {
-      return;
-    }
 
     // Create a FormData instance
     const formData = new FormData();
 
-    Object.keys(this.addEditForm.controls).forEach((key) => {
-      const value = this.addEditForm.get(key)?.value;
-
-      if (key === 'dateOfBirth' || key === 'joiningDate') {
-        // Append the formatted date for 'dob' and 'joiningDate'
-        formData.append(key, this.formatDateForSubmission(value));
-      } else if (key === 'employeeImage' && this.selectedFile) {
-        // Append file if 'employeeImage' is the key and file is selected
-        formData.append(key, this.selectedFile);
-      } else {
-        // Append other form control values
-        formData.append(key, value ?? ''); // Ensure no null/undefined values are appended
-      }
-    });
+  formData.append('image', this.selectedFile);
 
 
-    // Determine API call based on mode
-    const apiCall = this.isEditMode
-      ? this.apiCalling.putData('Employee', `updateEmployee/${this.isEditMode}`, formData, true)
-      : this.apiCalling.postData('Employee', 'addEmployee', formData, true);
 
-    // Execute the API call
-    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    this.apiCalling.patchData('Employee', `uploadEmployeeImage`, formData, true,this.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
+          this.defaultImagePath = response.data.imagePath
+          this.removeImage()
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
@@ -309,8 +261,5 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  goBack(): void {
-    this.router.navigate(['/employee/employee-list']);
-  }
 
 }
