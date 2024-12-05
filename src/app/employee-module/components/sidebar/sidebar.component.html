@@ -1,4 +1,4 @@
-<div class="d-flex flex-row px-3">
+<div class="d-flex flex-row px-5">
   <div class="flex-row-auto offcanvas-mobile w-250px w-xxl-350px" id="kt_profile_aside">
     <div class="card card-custom card-stretch">
       <div class="card-body pt-4">
@@ -47,15 +47,15 @@
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="font-weight-bold mr-2">Email:</span>
             <a href="#"
-              class="text-muted text-hover-primary">{{addEditForm.get('email').value}}</a>
+              class="text-muted text-hover-primary">{{addEditForm.get('email').value || 'N/A'}}</a>
           </div>
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="font-weight-bold mr-2">Phone:</span>
-            <span class="text-muted">{{addEditForm.get('phoneNumber').value}}</span>
+            <span class="text-muted">{{addEditForm.get('phoneNumber').value || 'N/A'}}</span>
           </div>
           <div class="d-flex align-items-center justify-content-between">
             <span class="font-weight-bold mr-2">Location:</span>
-            <span class="text-muted">{{addEditForm.get('country').value}},{{addEditForm.get('city').value}}</span>
+            <span class="text-muted">{{addEditForm.get('country').value}},{{addEditForm.get('city').value || 'N/A'}}</span>
           </div>
         </div>
       @if(this.isEditMode){
