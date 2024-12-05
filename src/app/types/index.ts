@@ -382,6 +382,9 @@ export interface ILeaveRes extends ICommonRes {
 
 
 export interface IAttendanceList extends ICommon {
+  approvedBy: string;
+  approvedDate: string;
+  approvedComment: string;
   attendanceId: string;
   employeeId: string;
   date: null | string;

@@ -332,7 +332,55 @@
                   </div>
 
                   }
+                  @if (data.attendanceStatus != 0) {
 
+                    <!-- Modal -->
+                    <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                      aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                              aria-label="Close">x</button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+
+
+                              <div class="d-flex w-100 mb-2"  style="gap: 4px;">
+                                <b>{{'language.generic.approvedDate' | translate}}:</b> {{data.approvedDate | convertTime: 'date' }}
+                              </div>
+
+                              <div class="d-flex w-100 mb-2"  style="gap: 4px;">
+                                <b>{{'language.generic.approvedBy' | translate}}:</b> {{data.approvedBy}}
+                              </div>
+
+                              <div class="d-flex w-100 mb-2"  style="gap: 4px;">
+                                <b>{{'language.generic.comment' | translate}}:</b> {{data.approvedComment}}
+                              </div>
+
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div
+                    class="d-flex align-items-center mt-2" style="gap: 1px;">
+
+                      <button
+
+                              data-bs-toggle="modal"
+                        [attr.data-bs-target]="'#leaveModal-' + $index"
+                      class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon mr-2"
+                        title="Edit details">
+                      <i class="icon-2x text-dark-50 flaticon-eye" style="color: white;"></i>
+                      </button>
+                    </div>
+
+                    }
 
 
               </td>
