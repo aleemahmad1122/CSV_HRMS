@@ -88,7 +88,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
               this.isEditMode = false;
               this.isAddMode = true;
               this.selectedValue = null;
-              this.toaster.info(response.data, '');
             }
           },
           error: () => {
