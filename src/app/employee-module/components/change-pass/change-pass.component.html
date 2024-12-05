@@ -4,18 +4,19 @@
   <div class="row">
     <div class="col-md-12 mb-3">
       <label class="form-label">{{'language.generic.currentPassword' | translate}} <span class="text-danger">*</span></label>
-   <div class="position-relative" >
+   <div class="position-relative mb-3" style="height: 40px;" >
     <input [type]="showOldPassword ? 'text' : 'password'" class="form-control" formControlName="oldPassword"
     placeholder="************"
 
       [ngClass]="{'is-invalid': (addEditForm.get('oldPassword')?.invalid && (addEditForm.get('oldPassword')?.touched || isSubmitted))}" />
-      <i  (click)="togglePasswordVisibility('oldPassword')" style="right: 18px; top: 33%; cursor: pointer;"
+      <i  (click)="togglePasswordVisibility('oldPassword')" style="right: 28px; top: 33%; cursor: pointer;"
       class="fa-solid position-absolute" [ngClass]="showOldPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+      <div class="position-absolute" style="bottom: 0;"  *ngIf="addEditForm.get('oldPassword')?.invalid && (addEditForm.get('oldPassword')?.touched || isSubmitted)"
+      class="invalid-feedback">
+      {{'language.errors.currentPasswordRequired' | translate}}
+    </div>
    </div>
-      <div *ngIf="addEditForm.get('oldPassword')?.invalid && (addEditForm.get('oldPassword')?.touched || isSubmitted)"
-        class="invalid-feedback">
-        {{'language.errors.currentPasswordRequired' | translate}}
-      </div>
+
     </div>
 
   </div>
@@ -26,15 +27,14 @@
 
     <div class="col-md-6 mb-3 position-relative">
       <label class="form-label">{{'language.generic.newPassword' | translate}} <span class="text-danger">*</span></label>
-     <div class="position-relative" >
+      <div class="position-relative mb-3" style="height: 40px;" >
       <input [type]="showNewPassword ? 'text' : 'password'" class="form-control" formControlName="newPassword"
       placeholder="************"
 
         [ngClass]="{'is-invalid': (addEditForm.get('newPassword')?.invalid && (addEditForm.get('newPassword')?.touched || isSubmitted))}" />
 
-      <i (click)="togglePasswordVisibility('newPassword')" style="right: 18px; top: 33%; cursor: pointer;"
+      <i (click)="togglePasswordVisibility('newPassword')" style="right: 28px; top: 33%; cursor: pointer;"
       class="fa-solid position-absolute" [ngClass]="showNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-     </div>
       <div class="invalid-feedback">
         <div *ngFor="let error of getPasswordErrors()">
           {{ error | translate }}
@@ -51,27 +51,30 @@
           <li>{{'language.generic.passwordSpecial' | translate}}</li>
         </ul>
       </div>
+     </div>
+
     </div>
 
 
     <div class="col-md-6 mb-3" style="height: fit-content;">
       <label class="form-label">{{'language.generic.confirmPassword' | translate}} <span class="text-danger">*</span></label>
- <div class="position-relative" >
+      <div class="position-relative mb-3" style="height: 40px;" >
   <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" formControlName="confirmPassword"
   placeholder="************"
   [ngClass]="{'is-invalid': (addEditForm.get('confirmPassword')?.invalid && (addEditForm.get('confirmPassword')?.touched || isSubmitted)) || addEditForm.hasError('passwordMismatch')}" />
-  <i (click)="togglePasswordVisibility('confirmPassword')" style="right: 18px; top: 33%; cursor: pointer;"
+  <i (click)="togglePasswordVisibility('confirmPassword')" style="right: 28px; top: 33%; cursor: pointer;"
   class="fa-solid position-absolute" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+  <div class="invalid-feedback">
+    <span *ngIf="addEditForm.get('confirmPassword')?.errors?.['required'] && (addEditForm.get('confirmPassword')?.touched || isSubmitted)">
+      {{'language.errors.confirmPasswordRequired' | translate}}
+    </span>
+    <span *ngIf="addEditForm.hasError('passwordMismatch') && !addEditForm.get('confirmPassword')?.errors?.['required']">
+      {{'language.errors.passwordMismatch' | translate}}
+    </span>
+  </div>
  </div>
 
-      <div class="invalid-feedback">
-        <span *ngIf="addEditForm.get('confirmPassword')?.errors?.['required'] && (addEditForm.get('confirmPassword')?.touched || isSubmitted)">
-          {{'language.errors.confirmPasswordRequired' | translate}}
-        </span>
-        <span *ngIf="addEditForm.hasError('passwordMismatch') && !addEditForm.get('confirmPassword')?.errors?.['required']">
-          {{'language.errors.passwordMismatch' | translate}}
-        </span>
-      </div>
+
     </div>
 
   </div>

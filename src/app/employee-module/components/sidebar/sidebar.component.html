@@ -1,48 +1,50 @@
 <div class="d-flex flex-row px-5">
   <div class="flex-row-auto offcanvas-mobile w-250px w-xxl-350px" id="kt_profile_aside">
     <div class="card card-custom card-stretch">
-      <div class="card-body pt-4">
-        <div class="d-flex align-items-center">
+      <form [formGroup]="addEditForm" (ngSubmit)="submitForm()" class="card-body pt-4">
+@if(this.isEditMode){
+  <div class="d-flex align-items-center">
 
 
-          <div class="mr-2" style="width: 120px;" >
-              <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
-                id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
-                <div class="image-input-wrapper"></div>
+    <div class="mr-2" style="width: 120px;" >
+        <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
+          id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
+          <div class="image-input-wrapper"></div>
 
-                <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
-                  data-action="change" data-toggle="tooltip" title="Change avatar">
-                  <i class="fa fa-pen icon-sm text-muted"></i>
-                  <input type="file" formControlName="employeeImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
-                    (change)="onFileSelected($event)" />
-                </label>
+          <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+            data-action="change" data-toggle="tooltip" title="Change avatar">
+            <i class="fa fa-pen icon-sm text-muted"></i>
+            <input type="file" formControlName="employeeImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
+              (change)="onFileSelected($event)" />
+          </label>
 
-                <span *ngIf="imagePreview !== defaultImagePath"
-                  class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
-                  data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
-                  <i class="ki ki-bold-close icon-xs text-muted"></i>
-                </span>
-              </div>
-            @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
-            <div class="text-muted mb-4   small ">
-              <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
-                {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
-                JPEG</span>
-            </div>
-            }
-            <div class="text-danger mx-4 small">
-              @if(imageSizeExceeded) {
-              <span>{{ "language.errors.maxFileSize" | translate }} 1 MB</span>
-              }
-            </div>
-          </div>
-          <div>
-            <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
-              {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
-            </a>
-            <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
-          </div>
+          <span *ngIf="imagePreview !== defaultImagePath"
+            class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
+            data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+            <i class="ki ki-bold-close icon-xs text-muted"></i>
+          </span>
         </div>
+      @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
+      <div class="text-muted mb-4   small ">
+        <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
+          {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
+          JPEG</span>
+      </div>
+      }
+      <div class="text-danger mx-4 small">
+        @if(imageSizeExceeded) {
+        <span>{{ "language.errors.maxFileSize" | translate }} 1 MB</span>
+        }
+      </div>
+    </div>
+    <div>
+      <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
+        {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
+      </a>
+      <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
+    </div>
+  </div>
+}
         <div class="py-9">
           <div class="d-flex align-items-center justify-content-between mb-2">
             <span class="font-weight-bold mr-2">Email:</span>
@@ -58,6 +60,8 @@
             <span class="text-muted">{{addEditForm.get('country').value}},{{addEditForm.get('city').value || 'N/A'}}</span>
           </div>
         </div>
+
+
       @if(this.isEditMode){
         <div class="navi navi-bold navi-hover navi-active navi-link-rounded">
           @for(item of tabList; track item){
@@ -73,7 +77,7 @@
           }
         </div>
       }
-      </div>
+      </form>
     </div>
   </div>
   <div class="flex-row-fluid ml-lg-8">

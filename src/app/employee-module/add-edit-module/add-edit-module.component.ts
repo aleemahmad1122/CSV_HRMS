@@ -128,7 +128,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      employeeImage: [''],
+      // employeeImage: [''],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -147,7 +147,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        employeeImage: this.selectedValue.employeeImage,
+        // employeeImage: this.selectedValue.employeeImage,
         firstName: this.selectedValue.firstName,
         lastName: this.selectedValue.lastName,
         email: this.selectedValue.email,
@@ -237,10 +237,12 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       if (key === 'dateOfBirth' || key === 'joiningDate') {
         // Append the formatted date for 'dob' and 'joiningDate'
         formData.append(key, this.formatDateForSubmission(value));
-      } else if (key === 'employeeImage' && this.selectedFile) {
-        // Append file if 'employeeImage' is the key and file is selected
-        formData.append(key, this.selectedFile);
-      } else {
+      }
+      // else if (key === 'employeeImage' && this.selectedFile) {
+      //   // Append file if 'employeeImage' is the key and file is selected
+      //   formData.append(key, this.selectedFile);
+      // }
+      else {
         // Append other form control values
         formData.append(key, value ?? ''); // Ensure no null/undefined values are appended
       }
