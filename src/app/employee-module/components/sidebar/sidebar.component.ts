@@ -253,11 +253,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   removeImage(): void {
     this.imagePreview = this.defaultImagePath;
-    this.selectedFile = null;
     this.imageSizeExceeded = false;
   }
 
+  confirmImage(){
 
+  }
 
   submitForm(): void {
     this.isSubmitted = true;
