@@ -63,6 +63,13 @@ const routes: Routes = [
         data: { breadcrumb: 'Shift' },
         canActivate: [ProtectedGuard]
       },
+      {
+        path: 'change-password',
+        loadComponent: () => import(`./components/change-pass/change-pass.component`).then(c => c.ChangePassComponent),
+        title: 'Change Password',
+        data: { breadcrumb: 'Change Password' },
+        canActivate: [ProtectedGuard]
+      },
     ]
   }
 

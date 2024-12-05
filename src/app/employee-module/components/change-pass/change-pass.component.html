@@ -1,0 +1,66 @@
+
+
+<form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <label class="form-label">{{ "language.form.shiftId" | translate }}
+        <span class="text-danger">*</span></label>
+      <select class="form-control custom-select" formControlName="shiftId" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('shiftId')?.invalid &&
+            (addEditForm.get('shiftId')?.touched || isSubmitted)
+        }" [disabled]="isViewMode">
+        <option value="">
+          {{ "language.form.selectShift" | translate }}
+        </option>
+        <option *ngFor="let shift of shiftList" [value]="shift.shiftId">
+          {{ shift.name }}
+        </option>
+      </select>
+      <div *ngIf="
+          addEditForm.get('shiftId')?.invalid &&
+          (addEditForm.get('shiftId')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.shiftRequired" | translate }}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <label class="form-label">{{ "language.form.description" | translate }}
+        <span class="text-danger">*</span></label>
+      <textarea class="form-control" formControlName="description"
+        [placeholder]="'language.placeholders.description' | translate" rows="3" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('description')?.invalid &&
+            (addEditForm.get('description')?.touched || isSubmitted)
+        }"></textarea>
+      <div *ngIf="
+          addEditForm.get('description')?.invalid &&
+          (addEditForm.get('description')?.touched || isSubmitted)
+        " class="invalid-feedback">
+      {{ "language.errors.descriptionRequired" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Form submission buttons -->
+  @if(!isViewMode){
+  <div class="row mt-3">
+    <div class="col-12 text-right">
+      <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mx-4" (click)="goBack()">
+        {{ "language.generic.back" | translate }}
+      </button>
+      <button type="submit" class="btn btn-primary font-weight-bold me-3">
+        {{
+        isEditMode
+        ? ("language.generic.update" | translate)
+        : ("language.generic.submit" | translate)
+        }}
+      </button>
+    </div>
+  </div>
+  }
+</form>

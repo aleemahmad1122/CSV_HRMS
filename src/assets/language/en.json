@@ -219,6 +219,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "changePass":"Change Password",
+      "personalInfo":"Personal Info",
       "approvedDate":"Approved Date",
       "approvedBy":"Approved by",
       "organization":"Organization",

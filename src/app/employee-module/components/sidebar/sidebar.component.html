@@ -3,11 +3,38 @@
     <div class="card card-custom card-stretch">
       <div class="card-body pt-4">
         <div class="d-flex align-items-center">
-          <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-            <div class="symbol-label"
-              [style.backgroundImage]="'url(' + (addEditForm.get('employeeImage').value || imagePreview) + ')'">
+
+
+          <div class="mr-2" style="width: 120px;" >
+              <div class="image-input image-input-outline" style="background-size: cover; background-position: center"
+                id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
+                <div class="image-input-wrapper"></div>
+
+                <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                  data-action="change" data-toggle="tooltip" title="Change avatar">
+                  <i class="fa fa-pen icon-sm text-muted"></i>
+                  <input type="file" formControlName="employeeImage" name="profile_avatar" accept=".png, .jpg, .jpeg"
+                    (change)="onFileSelected($event)" />
+                </label>
+
+                <span *ngIf="imagePreview !== defaultImagePath"
+                  class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="remove"
+                  data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+                  <i class="ki ki-bold-close icon-xs text-muted"></i>
+                </span>
+              </div>
+            @if(!imageSizeExceeded && imagePreview == defaultImagePath) {
+            <div class="text-muted mb-4   small ">
+              <span>{{ "language.errors.maxFileSize" | translate }} 1 MB.
+                {{ "language.errors.allowedFormats" | translate }} PNG, JPG,
+                JPEG</span>
             </div>
-            <i class="symbol-badge bg-success"></i>
+            }
+            <div class="text-danger mx-4 small">
+              @if(imageSizeExceeded) {
+              <span>{{ "language.errors.maxFileSize" | translate }} 1 MB</span>
+              }
+            </div>
           </div>
           <div>
             <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
@@ -36,8 +63,11 @@
           @for(item of tabList; track item){
           <div class="navi-item mb-2">
             <a class="navi-link py-4" [routerLinkActive]="'active'"  [routerLink]="item.path" [queryParams]="{id:this.isEditMode}">
-              <img  class="mx-3" style="opacity: .5;" width="24px" height="24px" [alt]="item.name" [src]="item.image">
-              <span class="navi-text font-size-lg"> {{ item.name| translate }}</span>
+           <span class="  d-flex align-items-center justify-content-center"  style="width: 30px;height: 30px; border-radius: 50%;background: #0000001e;">
+            <i [class]="item.class" [routerLinkActive]="'text-primary'"></i>
+           </span>
+              <span class="navi-text font-size-lg mx-3"> {{ item.name| translate }}</span>
+
             </a>
           </div>
           }

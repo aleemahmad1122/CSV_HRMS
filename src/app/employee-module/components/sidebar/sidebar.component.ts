@@ -58,35 +58,39 @@ export class SidebarComponent implements OnInit, OnDestroy {
   tabList: {
     path: string;
     name: string;
-    image: string;
+    class: string;
   }[] = [
       {
-        name: 'language.sidebar.employee',
+        name: 'language.generic.personalInfo',
         path: "/employee/profile/employee/edit",
-        image: "assets/media/svg/icons/Design/Layers.svg"
+        class: "fa-solid fa-user"
       },
       {
         name: 'language.employee.shift',
         path: "/employee/profile/shift/edit",
-        image: "assets/media/svg/icons/Design/Layers.svg"
+        class: "fa-solid fa-briefcase"
       },
       {
         name: 'language.employee.department',
         path: "/employee/profile/department-team/edit",
-        image: "assets/media/svg/icons/Design/Layers.svg"
+        class: "fa-solid fa-people-group"
       },
       {
         name: 'language.employee.education',
         path: "/employee/profile/education-history",
-        image: "assets/media/svg/icons/Design/Layers.svg"
+        class: "fa-sharp fa-solid fa-file-certificate"
       },
       {
         name: 'language.employee.workHistory',
         path: "/employee/profile/work-history",
-        image: "assets/media/svg/icons/Design/Layers.svg"
+        class: "fa-solid fa-briefcase"
+      },
+      {
+        name: 'language.generic.changePass',
+        path: "/employee/profile/change-password",
+        class: "fa-solid fa-key"
       },
     ];
-  // activeTab: string = this.tabList[0];
 
   constructor(
     private fb: FormBuilder,
@@ -308,7 +312,4 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/employee/employee-list']);
   }
 
-  // setActiveTab(tab: string) {
-  //   this.activeTab = tab;
-  // }
 }
