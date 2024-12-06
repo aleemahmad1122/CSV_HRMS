@@ -1,7 +1,7 @@
 <div class="d-flex flex-column-fluid px-3">
 
   <div class="card card-custom w-100">
-    <!--begin::Header-->
+
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
       <form class="d-flex  mt-2 w-25" role="search">
         <div class="form-group">
@@ -49,7 +49,7 @@
                     fill="#000000"></path>
                 </g>
               </svg>
-              <!--end::Svg Icon-->
+
             </span> {{'language.generic.export' | translate}} </button>
           <!--begin::Dropdown Menu-->
           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
@@ -89,7 +89,7 @@
                   fill="#000000" opacity="0.3"></path>
               </g>
             </svg>
-            <!--end::Svg Icon-->
+
           </span> {{'language.generic.addCompany' | translate}}</button>
         <!--end::Button-->
       </div>
@@ -97,43 +97,41 @@
 
 
     </div>
-    <!--end::Header-->
+
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto;">
-      <!--begin: Datatable-->
-      <div
-        class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-        id="kt_datatable">
-        <table class="datatable-table" style="display: block; overflow-x: auto;">
-          <thead class="datatable-head">
-            <tr class="datatable-row" style="left: 0px;">
-              <th data-field="RecordID"
-                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px;"># </span>
+
+      <div >
+        <table  class="table table-striped w-100">
+          <thead >
+            <tr   style="left: 0px;">
+              <th
+                >
+                <span ># </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
-              </th>
-
-
-
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.foundedDate' | translate}} </span>
-              </th>
-
-
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.phoneNumber' | translate}} </span>
+              <th      >
+                <span > {{'language.generic.title' | translate}} </span>
               </th>
 
 
 
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.company.registrationNumber' | translate}} </span>
+              <th      >
+                <span > {{'language.company.foundedDate' | translate}} </span>
               </th>
 
-              <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
+
+              <th      >
+                <span > {{'language.company.phoneNumber' | translate}} </span>
+              </th>
+
+
+
+              <th      >
+                <span > {{'language.company.registrationNumber' | translate}} </span>
+              </th>
+
+              <th data-field="Actions" data-autohide-disabled="false"      ><span
                   style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
             </tr>
           </thead>
@@ -141,14 +139,14 @@
             @for (data of dataList; track $index) {
             <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
 
-              <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-                <span style="width: 40px;"><span class="font-weight-bolder px-3">
+              <td class="datatable-cell-sorted datatable-cell-left datatable-cell"  aria-label="1">
+                <span ><span class="font-weight-bolder px-3">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
 
-              <td aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px;">
+              <td >
+                <span >
                   <figure class="symbol-label companyImage">
                     <img
                       [src]="data.companyImage || 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg'"
@@ -163,19 +161,19 @@
               </td>
 
 
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td ><span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{ data.foundedDate | convertTime: 'date' }}
                     </div>
                   </div>
                 </span></td>
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td ><span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.phoneNumber || "N/A"}}</div>
                   </div>
                 </span></td>
-              <td aria-label="64616-103" class="datatable-cell"><span style="width: 250px;">
+              <td ><span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">{{data.registrationNumber ||
                       "N/A"}}</div>

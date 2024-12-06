@@ -25,6 +25,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedAddEditValue: any;
 
+  selectedStartTime: Date | null = null;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -73,8 +75,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.maxLength(100)]],
       startTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       endTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      graceMinutes: [0],
-      earlyMinutes: [0],
+      graceMinutes: [5],
+      earlyMinutes: [5],
       description: [''],
       offSet: [new Date().getTimezoneOffset().toString()]
     });

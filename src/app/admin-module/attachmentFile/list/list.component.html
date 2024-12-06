@@ -3,7 +3,7 @@
 
   <!--begin::Card-->
   <div class="card card-custom w-100">
-    <!--begin::Header-->
+
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
       <form class="d-flex  mt-2 w-25" role="search">
         <div class="form-group">
@@ -47,7 +47,7 @@
                     fill="#000000"></path>
                 </g>
               </svg>
-              <!--end::Svg Icon-->
+
             </span> {{'language.generic.export' | translate}} </button>
           <!--begin::Dropdown Menu-->
           <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
@@ -85,19 +85,17 @@
                   fill="#000000" opacity="0.3"></path>
               </g>
             </svg>
-            <!--end::Svg Icon-->
+
           </span> {{'language.generic.addAttachmentType' | translate}}</button>
         <!--end::Button-->
       </div>
     </div>
-    <!--end::Header-->
+
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto;">
       <!--begin: Datatable-->
-      <div
-        class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-        id="kt_datatable">
-        <table class="datatable-table" style="display: block; overflow-x: auto;">
+      <div >
+        <table class="table table-striped w-100">
           <thead class="datatable-head">
             <tr class="datatable-row" style="left: 0px;">
               <th data-field="RecordID"
@@ -105,15 +103,15 @@
                 <span style="width: 40px;"># </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
+              <th      >
                 <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
+              <th      >
                 <span style="width: 250px;"> {{'language.generic.description' | translate}} </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
+              <th      >
                 <span style="width: 250px;"> {{'language.generic.actions' | translate}} </span>
               </th>
 
@@ -225,8 +223,10 @@
 
             </tr>
             }
-            @if(this.dataList.length < 1){ <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize"
-              style="left: 0px;">{{'language.generic.noRecords' | translate}}</tr>
+            @if(this.dataList.length < 1){
+              <tr>
+                <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+            </tr>
               }
           </tbody>
         </table>

@@ -43,7 +43,7 @@
                 fill="#000000"></path>
             </g>
           </svg>
-          <!--end::Svg Icon-->
+
         </span> {{'language.generic.export' | translate}} </button>
       <!--begin::Dropdown Menu-->
       <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
@@ -91,7 +91,7 @@
           ></path>
         </g>
       </svg>
-      <!--end::Svg Icon-->
+
     </span>
     {{ "language.generic.addEducation" | translate }}
   </button>
@@ -99,31 +99,28 @@
 
 
   <div
-  class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-  id="kt_datatable"
 >
-  <table class="datatable-table" style="display: block; overflow-x: auto">
+<table class="table table-striped w-100">
     <thead class="datatable-head">
-      <tr class="datatable-row" style="left: 0px">
-        <th data-field="RecordID"
-        class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-        <span style="width: 40px;">#     </span>
+      <tr  >
+        <th >
+        <span>#     </span>
       </th>
 
 
-        <th      class="datatable-cell datatable-cell-sort">
-          <span style="width: 250px;"> {{'language.generic.organization' | translate}} </span>
+        <th           >
+          <span > {{'language.generic.organization' | translate}} </span>
         </th>
 
 
-        <th      class="datatable-cell datatable-cell-sort">
-          <span style="width: 250px;">  {{'language.generic.institution' | translate}}</span>
+        <th           >
+          <span >  {{'language.generic.institution' | translate}}</span>
         </th>
 
 
 
-        <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
-          style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
+        <th data-field="Actions" data-autohide-disabled="false"      ><span
+          > {{'language.generic.actions' | translate}}</span></th>
       </tr>
     </thead>
     <tbody class="datatable-body">
@@ -148,7 +145,7 @@
         </td>
 
         <td      aria-label="64616-103" class="datatable-cell">
-          <span style="width: 250px;" >
+          <span  >
             <div class="d-flex align-items-center">
               <div class="text-dark-75   font-size-lg mb-0">
                 {{ data.educationTitle}}
@@ -158,7 +155,7 @@
         </td>
 
         <td      aria-label="64616-103" class="datatable-cell">
-          <span style="width: 250px;" >
+          <span  >
             <div class="d-flex align-items-center">
               <div class="text-dark-75   font-size-lg mb-0">
                 {{ data.institution}}
@@ -170,10 +167,6 @@
 
 
         <td
-          data-field="Actions"
-          data-autohide-disabled="false"
-          aria-label="null"
-          class="datatable-cell"
         >
           <span style="overflow: visible; position: relative; width: 130px">
             <a
@@ -306,14 +299,8 @@
       </tr>
 
       } @if(this.dataList.length < 1){
-      <tr
-        data-row="0"
-        class="datatable-row text-center fw-bold text-capitalize"
-        style="left: 0px"
-      >
-        {{
-          "language.generic.noRecords" | translate
-        }}
+        <tr>
+          <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
       </tr>
       }
     </tbody>

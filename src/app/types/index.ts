@@ -388,12 +388,12 @@ export interface IAttendanceList extends ICommon {
   attendanceId: string;
   employeeId: string;
   date: null | string;
-  firstName:string;
-  lastName:string;
+  firstName: string;
+  lastName: string;
   checkIn: null | string;
   checkOut: null | string;
   offSet: null | string;
-  attendanceStatus:number;
+  attendanceStatus: number;
   comment: null | string;
   attendanceDateTime: string;
 }
@@ -542,10 +542,11 @@ export interface EmployeeDetail {
   employeeId: string;
   companyId: string;
   email: string;
-  employeeName: string;
+  firstName: string,
+  lastName: string,
+  imagePath: string,
   role?: string;
 }
-
 
 export interface ICompany {
   offSet: string | number;

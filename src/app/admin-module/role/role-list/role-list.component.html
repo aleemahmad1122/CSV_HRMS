@@ -1,7 +1,7 @@
 <div class="d-flex flex-column-fluid px-3">
   <!--begin::Container-->
   <div class="card card-custom w-100">
-    <!--begin::Header-->
+
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
       <form class="d-flex  mt-2 w-25" role="search">
         <div class="form-group">
@@ -47,7 +47,7 @@
                     fill="#000000"></path>
                 </g>
               </svg>
-              <!--end::Svg Icon-->
+
             </span> {{'language.generic.export' | translate}} </button>
           <!--begin::Dropdown Menu-->
 
@@ -89,52 +89,49 @@
                   fill="#000000" opacity="0.3"></path>
               </g>
             </svg>
-            <!--end::Svg Icon-->
+
           </span> {{'language.generic.addRole' | translate}}</button>
         <!--end::Button-->
       </div>
     </div>
-    <!--end::Header-->
+
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto;">
       <!--begin: Datatable-->
-      <div
-        class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-        id="kt_datatable">
-        <table class="datatable-table" style="display: block; overflow-x: auto;">
-          <thead class="datatable-head">
-            <tr class="datatable-row" style="left: 0px;">
-              <th data-field="RecordID"
-                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px;"># </span>
+      <div >
+        <table class="table table-striped w-100">
+          <thead  >
+            <tr >
+              <th  >
+                <span ># </span>
               </th>
 
-              <th class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
+              <th      >
+                <span > {{'language.generic.title' | translate}} </span>
               </th>
 
 
 
-              <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span style="width: 124px;">
+              <th data-field="CompanyName"      ><span >
                   {{'language.form.details' | translate}} </span></th>
 
 
 
 
-              <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort"><span
-                  style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>
+              <th data-field="Actions"    ><span
+                  > {{'language.generic.actions' | translate}}</span></th>
             </tr>
           </thead>
           <tbody class="datatable-body">
             @for (data of dataList; track $index) {
-            <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
-              <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-                <span style="width: 40px;"><span class="font-weight-bolder px-3">
+            <tr   [ngClass]="{ 'inactive-row': !data.isActive }">
+              <td  >
+                <span ><span class="font-weight-bolder px-3">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
-              <td aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px;">
+              <td >
+                <span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
@@ -143,14 +140,13 @@
                 </span>
               </td>
 
-              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span style="width: 124px;">
+              <td ><span >
                   <div class="font-weight-bolder text-primary mb-0">{{data?.description?.slice(0,15) || "N/A"}}
                     {{data?.description?.length > 15 ? '...' : ''}}</div>
                 </span></td>
 
 
-              <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell"><span
-                  style="overflow: visible; position: relative; width: 130px;">
+              <td><span >
 
 
 
@@ -218,14 +214,14 @@
                 </span></td>
             </tr>
             }
-            @if(this.dataList.length < 1){ <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize"
-              style="left: 0px;">{{'language.generic.noRecords' | translate}}</tr>
+            @if(this.dataList.length < 1){
+              <tr>
+                <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+            </tr>
               }
           </tbody>
         </table>
 
-
-        <!--begin::Pagination-->
         @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
           <div class="d-flex flex-wrap py-2 mr-3">
             <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
@@ -268,15 +264,9 @@
 
         </div>}
 
-        <!--end:: Pagination-->
-
 
 
       </div>
-      <!--end: Datatable-->
     </div>
-    <!--end::Body-->
   </div>
-
-  <!--end::Container-->
 </div>

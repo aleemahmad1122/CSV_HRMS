@@ -1,7 +1,7 @@
 <div class="d-flex flex-column-fluid px-3">
 
   <div class="card card-custom mx-auto w-100">
-    <!--begin::Header-->
+
 
 
     <div class="d-flex justify-content-between  align-items-center pt-4 px-5">
@@ -79,51 +79,49 @@
       </div>
 
     </div>
-    <!--end::Header-->
+
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto">
       <!--begin: Datatable-->
-      <div
-        class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-        id="kt_datatable">
-        <table class="datatable-table" style="display: block; overflow-x: auto">
+      <div >
+        <table class="table table-striped w-100">
           <thead class="datatable-head">
             <tr class="datatable-row" style="left: 0px">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span style="width: 40px"># </span>
+                <span ># </span>
               </th>
 
-              <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px">
+              <th data-field="OrderID"      >
+                <span >
                   {{ "language.generic.empName" | translate }}
                 </span>
               </th>
 
-              <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px">
+              <th data-field="OrderID"      >
+                <span >
                   {{ "language.generic.date" | translate }}
                 </span>
               </th>
 
 
 
-              <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px">
+              <th data-field="OrderID"      >
+                <span >
                   {{ "language.form.leaveReason" | translate }}
                 </span>
               </th>
 
 
 
-              <th data-field="OrderID" class="datatable-cell datatable-cell-sort">
-                <span style="width: 250px">
+              <th data-field="OrderID"      >
+                <span >
                   {{ "language.form.status" | translate }}
                 </span>
               </th>
 
 
-              <th data-field="CompanyName" class="datatable-cell datatable-cell-sort">
+              <th data-field="CompanyName"      >
                 <span style="width: 124px">
                   {{ "language.generic.actions" | translate }}
                 </span>
@@ -135,13 +133,13 @@
             @for (data of dataList; track $index) {
             <tr data-row="0" class="datatable-row" style="left: 0px">
               <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-                <span style="width: 40px"><span class="font-weight-bolder px-3">
+                <span ><span class="font-weight-bolder px-3">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px">
+                <span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.firstName + ' ' + data.lastName || 'N/A' | highlight: searchTerm">
@@ -151,7 +149,7 @@
               </td>
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px">
+                <span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{(data.leaveDate | convertTime: 'date' ) || 'N/A'}}
@@ -162,7 +160,7 @@
 
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px">
+                <span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{data.leaveReason || 'N/A'}}
@@ -173,7 +171,7 @@
 
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 250px">
+                <span >
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       <div>
@@ -329,7 +327,7 @@
                             fill="#000000" fill-rule="nonzero"
                             transform="translate(11.999995, 12.000002) rotate(-180.000000) translate(-11.999995, -12.000002) " />
                         </g>
-                      </svg><!--end::Svg Icon--></span>
+                      </svg>     </span>
                   </button>
 
                   <button
@@ -351,7 +349,7 @@
                               x="0" y="7" width="16" height="2" rx="1" />
                           </g>
                         </g>
-                      </svg><!--end::Svg Icon--></span>
+                      </svg>     </span>
                   </button>
                 </div>
 
@@ -408,12 +406,10 @@
 
               </td>
             </tr>
-            } @if(this.dataList.length < 1){ <tr data-row="0" class="datatable-row text-center fw-bold text-capitalize"
-              style="left: 0px">
-              {{
-              "language.generic.noRecords" | translate
-              }}
-              </tr>
+            } @if(this.dataList.length < 1){
+              <tr>
+                <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+            </tr>
               }
           </tbody>
         </table>

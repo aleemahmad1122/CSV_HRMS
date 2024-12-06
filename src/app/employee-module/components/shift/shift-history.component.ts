@@ -7,11 +7,12 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConvertTimePipe } from '../../../shared/pipes/convert-time.pipe';
 
 @Component({
   selector: 'app-shift-history',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,ConvertTimePipe],
   templateUrl: './shift-history.component.html',
   styleUrl: './shift-history.component.css'
 })

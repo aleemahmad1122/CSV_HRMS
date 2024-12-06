@@ -14,7 +14,7 @@
           {{ "language.form.selectShift" | translate }}
         </option>
         <option *ngFor="let shift of shiftList" [value]="shift.shiftId">
-          {{ shift.name }}
+          {{ shift.name }}  ({{ "language.generic.startTime" | translate }}: {{shift.startTime | convertTime: 'time' }}) ({{ "language.generic.endTime" | translate }}: {{shift.endTime | convertTime: 'time'}})
         </option>
       </select>
       <div *ngIf="

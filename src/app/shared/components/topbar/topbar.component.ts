@@ -5,6 +5,8 @@ import { DataShareService } from '../../Services/data-share.service';
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { FormsModule } from '@angular/forms';
+import { LocalStorageManagerService } from "../../Services/local-storage-manager.service"
+import { EmployeeDetail } from '../../../types';
 
 @Component({
   selector: 'app-topbar',
@@ -14,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './topbar.component.css'
 })
 export class TopbarComponent {
-  user: any;
+  user: EmployeeDetail;
   currentLang = 'en';
   currentLangFlag = '226-united-states.svg';
   Lang = 'en';
@@ -29,13 +31,15 @@ export class TopbarComponent {
 
   constructor(
     public _translateService: TranslateService,
-    @Inject(DOCUMENT) private _document: Document,
-    private _dataShare: DataShareService
+    public _localStorage : LocalStorageManagerService
   ) {
     _translateService.addLangs(['en', 'ar', 'es', 'fr', 'de', 'ja']);
     _translateService.setDefaultLang('en');
     const browserLang = _translateService.getBrowserLang();
     _translateService.use(browserLang?.match(/en|ar|es|fr|de|ja/) ? browserLang : 'en');
+
+    this.user = this._localStorage.getEmployeeDetail()[0];
+
   }
 
   changeLang(langCode: string): void {
