@@ -93,11 +93,11 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
-      companyImage: [''], // Added field for company image
+      companyImage: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
-      faxNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      faxNumber: [0],
       website: ['', Validators.required],
       registrationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       country: ['', Validators.required],
@@ -122,7 +122,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
         name: this.selectedCompany.name,
         email: this.selectedCompany.email,
         phoneNumber: this.selectedCompany.phoneNumber,
-        faxNumber: this.selectedCompany.faxNumber,
+        faxNumber: this.selectedCompany.faxNumber || 0,
         website: this.selectedCompany.website,
         registrationNumber: this.selectedCompany.registrationNumber,
         country: this.selectedCompany.countryId,
@@ -172,7 +172,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     formData.append('name', this.companyForm.get('name')?.value);
     formData.append('email', this.companyForm.get('email')?.value);
     formData.append('phoneNumber', this.companyForm.get('phoneNumber')?.value);
-    formData.append('faxNumber', this.companyForm.get('faxNumber')?.value);
+    formData.append('faxNumber', this.companyForm.get('faxNumber')?.value || 0);
     formData.append('website', this.companyForm.get('website')?.value);
     formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
     formData.append('countryId', this.companyForm.get('country')?.value);

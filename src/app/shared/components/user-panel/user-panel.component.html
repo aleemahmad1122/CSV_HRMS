@@ -51,7 +51,7 @@
 
         <div class="navi navi-spacer-x-0 p-0">
 
-            <a [routerLink]="['profile/overview']" class="navi-item">
+            <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{id:this.user.employeeId}" class="navi-item">
                 <div class="navi-link">
                     <div class="symbol symbol-40 bg-light mr-3">
                         <div class="symbol-label">

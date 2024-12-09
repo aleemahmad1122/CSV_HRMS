@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="col-md-6 mb-3">
-        <label class="form-label">{{'language.form.faxNumber' | translate}} <span class="text-danger">*</span></label>
+        <label class="form-label">{{'language.form.faxNumber' | translate}} <span class="text-danger"></span></label>
         <input type="number" class="form-control" formControlName="faxNumber"
           [placeholder]="'language.placeholders.faxNumber' | translate"
           [ngClass]="{'is-invalid': (companyForm.get('faxNumber')?.invalid && (companyForm.get('faxNumber')?.touched || isSubmitted))}" />
