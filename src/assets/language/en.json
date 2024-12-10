@@ -228,6 +228,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "dashboard":"Dashboard",
       "passwordRequirements": "Password requirements",
       "passwordMinLength": "Minimum 8 characters",
       "passwordUppercase": "One uppercase letter",

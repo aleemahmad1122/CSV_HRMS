@@ -576,22 +576,42 @@ interface EmergencyContact {
 
 
 
-export interface DasAttendanceSummary {
-  employeeId: string,
+export interface AttendanceSummary {
+  employeeId: string;
   fullName: string;
-  presents: number;
-  absents: number;
-  leaves: number;
-  late: number;
-  early: number;
-  halfDays: number;
-  offDays: number;
-  missingAttendance: number;
+  presents: number,
+  absents: number,
+  leaves: number,
+  late: number,
+  early: number,
+  halfDays: number,
+  offDays: number,
+  missingAttendance: number
 }
 
-export interface ResDasAttendanceSummary {
-  message:string;
-  data: DasAttendanceSummary;
+export interface TeamSummary {
+  employeeId: string;
+  fullName: string;
+  imagePath: string;
+  attendanceStatus: false
+}
+
+export interface EmployeeLeaveSummary {
+  leaveTypeId: string
+  leaveTypeName: string;
+  totalLeaves: number,
+  leavesTaken: number,
+  remainingLeaves: number
+}
+
+export interface ResDasSummaryData{
+  attendanceSummary: AttendanceSummary;
+  teamSummary: TeamSummary[];
+  employeeLeaveSummary: EmployeeLeaveSummary;
+}
+export interface ResDasSummary {
+  message: string;
+  data: ResDasSummaryData;
   status: number;
-  success: boolean ;
+  success: boolean;
 }

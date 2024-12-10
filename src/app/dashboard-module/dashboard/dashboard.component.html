@@ -1,61 +1,63 @@
-<div class="d-flex flex-column-fluid px-3" style="overflow: hidden;">
-
-  <div class="card card-custom w-100">
-      <div class="row">
-
-
-          <div class="col-lg-3 col-xxl-4">
-              <div class="card card-custom card-stretch card-stretch-half gutter-b">
-                <div class="card card-custom bg-danger gutter-b" style=" padding: 15px;">
-                  <!--begin::Body-->
-                  <div class="card-body d-flex flex-column p-0">
-                    <!--begin::Stats-->
-                    <div class="flex-grow-1 card-spacer-x pt-6">
-                      <div class="text-inverse-danger font-weight-bold fw-bold h3">Attendance Summary for {{ attendanceData.fullName }}</div>
-                      <div class="summary-item">
-                        <span class="text-white fw-bold" >Presents:</span>
-                        <span style="color: #333333;" >{{ attendanceData.presents }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Absents:</span>
-                        <span style="color: #333333;" >{{ attendanceData.absents }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Leaves:</span>
-                        <span style="color: #333333;" >{{ attendanceData.leaves }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Late:</span>
-                        <span style="color: #333333;" >{{ attendanceData.late }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Early:</span>
-                        <span style="color: #333333;" >{{ attendanceData.early }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Half Days:</span>
-                        <span style="color: #333333;" >{{ attendanceData.halfDays }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Off Days:</span>
-                        <span style="color: #333333;" >{{ attendanceData.offDays }}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="text-white fw-bold" >Missing Attendance:</span>
-                        <span style="color: #333333;" >{{ attendanceData.missingAttendance }}</span>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
-
-
+<div class="container-fluid">
+  <h1 class="text-center my-4">Dashboard Overview</h1>
+  <div class="row">
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card bg-danger text-white">
+        <div class="card-body">
+          <h5 class="card-title">Attendance Summary</h5>
+          <p>Absents: {{attendanceSummary.absents}}</p>
+          <p>Presents: {{attendanceSummary.presents}}</p>
+          <p>Leaves: {{attendanceSummary.leaves}}</p>
+          <p>Late: {{attendanceSummary.late}}</p>
+          <p>Early: {{attendanceSummary.early}}</p>
+          <p>Half Days: {{attendanceSummary.halfDays}}</p>
+          <p>Off Days: {{attendanceSummary.offDays}}</p>
+          <p>Missing Attendance: {{attendanceSummary.missingAttendance}}</p>
+        </div>
       </div>
+    </div>
+
+    <!-- Displaying Team Summary -->
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h5 class="card-title">Team Members</h5>
+          <ul class="list-unstyled">
+            @for(team of teamSummary; track $index){
+              <li class="mb-2">
+                <h6>{{team.fullName}}</h6>
+                <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"  [src]="team.imagePath"
+                      alt="{{team.fullName}}"
+                      class="img-fluid rounded-circle"
+                      style="width: 50px; height: 50px;"
+                     >
+                <b>
+                  {{team.fullName}} - Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}
+                </b>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5 class="card-title">Employee Leave Summary</h5>
+          <ul class="list-unstyled">
+            <li>
+              {{employeeLeaveSummary.leaveTypeName}}: Total Leaves: {{employeeLeaveSummary.totalLeaves}}
+            </li>
+            <li>
+              Leaves Taken: {{employeeLeaveSummary.leavesTaken}}
+            </li>
+            <li>
+              Remaining Leaves: {{employeeLeaveSummary.remainingLeaves}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<div>
-  <canvas id="myChart"></canvas>
-</div>
-
