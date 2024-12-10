@@ -1,64 +1,180 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5" >
-  <div class="row">
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card bg-danger text-white">
-        <div class="card-body">
-          <h5 class="card-title">Attendance Summary</h5>
-          <p>Absents: {{attendanceSummary.absents}}</p>
-          <p>Presents: {{attendanceSummary.presents}}</p>
-          <p>Leaves: {{attendanceSummary.leaves}}</p>
-          <p>Late: {{attendanceSummary.late}}</p>
-          <p>Early: {{attendanceSummary.early}}</p>
-          <p>Half Days: {{attendanceSummary.halfDays}}</p>
-          <p>Off Days: {{attendanceSummary.offDays}}</p>
-          <p>Missing Attendance: {{attendanceSummary.missingAttendance}}</p>
-        </div>
+  <div class="card card-custom w-100 p-5">
+
+    <div class="d-flex justify-content-between  align-items-center pt-4 px-5">
+
+      <div class="" style="flex: 1; min-width: 200px;">
+        <label class="form-label">{{ "language.generic.selectFilter" | translate }}
+          <span class="text-danger"></span></label>
+        <select class="form-control custom-select" data-col-index="2" (change)="setFilter(selectFilter.value)"
+          #selectFilter>
+          <option value="" disabled selected>Select a filter</option>
+          <option value="MTD" title="Filter data from the start of the current month to today" selected>Month to Date
+            (MTD)</option>
+          <option value="YTD" title="Filter data from the start of the current year to today">Year to Date (YTD)
+          </option>
+          <option value="QTD" title="Filter data from the start of the current quarter to today">Quarter to Date (QTD)
+          </option>
+          <option value="PreviousYear" title="Filter data for the entire previous year">Previous Year</option>
+          <option value="PreviousMonth" title="Filter data for the entire previous month">Previous Month</option>
+          <option value="Last7Days" title="Filter data for the last 7 days">Last 7 Days</option>
+
+        </select>
       </div>
+
+      <div class="" style="flex: 1;">
+        <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
+        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
+          theme="dp-material" (change)="onStartDateChange($event)"></dp-date-picker>
+      </div>
+
+      <div class="" style="flex: 1;">
+        <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
+        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
+          [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
+      </div>
+      <div class="flex-column d-flex">
+        <label class="form-label" style="opacity: 0;">{{ 'language.generic.endDate' | translate }}</label>
+        <button class="btn btn-secondary " (click)="applyDateFilter()">
+          {{ 'language.generic.applyFilter' | translate }} <i class="fa fa-search ml-2" style="color: gray;"
+            aria-hidden="true"></i>
+        </button>
+
+      </div>
+
     </div>
 
-    <!-- Displaying Team Summary -->
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card bg-info text-white">
-        <div class="card-body">
-          <h5 class="card-title">Team Members</h5>
-          <ul class="list-unstyled">
-            @for(team of teamSummary; track $index){
-              <li class="mb-2">
-                <h6>{{team.fullName}}</h6>
-                <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"  [src]="team.imagePath"
-                      alt="{{team.fullName}}"
-                      class="img-fluid rounded-circle"
-                      style="width: 50px; height: 50px;"
-                     >
-                <b>
-                  {{team.fullName}} - Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}
-                </b>
-              </li>
-            }
-          </ul>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card bg-success text-white">
-        <div class="card-body">
-          <h5 class="card-title">Employee Leave Summary</h5>
-          <ul class="list-unstyled">
-            <li>
-              {{employeeLeaveSummary.leaveTypeName}}: Total Leaves: {{employeeLeaveSummary.totalLeaves}}
-            </li>
-            <li>
-              Leaves Taken: {{employeeLeaveSummary.leavesTaken}}
-            </li>
-            <li>
-              Remaining Leaves: {{employeeLeaveSummary.remainingLeaves}}
-            </li>
-          </ul>
+
+    <div class="row">
+      <!-- Attendance Summary Tile -->
+      <div class="d-flex flex-column-fluid px-3">
+        <div class="card card-custom w-100 p-5">
+          <div class="row">
+            <!-- Absents Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Absents</h5>
+                  <p class="display-4">{{ attendanceSummary.absents }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Presents Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Presents</h5>
+                  <p class="display-4">{{ attendanceSummary.presents }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Leaves Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Leaves</h5>
+                  <p class="display-4">{{ attendanceSummary.leaves }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Late Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Late</h5>
+                  <p class="display-4">{{ attendanceSummary.late }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Early Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Early</h5>
+                  <p class="display-4">{{ attendanceSummary.early }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Half Days Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-secondary text-black">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Half Days</h5>
+                  <p class="display-4">{{ attendanceSummary.halfDays }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Off Days Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Off Days</h5>
+                  <p class="display-4">{{ attendanceSummary.offDays }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Missing Attendance Tile -->
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Missing Attendance</h5>
+                  <p class="display-4">{{ attendanceSummary.missingAttendance }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+
+      <!-- Team Members Tile -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-info text-white">
+          <div class="card-body">
+            <h5 class="card-title">Team Members</h5>
+            <ul class="list-unstyled">
+              @for(team of teamSummary; track $index){
+                <li class="mb-2 d-flex align-items-center">
+                  <img
+                    onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+                    [src]="team.imagePath"
+                    alt="{{team.fullName}}"
+                    class="img-fluid rounded-circle me-2"
+                    style="width: 50px; height: 50px;"
+                  >
+                  <div>
+                    <b>{{team.fullName}}</b><br>
+                    <small>Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}</small>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Employee Leave Summary Tile -->
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <h5 class="card-title">Employee Leave Summary</h5>
+            <ul class="list-unstyled">
+              <li>{{employeeLeaveSummary.leaveTypeName}}: Total Leaves: {{employeeLeaveSummary.totalLeaves}}</li>
+              <li>Leaves Taken: {{employeeLeaveSummary.leavesTaken}}</li>
+              <li>Remaining Leaves: {{employeeLeaveSummary.remainingLeaves}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
 </div>
