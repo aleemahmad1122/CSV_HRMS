@@ -761,7 +761,7 @@
 
         <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
           <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-              <img class="h-20px w-20px rounded-sm" [src]="'assets/media/svg/flags/' + currentLangFlag" [alt]="currentLang" />
+                 <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   class="h-20px w-20px rounded-sm" [src]="'assets/media/svg/flags/' + currentLangFlag" [alt]="currentLang" />
           </div>
       </div>
 
@@ -777,7 +777,7 @@
                   <div   class="navi-link" (click)="changeLang(lang.code)">
 
                       <span class="symbol symbol-20 mr-3">
-                          <img [src]="'assets/media/svg/flags/' + lang.flag" [alt]="lang.name" />
+                             <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   [src]="'assets/media/svg/flags/' + lang.flag" [alt]="lang.name" />
                       </span>
                       <span class="navi-text">{{ lang.name  | translate}}</span>
                   </div>
@@ -797,7 +797,7 @@
             <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{{this.user.lastName}}</span>
             @if (this.user.imagePath) {
                 <span class="symbol symbol-lg-35 symbol-25 ">
-                    <img src="{{this.user.imagePath}}" style="object-fit: cover;" alt="User avatar"/>
+                       <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   src="{{this.user.imagePath}}" style="object-fit: cover;" alt="User avatar"/>
                 </span>
             } @else {
                 <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">

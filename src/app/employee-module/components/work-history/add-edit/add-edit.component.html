@@ -214,7 +214,7 @@ autocomplete="off">
             <div *ngFor="let file of attachedFiles; let i = index" style="display: inline-block; margin-right: 10px;">
               <!-- Image file preview -->
               <div *ngIf="isImageFile(file)">
-                <img [src]="file?.url" class="img-fluid" alt="File preview" style="max-width: 150px;">
+                   <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   [src]="file?.url" class="img-fluid" alt="File preview" style="max-width: 150px;">
               </div>
 
               <!-- PDF file preview -->
