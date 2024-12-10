@@ -1,0 +1,23 @@
+.attendance-summary {
+  margin: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}

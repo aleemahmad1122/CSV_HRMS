@@ -1,5 +1,5 @@
-<div class="d-flex flex-column-fluid px-3">
-<div class="card card-custom w-100 px-3" >
+<div class="d-flex flex-column-fluid px-3 py-5">
+<div class="card card-custom w-100 px-3 py-5" >
   <form [formGroup]="companyForm" class="form  " id="kt_form_1" (ngSubmit)="submitForm()">
     <div class="row">
       <div class="col-md-12">
@@ -73,14 +73,28 @@
     <div class="row">
       <div class="col-md-6 mb-3">
         <label class="form-label">{{'language.form.phoneNumber' | translate}} <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" formControlName="phoneNumber"
-          [placeholder]="'language.placeholders.phoneNumber' | translate"
-          [ngClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}" />
-        <div *ngIf="companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted)"
-          class="invalid-feedback">
-          {{'language.errors.phoneNumberRequired' | translate}}
+
+        <ngx-intl-tel-input
+            [cssClass]="'form-control'"
+            [preferredCountries]="['us', 'gb', 'pk']"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [separateDialCode]="true"
+            [searchCountryField]="searchCountryField"
+            [phoneValidation]="true"
+            [selectFirstCountry]="false"
+            [separateDialCode]="true"
+            inputId="phoneNumber"
+            [maxLength]="15"
+            name="phoneNumber"
+            [attr.cssClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}"
+            formControlName="phoneNumber">
+        </ngx-intl-tel-input>
+        <div *ngIf="companyForm.get('phoneNumber')?.hasError('invalidSymbol') || (companyForm.get('phoneNumber')?.touched || isSubmitted)" class="text-danger">
+            Phone number cannot contain symbols like +.
         </div>
-      </div>
+    </div>
       <div class="col-md-6 mb-3">
         <label class="form-label">{{'language.form.faxNumber' | translate}} <span class="text-danger"></span></label>
         <input type="number" class="form-control" formControlName="faxNumber"

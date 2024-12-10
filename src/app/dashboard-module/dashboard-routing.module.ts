@@ -7,6 +7,7 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import(`./dashboard/dashboard.component`).then(c => c.DashboardComponent),
     title: 'Dashboard',
+    data: { breadcrumb: '' },
     canActivate: [ProtectedGuard]
   },
 ];

@@ -573,3 +573,25 @@ interface EmergencyContact {
   relationship: string;
   phoneNumber: string;
 }
+
+
+
+export interface DasAttendanceSummary {
+  employeeId: string,
+  fullName: string;
+  presents: number;
+  absents: number;
+  leaves: number;
+  late: number;
+  early: number;
+  halfDays: number;
+  offDays: number;
+  missingAttendance: number;
+}
+
+export interface ResDasAttendanceSummary {
+  message:string;
+  data: DasAttendanceSummary;
+  status: number;
+  success: boolean ;
+}

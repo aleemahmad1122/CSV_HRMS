@@ -25,6 +25,7 @@
             "styles": [
               "src/styles.css",
               "node_modules/ngx-spinner/animations/ball-atom.css",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/@ng-select/ng-select/themes/default.theme.css",
               "node_modules/@angular/cdk/overlay-prebuilt.css"

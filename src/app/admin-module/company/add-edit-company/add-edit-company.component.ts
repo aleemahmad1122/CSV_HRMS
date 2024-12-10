@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ICompany } from "../../../types/index";
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateModule } from '@ngx-translate/core';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment.prod';
+import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
 
 interface Typess {
   typeId: string;
@@ -19,7 +20,7 @@ interface Typess {
 @Component({
   selector: 'app-add-edit-company',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule, DpDatePickerModule, NgxIntlTelInputModule],
   templateUrl: './add-edit-company.component.html',
   styleUrl: './add-edit-company.component.css'
 })
@@ -29,6 +30,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     format: environment.dateTimePatterns.date,
   };
   private ngUnsubscribe = new Subject<void>();
+
   companyForm!: FormGroup;
   isEditMode: boolean | string = false;
   defaultImagePath = 'https://s3.us-east-2.amazonaws.com/digitalhealth.prod/DigitalHealth/1624343086078_default_company_image.jpg';
@@ -38,20 +40,15 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   maxSizeInBytes = 1048576;
   selectedCompany: ICompany;
   isSubmitted = false;
+  searchCountryField: SearchCountryField[] = [SearchCountryField.Iso2];
+
+  countries: { id: string; name: string }[] = Object.entries(CountryISO).map(([key, value]) => ({
+    name: key,
+    id: value
+  }));
 
 
-  countries: { id: string; name: string }[] = [
-    { id: 'PK', name: 'Pakistan' },
-    { id: 'US', name: 'United States' },
-    { id: 'IN', name: 'India' },
-    { id: 'CA', name: 'Canada' },
-    { id: 'DE', name: 'Germany' },
-    { id: 'FR', name: 'France' },
-    { id: 'SA', name: 'Saudi Arabia' },
-    { id: 'AE', name: 'United Arab Emirates' },
-    { id: 'JP', name: 'Japan' },
-    { id: 'CN', name: 'China' },
-  ];
+
   types: Typess[] = [
     { typeId: "1", typeName: 'Head Office' },
     { typeId: "2", typeName: 'Branch' },
@@ -96,7 +93,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       companyImage: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
+      phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
       faxNumber: [0],
       website: ['', Validators.required],
       registrationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
@@ -109,12 +106,16 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       companyType: [2]
     });
 
+    this.companyForm.get('phoneNumber')?.setValidators([this.noSymbolsValidator()]);
+    this.companyForm.get('phoneNumber')?.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+
 
   private patchFormValues(): void {
     if (this.selectedCompany) {
@@ -231,5 +232,35 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.imagePreview = this.defaultImagePath;
     this.selectedFile = null;
     this.imageSizeExceeded = false;
+  }
+
+  private phoneNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const country = this.companyForm?.get('phoneNumber')?.value;
+      const phoneNumber = control.value;
+console.warn(phoneNumber);
+
+      if (phoneNumber && typeof phoneNumber === 'object' && phoneNumber.number) {
+        switch (country) {
+          case 'pk':
+            const isValidPK = /^\d{10}$/.test(phoneNumber.number);
+            return isValidPK ? null : { invalidPhoneNumber: true };
+          case 'us':
+            const isValidUS = /^\d{10}$/.test(phoneNumber.number);
+            return isValidUS ? null : { invalidPhoneNumber: true };
+          default:
+            return null;
+        }
+      }
+
+      return null;
+    };
+  }
+
+  private noSymbolsValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+        const forbidden = /[^\d]/.test(control.value); // Check for non-digit characters
+        return forbidden ? { 'invalidSymbol': { value: control.value } } : null;
+    };
   }
 }
