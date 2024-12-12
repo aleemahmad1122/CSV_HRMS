@@ -21,6 +21,8 @@ export class RoleAddEditComponent  implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedAddEditValue: any;
 
+  rolePermissions:string[] = ['1','2','3','4']
+
 
   constructor(
     private fb: FormBuilder,
@@ -105,6 +107,6 @@ export class RoleAddEditComponent  implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/role']);
+    this.router.navigate([window.history.back()]);
   }
 }

@@ -228,6 +228,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "rolePermissions":"Role Permissions",
       "attachmentType":"Attachment Type",
       "personal":"Personal",
       "education":"Education",
