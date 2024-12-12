@@ -9,6 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 
+
+enum AttachmentType {
+  Personal = 0,
+  Education = 1,
+  WorkHistory = 2,
+}
+
+
 @Component({
   selector: 'app-list',
   standalone: true,
@@ -16,6 +24,9 @@ import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
+
+
+
 export class ListComponent   {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
@@ -74,6 +85,16 @@ export class ListComponent   {
         error: () => (this.dataList = []),
       });
   }
+
+  getAttachmentTypeName(type: any): string {
+    switch (type) {
+      case AttachmentType.Personal: return 'Personal';
+      case AttachmentType.Education: return 'Education';
+      case AttachmentType.WorkHistory: return 'Work History';
+      default: return 'N/A';
+    }
+  }
+
 
   private handleResponse(response: IAttachmentTypeRes): void {
     if (response?.success) {

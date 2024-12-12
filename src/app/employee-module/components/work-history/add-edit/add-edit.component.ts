@@ -184,7 +184,9 @@ export class AddEditComponent {
 
 
   private getAttachmentTypes() {
-    this._apiCalling.getData("AttachmentType", `getAttachmentType`, true).subscribe({
+    this._apiCalling.getData("AttachmentType", `getAttachmentType`, true,{
+      attachmentType:2
+    }).subscribe({
       next: (response: IAttachmentTypeRes) => {
         if (response?.success) {
           this.attachmentTypes = response.data.attachmentTypes;

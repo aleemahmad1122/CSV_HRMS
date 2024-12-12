@@ -154,6 +154,7 @@ export interface IDesignationRes extends ICommonRes {
 export interface IAttachmentType extends ICommon {
   attachmentTypeId: string;
   name: string;
+  attachmentType:string | number;
   description: string;
 }
 

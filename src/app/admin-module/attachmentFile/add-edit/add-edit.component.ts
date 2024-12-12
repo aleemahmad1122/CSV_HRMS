@@ -64,6 +64,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
+      attachmentType:[0],
       description: [''],
     });
   }
@@ -73,6 +74,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.qualificationForm.patchValue({
 
         name: this.selectedValue.name,
+        attachmentType:Number(this.selectedValue.attachmentType),
         description: this.selectedValue.description
       });
     }

@@ -228,6 +228,10 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "attachmentType":"Attachment Type",
+      "personal":"Personal",
+      "education":"Education",
+      "workHistory":"Work History",
       "dashboard":"Dashboard",
       "passwordRequirements": "Password requirements",
       "passwordMinLength": "Minimum 8 characters",

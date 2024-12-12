@@ -45,97 +45,89 @@
     </div>
 
 
-
-    <div class="row">
-      <!-- Attendance Summary Tile -->
-      <div class="d-flex flex-column-fluid px-3">
-        <div class="card card-custom w-100 p-5">
-          <div class="row">
-            <!-- Absents Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-danger text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Absents</h5>
-                  <p class="display-4">{{ attendanceSummary.absents }}</p>
-                </div>
-              </div>
+      <div class="row">
+        <!-- Absents Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Absents</h5>
+              <p class="display-4">{{ attendanceSummary.absents }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Presents Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-success text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Presents</h5>
-                  <p class="display-4">{{ attendanceSummary.presents }}</p>
-                </div>
-              </div>
+        <!-- Presents Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Presents</h5>
+              <p class="display-4">{{ attendanceSummary.presents }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Leaves Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-warning text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Leaves</h5>
-                  <p class="display-4">{{ attendanceSummary.leaves }}</p>
-                </div>
-              </div>
+        <!-- Leaves Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Leaves</h5>
+              <p class="display-4">{{ attendanceSummary.leaves }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Late Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-info text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Late</h5>
-                  <p class="display-4">{{ attendanceSummary.late }}</p>
-                </div>
-              </div>
+        <!-- Late Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Late</h5>
+              <p class="display-4">{{ attendanceSummary.late }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Early Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-primary text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Early</h5>
-                  <p class="display-4">{{ attendanceSummary.early }}</p>
-                </div>
-              </div>
+        <!-- Early Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Early</h5>
+              <p class="display-4">{{ attendanceSummary.early }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Half Days Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-secondary text-black">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Half Days</h5>
-                  <p class="display-4">{{ attendanceSummary.halfDays }}</p>
-                </div>
-              </div>
+        <!-- Half Days Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-secondary text-black">
+            <div class="card-body text-center">
+              <h5 class="card-title">Half Days</h5>
+              <p class="display-4">{{ attendanceSummary.halfDays }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Off Days Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-dark text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Off Days</h5>
-                  <p class="display-4">{{ attendanceSummary.offDays }}</p>
-                </div>
-              </div>
+        <!-- Off Days Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-dark text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Off Days</h5>
+              <p class="display-4">{{ attendanceSummary.offDays }}</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Missing Attendance Tile -->
-            <div class="col-lg-3 col-md-6 mb-4">
-              <div class="card bg-danger text-white">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Missing Attendance</h5>
-                  <p class="display-4">{{ attendanceSummary.missingAttendance }}</p>
-                </div>
-              </div>
+        <!-- Missing Attendance Tile -->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Missing Attendance</h5>
+              <p class="display-4">{{ attendanceSummary.missingAttendance }}</p>
             </div>
           </div>
         </div>
       </div>
 
 
-      <!-- Team Members Tile -->
       <div class="col-lg-3 col-md-6 mb-4">
         <div class="card bg-info text-white">
           <div class="card-body">
@@ -161,7 +153,7 @@
         </div>
       </div>
 
-      <!-- Employee Leave Summary Tile -->
+
       <div class="col-lg-3 col-md-6 mb-4">
         <div class="card bg-success text-white">
           <div class="card-body">
@@ -175,6 +167,6 @@
         </div>
       </div>
 
-    </div>
+
   </div>
 </div>

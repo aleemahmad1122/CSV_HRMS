@@ -33,6 +33,7 @@ export class ApiCallingService {
     showLoader: boolean,
     paginationParams?: {
       employeeId?: string;
+      attachmentType?:string | number;
       page?: number;
       limit?: number;
       searchQuery?: string;
