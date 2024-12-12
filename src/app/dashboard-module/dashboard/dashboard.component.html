@@ -1,7 +1,7 @@
 <div class="d-flex flex-column-fluid px-3">
   <div class="card card-custom w-100 p-5">
 
-    <div class="d-flex justify-content-between  align-items-center pt-4 px-5">
+    <div class="d-flex justify-content-between  align-items-center p-3" style="gap: 4px;">
 
       <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">{{ "language.generic.selectFilter" | translate }}
@@ -45,7 +45,7 @@
     </div>
 
 
-      <div class="row">
+      <div class="row px-3">
         <!-- Absents Tile -->
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card bg-danger text-white">
@@ -125,47 +125,50 @@
             </div>
           </div>
         </div>
-      </div>
 
 
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card bg-info text-white">
-          <div class="card-body">
-            <h5 class="card-title">Team Members</h5>
-            <ul class="list-unstyled">
-              @for(team of teamSummary; track $index){
-                <li class="mb-2 d-flex align-items-center">
-                  <img
-                    onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
-                    [src]="team.imagePath"
-                    alt="{{team.fullName}}"
-                    class="img-fluid rounded-circle me-2"
-                    style="width: 50px; height: 50px;"
-                  >
-                  <div>
-                    <b>{{team.fullName}}</b><br>
-                    <small>Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}</small>
-                  </div>
-                </li>
-              }
-            </ul>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <h5 class="card-title">Team Members</h5>
+              <ul class="list-unstyled">
+                @for(team of teamSummary; track $index){
+                  <li class="mb-2 d-flex align-items-center">
+                    <img
+                      onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+                      [src]="team.imagePath"
+                      alt="{{team.fullName}}"
+                      class="img-fluid rounded-circle mx-2"
+                      style="width: 50px; height: 50px;"
+                    >
+                    <div>
+                      <b>{{team.fullName}}</b><br>
+                      <small>Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}</small>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <h5 class="card-title">Employee Leave Summary</h5>
+              <ul class="list-unstyled">
+                <li>{{employeeLeaveSummary.leaveTypeName}}: Total Leaves: {{employeeLeaveSummary.totalLeaves}}</li>
+                <li>Leaves Taken: {{employeeLeaveSummary.leavesTaken}}</li>
+                <li>Remaining Leaves: {{employeeLeaveSummary.remainingLeaves}}</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
 
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card bg-success text-white">
-          <div class="card-body">
-            <h5 class="card-title">Employee Leave Summary</h5>
-            <ul class="list-unstyled">
-              <li>{{employeeLeaveSummary.leaveTypeName}}: Total Leaves: {{employeeLeaveSummary.totalLeaves}}</li>
-              <li>Leaves Taken: {{employeeLeaveSummary.leavesTaken}}</li>
-              <li>Remaining Leaves: {{employeeLeaveSummary.remainingLeaves}}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+
 
 
   </div>
