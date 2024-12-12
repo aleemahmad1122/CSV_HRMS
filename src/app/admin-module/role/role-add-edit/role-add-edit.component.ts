@@ -1,27 +1,28 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { IGetSystemPermissions, IResGetSystemPermissions } from "../../../types/index";
 
 @Component({
   selector: 'app-role-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, FormsModule],
   templateUrl: './role-add-edit.component.html',
   styleUrl: './role-add-edit.component.css'
 })
-export class RoleAddEditComponent  implements OnInit, OnDestroy {
+export class RoleAddEditComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
   selectedAddEditValue: any;
 
-  rolePermissions:string[] = ['1','2','3','4']
+  systemModules: IGetSystemPermissions[] = []
 
 
   constructor(
@@ -36,28 +37,49 @@ export class RoleAddEditComponent  implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.getSystemPermissions()
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Role", `getRoleById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData("Role", `getRoleById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedAddEditValue = response?.data;
                 this.patchFormValues(); // Call patchFormValues here after setting selectedAddEditValue
-            } else {
+              } else {
+                this.selectedAddEditValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedAddEditValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedAddEditValue = [];
-          }
-        });
+          });
         // this.patchFormValues(); // Removed this line
       }
     });
+  }
+
+
+  private getSystemPermissions(): void {
+    this.apiCalling.getData("Role", `getSystemPermissions`, true)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response: IResGetSystemPermissions) => {
+          if (response.success) {
+            this.systemModules = response.data.systemModules
+
+          } else {
+            this.systemModules = []
+          }
+        },
+        error: (error) => {
+          this.toaster.error(error || 'An error occurred', 'Error!');
+          this.systemModules = []
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -67,25 +89,47 @@ export class RoleAddEditComponent  implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]]
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      textColor: ["#ffffff"],
+      backgroundColor: ['#000'],
+      rolePermissions: []
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedAddEditValue) {
       this.addEditForm.patchValue({
-        name: this.selectedAddEditValue.name
+        name: this.selectedAddEditValue.name,
+        textColor: this.selectedAddEditValue.textColor,
+        backgroundColor: this.selectedAddEditValue.backgroundColor,
+        rolePermissions: this.selectedAddEditValue.rolePermissions,
       });
     }
   }
 
+
+  selectPermission(object: any, event: any): void {
+
+    object.isAssigned = event.target.checked
+
+
+
+  }
+
+
+
   submitForm(): void {
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
     }
 
-    const body = this.addEditForm.value;
+    const body = {
+      ...this.addEditForm.value,
+      rolePermissions:this.systemModules
+    };
+
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("Role", `updateRole/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Role", "addRole", body, true);

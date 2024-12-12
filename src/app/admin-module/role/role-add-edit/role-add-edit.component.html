@@ -2,7 +2,7 @@
   <div class="card card-custom w-100 p-5">
     <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
-        <div class="col-md-12 mb-3">
+        <div class="col-md-4 col-sm-12  mb-3">
           <label class="form-label">{{'language.form.name' | translate}} <span class="text-danger">*</span></label>
           <input type="text" class="form-control" formControlName="name"
             [placeholder]="'language.placeholders.name' | translate"
@@ -13,7 +13,28 @@
           </div>
         </div>
 
+        <div class="col-md-4 col-sm-12 mb-3">
+          <label class="form-label">{{'language.generic.badgeTextColor' | translate}} <span class="text-danger">*</span></label>
+          <input type="color" class="form-control" formControlName="textColor"
+
+            [ngClass]="{'is-invalid': (addEditForm.get('textColor')?.invalid && (addEditForm.get('textColor')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('textColor')?.invalid && (addEditForm.get('textColor')?.touched || isSubmitted)"
+            class="invalid-feedback">
+            {{'language.errors.textColorRequired' | translate}}
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12  mb-3">
+          <label class="form-label">{{'language.generic.badgebackgroundColor' | translate}} <span class="text-danger">*</span></label>
+          <input type="color" class="form-control" formControlName="backgroundColor"
+
+            [ngClass]="{'is-invalid': (addEditForm.get('backgroundColor')?.invalid && (addEditForm.get('backgroundColor')?.touched || isSubmitted))}" />
+          <div *ngIf="addEditForm.get('backgroundColor')?.invalid && (addEditForm.get('backgroundColor')?.touched || isSubmitted)"
+            class="invalid-feedback">
+            {{'language.errors.backgroundColorRequired' | translate}}
+          </div>
+        </div>
       </div>
+
 
       <div class="row mt-3 py-5">
 
@@ -26,91 +47,44 @@
 
 
             <div class="card-body">
-              <div class="accordion  accordion-toggle-arrow" id="accordionExample4">
+              <div class="accordion accordion-toggle-arrow" id="accordionPanelsStayOpenExample">
                 <div class="row">
 
-                  @for(rp of rolePermissions; track $index){
+                  @for(rp of systemModules; track $index){
                   <div class="col-md-6 col-sm-12 mb-4">
                     <div class="card">
                       <div class="card-header" id="headingOne{{ $index }}">
                         <div class="card-title" data-toggle="collapse" [attr.data-target]="'#collapse'+$index" aria-expanded="true" [attr.aria-controls]="'collapse'+$index">
-                          Admin Panel > Company Permissions
+                        {{rp.parentModule}} > {{rp.description}}
                         </div>
                       </div>
 
-                      <div [id]="'collapse'+$index" class="collapse" [ngClass]="{'show': $index == 0}" data-parent="#accordionExample4" [attr.aria-labelledby]="'headingOne'+$index">
+                      <div [id]="'collapse'+$index" class="collapse show" [attr.aria-labelledby]="'headingOne'+$index">
                         <div class="row">
+                          @for(mp of rp.modulePermissions; track $index){
                           <div class="col-md-6">
                             <div class="form-group p-3 m-0">
                               <div class="input-group">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text">
                                     <label class="checkbox checkbox-inline checkbox-primary">
-                                      <input type="checkbox">
+                                      <input type="checkbox" [checked]="mp.isAssigned" (change)="selectPermission(mp, $event)">
                                       <span></span>
                                     </label>
                                   </span>
                                 </div>
-                                <input type="text" class="form-control disabled" [disabled]="true" value="Create Company">
+                                <input type="text" class="form-control disabled" [disabled]="true" [value]="mp.description">
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-6">
-                            <div class="form-group p-3 m-0">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">
-                                    <label class="checkbox checkbox-inline checkbox-primary">
-                                      <input type="checkbox">
-                                      <span></span>
-                                    </label>
-                                  </span>
-                                </div>
-                                <input type="text" [disabled]="true"  class="form-control disabled" value="Edit Company">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group p-3 m-0">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">
-                                    <label class="checkbox checkbox-inline checkbox-primary">
-                                      <input type="checkbox">
-                                      <span></span>
-                                    </label>
-                                  </span>
-                                </div>
-                                <input type="text" [disabled]="true"  class="form-control disabled" value="View Company">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group p-3 m-0">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text">
-                                    <label class="checkbox checkbox-inline checkbox-primary">
-                                      <input type="checkbox">
-                                      <span></span>
-                                    </label>
-                                  </span>
-                                </div>
-                                <input [disabled]="true"  type="text" class="form-control disabled" value="Delete Company">
-                              </div>
-                            </div>
-                          </div>
+                          }
                         </div>
                       </div>
-
-
                     </div>
                   </div>
                   }
 
                 </div>
-
-
               </div>
             </div>
 

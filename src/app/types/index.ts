@@ -119,7 +119,10 @@ export interface IEmployeeEducationRes extends ICommonRes {
 export interface IRole extends ICommon {
   roleId: string;
   name: string;
-  description?: string;
+  rolePriority: number;
+  textColor:string;
+  backgroundColor: string;
+  isActive: boolean;
 }
 
 
@@ -154,7 +157,7 @@ export interface IDesignationRes extends ICommonRes {
 export interface IAttachmentType extends ICommon {
   attachmentTypeId: string;
   name: string;
-  attachmentType:string | number;
+  attachmentType: string | number;
   description: string;
 }
 
@@ -311,6 +314,9 @@ export interface IEmployee extends ICommon {
   role: string;
   cnic: string;
   ssn: string;
+  roleId: string;
+  roleTextColor: string;
+  roleBackgroundColor: string;
   passportNumber: string;
   dateOfBirth: string;
   gender: 'Male' | 'Female' | 'Other';
@@ -336,7 +342,7 @@ export interface ILeaveType extends ICommon {
   leaveTypeId: string;
   companyId: string;
   name: string;
-  noOfDays: number,
+  noOfDays: number;
   description: string;
   isPaid: boolean;
   isActive: boolean;
@@ -605,7 +611,7 @@ export interface EmployeeLeaveSummary {
   remainingLeaves: number
 }
 
-export interface ResDasSummaryData{
+export interface ResDasSummaryData {
   attendanceSummary: AttendanceSummary;
   teamSummary: TeamSummary[];
   employeeLeaveSummary: EmployeeLeaveSummary;
@@ -613,6 +619,28 @@ export interface ResDasSummaryData{
 export interface ResDasSummary {
   message: string;
   data: ResDasSummaryData;
+  status: number;
+  success: boolean;
+}
+
+
+export interface IModulePermissions {
+  systemPermissionId: string;
+  title: string
+  description: string;
+  isAssigned: boolean;
+}
+export interface IGetSystemPermissions {
+  systemModuleId: string;
+  parentModule: string;
+  description: string;
+  modulePermissions: IModulePermissions[];
+}
+export interface IResGetSystemPermissions {
+  message: string;
+  data: {
+    systemModules: IGetSystemPermissions[]
+  };
   status: number;
   success: boolean;
 }

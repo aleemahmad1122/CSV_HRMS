@@ -8,6 +8,7 @@ const routes: Routes = [
     loadComponent: () => import(`./company/company-list/company-list.component`).then(c => c.CompanyListComponent),
     data: { breadcrumb: 'Company Structure' },
     title: 'Company Structure',
+    // resolve
   },
 
   {

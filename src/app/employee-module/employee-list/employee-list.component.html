@@ -193,10 +193,14 @@
                 </span>
               </td>
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span style="width: 124px">
+                <span >
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">
-                      {{ data.role || "N/A" }}
+                    <div class="text-dark-75 font-size-lg mb-0">
+                      <div>
+                        <span [ngStyle]="{'color': data.roleTextColor, 'background': data.roleBackgroundColor}" class="label label-lg label-inline mr-2">
+                          {{ data.role || "N/A" }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </span>

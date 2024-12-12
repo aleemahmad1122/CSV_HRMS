@@ -46,6 +46,7 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "rolePriority":"Role Priority",
       "selectStatus": "Select Status",
       "joiningStatus": "Joining Status",
       "joiningDate": "Joining Date",
@@ -163,6 +164,9 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "backgroundColorRequired":"Background Color is Required",
+      "textColorRequired":"Text Color is Required",
+      "rolePriorityRequired":"Role Priority is Required",
       "passwordMinLength": "Password must be at least 8 characters long",
       "passwordUppercase": "Password must contain at least one uppercase letter",
       "passwordLowercase": "Password must contain at least one lowercase letter",
@@ -228,6 +232,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "badgebackgroundColor":"Badge Background Color",
+      "badgeTextColor":"Badge Text Color",
       "rolePermissions":"Role Permissions",
       "attachmentType":"Attachment Type",
       "personal":"Personal",

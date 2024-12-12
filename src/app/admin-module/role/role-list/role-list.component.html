@@ -112,12 +112,6 @@
 
 
 
-              <th data-field="CompanyName"      ><span >
-                  {{'language.form.details' | translate}} </span></th>
-
-
-
-
               <th data-field="Actions"    ><span
                   > {{'language.generic.actions' | translate}}</span></th>
             </tr>
@@ -126,26 +120,23 @@
             @for (data of dataList; track $index) {
             <tr   [ngClass]="{ 'inactive-row': !data.isActive }">
               <td  >
-                <span ><span class="font-weight-bolder px-3">
+                <span ><span class="font-weight-bolder ">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
               <td >
                 <span >
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0"
-                      [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
+                    <div class="text-dark-75 font-size-lg mb-0">
+                      <div>
+                        <span [ngStyle]="{'color': data.textColor, 'background': data.backgroundColor}" class="label label-lg label-inline mr-2"
+                        [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </span>
               </td>
-
-              <td ><span >
-                  <div class="font-weight-bolder text-primary mb-0">{{data?.description?.slice(0,15) || "N/A"}}
-                    {{data?.description?.length > 15 ? '...' : ''}}</div>
-                </span></td>
-
-
               <td><span >
 
 
