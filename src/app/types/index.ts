@@ -545,15 +545,6 @@ export interface CompanyDetail {
   companyName: string;
 }
 
-export interface EmployeeDetail {
-  employeeId: string;
-  companyId: string;
-  email: string;
-  firstName: string,
-  lastName: string,
-  imagePath: string,
-  role?: string;
-}
 
 export interface ICompany {
   offSet: string | number;
@@ -643,4 +634,25 @@ export interface IResGetSystemPermissions {
   };
   status: number;
   success: boolean;
+}
+
+
+export interface EmployeeDetail {
+  employeeId: string;
+  companyId: string;
+  email: string;
+  firstName: string,
+  lastName: string,
+  imagePath: string,
+  role: string;
+  roleId: string;
+  rolePermission:{
+    backgroundColor:string;
+    isActive:boolean;
+    name:string;
+    roleId:string;
+    systemModulePermissions:{
+      systemModules:IGetSystemPermissions[]
+    }
+  }
 }

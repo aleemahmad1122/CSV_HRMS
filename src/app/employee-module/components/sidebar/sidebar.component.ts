@@ -37,6 +37,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   id:string;
   isSubmitted = false;
   activRoute: string = '';
+
+  faildToLoadImage:boolean = false;
   rolesList: {
     roleId: string;
     name: string;

@@ -38,9 +38,11 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.getSystemPermissions()
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
+      if(!id){
+        this.getSystemPermissions()
+      }
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
@@ -49,6 +51,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
             next: (response) => {
               if (response?.success) {
                 this.selectedAddEditValue = response?.data;
+                this.systemModules = response?.data?.systemModulePermissions.systemModules
                 this.patchFormValues(); // Call patchFormValues here after setting selectedAddEditValue
               } else {
                 this.selectedAddEditValue = [];
@@ -69,6 +72,8 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response: IResGetSystemPermissions) => {
           if (response.success) {
+
+
             this.systemModules = response.data.systemModules
 
           } else {
@@ -109,11 +114,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
 
   selectPermission(object: any, event: any): void {
-
     object.isAssigned = event.target.checked
-
-
-
   }
 
 
@@ -127,7 +128,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
     const body = {
       ...this.addEditForm.value,
-      rolePermissions:this.systemModules
+      systemModules:this.systemModules
     };
 
     const apiCall = this.isEditMode
