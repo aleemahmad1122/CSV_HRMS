@@ -20,9 +20,9 @@
         </div>
       </form>
 
-      <button routerLink="/leave/leave/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
+      @if(this._getPermission.checkPermission('Apply_Leave')){<button routerLink="/leave/leave/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
         {{ 'language.generic.applyLeave' | translate }}
-      </button>
+      </button>}
     </div>
 
     <div class="d-flex align-items-center justify-content-between p-5 flex-wrap" style="gap: 8px; overflow: hidden;">
@@ -192,7 +192,7 @@
 
               <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell">
                 <span style="overflow: visible; position: relative; width: 130px">
-                  <button [routerLink]="['/leave/leave/edit']" [disabled]="data.leaveStatus != 0"
+                  @if(this._getPermission.checkPermission('Edit_Leave')){<button [routerLink]="['/leave/leave/edit']" [disabled]="data.leaveStatus != 0"
                     [queryParams]="{ id:this.empId,editId: data.leaveId,}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                     title="Edit details">
@@ -212,7 +212,7 @@
                         </g>
                       </svg>
                     </span>
-                  </button>
+                  </button>}
 
 
 

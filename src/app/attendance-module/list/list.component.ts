@@ -13,6 +13,7 @@ import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
+import { PermissionService } from '../../shared/Services/permission.service';
 
 @Component({
   selector: 'app-list',
@@ -62,6 +63,7 @@ export class ListComponent implements AfterViewInit {
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private _localStorage: LocalStorageManagerService,
+    public _getPermission: PermissionService,
     private fb: FormBuilder
   ) {
 

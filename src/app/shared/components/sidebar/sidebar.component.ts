@@ -1,130 +1,189 @@
-import { AfterViewInit, Component, EventEmitter, Inject, Injectable, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Inject } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { Sidebar } from "../../../types/index";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-declare const $: any;
-@Injectable()
+import { LocalStorageManagerService } from '../../Services/local-storage-manager.service';
+
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [RouterModule, CommonModule, TranslateModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   isCollapsed = false;
   activRoute: string = '';
+
   adminItems: Sidebar[] = [
     {
       name: 'language.sidebar.company',
-      route: '/admin/company-structure'
+      route: '/admin/company-structure',
+      permissions: 'View_Company',
+      show: false,
     },
     {
       name: 'language.sidebar.jobDetailsSetup',
-      route: '/admin/job-detail'
+      route: '/admin/job-detail',
+      permissions: 'View_Job',
+      show: false,
     },
     {
       name: 'language.sidebar.qualifications',
-      route: '/admin/qualifications'
+      route: '/admin/qualifications',
+      permissions: 'View_Qualification',
+      show: false,
     },
     {
       name: 'language.sidebar.projects',
-      route: '/admin/projects'
+      route: '/admin/projects',
+      permissions: 'View_Project',
+      show: false,
     },
     {
       name: 'language.sidebar.clients',
-      route: '/admin/clients'
+      route: '/admin/clients',
+      permissions: 'View_Client',
+      show: false,
     },
     {
       name: 'language.sidebar.role',
-      route: '/admin/role'
+      route: '/admin/role',
+      permissions: 'View_Role',
+      show: false,
     },
     {
       name: 'language.sidebar.shift',
-      route: '/admin/shift'
+      route: '/admin/shift',
+      permissions: 'View_Shift',
+      show: false,
     },
     {
       name: 'language.sidebar.designation',
-      route: '/admin/designation'
+      route: '/admin/designation',
+      permissions: 'View_Designation',
+      show: false,
     },
     {
       name: 'language.sidebar.department',
-      route: '/admin/department'
+      route: '/admin/department',
+      permissions: 'View_Department',
+      show: false,
     },
     {
       name: 'language.sidebar.team',
-      route: '/admin/team'
+      route: '/admin/team',
+      permissions: 'View_Team',
+      show: false,
     },
     {
       name: 'language.sidebar.attachmentType',
-      route: '/admin/attachmentType'
+      route: '/admin/attachmentType',
+      permissions: 'View_Attachment_Type',
+      show: false,
     },
-
     {
       name: 'language.sidebar.leaveType',
-      route: '/admin/leave-type-list'
+      route: '/admin/leave-type-list',
+      permissions: 'View_Leave_Type',
+      show: false,
     },
-  ]
+  ];
 
   employeeItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageEmployee',
-      route: '/employee/employee-list'
+      route: '/employee/employee-list',
+      permissions: 'View_Employee',
+      show: false,
     },
-  ]
+  ];
 
   attendanceItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageAttendance',
-      route: '/attendance/attendance-list'
+      route: '/attendance/attendance-list',
+      permissions: 'View_Attendance',
+      show: false,
     },
     {
       name: 'language.sidebar.attendanceImport',
-      route: '/attendance/import'
+      route: '/attendance/import',
+      permissions: 'Import_Attendance',
+      show: false,
     },
-  ]
+  ];
 
   leaveItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageLeave',
-      route: '/leave/leave-list'
-    }
-  ]
-
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
-  }
-
+      route: '/leave/leave-list',
+      permissions: 'View_Leave',
+      show: false,
+    },
+  ];
 
   constructor(
-    @Inject(DOCUMENT)
-    private _document: Document,
-    private _route: Router,
+    @Inject(DOCUMENT) private _document: Document,
+    private _router: Router,
+    private _localStorage: LocalStorageManagerService,
     public translate: TranslateService
-  ) {
-    _route.events.subscribe((val) =>
-      this.activRoute = _route.url
-    )
-
-
-  }
-
-  ngAfterViewInit(): void {
-
-  }
+  ) { }
 
   ngOnInit(): void {
     this.loadScript();
+    this.initializeActiveRoute();
+    this.initializePermissions();
   }
 
-  // New method to load the script
-  loadScript() {
-    const script = document.createElement('script');
+  ngAfterViewInit(): void { }
+
+  toggleSidebar(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  private loadScript(): void {
+    const script = this._document.createElement('script');
     script.src = './assets/js/scripts.bundle.js';
     script.async = true;
-    document.body.appendChild(script);
+    this._document.body.appendChild(script);
+  }
+
+  private initializeActiveRoute(): void {
+    this._router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.activRoute = event.url;
+      }
+    });
   }
 
 
+  private initializePermissions(): void {
+    const employeeDetails = this._localStorage.getEmployeeDetail();
+    if (!employeeDetails || employeeDetails.length === 0) {
+      return;
+    }
+
+    const permissions = employeeDetails[0]?.rolePermission?.systemModulePermissions?.systemModules || [];
+
+    [this.adminItems, this.employeeItems, this.attendanceItems, this.leaveItems].forEach(itemList => {
+      itemList.forEach(item => {
+        const requiredPermissions = item.permissions?.split(',') || [];
+        const hasPermission = requiredPermissions.some(routePermission =>
+          permissions.some(module =>
+            module.modulePermissions.some(permission => permission.title === routePermission && permission.isAssigned)
+          )
+        );
+        item.show = hasPermission || requiredPermissions.length === 0;
+      });
+
+      const hasVisibleItems = itemList.some(item => item.show);
+      if (!hasVisibleItems) {
+        itemList.length = 0;
+      }
+    });
+  }
+
 }
+

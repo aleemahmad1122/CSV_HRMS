@@ -22,9 +22,9 @@
         </div>
       </form>
 
-      <button routerLink="/attendance/attendance/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
+      @if(this._getPermission.checkPermission('Apply_Attendance')){<button routerLink="/attendance/attendance/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
         {{ 'language.generic.applyAttendance' | translate }}
-      </button>
+      </button>}
     </div>
 
 
@@ -210,7 +210,7 @@
 
               <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell">
                 <span style="overflow: visible; position: relative; width: 100px">
-                  <button [disabled]="data.attendanceStatus != 0" [routerLink]="['/attendance/attendance/edit']"
+                  @if(this._getPermission.checkPermission('Edit_Attendance')){ <button [disabled]="data.attendanceStatus != 0" [routerLink]="['/attendance/attendance/edit']"
                     [queryParams]="{ id:this.empId,editId: data.attendanceId,}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                     title="Edit details">
@@ -230,7 +230,7 @@
                         </g>
                       </svg>
                     </span>
-                  </button>
+                  </button>}
 
 
                 </span>

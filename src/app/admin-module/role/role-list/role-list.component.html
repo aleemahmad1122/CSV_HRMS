@@ -99,7 +99,7 @@
     <div class="card-body" style="overflow-x: auto;">
       <!--begin: Datatable-->
       <div >
-        <table class="table table-striped w-100">
+        <table class="table table-striped w-100" style="margin-bottom: 1rem;">
           <thead  >
             <tr >
               <th  >
@@ -118,7 +118,7 @@
           </thead>
           <tbody class="datatable-body">
             @for (data of dataList; track $index) {
-            <tr   [ngClass]="{ 'inactive-row': !data.isActive }">
+            <tr   [ngClass]="{ 'inactive-row': !data.isActive }" style="height: 50px;">
               <td  >
                 <span ><span class="font-weight-bolder ">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}

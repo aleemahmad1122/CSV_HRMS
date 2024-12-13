@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ILeave, ILeaveRes } from '../../../types/index';
-import {  RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
@@ -13,11 +13,12 @@ import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../../environments/environment.prod"
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { PermissionService } from "../../../shared/Services/permission.service";
 
 @Component({
   selector: 'app-leave',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe,HighlightPipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe],
   templateUrl: './leave.component.html',
   styleUrl: './leave.component.css'
 })
@@ -57,12 +58,12 @@ export class LeaveComponent implements AfterViewInit {
     fullName: string;
   }[] = []
 
-
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private fb: FormBuilder,
     private _localStorage: LocalStorageManagerService,
+    public _getPermission: PermissionService,
   ) {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -70,7 +71,6 @@ export class LeaveComponent implements AfterViewInit {
 
     this.getUserReporting()
 
-    // Set default dates for Month to Date (MTD)
     const today = new Date();
     this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
     this.endDate = today.toISOString().split('T')[0];
@@ -80,9 +80,8 @@ export class LeaveComponent implements AfterViewInit {
 
     this.submitForm = this.fb.group({
       leaveStatus: [0],
-      comment: ['', Validators.required ],
+      comment: ['', Validators.required],
     });
-
   }
 
 
@@ -100,22 +99,22 @@ export class LeaveComponent implements AfterViewInit {
   }
 
   getLeaveStatusText(status: number): string {
-  switch (status) {
-    case 0:
-      return 'Pending';
-    case 1:
-      return 'Approved';
-    case 2:
-      return 'Rejected';
-    default:
-      return 'Unknown';
+    switch (status) {
+      case 0:
+        return 'Pending';
+      case 1:
+        return 'Approved';
+      case 2:
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
   }
-}
-search(event: Event): void {
-  const term = (event.target as HTMLInputElement).value;
-  this.searchTerm = term; // Update the bound search term for highlight pipe
-  this.searchSubject.next(term); // Debounce the API call
-}
+  search(event: Event): void {
+    const term = (event.target as HTMLInputElement).value;
+    this.searchTerm = term; // Update the bound search term for highlight pipe
+    this.searchSubject.next(term); // Debounce the API call
+  }
 
   onUserSelect(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -265,27 +264,27 @@ search(event: Event): void {
     }
   }
 
-  onSubmit(id:string){
+  onSubmit(id: string) {
     this.isSubmitted = true;
     if (!this.submitForm.valid) {
       return;
     }
 
     this.apiService
-    .patchData('Leave', `processLeave/${id}`,this.submitForm.value, true)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (response: any) => {
-        if (response?.success) {
-          this.getData()
+      .patchData('Leave', `processLeave/${id}`, this.submitForm.value, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.getData()
+            this.submitForm.reset()
+          }
+        },
+        error: () => {
           this.submitForm.reset()
-        }
-      },
-      error: () => {
-        this.submitForm.reset()
-        this.userReporting = []; // Handle error scenario
-      },
-    });
+          this.userReporting = []; // Handle error scenario
+        },
+      });
 
   }
 

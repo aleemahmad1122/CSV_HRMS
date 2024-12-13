@@ -4,7 +4,9 @@
   <div class="brand flex-column-auto" id="kt_brand">
     <!--begin::Logo-->
     <a [routerLink]="['dashboard']" class="brand-logo d-flex align-items-center justify-content-between">
-         <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   alt="Logo" src="https://cybersoftvantage.com/logo.png" width="35px" height="80px"
+      <img
+        onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+        alt="Logo" src="https://cybersoftvantage.com/logo.png" width="35px" height="80px"
         style="object-fit: contain;" />
       @if (!isCollapsed ) {
       <h1 class="text-white ml-3" style="font-size: 20px; font-weight: bold;">CSV_HRMS</h1>
@@ -43,14 +45,16 @@
       <!--begin::Menu Nav-->
       <ul class="menu-nav">
 
-        <li routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+        <li routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true"
+          data-menu-toggle="hover">
           <a [routerLink]="'/dashboard'" class="menu-link menu-toggle">
             <i class="fa-regular fa-chart-line mr-2 d-flex align-items-center justify-content-center"></i>
             <span class="menu-text">{{'language.sidebar.dashboard' | translate}}</span>
           </a>
         </li>
 
-        <li  routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.adminItems.length > 0){<li routerLinkActive="menu-item-active" class="menu-item menu-item-submenu"
+          aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon2-user-1 mr-2"></i>
             <span class="menu-text">{{'language.sidebar.admin' | translate}}</span>
@@ -64,24 +68,27 @@
                   <span class="menu-text">Bootstrap</span>
                 </span>
               </li>
-
               @for (item of adminItems; track $index) {
-
               <li class="menu-item" aria-haspopup="true">
-                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                @if(item.show){
+                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{item.name | translate}}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span>
                 </a>
+                }
               </li>
               }
+
             </ul>
           </div>
-        </li>
+        </li>}
 
-        <li  routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+
+        @if(this.employeeItems.length > 0){ <li routerLinkActive="menu-item-active" class="menu-item menu-item-submenu"
+          aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon2-group mr-2"></i>
             <span class="menu-text">{{'language.sidebar.employee' | translate}}</span>
@@ -97,25 +104,25 @@
               </li>
 
               @for (item of employeeItems; track $index) {
-
               <li class="menu-item" aria-haspopup="true">
-                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                @if(item.show){
+                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{item.name | translate}}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span>
                 </a>
+                }
               </li>
               }
             </ul>
           </div>
-        </li>
+        </li>}
 
 
-
-
-        <li  routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.attendanceItems.length > 0){ <li routerLinkActive="menu-item-active"
+          class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-user-ok mr-2"></i>
             <span class="menu-text">{{'language.sidebar.attendance' | translate}}</span>
@@ -131,23 +138,25 @@
               </li>
 
               @for (item of attendanceItems; track $index) {
-
               <li class="menu-item" aria-haspopup="true">
-                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                @if(item.show){
+                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{item.name | translate}}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span>
                 </a>
+                }
               </li>
               }
             </ul>
           </div>
-        </li>
+        </li>}
 
 
-        <li  routerLinkActive="menu-item-active" class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.leaveItems.length > 0){ <li routerLinkActive="menu-item-active" class="menu-item menu-item-submenu"
+          aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-file-1 mr-2"></i>
             <span class="menu-text">{{'language.sidebar.leave' | translate}}</span>
@@ -162,21 +171,23 @@
                 </span>
               </li>
 
-              @for (item of leaveItems; track $index) {
 
+              @for (item of leaveItems; track $index) {
               <li class="menu-item" aria-haspopup="true">
-                <a [routerLink]="[item.route]" [ngClass]="activRoute == item.route ? 'menu-item-active' : '' "
+                @if(item.show){
+                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{item.name | translate}}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span>
                 </a>
+                }
               </li>
               }
             </ul>
           </div>
-        </li>
+        </li>}
 
 
       </ul>

@@ -493,6 +493,8 @@ export interface Clients extends ICommon {
 export interface Sidebar {
   name: string;
   route: string;
+  permissions:string;
+  show:boolean;
 }
 
 
