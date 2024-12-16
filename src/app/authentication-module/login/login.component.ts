@@ -94,7 +94,7 @@ export class LoginComponent {
             this._localStorageService.setCompanyDetail(response.data.companyDetail[0]);
             this._dataShare.updateLoginStatus(true);
           }
-          this._authService.setToken(response.data.token);
+          this._authService.setToken(response.data.employeeDetail[0].token);
           this._localStorageService.setEmployeeDetail(response.data.employeeDetail);
 
         },

@@ -39,7 +39,7 @@ export class UserAuthenticationService {
   isLogin(): boolean {
       return this._localStorageManagerService.isLoginValidationFromStorage();
   }
-  
+
   isAdmin(): boolean {
     return this._localStorageManagerService.isAdminValidationFromStorage();
   }
