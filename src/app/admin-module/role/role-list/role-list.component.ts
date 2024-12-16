@@ -31,7 +31,7 @@ export class RoleListComponent implements OnDestroy {
   totalPages = 0;
 
   permissions: { isAssign: boolean; permission: string }[] = [];
-    isEdit: boolean = false;
+  isEdit: boolean = false;
   isCreate: boolean = false;
   isDelete: boolean = false;
 
