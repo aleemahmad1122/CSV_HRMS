@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { ILeave, ILeaveRes } from '../../../types/index';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
@@ -13,7 +13,6 @@ import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../../environments/environment.prod"
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
-import { PermissionService } from "../../../shared/Services/permission.service";
 
 @Component({
   selector: 'app-leave',
@@ -43,6 +42,12 @@ export class LeaveComponent implements AfterViewInit {
   submitForm!: FormGroup;
 
 
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+  isApproval: boolean = false;
+
   empId: string;
 
   selectedEmpId: string;
@@ -63,13 +68,17 @@ export class LeaveComponent implements AfterViewInit {
     private exportService: ExportService,
     private fb: FormBuilder,
     private _localStorage: LocalStorageManagerService,
-    public _getPermission: PermissionService,
+    private activatedRoute: ActivatedRoute
+
   ) {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
     this.getUserReporting()
+
+    this.loadPermissions();
+
 
     const today = new Date();
     this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
@@ -87,6 +96,24 @@ export class LeaveComponent implements AfterViewInit {
 
   setStatus(status: number): void {
     this.submitForm.patchValue({ leaveStatus: status });
+  }
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Leave" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Apply_Leave" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Leave" && p.isAssign);
+        this.isApproval = this.permissions.some(p => p.permission === "Leave_Approval" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
   }
 
 

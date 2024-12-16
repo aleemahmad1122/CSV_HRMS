@@ -79,7 +79,7 @@
                 </div>
                 <!--end::Dropdown-->
                 <!--begin::Button-->
-                <button routerLink="/admin/leave-type/add-edit" class="btn btn-primary font-weight-bolder">
+                @if(isCreate){<button routerLink="/admin/leave-type/add-edit" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -95,7 +95,7 @@
 
                     </span>
                     {{ "language.generic.addLeaveType" | translate }}
-                </button>
+                </button>}
                 <!--end::Button-->
             </div>
         </div>
@@ -136,11 +136,11 @@
                                 </span>
                             </th>
 
-                            <th data-field="CompanyName"      >
+                            @if(isEdit || isDelete){<th data-field="CompanyName"      >
                                 <span style="width: 124px">
                                     {{ "language.generic.actions" | translate }}
                                 </span>
-                            </th>
+                            </th>}
                         </tr>
                     </thead>
 
@@ -192,7 +192,7 @@
                                 </span>
                             </td>
 
-                            <td  >
+                            @if(isEdit){ <td  >
                                 <span style="overflow: visible; position: relative; width: 130px">
                                     <a [routerLink]="['/admin/leave-type/edit']"
                                         [queryParams]="{ id: data.leaveTypeId }"
@@ -251,7 +251,7 @@
                                         </div>
                                     </div>
 
-                                    <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                                    @if(isDelete){<button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon"
                                         title="Delete">
                                         <span class="svg-icon svg-icon-md">
@@ -269,9 +269,9 @@
                                                 </g>
                                             </svg>
                                         </span>
-                                    </button>
+                                    </button>}
                                 </span>
-                            </td>
+                            </td>}
                         </tr>
                         } @if(this.dataList.length < 1){
                           <tr>

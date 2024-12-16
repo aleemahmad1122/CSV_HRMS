@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ITeam,ITeamRes } from '../../../types/index';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ExportService } from '../../../shared/Services/export.service';
@@ -29,17 +29,40 @@ export class ListComponent {
   pageNo = 1;
   totalPages = 0;
 
+  permissions: { isAssign: boolean; permission: string }[] = [];
+    isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
   constructor(
     private apiService: ApiCallingService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
     this.getData();
+
+    this.loadPermissions();
   }
 
   private initializeSearch(): void {
     this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((term) => this.getData(term));
+  }
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Team" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Team" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Team" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
   }
 
 

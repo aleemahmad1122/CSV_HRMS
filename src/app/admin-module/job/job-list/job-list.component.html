@@ -73,7 +73,8 @@
         </div>
         <!--end::Dropdown-->
         <!--begin::Button-->
-        <button routerLink="/admin/job/add" class="btn btn-primary font-weight-bolder">
+        @if(isCreate
+        ){ <button routerLink="/admin/job/add" class="btn btn-primary font-weight-bolder">
           <span class="svg-icon svg-icon-md">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -87,7 +88,7 @@
               </g>
             </svg>
 
-          </span> {{'language.generic.addJob' | translate}}</button>
+          </span> {{'language.generic.addJob' | translate}}</button>}
         <!--end::Button-->
       </div>
     </div>
@@ -109,42 +110,40 @@
               <th style="width: 40%">
                 <span>{{'language.form.details' | translate}}</span>
               </th>
-              <th style="width: 20%">
+              @if(isEdit || isDelete){ <th style="width: 20%">
                 <span>{{'language.generic.actions' | translate}}</span>
-              </th>
+              </th>}
             </tr>
           </thead>
           <tbody>
             @for (data of dataList; track $index) {
-            <tr   [ngClass]="{ 'inactive-row': !data.isActive }">
-              <td  >
-                <span  ><span  >
+            <tr [ngClass]="{ 'inactive-row': !data.isActive }">
+              <td>
+                <span><span>
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
-              <td  >
-                <span  >
+              <td>
+                <span>
                   <div>
-                    <div
-                      [innerHTML]="data.jobTitle || 'N/A' | highlight: searchTerm">
+                    <div [innerHTML]="data.jobTitle || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
               </td>
 
-              <td><span >
-                  <div >{{data.jobDescription.slice(0,40) || "N/A"}}
+              <td><span>
+                  <div>{{data.jobDescription.slice(0,40) || "N/A"}}
                     {{data.jobDescription.length > 40 ? '...' : ''}}</div>
                 </span></td>
 
 
 
-              <td><span
-                  style="overflow: visible; position: relative;  ">
+              <td><span style="overflow: visible; position: relative;  ">
 
 
 
-                  <a [routerLink]="['/admin/job/edit']" [queryParams]="{id: data.jobId}"
+                  @if(isEdit){<a [routerLink]="['/admin/job/edit']" [queryParams]="{id: data.jobId}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                     title="Edit details"> <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -160,7 +159,7 @@
                             d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
                             fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
                         </g>
-                      </svg> </span> </a>
+                      </svg> </span> </a>}
 
 
 
@@ -208,11 +207,10 @@
                 </span></td>
             </tr>
             }
-            @if(this.dataList.length < 1){
-                <tr>
-                    <td colspan="4" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
-                </tr>
-            }
+            @if(this.dataList.length < 1){ <tr>
+              <td colspan="4" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
           </tbody>
         </table>
 

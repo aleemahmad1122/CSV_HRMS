@@ -20,7 +20,7 @@
         </div>
       </form>
 
-      @if(this._getPermission.checkPermission('Apply_Leave')){<button routerLink="/leave/leave/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
+      @if(isCreate){<button routerLink="/leave/leave/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
         {{ 'language.generic.applyLeave' | translate }}
       </button>}
     </div>
@@ -83,49 +83,49 @@
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto">
       <!--begin: Datatable-->
-      <div >
+      <div>
         <table class="table table-striped w-100">
           <thead class="datatable-head">
             <tr class="datatable-row" style="left: 0px">
               <th data-field="RecordID"
                 class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
-                <span ># </span>
+                <span># </span>
               </th>
 
-              <th data-field="OrderID"      >
-                <span >
+              <th data-field="OrderID">
+                <span>
                   {{ "language.generic.empName" | translate }}
                 </span>
               </th>
 
-              <th data-field="OrderID"      >
-                <span >
+              <th data-field="OrderID">
+                <span>
                   {{ "language.generic.date" | translate }}
                 </span>
               </th>
 
 
 
-              <th data-field="OrderID"      >
-                <span >
+              <th data-field="OrderID">
+                <span>
                   {{ "language.form.leaveReason" | translate }}
                 </span>
               </th>
 
 
 
-              <th data-field="OrderID"      >
-                <span >
+              <th data-field="OrderID">
+                <span>
                   {{ "language.form.status" | translate }}
                 </span>
               </th>
 
 
-              <th data-field="CompanyName"      >
+              @if(isDelete || isEdit || isApproval){<th >
                 <span style="width: 124px">
                   {{ "language.generic.actions" | translate }}
                 </span>
-              </th>
+              </th>}
             </tr>
           </thead>
 
@@ -133,13 +133,13 @@
             @for (data of dataList; track $index) {
             <tr data-row="0" class="datatable-row" style="left: 0px">
               <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-                <span ><span class="font-weight-bolder">
+                <span><span class="font-weight-bolder">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span >
+                <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.firstName + ' ' + data.lastName || 'N/A' | highlight: searchTerm">
@@ -149,7 +149,7 @@
               </td>
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span >
+                <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{(data.leaveDate | convertTime: 'date' ) || 'N/A'}}
@@ -160,7 +160,7 @@
 
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span >
+                <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{data.leaveReason || 'N/A'}}
@@ -171,7 +171,7 @@
 
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
-                <span >
+                <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
                       <div>
@@ -192,7 +192,7 @@
 
               <td data-field="Actions" data-autohide-disabled="false" aria-label="null" class="datatable-cell">
                 <span style="overflow: visible; position: relative; width: 130px">
-                  @if(this._getPermission.checkPermission('Edit_Leave')){<button [routerLink]="['/leave/leave/edit']" [disabled]="data.leaveStatus != 0"
+                  @if(isEdit){<button [routerLink]="['/leave/leave/edit']" [disabled]="data.leaveStatus != 0"
                     [queryParams]="{ id:this.empId,editId: data.leaveId,}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
                     title="Edit details">
@@ -241,7 +241,7 @@
                     </div>
                   </div>
 
-                  <button data-bs-toggle="modal" [disabled]="data.leaveStatus != 0"
+                  @if(isDelete){<button data-bs-toggle="modal" [disabled]="data.leaveStatus != 0"
                     [attr.data-bs-target]="'#modal-' + $index"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                       class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +257,7 @@
                             fill="#000000" opacity="0.3"></path>
                         </g>
                       </svg> </span>
-                  </button>
+                  </button>}
                 </span>
                 @if (data.leaveStatus == 0) {
 
@@ -275,11 +275,11 @@
                       </div>
                       <div class="modal-body">
                         <div class="row">
-                          <form [formGroup]="submitForm"  class="col-md-12 mb-3">
+                          <form [formGroup]="submitForm" class="col-md-12 mb-3">
                             <label class="form-label">{{ "language.form.comment" | translate }}
                               <span class="text-danger">*</span></label>
                             <textarea class="form-control" formControlName="comment"
-                              [placeholder]="'language.placeholders.comment' | translate"   [ngClass]="{
+                              [placeholder]="'language.placeholders.comment' | translate" [ngClass]="{
                                 'is-invalid':
                                   submitForm.get('comment')?.invalid &&
                                   (submitForm.get('comment')?.touched || isSubmitted)
@@ -299,7 +299,7 @@
                           {{'language.generic.cancel' | translate}}</button>
 
 
-                        <button type="button" (click)="onSubmit(data.leaveId)"  data-bs-dismiss="modal"
+                        <button type="button" (click)="onSubmit(data.leaveId)" data-bs-dismiss="modal"
                           class="btn btn-primary">{{'language.generic.continue' | translate}}</button>
                       </div>
                     </div>
@@ -307,14 +307,10 @@
                 </div>
 
 
-                <div
-                class="d-flex align-items-center mt-2" style="gap: 1px;">
+                @if(isApproval){<div class="d-flex align-items-center mt-2" style="gap: 1px;">
 
-                  <button
-                (click)="setStatus(1)"
-                data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#statusModal-' + $index"
-                  class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon mr-2"
+                  <button (click)="setStatus(1)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
+                    class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon mr-2"
                     title="Edit details">
                     <span
                       class="svg-icon svg-icon-success svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Navigation\Check.svg--><svg
@@ -327,15 +323,11 @@
                             fill="#000000" fill-rule="nonzero"
                             transform="translate(11.999995, 12.000002) rotate(-180.000000) translate(-11.999995, -12.000002) " />
                         </g>
-                      </svg>     </span>
+                      </svg> </span>
                   </button>
 
-                  <button
-                  (click)="setStatus(2)"
-                          data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#statusModal-' + $index"
-                  class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon mr-2"
-                    title="Edit details">
+                  <button (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
+                    class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon mr-2" title="Edit details">
                     <span
                       class="svg-icon svg-icon-danger svg-icon-2x"><!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo1\dist/../src/media/svg/icons\Navigation\Close.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -349,9 +341,9 @@
                               x="0" y="7" width="16" height="2" rx="1" />
                           </g>
                         </g>
-                      </svg>     </span>
+                      </svg> </span>
                   </button>
-                </div>
+                </div>}
 
                 }
                 @if (data.leaveStatus != 0) {
@@ -369,15 +361,16 @@
                         <div class="row">
 
 
-                          <div class="d-flex w-100 mb-2"  style="gap: 4px;">
-                            <b>{{'language.generic.approvedDate' | translate}}:</b> {{data.approvedDate | convertTime: 'date' }}
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
+                            <b>{{'language.generic.approvedDate' | translate}}:</b> {{data.approvedDate | convertTime:
+                            'date' }}
                           </div>
 
-                          <div class="d-flex w-100 mb-2"  style="gap: 4px;">
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
                             <b>{{'language.generic.approvedBy' | translate}}:</b> {{data.approvedBy}}
                           </div>
 
-                          <div class="d-flex w-100 mb-2"  style="gap: 4px;">
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
                             <b>{{'language.generic.comment' | translate}}:</b> {{data.approvedComment}}
                           </div>
 
@@ -389,27 +382,22 @@
                 </div>
 
 
-                <div
-                class="d-flex align-items-center mt-2" style="gap: 1px;">
+                <div class="d-flex align-items-center mt-2" style="gap: 1px;">
 
-                  <button
-
-                          data-bs-toggle="modal"
-                    [attr.data-bs-target]="'#leaveModal-' + $index"
-                  class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon mr-2"
+                  @if(isApproval){<button data-bs-toggle="modal" [attr.data-bs-target]="'#leaveModal-' + $index"
+                    class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon mr-2"
                     title="Edit details">
-                  <i class="icon-2x text-dark-50 flaticon-eye" style="color: white;"></i>
-                  </button>
+                    <i class="icon-2x text-dark-50 flaticon-eye" style="color: white;"></i>
+                  </button>}
                 </div>
 
                 }
 
               </td>
             </tr>
-            } @if(this.dataList.length < 1){
-              <tr>
-                <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
-            </tr>
+            } @if(this.dataList.length < 1){ <tr>
+              <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
               }
           </tbody>
         </table>

@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'company-structure',
     loadComponent: () => import(`./company/company-list/company-list.component`).then(c => c.CompanyListComponent),
-    data: { breadcrumb: 'Company Structure', permission: "View_Company" },
+    data: { breadcrumb: 'Company Structure', permission: "View_Company,Create_Company,Edit_Employee_Company,Delete_Company" },
     title: 'Company Structure',
     resolve: { permission: PermissionService }
   },
@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: 'job-detail',
     loadComponent: () => import(`./job/job-list/job-list.component`).then(c => c.JobListComponent),
-    data: { breadcrumb: 'Job', permission: "View_Job" },
+    data: { breadcrumb: 'Job', permission: "View_Job,Create_Job,Edit_Job,Delete_Job" },
     title: 'Job Detail',
     resolve: { permission: PermissionService }
   },
@@ -37,7 +37,7 @@ const routes: Routes = [
   {
     path: 'qualifications',
     loadComponent: () => import(`./qualifications/qualifications-list/qualifications-list.component`).then(c => c.QualificationsListComponent),
-    data: { breadcrumb: 'Qualifications', permission: "View_Qualification" },
+    data: { breadcrumb: 'Qualifications', permission: "View_Qualification,Create_Qualification,Edit_Qualification,Delete_Qualification" },
     title: 'Qualifications',
     resolve: { permission: PermissionService }
   },
@@ -51,7 +51,7 @@ const routes: Routes = [
   {
     path: 'projects',
     loadComponent: () => import(`./project/project-list/project-list.component`).then(c => c.ProjectListComponent),
-    data: { breadcrumb: 'Projects',permission: "View_Project" },
+    data: { breadcrumb: 'Projects',permission: "View_Project,Create_Project,Edit_Project,Delete_Project" },
     title: 'Projects',
     resolve: { permission: PermissionService }
   },
@@ -65,7 +65,7 @@ const routes: Routes = [
   {
     path: 'clients',
     loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
-    data: { breadcrumb: 'Clients',permission: "View_Client" },
+    data: { breadcrumb: 'Clients',permission: "View_Client,Create_Client,Edit_Client,Delete_Client" },
     title: 'Clients',
     resolve: { permission: PermissionService }
   },
@@ -79,7 +79,7 @@ const routes: Routes = [
   {
     path: 'role',
     loadComponent: () => import(`./role/role-list/role-list.component`).then(c => c.RoleListComponent),
-    data: { breadcrumb: 'Role', permission: "View_Role" },
+    data: { breadcrumb: 'Role', permission: "View_Role,Create_Role,Edit_Role,Delete_Role" },
     title: 'Role',
     resolve: { permission: PermissionService }
   },
@@ -93,7 +93,7 @@ const routes: Routes = [
   {
     path: 'shift',
     loadComponent: () => import(`./shift/shift-list/shift-list.component`).then(c => c.ShiftListComponent),
-    data: { breadcrumb: 'Shift' ,permission: "View_Shift" },
+    data: { breadcrumb: 'Shift' ,permission: "View_Shift,Create_Shift,Edit_Shift,Delete_Shift" },
     title: 'Shift',
     resolve: { permission: PermissionService }
   },
@@ -107,7 +107,7 @@ const routes: Routes = [
   {
     path: 'designation',
     loadComponent: () => import(`./designation/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Designation' ,permission: "View_Designation" },
+    data: { breadcrumb: 'Designation' ,permission: "View_Designation,Create_Designation,Edit_Designation,Delete_Designation" },
     title: 'Designation',
     resolve: { permission: PermissionService }
   },
@@ -121,7 +121,7 @@ const routes: Routes = [
   {
     path: 'department',
     loadComponent: () => import(`./department/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Department' ,permission: "View_Department" },
+    data: { breadcrumb: 'Department' ,permission: "View_Department,Create_Department,Edit_Department,Delete_Department" },
     title: 'Department',
     resolve: { permission: PermissionService }
   },
@@ -135,7 +135,7 @@ const routes: Routes = [
   {
     path: 'team',
     loadComponent: () => import(`./team/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Team' ,permission: "View_Team" },
+    data: { breadcrumb: 'Team' ,permission: "View_Team,Create_Team,Edit_Team,Delete_Team" },
     title: 'Team',
     resolve: { permission: PermissionService }
   },
@@ -149,7 +149,7 @@ const routes: Routes = [
   {
     path: 'attachmentType',
     loadComponent: () => import(`./attachmentFile/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Attachment Type'  ,permission: "View_Attachment_Type" },
+    data: { breadcrumb: 'Attachment Type'  ,permission: "View_Attachment_Type,Create_Attachment_Type,Edit_Attachment_Type,Delete_Attachment_Type" },
     title: 'Attachment Type',
     resolve: { permission: PermissionService }
   },
@@ -164,7 +164,7 @@ const routes: Routes = [
   {
     path: 'leave-type-list',
     loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Leave Type List'  ,permission: "View_Leave_Type" },
+    data: { breadcrumb: 'Leave Type List'  ,permission: "View_Leave_Type,Create_Leave_Type,Edit_Leave_Type,Delete_Leave_Type" },
     title: 'Leave Type List',
     resolve: { permission: PermissionService }
   },

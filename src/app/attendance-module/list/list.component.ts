@@ -13,7 +13,6 @@ import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
-import { PermissionService } from '../../shared/Services/permission.service';
 
 @Component({
   selector: 'app-list',
@@ -59,14 +58,25 @@ export class ListComponent implements AfterViewInit {
   }[] = []
 
 
+
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+  isApproval: boolean = false;
+
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private _localStorage: LocalStorageManagerService,
-    public _getPermission: PermissionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute
   ) {
 
+
+
+    this.loadPermissions();
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
@@ -89,6 +99,26 @@ export class ListComponent implements AfterViewInit {
 
   setStatus(status: number): void {
     this.submitForm.patchValue({ attendanceStatus: status });
+  }
+
+
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+      console.log(permissionsData);
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Attendance" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Apply_Attendance" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Attendance" && p.isAssign);
+        this.isApproval = this.permissions.some(p => p.permission === "Attendance_Approval" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
   }
 
 

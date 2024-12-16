@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IRole, IRoleRes } from '../../../types/index';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ExportService } from '../../../shared/Services/export.service';
-import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
@@ -12,11 +13,11 @@ import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 @Component({
   selector: 'app-role-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule,HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.css']
 })
-export class RoleListComponent {
+export class RoleListComponent implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
@@ -29,30 +30,54 @@ export class RoleListComponent {
   pageNo = 1;
   totalPages = 0;
 
+  permissions: { isAssign: boolean; permission: string }[] = [];
+    isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
   constructor(
     private apiService: ApiCallingService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
-    this.getData(); // Initial data fetch
+    this.getData();
+
+    this.loadPermissions();
   }
 
   private initializeSearch(): void {
-    this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
-      .subscribe((term) => this.getData(term));
+    this.searchSubject.pipe(
+      debounceTime(500),
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe((term) => this.getData(term));
   }
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === 'Edit_Role' && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === 'Create_Role' && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === 'Delete_Role' && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
+
 
   // Handles status change from the dropdown
   onStatusChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.selectedStatus = selectedValue;
-    this.getActiveStatusData('', selectedValue);
+    this.getActiveStatusData(this.searchTerm, selectedValue);
   }
 
   // Fetch data filtered by active status
   private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
-
-    // Call the API with the active status filter
     this.apiService.getData('Role', 'getRoles', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -121,8 +146,6 @@ export class RoleListComponent {
 
   // Delete a role by its ID
   onDelete(id: string): void {
-    console.log(id);
-
     this.apiService.deleteData('Role', `deleteRole/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -136,5 +159,11 @@ export class RoleListComponent {
   // Export data in a specified format
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
+  }
+
+  // Cleanup subscriptions to avoid memory leaks
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

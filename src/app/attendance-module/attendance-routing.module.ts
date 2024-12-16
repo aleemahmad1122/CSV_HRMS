@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: 'attendance-list',
     loadComponent: () => import(`./list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Manage Attendances',permission:"View_Attendance" },
+    data: { breadcrumb: 'Manage Attendances',permission:"View_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval" },
     title: 'Attendances List',
     resolve: { permission: PermissionService },
   },
