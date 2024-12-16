@@ -495,6 +495,7 @@ export interface Sidebar {
   route: string;
   permissions:string;
   show:boolean;
+  class?:string;
 }
 
 

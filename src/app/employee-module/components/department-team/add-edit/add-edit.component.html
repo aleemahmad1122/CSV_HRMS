@@ -5,7 +5,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.departmentId" | translate }}
         <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="departmentId" [ngClass]="{
+      @if(isEdit){<select class="form-control custom-select" formControlName="departmentId" [ngClass]="{
           'is-invalid':
             addEditForm.get('departmentId')?.invalid &&
             (addEditForm.get('departmentId')?.touched || isSubmitted)
@@ -16,7 +16,14 @@
         <option *ngFor="let department of departmentList" [value]="department.departmentId">
           {{ department.name }}
         </option>
-      </select>
+      </select>}
+      <div *ngIf="!isEdit">
+        <input
+          type="text"
+          class="form-control"
+          [value]="getDepartmentName(addEditForm.get('departmentId')?.value)"
+          readonly>
+      </div>
       <div *ngIf="
           addEditForm.get('departmentId')?.invalid &&
           (addEditForm.get('departmentId')?.touched || isSubmitted)
@@ -28,7 +35,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.designationId" | translate }}
         <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="designationId" [ngClass]="{
+        @if(isEdit){<select class="form-control custom-select" formControlName="designationId" [ngClass]="{
           'is-invalid':
             addEditForm.get('designationId')?.invalid &&
             (addEditForm.get('designationId')?.touched || isSubmitted)
@@ -39,7 +46,14 @@
         <option *ngFor="let designation of designationList" [value]="designation.designationId">
           {{ designation.designationTitle }}
         </option>
-      </select>
+      </select>}
+      <div *ngIf="!isEdit">
+        <input
+          type="text"
+          class="form-control"
+          [value]="getDsignationName(addEditForm.get('designationId')?.value)"
+          readonly>
+      </div>
       <div *ngIf="
           addEditForm.get('designationId')?.invalid &&
           (addEditForm.get('designationId')?.touched || isSubmitted)
@@ -51,7 +65,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.teamId" | translate }}
         <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="teamId" [ngClass]="{
+        @if(isEdit){<select class="form-control custom-select" formControlName="teamId" [ngClass]="{
           'is-invalid':
             addEditForm.get('teamId')?.invalid &&
             (addEditForm.get('teamId')?.touched || isSubmitted)
@@ -60,7 +74,14 @@
         <option *ngFor="let team of teamList" [value]="team.teamId">
           {{ team.name }}
         </option>
-      </select>
+      </select>}
+      <div *ngIf="!isEdit">
+        <input
+          type="text"
+          class="form-control"
+          [value]="getTeamName(addEditForm.get('teamId')?.value)"
+          readonly>
+      </div>
       <div *ngIf="
           addEditForm.get('teamId')?.invalid &&
           (addEditForm.get('teamId')?.touched || isSubmitted)
@@ -72,7 +93,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.reportsTo" | translate }}
         <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="reportsTo" [ngClass]="{
+        @if(isEdit){ <select class="form-control custom-select" formControlName="reportsTo" [ngClass]="{
           'is-invalid':
             addEditForm.get('reportsTo')?.invalid &&
             (addEditForm.get('reportsTo')?.touched || isSubmitted)
@@ -81,7 +102,14 @@
         <option *ngFor="let report of reportList" [value]="report.employeeId">
           {{ report.fullName }}
         </option>
-      </select>
+      </select>}
+      <div *ngIf="!isEdit">
+        <input
+          type="text"
+          class="form-control"
+          [value]="getReportsToName(addEditForm.get('reportsTo')?.value)"
+          readonly>
+      </div>
       <div *ngIf="
           addEditForm.get('reportsTo')?.invalid &&
           (addEditForm.get('reportsTo')?.touched || isSubmitted)
@@ -95,7 +123,7 @@
   </div>
 
   <!-- Form submission buttons -->
-  @if(!isViewMode){
+  @if(isEdit){
   <div class="row mt-3">
     <div class="col-12 text-right">
       <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mx-4" (click)="goBack()">

@@ -8,6 +8,8 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment.prod';
+import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
+import { Sidebar } from '../../../types';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,11 +36,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode: boolean | string = false;
-  id:string;
+  id: string;
   isSubmitted = false;
   activRoute: string = '';
 
-  faildToLoadImage:boolean = false;
+  faildToLoadImage: boolean = false;
   rolesList: {
     roleId: string;
     name: string;
@@ -58,53 +60,64 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
   allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-  tabList: {
-    path: string;
-    name: string;
-    class: string;
-  }[] = [
-      {
-        name: 'language.generic.personalInfo',
-        path: "/employee/profile/employee/edit",
-        class: "fa-solid fa-user"
-      },
-      {
-        name: 'language.employee.shift',
-        path: "/employee/profile/shift/edit",
-        class: "fa-solid fa-briefcase"
-      },
-      {
-        name: 'language.employee.department',
-        path: "/employee/profile/department-team/edit",
-        class: "fa-solid fa-people-group"
-      },
-      {
-        name: 'language.employee.education',
-        path: "/employee/profile/education-history",
-        class: "fa-sharp fa-solid fa-file-certificate"
-      },
-      {
-        name: 'language.employee.workHistory',
-        path: "/employee/profile/work-history",
-        class: "fa-solid fa-briefcase"
-      },
-      {
-        name: 'language.generic.changePass',
-        path: "/employee/profile/change-password",
-        class: "fa-solid fa-key"
-      },
-    ];
+
+
+  tabList: Sidebar[] = [
+    {
+      name: 'language.generic.personalInfo',
+      route: "/employee/profile/employee/edit",
+      class: "fa-solid fa-user",
+      permissions: "View_Employee",
+      show: false
+    },
+    {
+      name: 'language.employee.shift',
+      route: "/employee/profile/shift/edit",
+      class: "fa-solid fa-briefcase",
+      permissions: "View_Employee_Shift",
+      show: false
+    },
+    {
+      name: 'language.employee.department',
+      route: "/employee/profile/department-team/edit",
+      class: "fa-solid fa-people-group",
+      permissions: "View_Department_Team",
+      show: false
+    },
+    {
+      name: 'language.employee.education',
+      route: "/employee/profile/education-history",
+      class: "fa-sharp fa-solid fa-file-certificate",
+      permissions: "View_Employee_Education",
+      show: false
+    },
+    {
+      name: 'language.employee.workHistory',
+      route: "/employee/profile/work-history",
+      class: "fa-solid fa-briefcase",
+      permissions: "View_Employee_Work_History",
+      show: false
+    },
+    {
+      name: 'language.generic.changePass',
+      route: "/employee/profile/change-password",
+      class: "fa-solid fa-key",
+      permissions: "View_Employee_Change_Password",
+      show: false
+    },
+  ];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
+    private _localStorage: LocalStorageManagerService,
     private toaster: ToastrService,
 
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-
+    this.initializePermissions()
 
 
     this.router.events.subscribe(() => {
@@ -152,7 +165,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       employeeImage: [''],
       firstName: ['',],
       lastName: ['',],
-      email: ['' ],
+      email: [''],
       password: ['',],
       country: ['',],
       city: ['',],
@@ -167,7 +180,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private patchFormValues(): void {
-    if(this.selectedValue.imagePath){
+    if (this.selectedValue.imagePath) {
 
       this.defaultImagePath = this.selectedValue.imagePath
     }
@@ -246,11 +259,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     // Create a FormData instance
     const formData = new FormData();
 
-  formData.append('image', this.selectedFile);
+    formData.append('image', this.selectedFile);
 
 
 
-    this.apiCalling.patchData('Employee', `uploadEmployeeImage`, formData, true,this.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    this.apiCalling.patchData('Employee', `uploadEmployeeImage`, formData, true, this.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
@@ -266,6 +279,33 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
   }
 
+
+
+  private initializePermissions(): void {
+    const employeeDetails = this._localStorage.getEmployeeDetail();
+    if (!employeeDetails || employeeDetails.length === 0) {
+      return;
+    }
+
+    const permissions = employeeDetails[0]?.rolePermission?.systemModulePermissions?.systemModules || [];
+
+    [this.tabList].forEach(itemList => {
+      itemList.forEach(item => {
+        const requiredPermissions = item.permissions?.split(',') || [];
+        const hasPermission = requiredPermissions.some(routePermission =>
+          permissions.some(module =>
+            module.modulePermissions.some(permission => permission.title === routePermission && permission.isAssigned)
+          )
+        );
+        item.show = hasPermission || requiredPermissions.length === 0;
+      });
+
+      const hasVisibleItems = itemList.some(item => item.show);
+      if (!hasVisibleItems) {
+        itemList.length = 0;
+      }
+    });
+  }
 
 
 }

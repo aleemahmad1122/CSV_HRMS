@@ -29,18 +29,63 @@ export class AddEditComponent implements OnInit, OnDestroy {
   selectedValue: any;
   id: string = "";
 
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.route.queryParams.subscribe(params => {
       this.id = params['id']
     });
     this.addEditForm = this.createForm();
+
+    this.loadPermissions();
+  }
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+      if (Array.isArray(permissionsData)) {
+
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Department_Team" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Department_Team" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
+
+  getDepartmentName(value: string): string {
+    const val = this.departmentList.find((_) => _.departmentId === value);
+    return val ? val.name : '';
+  }
+
+  getDsignationName(value: string): string {
+    const val = this.designationList.find((_) => _.designationId === value);
+    return val ? val.designationTitle : '';
+  }
+
+  getTeamName(value: string): string {
+    const val = this.teamList.find((_) => _.teamId === value);
+    return val ? val.name : '';
+  }
+
+  getReportsToName(value: string): string {
+    const val = this.reportList.find((_) => _.employeeId === value);
+    return val ? val.fullName : '';
   }
 
   ngOnInit(): void {

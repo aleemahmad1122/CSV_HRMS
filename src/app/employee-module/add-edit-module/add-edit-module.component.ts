@@ -55,18 +55,25 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
 
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
-
+    private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
 
 
+    this.loadPermissions();
     this.router.events.subscribe(() => {
       this.activRoute = this.router.url;
     });
@@ -91,6 +98,23 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         },
       });
   }
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+      console.log(permissionsData);
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === 'Create_Employee' && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
+
+
 
   ngOnInit(): void {
     this.getRoles()
@@ -260,7 +284,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }

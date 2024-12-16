@@ -28,24 +28,47 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
   selectedValue: any;
   id: string = "";
 
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+
+    this.loadPermissions();
     this.route.queryParams.subscribe(params => {
       this.id = params['id']
     });
     this.addEditForm = this.createForm();
   }
 
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === 'Edit_Employee_Shift' && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === 'Create_Employee_Shift' && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const action = params.get('action');
-      console.log("====",action);
 
       const id = this.route.snapshot.queryParams['id'];
 
@@ -78,6 +101,11 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
         next: (res: IShiftRes) => this.shiftList = res.data.shifts,
         error: () => this.toaster.error('Failed to load departments', 'Error'),
       });
+  }
+
+  getShiftName(shiftId: string): string {
+    const shift = this.shiftList.find((shift) => shift.shiftId === shiftId);
+    return shift ? shift.name : '';
   }
 
   private loadEmployeeShift(id: string | null): void {

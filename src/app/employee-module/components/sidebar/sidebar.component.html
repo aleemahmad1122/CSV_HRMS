@@ -7,9 +7,10 @@
 
 
           <div class="mr-2" style="width: 120px;">
-            <div class="image-input image-input-outline" style="background-size: cover; background-position: center;height:120px;"
-              id="kt_image_5" [style.background-image]="'url(' + imagePreview + ')'">
-              <div class="image-input-wrapper"  ></div>
+            <div class="image-input image-input-outline"
+              style="background-size: cover; background-position: center;height:120px;" id="kt_image_5"
+              [style.background-image]="'url(' + imagePreview + ')'">
+              <div class="image-input-wrapper"></div>
 
               <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
                 data-action="change" data-toggle="tooltip" title="Change avatar">
@@ -26,8 +27,8 @@
                 <i class="fa-duotone fa-solid fa-check"></i>
               </span>
               <span *ngIf="imagePreview !== defaultImagePath"
-                class="btn btn-xs btn-icon btn-circle btn-danger btn-shadow" data-action="remove"
-                data-toggle="tooltip" title="Remove avatar" (click)="removeImage()">
+                class="btn btn-xs btn-icon btn-circle btn-danger btn-shadow" data-action="remove" data-toggle="tooltip"
+                title="Remove avatar" (click)="removeImage()">
                 <i class="fa-regular fa-xmark"></i>
               </span>
             </div>
@@ -72,8 +73,8 @@
         @if(this.isEditMode){
         <div class="navi navi-bold navi-hover navi-active navi-link-rounded">
           @for(item of tabList; track item){
-          <div class="navi-item mb-2">
-            <a class="navi-link py-4" [routerLinkActive]="'active'" [routerLink]="item.path"
+          @if(item.show){<div class="navi-item mb-2">
+            <a class="navi-link py-4" [routerLinkActive]="'active'" [routerLink]="item.route"
               [queryParams]="{id:this.isEditMode}">
               <span class="  d-flex align-items-center justify-content-center"
                 style="width: 30px;height: 30px; border-radius: 50%;background: #0000001e;">
@@ -82,7 +83,7 @@
               <span class="navi-text font-size-lg mx-3"> {{ item.name| translate }}</span>
 
             </a>
-          </div>
+          </div>}
           }
         </div>
         }

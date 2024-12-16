@@ -5,7 +5,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.firstName" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="firstName" [readOnly]="isView"
+      <input type="text" class="form-control" formControlName="firstName" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.firstName' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -24,7 +24,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.lastName" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="lastName" [readOnly]="isView"
+      <input type="text" class="form-control" formControlName="lastName" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.lastName' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -43,7 +43,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.email" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="email" class="form-control" formControlName="email" [readOnly]="isView"
+      <input type="email" class="form-control" formControlName="email" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.email' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -62,7 +62,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.country" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="country" [readOnly]="isView"
+      <input type="text" class="form-control" formControlName="country" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.country' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -81,7 +81,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.city" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="city" [readOnly]="isView"
+      <input type="text" class="form-control" formControlName="city" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.city' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -100,7 +100,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.address" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="address" [readOnly]="isView"
+      <input type="text" class="form-control" formControlName="address" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.address' | translate" [ngClass]="{
             'is-invalid':
               addEditForm.get('address')?.invalid &&
@@ -117,7 +117,7 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.phoneNumber" | translate }}
         <span class="text-danger">*</span></label>
-      <input type="number" class="form-control" formControlName="phoneNumber" [readOnly]="isView"
+      <input type="number" class="form-control" formControlName="phoneNumber" [readOnly]="isView || !this.isEdit"
         [placeholder]="'language.placeholders.phoneNumber' | translate" [ngClass]="{
             'is-invalid':
               !this.isView &&
@@ -238,7 +238,7 @@
 
   </div>
 
-  @if(!this.isView){
+  @if(isEdit){
   <div class="row mt-3 py-5">
     <div class="col-12 text-right">
       <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
