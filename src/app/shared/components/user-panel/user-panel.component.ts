@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-user-panel',
   standalone: true,
-  imports: [RouterModule, RouterLink,TranslateModule],
+  imports: [RouterModule, RouterLink, TranslateModule],
   templateUrl: './user-panel.component.html',
   styleUrl: './user-panel.component.css'
 })
