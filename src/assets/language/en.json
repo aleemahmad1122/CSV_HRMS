@@ -164,6 +164,7 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "invalidPhoneNumber":"Invalid phone number",
       "backgroundColorRequired":"Background Color is Required",
       "textColorRequired":"Text Color is Required",
       "rolePriorityRequired":"Role Priority is Required",
@@ -232,6 +233,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "accountsettingMore":"Account settings and more",
+      "myProfile":"My Profile",
       "badgebackgroundColor":"Badge Background Color",
       "badgeTextColor":"Badge Text Color",
       "rolePermissions":"Role Permissions",

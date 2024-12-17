@@ -67,7 +67,7 @@
     </div>
     <!--end::Dropdown Menu-->
   </div>
-  <button routerLink="/employee/profile/work-history/add" [queryParams]="{id:this.id}"
+  @if(isCreate){<button routerLink="/employee/profile/work-history/add" [queryParams]="{id:this.id}"
   class="btn btn-primary font-weight-bolder">
   <span class="svg-icon svg-icon-md">
     <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
@@ -82,7 +82,7 @@
       </g>
     </svg>
 
-  </span> {{'language.generic.addWorkHistory' | translate}}</button>
+  </span> {{'language.generic.addWorkHistory' | translate}}</button>}
 </div>
 
 
@@ -104,8 +104,8 @@
           </th>
 
 
-          <th       ><span
-              > {{'language.generic.actions' | translate}}</span></th>
+          @if(isEdit || isDelete){<th       ><span
+              > {{'language.generic.actions' | translate}}</span></th>}
         </tr>
       </thead>
       <tbody class="datatable-body">
@@ -144,7 +144,7 @@
 
 
 
-              <a [routerLink]="['/employee/profile/work-history/edit']"
+              @if(isEdit){<a [routerLink]="['/employee/profile/work-history/edit']"
                 [queryParams]="{editId: data.employeeWorkHistoryId,id:this.id}"
                 class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2" title="Edit details">
                 <span class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@
                         d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
                         fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
                     </g>
-                  </svg> </span> </a>
+                  </svg> </span> </a>}
 
 
 
@@ -190,7 +190,7 @@
                 </div>
               </div>
 
-              <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+              @if(isDelete){<button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                 class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon" title="Delete"> <span
                   class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -205,7 +205,7 @@
                         fill="#000000" opacity="0.3"></path>
                     </g>
                   </svg></span>
-              </button>
+              </button>}
             </span></td>
         </tr>
 

@@ -71,30 +71,54 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">{{'language.form.phoneNumber' | translate}} <span class="text-danger">*</span></label>
+
+      <div class="col-md-6 mb-3 d-flex flex-column">
+        <label class="form-label">
+          {{ 'language.form.phoneNumber' | translate }}
+          <span class="text-danger">*</span>
+        </label>
 
         <ngx-intl-tel-input
-            [cssClass]="'form-control'"
-            [preferredCountries]="['us', 'gb', 'pk']"
-            [enableAutoCountrySelect]="true"
-            [enablePlaceholder]="true"
-            [searchCountryFlag]="true"
-            [separateDialCode]="true"
-            [searchCountryField]="searchCountryField"
-            [phoneValidation]="true"
-            [selectFirstCountry]="false"
-            [separateDialCode]="true"
-            inputId="phoneNumber"
-            [maxLength]="15"
-            name="phoneNumber"
-            [attr.cssClass]="{'is-invalid': (companyForm.get('phoneNumber')?.invalid && (companyForm.get('phoneNumber')?.touched || isSubmitted))}"
-            formControlName="phoneNumber">
-        </ngx-intl-tel-input>
-        <div *ngIf="companyForm.get('phoneNumber')?.hasError('invalidSymbol') || (companyForm.get('phoneNumber')?.touched || isSubmitted)" class="text-danger">
-            Phone number cannot contain symbols like +.
+        style="display: grid;"
+        [preferredCountries]="preferredCountries"
+        [enableAutoCountrySelect]="true"
+        [enablePlaceholder]="true"
+        [searchCountryFlag]="true"
+        [searchCountryField]="[
+          SearchCountryField.Iso2,
+          SearchCountryField.Name
+        ]"
+        [selectFirstCountry]="false"
+        [selectedCountryISO]="CountryISO.Pakistan"
+        [maxLength]="15"
+        [phoneValidation]="true"
+        [separateDialCode]="separateDialCode"
+        [numberFormat]="PhoneNumberFormat.International"
+        [cssClass]="(companyForm.get('phoneNumber')?.invalid &&
+        (companyForm.get('phoneNumber')?.touched || isSubmitted))
+        ? 'is-invalid form-control'
+        : (companyForm.get('phoneNumber')?.valid &&
+          companyForm.get('phoneNumber')?.touched)
+        ? ' form-control'
+        : 'form-control'"
+        name="phoneNumber"
+        formControlName="phoneNumber">
+      </ngx-intl-tel-input>
+
+        <!-- Validation Error Messages -->
+        <div class="text-danger mt-1 " style="font-size: 10px;" *ngIf="(companyForm.get('phoneNumber')?.invalid &&
+        (companyForm.get('phoneNumber')?.touched || isSubmitted))">
+          <div *ngIf="companyForm.get('phoneNumber')?.errors?.['required']">
+            {{ 'language.errors.phoneNumberRequired' | translate }}
+          </div>
+          <div *ngIf="companyForm.get('phoneNumber')?.errors?.['validatePhoneNumber']">
+            {{ 'language.errors.invalidPhoneNumber' | translate }}
+          </div>
+
         </div>
-    </div>
+      </div>
+
+
       <div class="col-md-6 mb-3">
         <label class="form-label">{{'language.form.faxNumber' | translate}} <span class="text-danger"></span></label>
         <input type="number" class="form-control" formControlName="faxNumber"
@@ -132,52 +156,6 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label class="form-label">{{ "language.form.country" | translate }}
-          <span class="text-danger">*</span></label>
-        <select class="form-control custom-select" formControlName="country" [ngClass]="{
-            'is-invalid':
-              companyForm.get('country')?.invalid &&
-              (companyForm.get('country')?.touched || isSubmitted)
-          }">
-          <option value="">
-            {{ "language.form.selectCountry" | translate }}
-          </option>
-          @for(country of countries; track country) {
-          <option [value]="country.id">{{ country.name }}</option>
-          }
-        </select>
-        <div *ngIf="
-            companyForm.get('country')?.invalid &&
-            (companyForm.get('country')?.touched || isSubmitted)
-          " class="invalid-feedback">
-          {{ "language.errors.countryRequired" | translate }}
-        </div>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label class="form-label">{{ "language.form.industry" | translate }}
-          <span class="text-danger">*</span></label>
-        <select class="form-control custom-select" formControlName="industry" [ngClass]="{
-            'is-invalid':
-              companyForm.get('industry')?.invalid &&
-              (companyForm.get('industry')?.touched || isSubmitted)
-          }">
-          <option value="">
-            {{ "language.form.selectIndustry" | translate }}
-          </option>
-          @for(industry of types; track industry) {
-          <option [value]="industry.typeId">{{ industry.typeName }}</option>
-          }
-        </select>
-        <div *ngIf="
-            companyForm.get('industry')?.invalid &&
-            (companyForm.get('industry')?.touched || isSubmitted)
-          " class="invalid-feedback">
-          {{ "language.errors.industryRequired" | translate }}
-        </div>
-      </div>
-    </div>
 
     <div class="row">
       <div class="col-md-6 mb-3">
@@ -236,6 +214,54 @@
             (companyForm.get('foundedDate')?.touched || isSubmitted)
           " class="invalid-feedback">
           {{ "language.errors.foundedDateRequired" | translate }}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <!-- <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.form.country" | translate }}
+          <span class="text-danger">*</span></label>
+        <select class="form-control custom-select" formControlName="country" [ngClass]="{
+            'is-invalid':
+              companyForm.get('country')?.invalid &&
+              (companyForm.get('country')?.touched || isSubmitted)
+          }">
+          <option value="">
+            {{ "language.form.selectCountry" | translate }}
+          </option>
+          @for(country of countries; track country) {
+          <option [value]="country.id">{{ country.name }}</option>
+          }
+        </select>
+        <div *ngIf="
+            companyForm.get('country')?.invalid &&
+            (companyForm.get('country')?.touched || isSubmitted)
+          " class="invalid-feedback">
+          {{ "language.errors.countryRequired" | translate }}
+        </div>
+      </div> -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.form.industry" | translate }}
+          <span class="text-danger">*</span></label>
+        <select class="form-control custom-select" formControlName="industry" [ngClass]="{
+            'is-invalid':
+              companyForm.get('industry')?.invalid &&
+              (companyForm.get('industry')?.touched || isSubmitted)
+          }">
+          <option value="">
+            {{ "language.form.selectIndustry" | translate }}
+          </option>
+          @for(industry of types; track industry) {
+          <option [value]="industry.typeId">{{ industry.typeName }}</option>
+          }
+        </select>
+        <div *ngIf="
+            companyForm.get('industry')?.invalid &&
+            (companyForm.get('industry')?.touched || isSubmitted)
+          " class="invalid-feedback">
+          {{ "language.errors.industryRequired" | translate }}
         </div>
       </div>
     </div>

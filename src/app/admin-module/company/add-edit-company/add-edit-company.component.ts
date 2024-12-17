@@ -1,7 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ICompany } from "../../../types/index";
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -47,7 +47,11 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     id: value
   }));
 
-
+	separateDialCode = false;
+	SearchCountryField = SearchCountryField;
+	CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+	preferredCountries: CountryISO[] = [CountryISO.Pakistan, CountryISO.UnitedStates, CountryISO.UnitedKingdom];
 
   types: Typess[] = [
     { typeId: "1", typeName: 'Head Office' },
@@ -87,17 +91,18 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.isEditMode = this._router.url.includes('edit');
 
     this.companyForm = this.fb.group({
       companyImage: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, this.phoneNumberValidator()]],
+      phoneNumber: new FormControl(undefined, [Validators.required]),
       faxNumber: [0],
       website: ['', Validators.required],
       registrationNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      country: ['', Validators.required],
+      country: [''],
       industry: ['', Validators.required],
       firstAddress: ['', Validators.required],
       secondAddress: [''],
@@ -106,8 +111,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
       companyType: [2]
     });
 
-    this.companyForm.get('phoneNumber')?.setValidators([this.noSymbolsValidator()]);
-    this.companyForm.get('phoneNumber')?.updateValueAndValidity();
+
   }
 
   ngOnDestroy(): void {
@@ -154,14 +158,20 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
   private formatDateForSubmission(dateString: string): string {
     const date = new Date(dateString);
-    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+    return date.toISOString();
   }
 
   submitForm() {
-    console.log(this.companyForm.value);
+    this.companyForm.controls['phoneNumber'].touched
+    const internationalNumber = this.companyForm.value.phoneNumber?.internationalNumber || '0';
+
+    const countryCode = this.companyForm.value.phoneNumber?.countryCode || 'PK';
 
     this.isSubmitted = true;
+
+
     if (!this.companyForm.valid) {
+
       return;
     }
 
@@ -172,11 +182,11 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     }
     formData.append('name', this.companyForm.get('name')?.value);
     formData.append('email', this.companyForm.get('email')?.value);
-    formData.append('phoneNumber', this.companyForm.get('phoneNumber')?.value);
+    formData.append('phoneNumber', internationalNumber);
     formData.append('faxNumber', this.companyForm.get('faxNumber')?.value || 0);
     formData.append('website', this.companyForm.get('website')?.value);
     formData.append('registrationNumber', this.companyForm.get('registrationNumber')?.value);
-    formData.append('countryId', this.companyForm.get('country')?.value);
+    formData.append('countryId',countryCode);
     formData.append('industryId', this.companyForm.get('industry')?.value);
     formData.append('foundedDate', this.formatDateForSubmission(this.companyForm.get('foundedDate')?.value));
     formData.append('firstAddress', this.companyForm.get('firstAddress')?.value);
@@ -234,33 +244,5 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
     this.imageSizeExceeded = false;
   }
 
-  private phoneNumberValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const country = this.companyForm?.get('phoneNumber')?.value;
-      const phoneNumber = control.value;
-console.warn(phoneNumber);
 
-      if (phoneNumber && typeof phoneNumber === 'object' && phoneNumber.number) {
-        switch (country) {
-          case 'pk':
-            const isValidPK = /^\d{10}$/.test(phoneNumber.number);
-            return isValidPK ? null : { invalidPhoneNumber: true };
-          case 'us':
-            const isValidUS = /^\d{10}$/.test(phoneNumber.number);
-            return isValidUS ? null : { invalidPhoneNumber: true };
-          default:
-            return null;
-        }
-      }
-
-      return null;
-    };
-  }
-
-  private noSymbolsValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-        const forbidden = /[^\d]/.test(control.value); // Check for non-digit characters
-        return forbidden ? { 'invalidSymbol': { value: control.value } } : null;
-    };
-  }
 }

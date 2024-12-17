@@ -608,7 +608,7 @@ export interface EmployeeLeaveSummary {
 export interface ResDasSummaryData {
   attendanceSummary: AttendanceSummary;
   teamSummary: TeamSummary[];
-  employeeLeaveSummary: EmployeeLeaveSummary;
+  employeeLeaveSummary: EmployeeLeaveSummary[];
 }
 export interface ResDasSummary {
   message: string;

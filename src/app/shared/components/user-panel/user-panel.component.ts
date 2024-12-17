@@ -4,11 +4,12 @@ import { UserAuthenticationService } from '../../Services/user-authentication.se
 import { DataShareService } from '../../Services/data-share.service';
 import { EmployeeDetail } from '../../../types/index';
 import { LocalStorageManagerService } from "../../Services/local-storage-manager.service"
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-panel',
   standalone: true,
-  imports: [RouterModule, RouterLink],
+  imports: [RouterModule, RouterLink,TranslateModule],
   templateUrl: './user-panel.component.html',
   styleUrl: './user-panel.component.css'
 })

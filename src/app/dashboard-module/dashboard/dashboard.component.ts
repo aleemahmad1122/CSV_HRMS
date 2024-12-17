@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   };
 
   attendanceSummary: AttendanceSummary;
-  employeeLeaveSummary: EmployeeLeaveSummary;
+  employeeLeaveSummary: EmployeeLeaveSummary[];
   teamSummary: TeamSummary[];
   empId: string;
 

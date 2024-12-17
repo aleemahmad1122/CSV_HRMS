@@ -54,15 +54,20 @@ export class AddEditComponent {
   id: string = '';
   patchData: any
 
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEditP: boolean = false;
+  isCreateP: boolean = false;
   constructor(
     private _router: Router,
     private _toaster: ToastrService,
     private _fb: FormBuilder,
     private _apiCalling: ApiCallingService,
+    private activatedRoute: ActivatedRoute,
     private _route: ActivatedRoute, private _sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-
+    this.loadPermissions();
     this._route.queryParams.subscribe(params => {
       this.id = params['id']
       this.selectedValues = {};
@@ -91,6 +96,25 @@ export class AddEditComponent {
 
     this.addRow();
   }
+
+
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+      console.log(permissionsData);
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEditP = this.permissions.some(p => p.permission === "Edit_Employee_Education" && p.isAssign);
+        this.isCreateP = this.permissions.some(p => p.permission === "Create_Employee_Education" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
+
 
   ngOnInit(): void {
     if (this.isEdit) {

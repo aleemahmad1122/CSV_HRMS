@@ -29,6 +29,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
 
+  remainingLeaves: {
+    leaveTypeId: string;
+    leaveTypeName: string;
+    remainingLeaves: number;
+  }[] = [];
+
   leaveType: ILeaveType[]
 
   id: string;
@@ -41,6 +47,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     private toaster: ToastrService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       this.id = params['id'];
       const editId = params['editId'];
@@ -65,6 +72,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
     });
     this.addEditForm = this.createForm();
+
+    this.getRemainingLeaves()
   }
 
   ngOnInit(): void {
@@ -90,6 +99,22 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
 
+  private getRemainingLeaves(): void {
+    this.apiCalling.getData('Leave', 'getRemainingLeaves', true, { employeeId: this.id })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.remainingLeaves = res.data
+          } else {
+            this.remainingLeaves = []
+          }
+        },
+        error: () => {
+          this.remainingLeaves = []
+        },
+      });
+  }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

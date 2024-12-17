@@ -40,8 +40,6 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-
-
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
       this.isEditMode = id;
@@ -103,19 +101,19 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     // Extract local time components
     const hours = date.getHours(); // Get the hour in local time
     const minutes = date.getMinutes(); // Get the minutes in local time
-    const seconds = date.getSeconds(); // Get the seconds in local time
 
-    // Format the time with leading zeros for consistency
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    // Format the time with leading zeros (HH:mm)
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
     return formattedTime;
   }
 
 
   datePickerConfig = {
-    hour12: false,  // Use 24-hour format
-    timePicker: true,  // Enable time picker
-    format: environment.dateTimePatterns.time,  // Set the time format for the picker
+    hour12: false,
+    timePicker: true,
+    showSeconds: false,
+    format:environment.dateTimePatterns.time,
   };
 
 
@@ -129,15 +127,13 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   private formatDateForSubmission(timeString: string): string {
     // Split the timeString into hours, minutes, and seconds
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    const [hours, minutes] = timeString.split(':').map(Number);
 
     if (
       isNaN(hours) ||
       isNaN(minutes) ||
-      isNaN(seconds) ||
       hours < 0 || hours > 23 ||
-      minutes < 0 || minutes > 59 ||
-      seconds < 0 || seconds > 59
+      minutes < 0 || minutes > 59
     ) {
       throw new Error("Invalid time format. Expected HH:mm:ss");
     }
@@ -149,8 +145,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       now.getMonth(),
       now.getDate(),
       hours,
-      minutes,
-      seconds
+      minutes
     );
 
     // Return the ISO string in local time format, without fractional seconds and 'Z'

@@ -67,7 +67,7 @@
       <!--end::Dropdown Menu-->
     </div>
 
-    <button
+    @if(isCreate){<button
     routerLink="/employee/profile/education-history/add"
     [queryParams]="{id:this.id}"
     class="btn btn-primary font-weight-bolder"
@@ -94,7 +94,7 @@
 
     </span>
     {{ "language.generic.addEducation" | translate }}
-  </button>
+  </button>}
   </div>
 
 
@@ -119,8 +119,8 @@
 
 
 
-        <th data-field="Actions" data-autohide-disabled="false"      ><span
-          > {{'language.generic.actions' | translate}}</span></th>
+        @if(this.isEdit || this.isDelete){<th data-field="Actions" data-autohide-disabled="false"      ><span
+          > {{'language.generic.actions' | translate}}</span></th>}
       </tr>
     </thead>
     <tbody class="datatable-body">
@@ -169,7 +169,7 @@
         <td
         >
           <span style="overflow: visible; position: relative; width: 130px">
-            <a
+            @if(isEdit){<a
               [routerLink]="['/employee/profile/education-history//edit']"
               [queryParams]="{editId: data.employeeEducationId,id:this.id}"
               class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon mr-2"
@@ -207,7 +207,7 @@
                   </g>
                 </svg>
               </span>
-            </a>
+            </a>}
 
             <!-- Modal -->
             <div
@@ -256,7 +256,7 @@
               </div>
             </div>
 
-            <button
+           @if(isDelete){ <button
               data-bs-toggle="modal"
 
               [attr.data-bs-target]="'#modal-' + $index"
@@ -293,7 +293,7 @@
                     ></path>
                   </g></svg
               ></span>
-            </button>
+            </button>}
           </span>
         </td>
       </tr>

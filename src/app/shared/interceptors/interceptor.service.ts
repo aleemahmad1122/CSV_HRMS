@@ -11,7 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class InterceptorService {
 
   constructor(
-    private _authService:UserAuthenticationService, 
+    private _authService:UserAuthenticationService,
     private _toaster: ToastrService,
     private _loader: NgxSpinnerService) { }
 
@@ -23,7 +23,7 @@ export class InterceptorService {
     } else {
       req = request;
     }
-    
+
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
@@ -43,9 +43,13 @@ export class InterceptorService {
           this._toaster.info('Please log in again to continue using the app', 'Your session has expired')
           this._authService.logout();
         }
+        if (error.status === 403) {
+          this._toaster.info('Your session has expired')
+          // this._authService.logout();
+        }
         this._loader.hide();
         return throwError(() => error);
       })
-    );   
+    );
   }
 }

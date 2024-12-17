@@ -21,7 +21,7 @@ const routes: Routes = [
         path: 'employee/:action',
         loadComponent: () => import(`./add-edit-module/add-edit-module.component`).then(c => c.AddEditModuleComponent),
         title: 'Add Employee',
-        data: { breadcrumb: '', permission: "Create_Employee,Edit_Employee" },
+        data: { breadcrumb: '', permission: "Create_Employee,Edit_Employee,View_Personal_Info" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
       },

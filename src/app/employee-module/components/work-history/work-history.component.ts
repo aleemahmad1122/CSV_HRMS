@@ -29,15 +29,26 @@ export class WorkHistoryComponent{
   totalPages = 0;
   id:string = "";
 
+
+
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+
+
   constructor(
     private apiService: ApiCallingService,
     private route: ActivatedRoute,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
 
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(_ => this.id = _['id']);
     this.getData();
+
+    this.loadPermissions();
   }
 
   private initializeSearch(): void {
@@ -45,6 +56,22 @@ export class WorkHistoryComponent{
       .subscribe((term) => this.getData(term));
   }
 
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee_Work_History" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Employee_Work_History" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Employee_Work_History" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
+  }
 
     // Handles status change from the dropdown
     onStatusChange(event: Event): void {
