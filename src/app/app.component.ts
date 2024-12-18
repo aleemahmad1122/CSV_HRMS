@@ -6,6 +6,8 @@ import { UserAuthenticationService } from './shared/Services/user-authentication
 
 import { DataShareService } from './shared/Services/data-share.service';
 
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -42,9 +44,12 @@ export class AppComponent {
         this.isLogin = true;
       } else {
         this.isLogin = false;
+        this._authService.logout()
       }
     });
 
   }
+
+
 
 }

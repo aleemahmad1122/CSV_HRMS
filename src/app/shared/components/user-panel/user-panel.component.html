@@ -1,7 +1,7 @@
 <div id="kt_quick_user" class="offcanvas offcanvas-right p-10">
 
   <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
-    <h3 class="font-weight-bold m-0">User Profile
+    <h3 class="font-weight-bold m-0">{{"language.generic.userProfile" | translate}}
     </h3>
     <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
       <i class="ki ki-close icon-xs text-muted"></i>
@@ -41,7 +41,7 @@
               <span class="navi-text text-muted text-hover-primary">{{this.user.email || "N/A"}}</span>
             </span>
           </a>
-          <button (click)="logOut()" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</button>
+          <button (click)="logOut()" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">{{"language.generic.signOut" | translate}}</button>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
 
     <div class="navi navi-spacer-x-0 p-0">
 
-      <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{id:this.user.employeeId}" class="navi-item">
+      <a (click)="this.closeSidebar()" [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{id:this.user.employeeId}" class="navi-item"  >
         <div class="navi-link">
           <div class="symbol symbol-40 bg-light mr-3">
             <div class="symbol-label">

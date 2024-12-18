@@ -1,8 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnDestroy, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, takeUntil, catchError, of } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { UserAuthenticationService } from '../../shared/Services/user-authentication.service';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageManagerService } from "../../shared/Services/local-storage-manager.service";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyDetail } from '../../types';
+
 declare var $: any;
 
 @Component({
@@ -18,9 +19,9 @@ declare var $: any;
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   loginForm!: FormGroup;
   companyList: CompanyDetail[] = [];
@@ -36,42 +37,44 @@ export class LoginComponent {
     private _localStorageService: LocalStorageManagerService,
     private _dataShare: DataShareService
   ) {
-
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[!@#$%^&*])/)]],
     });
   }
 
+  @HostListener('window:beforeunload', ['$event'])
+  handlePageRefresh(event: Event): void {
+    // Clear session and logout the user
+    this.logoutUser();
+  }
 
-  selectCompany(company: CompanyDetail): void {
-    // Update login status
+  selectCompany(company: CompanyDetail | null): void {
+    if (!company) {
+      this._toaster.error("No company selected. Please select a company to proceed.");
+      $('#selectCompanyModal').modal('hide');
+      return;
+    }
+
     this._dataShare.updateLoginStatus(true);
-
-    // Store selected company details in LocalStorage
     this._localStorageService.setCompanyDetail(company);
 
-    // Filter employees related to the selected company
     const relatedEmployees = this._localStorageService.getEmployeeDetail().filter(
       (employee: any) => employee.companyId === company.companyId
     );
 
-    console.log("=====================>", relatedEmployees);
-
-
-    // Store the filtered employees in LocalStorage
     this._localStorageService.setEmployeeDetail(relatedEmployees);
 
-    // Close the modal
-    $('#selectCompanyModal').modal('hide');
+    if (typeof $ !== 'undefined') {
+      $('#selectCompanyModal').modal('hide');
+    }
 
-    // Navigate to the dashboard
     this._router.navigateByUrl('dashboard');
   }
 
-
   submitLoginForm(): void {
     if (!this.loginForm.valid) {
+      this._toaster.error("Invalid form. Please fill in all required fields.");
       return;
     }
 
@@ -83,26 +86,34 @@ export class LoginComponent {
             this._toaster.error(response.message);
             return;
           }
-          this.companyList = response.data.companyDetail
-          if (response.data.companyDetail.length > 1) {
 
-            console.log(response);
-
+          this.companyList = response.data?.companyDetail || [];
+          if (this.companyList.length > 1) {
             $('#selectCompanyModal').modal('show');
-
+          } else if (this.companyList.length === 1) {
+            this.selectCompany(this.companyList[0]);
           } else {
-            this._localStorageService.setCompanyDetail(response.data.companyDetail[0]);
-            this._dataShare.updateLoginStatus(true);
+            this._toaster.error("No companies found for this user.");
           }
-          this._authService.setToken(response.data.employeeDetail[0].token);
-          this._localStorageService.setEmployeeDetail(response.data.employeeDetail);
 
+          this._authService.setToken(response.data?.employeeDetail[0]?.token);
+          this._localStorageService.setEmployeeDetail(response.data?.employeeDetail || []);
         },
         error: (error) => {
           console.error(error); // Log the error for debugging
-          this._toaster.error("Internal server error occurred while processing your request");
+          this._toaster.error("Internal server error occurred while processing your request.");
         }
       });
   }
 
+  logoutUser(): void {
+    this._dataShare.updateLoginStatus(false);
+    this._router.navigateByUrl('/login');
+    this._toaster.info("You have been logged out due to page refresh.");
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

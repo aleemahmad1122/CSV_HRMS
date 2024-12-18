@@ -233,6 +233,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "signOut":"Sign Out",
+      "userProfile":"User Profile",
       "employeeLeaveSummary":"Employee Leave Summary",
       "teamMembers":"Team Members",
       "absents":"Absents",

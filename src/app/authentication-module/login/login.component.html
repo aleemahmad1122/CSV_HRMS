@@ -4,7 +4,9 @@
       class="login-container order-2 order-lg-1 d-flex flex-center flex-row-fluid px-7 pt-lg-0 pb-lg-0 pt-4 pb-6 bg-white">
       <div class="login-content d-flex flex-column pt-lg-0 pt-12">
         <a href="#" class="login-logo pb-lg-4 pb-10 d-flex align-items-center justify-content-center gap-2">
-             <img   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"   src="https://cybersoftvantage.com/logo.png" class="max-h-70px" alt="" />
+          <img
+            onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+            src="https://cybersoftvantage.com/logo.png" class="max-h-70px" alt="" />
           <h1 class="fw-bold">Cybersoft Vantage</h1>
         </a>
         <div class="login-form">
@@ -46,13 +48,13 @@
                     one uppercase letter, one lowercase letter, and one number.</ng-container>
                 </div>
               </div>
-             {{' Csv@1122@@!!'}}
+              {{' Csv@1122@@!!'}}
             </div>
 
 
             <div class="pb-lg-0 pb-5">
               <button type="submit" id="kt_login_singin_form_submit_button"
-                class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 w-100" >Sign In</button>
+                class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 w-100">Sign In</button>
 
             </div>
           </form>
@@ -67,7 +69,8 @@
 
 
 
-<div class="modal fade" id="selectCompanyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" #selectCompanyModal>
+<div class="modal fade" id="selectCompanyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  #selectCompanyModal>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -75,17 +78,16 @@
         <button type="button" class="btn-close border-0" data-bs-dismiss="modal" aria-label="Close">x</button>
       </div>
       <div class="modal-body">
-        <div *ngFor="let company of companyList">
-          <div class="company-item btn btn-secondary w-100 mb-3"  (click)="selectCompany(company)" >
+        @for(company of companyList; track $index){<div>
+          <div class="company-item btn btn-secondary w-100 mb-3" (click)="selectCompany(company)">
             {{ company.companyName }}
           </div>
-        </div>
+        </div>}
       </div>
-      <div class="modal-footer">
+      <!-- <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="button" data-bs-dismiss="modal" class="btn btn-danger">Continue</button>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
-

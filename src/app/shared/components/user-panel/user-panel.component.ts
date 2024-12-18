@@ -6,6 +6,8 @@ import { EmployeeDetail } from '../../../types/index';
 import { LocalStorageManagerService } from "../../Services/local-storage-manager.service"
 import { TranslateModule } from '@ngx-translate/core';
 
+
+
 @Component({
   selector: 'app-user-panel',
   standalone: true,
@@ -31,4 +33,10 @@ export class UserPanelComponent {
     this._dataShare.updateLoginStatus(false);
   }
 
+  public closeSidebar(): void {
+    const closeButton = document.getElementById('kt_quick_user_close') as HTMLAnchorElement;
+    if (closeButton) {
+      closeButton.click();
+    }
+  }
 }
