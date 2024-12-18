@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
   employeeLeaveSummary: EmployeeLeaveSummary[];
   teamSummary: TeamSummary[];
   empId: string;
-
+  summaryItems:{title:string;count:any;icon:string;color:string;}[]
   startDate = '';
   endDate = new Date().toISOString();
 
@@ -48,6 +48,59 @@ export class DashboardComponent implements OnInit {
       startDate: this.startDate,
       endDate: this.endDate,
     });
+
+
+    this.summaryItems = [
+      {
+        title: 'language.generic.absents',
+        count: () => this.attendanceSummary.absents || 0,
+        icon: 'fa-user-times',
+        color: 'danger', // Bootstrap class for red color
+      },
+      {
+        title: 'language.generic.presents',
+        count: () => this.attendanceSummary.presents || 0,
+        icon: 'fa-user-check',
+        color: 'success', // Bootstrap class for green color
+      },
+      {
+        title: 'language.generic.leaves',
+        count: () => this.attendanceSummary.leaves || 0,
+        icon: 'fa-calendar-day',
+        color: 'info', // Bootstrap class for blue color
+      },
+      {
+        title: 'language.generic.late',
+        count: () => this.attendanceSummary.late || 0,
+        icon: 'fa-clock',
+        color: 'warning', // Bootstrap class for yellow color
+      },
+      {
+        title: 'language.generic.early',
+        count: () => this.attendanceSummary.early || 0,
+        icon: 'fa-hourglass-half',
+        color: 'primary', // Bootstrap class for light blue color
+      },
+      {
+        title: 'language.generic.halfDays',
+        count: () => this.attendanceSummary.halfDays || 0,
+        icon: 'fa-adjust',
+        color: 'secondary', // Bootstrap class for gray color
+      },
+      {
+        title: 'language.generic.offDays',
+        count: () => this.attendanceSummary.offDays || 0,
+        icon: 'fa-umbrella-beach',
+        color: 'dark', // Bootstrap class for dark gray color
+      },
+      {
+        title: 'language.generic.missingAttendance',
+        count: () => this.attendanceSummary.missingAttendance || 0,
+        icon: 'fa-question-circle',
+        color: 'muted', // Bootstrap class for muted color
+      },
+    ]
+
   }
 
   private fetchAttendanceData({startDate,endDate}:{
@@ -58,6 +111,7 @@ export class DashboardComponent implements OnInit {
       next: (response: ResDasSummary) => {
         if (response.success) {
           this.attendanceSummary = response.data.attendanceSummary;
+
           this.employeeLeaveSummary = response.data.employeeLeaveSummary;
           this.teamSummary = response.data.teamSummary;
         } else {

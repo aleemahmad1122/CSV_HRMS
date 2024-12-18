@@ -233,6 +233,17 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "employeeLeaveSummary":"Employee Leave Summary",
+      "teamMembers":"Team Members",
+      "absents":"Absents",
+      "presents":"Presents",
+      "eaves":"Leaves",
+      "late":"Late",
+      "early":"Early",
+      "leaves":"Leaves",
+      "halfDays":"Half Days",
+      "offDays":"Off Days",
+      "missingAttendance":"Missing Attendance",
       "accountsettingMore":"Account settings and more",
       "myProfile":"My Profile",
       "badgebackgroundColor":"Badge Background Color",
