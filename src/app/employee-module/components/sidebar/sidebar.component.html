@@ -1,5 +1,23 @@
+<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+  <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+
+    <div class="d-flex align-items-center flex-wrap mr-1">
+
+      <button (click)="sideToggle()" class="burger-icon burger-icon-left mr-4 d-inline-block d-lg-none"
+        id="kt_subheader_mobile_toggle">
+        <span></span>
+      </button>
+
+
+
+    </div>
+
+  </div>
+</div>
+
 <div class="d-flex flex-row px-5">
-  <div class="flex-row-auto offcanvas-mobile w-250px w-xxl-350px" id="kt_profile_aside">
+  <div class="flex-row-auto offcanvas-mobile w-250px w-xxl-350px offcanvas-mobile-off" id="kt_profile_aside">
+
     <div class="card card-custom card-stretch">
       <form [formGroup]="addEditForm" (ngSubmit)="submitForm()" class="card-body pt-4">
         @if(this.isEditMode){
@@ -74,7 +92,7 @@
         <div class="navi navi-bold navi-hover navi-active navi-link-rounded">
           @for(item of tabList; track item){
           @if(item.show){<div class="navi-item mb-2">
-            <a class="navi-link py-4" [routerLinkActive]="'active'" [routerLink]="item.route"
+            <a (click)="sideToggle()" class="navi-link py-4" [routerLinkActive]="'active'" [routerLink]="item.route"
               [queryParams]="{id:this.isEditMode}">
               <span class="  d-flex align-items-center justify-content-center"
                 style="width: 30px;height: 30px; border-radius: 50%;background: #0000001e;">
@@ -90,6 +108,7 @@
       </form>
     </div>
   </div>
+  @if(showOverLay){<div (click)="sideToggle()" class="offcanvas-mobile-overlay"></div>}
   <div class="flex-row-fluid ml-lg-8">
     <div class="card card-custom card-stretch p-5">
       <router-outlet />

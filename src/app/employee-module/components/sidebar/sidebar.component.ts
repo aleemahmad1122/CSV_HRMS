@@ -107,6 +107,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     },
   ];
 
+  showOverLay: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -280,6 +282,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
 
+  sideToggle(): void {
+    const sidebar = document.getElementById('kt_profile_aside') as HTMLElement;
+
+    if (sidebar) {
+      if (sidebar.classList.contains('offcanvas-mobile-on')) {
+        this.showOverLay = false;
+        sidebar.classList.remove('offcanvas-mobile-on');
+      } else {
+        this.showOverLay = true;
+        sidebar.classList.add('offcanvas-mobile-on');
+      }
+    }
+  }
 
   private initializePermissions(): void {
     const employeeDetails = this._localStorage.getEmployeeDetail();
