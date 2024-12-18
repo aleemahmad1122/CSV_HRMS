@@ -58,7 +58,7 @@ export class EducationComponent {
   private loadPermissions(): void {
     this.activatedRoute.data.subscribe(data => {
       const permissionsData = data['permission'];
-      console.log(permissionsData);
+
 
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
