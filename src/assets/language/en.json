@@ -46,6 +46,8 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "leaveFrom":"Leave From Date",
+      "leaveTo":"Leave To Date",
       "rolePriority":"Role Priority",
       "selectStatus": "Select Status",
       "joiningStatus": "Joining Status",
@@ -164,6 +166,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "leaveToRequired":"Leave To Date is Required",
+      "leaveFromRequired":"Leave From Date is Required",
       "invalidPhoneNumber":"Invalid phone number",
       "backgroundColorRequired":"Background Color is Required",
       "textColorRequired":"Text Color is Required",
@@ -233,6 +237,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "remaingLeaves":"Remaing Leaves",
       "approve":"Approve",
       "delete":"Delete",
       "actionBtns":"Action Buttons",

@@ -1,83 +1,123 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5" >
+  <div class="card card-custom w-100 p-5">
     <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.form.leaveDate" | translate }}
-                    <span class="text-danger">*</span></label>
-                <dp-date-picker class="form-control" formControlName="leaveDate" placeholder="00/00/00"
-                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'leaveDate')"
-                    [ngClass]="{
-                    'is-invalid':
-                      addEditForm.get('leaveDate')?.invalid &&
-                      (addEditForm.get('leaveDate')?.touched || isSubmitted)
-                  }"></dp-date-picker>
-                <div *ngIf="
-                    addEditForm.get('leaveDate')?.invalid &&
-                    (addEditForm.get('leaveDate')?.touched || isSubmitted)
-                  " class="invalid-feedback">
-                    {{ "language.errors.leaveDateRequired" | translate }}
-                </div>
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.form.type" | translate }}
-                    <span class="text-danger">*</span></label>
-                <select class="form-control custom-select" formControlName="leaveTypeId" [ngClass]="{
-                    'is-invalid':
-                      addEditForm.get('leaveTypeId')?.invalid &&
-                      (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
-                  }">
-                    <option value="">
-                        {{ "language.form.selectType" | translate }}
-                    </option>
-
-                    @for(item of leaveType; track $index){
-                    <option [value]="item.leaveTypeId">
-                        {{item.name}}
-                    </option>
-                    }
-
-                </select>
-                <div *ngIf="
-                    addEditForm.get('leaveTypeId')?.invalid &&
-                    (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
-                  " class="invalid-feedback">
-                    {{ "language.errors.typeRequired" | translate }}
-                </div>
-            </div>
+      <div class="row">
+        <!-- Leave From Field -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">
+            {{ "language.form.leaveFrom" | translate }}
+            <span class="text-danger">*</span>
+          </label>
+          <dp-date-picker
+            class="form-control"
+            formControlName="leaveFrom"
+            placeholder="00/00/00"
+            [config]="datePickerConfig"
+            theme="dp-material"
+            (change)="onDateTimeChange($event, 'leaveFrom')"
+            [ngClass]="{
+              'is-invalid': addEditForm.get('leaveFrom')?.invalid &&
+                            (addEditForm.get('leaveFrom')?.touched || isSubmitted)
+            }"
+          ></dp-date-picker>
+          <div
+            *ngIf="
+              addEditForm.get('leaveFrom')?.invalid &&
+              (addEditForm.get('leaveFrom')?.touched || isSubmitted)
+            "
+            class="invalid-feedback"
+          >
+            {{ "language.errors.leaveFromRequired" | translate }}
+          </div>
         </div>
 
-
-
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label class="form-label">{{'language.form.leaveReason' | translate}} <span
-                        class="text-danger"></span></label>
-                <textarea class="form-control" formControlName="leaveReason"
-                    [placeholder]="'language.placeholders.leaveReason' | translate" rows="3"
-                    [ngClass]="{'is-invalid': (addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted))}"></textarea>
-                <div *ngIf="addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.leaveReasonRequired' | translate}}
-                </div>
-            </div>
+        <!-- Leave To Field -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">
+            {{ "language.form.leaveTo" | translate }}
+            <span class="text-danger">*</span>
+          </label>
+          <dp-date-picker
+            class="form-control"
+            formControlName="leaveTo"
+            placeholder="00/00/00"
+            [config]="datePickerConfig"
+            theme="dp-material"
+            (change)="onDateTimeChange($event, 'leaveTo')"
+            [ngClass]="{
+              'is-invalid': addEditForm.get('leaveTo')?.invalid &&
+                            (addEditForm.get('leaveTo')?.touched || isSubmitted)
+            }"
+          ></dp-date-picker>
+          <div
+            *ngIf="
+              addEditForm.get('leaveTo')?.invalid &&
+              (addEditForm.get('leaveTo')?.touched || isSubmitted)
+            "
+            class="invalid-feedback"
+          >
+            {{ "language.errors.leaveToRequired" | translate }}
+          </div>
         </div>
+      </div>
 
-        <div class="row mt-3">
-            <div class="col-12 text-right">
-                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3"
-                    (click)="goBack()">
-                    {{ 'language.generic.back'| translate }}
-                </button>
-                <button type="submit" class="btn btn-primary font-weight-bold me-3">
-                    {{ 'language.generic.submit'| translate }}
-                </button>
-            </div>
+
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{ "language.form.type" | translate }}
+            <span class="text-danger">*</span></label>
+          <select class="form-control custom-select" formControlName="leaveTypeId" [ngClass]="{
+        'is-invalid':
+          addEditForm.get('leaveTypeId')?.invalid &&
+          (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
+      }">
+            <option value="">
+              {{ "language.form.selectType" | translate }}
+            </option>
+
+            @for(item of leaveType; track $index){
+            <option [value]="item.leaveTypeId">
+              {{item.leaveTypeName}} {{ "language.generic.remaingLeaves" | translate }} ({{item.remainingLeaves}})
+            </option>
+            }
+
+          </select>
+          <div *ngIf="
+        addEditForm.get('leaveTypeId')?.invalid &&
+        (addEditForm.get('leaveTypeId')?.touched || isSubmitted)
+      " class="invalid-feedback">
+            {{ "language.errors.typeRequired" | translate }}
+          </div>
         </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{'language.form.leaveReason' | translate}} <span
+              class="text-danger"></span></label>
+          <textarea class="form-control" formControlName="leaveReason"
+            [placeholder]="'language.placeholders.leaveReason' | translate" rows="3"
+            [ngClass]="{'is-invalid': (addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted))}"></textarea>
+          <div
+            *ngIf="addEditForm.get('leaveReason')?.invalid && (addEditForm.get('leaveReason')?.touched || isSubmitted)"
+            class="invalid-feedback">
+            {{'language.errors.leaveReasonRequired' | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12 text-right">
+          <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
+            {{ 'language.generic.back'| translate }}
+          </button>
+          <button type="submit" class="btn btn-primary font-weight-bold me-3">
+            {{ 'language.generic.submit'| translate }}
+          </button>
+        </div>
+      </div>
     </form>
-</div>
+  </div>
 </div>

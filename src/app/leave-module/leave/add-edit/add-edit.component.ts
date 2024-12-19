@@ -29,13 +29,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
 
-  remainingLeaves: {
+
+  leaveType:  {
     leaveTypeId: string;
     leaveTypeName: string;
     remainingLeaves: number;
-  }[] = [];
-
-  leaveType: ILeaveType[]
+  }[]
 
   id: string;
 
@@ -73,28 +72,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     });
     this.addEditForm = this.createForm();
 
-    this.getRemainingLeaves()
+
   }
 
   ngOnInit(): void {
-    this.getLeaveTypes()
-  }
-
-  private getLeaveTypes(searchTerm = ''): void {
-    this.apiCalling.getData('LeaveType', 'getLeaveTypes', true, { searchQuery: searchTerm })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: ILeaveTypeRes) => {
-          if (res.success) {
-            this.leaveType = res.data.leaveType;
-          } else {
-            this.leaveType = [];
-          }
-        },
-        error: () => {
-          this.leaveType = [];
-        },
-      });
+    this.getRemainingLeaves()
   }
 
 
@@ -105,13 +87,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.remainingLeaves = res.data
+            this.leaveType = res.data;
           } else {
-            this.remainingLeaves = []
+            this.leaveType = []
           }
         },
         error: () => {
-          this.remainingLeaves = []
+          this.leaveType = []
         },
       });
   }
@@ -124,7 +106,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       leaveTypeId: ['', [Validators.required]],
-      leaveDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      leaveFrom: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      leaveTo: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       leaveReason: [''],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
@@ -135,7 +118,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
       this.addEditForm.patchValue({
         leaveTypeId: this.selectedValue.leaveTypeId,
-        leaveDate: this.convertToDatetimeLocalFormat(this.selectedValue.leaveDate),
+        leaveFrom: this.convertToDatetimeLocalFormat(this.selectedValue.leaveFrom),
+        leaveTo: this.convertToDatetimeLocalFormat(this.selectedValue.leaveTo),
         leaveReason: this.selectedValue.leaveReason,
         offSet: this.selectedValue.offSet,
       });
@@ -158,26 +142,40 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
 
-
   submitForm(): void {
     this.isSubmitted = true;
+
     if (this.addEditForm.invalid) {
       return;
     }
 
     const formValue = this.addEditForm.value;
 
+    // Parse dates and calculate duration of leave
+    const leaveFrom = new Date(formValue.leaveFrom);
+    const leaveTo = new Date(formValue.leaveTo);
+    const leaveDuration = (leaveTo.getTime() - leaveFrom.getTime()) / (1000 * 60 * 60 * 24) + 1; // Including the start day
 
+    // Check if leaveFrom is earlier than leaveTo
+    if (leaveFrom > leaveTo) {
+      this.toaster.error('The "Leave From" date must be earlier than or equal to the "Leave To" date.', 'Invalid Date Range');
+      return;
+    }
 
+    // Check if the selected leave type has sufficient remaining leaves
+    const selectedLeaveType = this.leaveType.find(type => type.leaveTypeId === formValue.leaveTypeId);
+    if (selectedLeaveType && leaveDuration > selectedLeaveType.remainingLeaves) {
+      this.toaster.error(`You only have ${selectedLeaveType.remainingLeaves} remaining leaves for this leave type.`, 'Insufficient Leaves');
+      return;
+    }
 
     const values = {
       ...formValue,
-      leaveDate: this.formatDateForSubmission(formValue.leaveDate)
+      leaveFrom: this.formatDateForSubmission(formValue.leaveFrom),
+      leaveTo: this.formatDateForSubmission(formValue.leaveTo),
     };
 
-
-    const payload = { ...values }
-
+    const payload = { ...values };
 
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("Leave", `updateLeave/${this.isEditMode}`, payload, true, this.id)
@@ -195,9 +193,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('API error:', error);
         this.toaster.error("An error occurred while processing your request. Please try again later.");
-      }
+      },
     });
   }
+
 
   goBack(): void {
     this._router.navigate([window.history.back()]);

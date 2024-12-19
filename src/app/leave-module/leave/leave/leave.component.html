@@ -202,6 +202,7 @@
                     @if(this.isEdit && data.leaveStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/leave/leave/edit']"
+                      [queryParams]="{ id:this.empId,editId: data.leaveId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
