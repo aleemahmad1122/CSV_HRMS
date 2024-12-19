@@ -66,58 +66,59 @@ export class DashboardComponent implements OnInit {
         count: this.attendanceSummary.absents || 0,
         icon: 'fa-user-times',
         color: 'danger',
-        percentage: (this.attendanceSummary.absents / total) * 100,
+        percentage: ((this.attendanceSummary.absents / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.presents',
         count: this.attendanceSummary.presents || 0,
         icon: 'fa-user-check',
         color: 'success',
-        percentage: (this.attendanceSummary.presents / total) * 100,
+        percentage: ((this.attendanceSummary.presents / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.leaves',
         count: this.attendanceSummary.leaves || 0,
         icon: 'fa-calendar-day',
         color: 'info',
-        percentage: (this.attendanceSummary.leaves / total) * 100,
+        percentage: ((this.attendanceSummary.leaves / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.late',
         count: this.attendanceSummary.late || 0,
         icon: 'fa-clock',
         color: 'warning',
-        percentage: (this.attendanceSummary.late / total) * 100,
+        percentage: ((this.attendanceSummary.late / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.early',
         count: this.attendanceSummary.early || 0,
         icon: 'fa-hourglass-half',
         color: 'primary',
-        percentage: (this.attendanceSummary.early / total) * 100,
+        percentage: ((this.attendanceSummary.early / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.halfDays',
         count: this.attendanceSummary.halfDays || 0,
         icon: 'fa-adjust',
         color: 'secondary',
-        percentage: (this.attendanceSummary.halfDays / total) * 100,
+        percentage: ((this.attendanceSummary.halfDays / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.offDays',
         count: this.attendanceSummary.offDays || 0,
         icon: 'fa-umbrella-beach',
         color: 'dark',
-        percentage: (this.attendanceSummary.offDays / total) * 100,
+        percentage: ((this.attendanceSummary.offDays / total) * 100).toFixed(2),
       },
       {
         title: 'language.generic.missingAttendance',
         count: this.attendanceSummary.missingAttendance || 0,
         icon: 'fa-question-circle',
         color: 'muted',
-        percentage: (this.attendanceSummary.missingAttendance / total) * 100,
-      }
+        percentage: ((this.attendanceSummary.missingAttendance / total) * 100).toFixed(2),
+      },
     ];
+
   }
 
   private fetchAttendanceData({ startDate, endDate }: { startDate: string; endDate: string }): void {
@@ -201,9 +202,52 @@ export class DashboardComponent implements OnInit {
   }
 
 
-
   applyDateFilter(): void {
+    if (this.startDate && this.endDate) {
+      const params = {
+        employeeId: this.empId,
+        startDate: this.startDate,
+        endDate: this.endDate,
+      };
 
+      this.api
+        .getData('Dashboard', 'getDashboardSummary', true, params)
+        .subscribe({
+          next: (response: ResDasSummary) => {
+            if (response.success) {
+              this.attendanceSummary = response.data.attendanceSummary || {} as AttendanceSummary;
+              this.employeeLeaveSummary = response.data.employeeLeaveSummary || [];
+              this.teamSummary = response.data.teamSummary || [];
+
+              // Update total attendance and summary items
+              this.totalAttendance = (
+                this.attendanceSummary.absents +
+                this.attendanceSummary.presents +
+                this.attendanceSummary.leaves +
+                this.attendanceSummary.late +
+                this.attendanceSummary.early +
+                this.attendanceSummary.halfDays +
+                this.attendanceSummary.offDays +
+                this.attendanceSummary.missingAttendance
+              );
+              this.updateSummaryItems();
+            } else {
+              this._toaster.error(response?.message || 'An error occurred');
+              this.teamSummary = [];
+            }
+          },
+          error: (error) => {
+            this._toaster.error(
+              'An error occurred while processing your request. Please try again later.',
+              'Error'
+            );
+            this.teamSummary = [];
+          },
+        });
+    } else {
+      this._toaster.warning('Please select both start and end dates.', 'Invalid Dates');
+    }
   }
+
 
 }

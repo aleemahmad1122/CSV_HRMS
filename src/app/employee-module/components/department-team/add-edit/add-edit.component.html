@@ -100,7 +100,7 @@
         }" [disabled]="isViewMode">
         <option value="">{{ "language.form.selectReportTo" | translate }}</option>
         <option *ngFor="let report of reportList" [value]="report.employeeId">
-          {{ report.fullName }}
+          {{ report.employeeName }}
         </option>
       </select>}
       <div *ngIf="!isEdit">

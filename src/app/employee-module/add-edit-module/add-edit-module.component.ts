@@ -38,7 +38,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   rolesList: {
     roleId: string;
     name: string;
-    isActive: boolean;
   }[
 
   ] = []
@@ -117,7 +116,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.getRoles()
+
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
       this.isEditMode = id;
@@ -125,6 +124,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       this.isView = view === 'true';
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+
         this.apiCalling
           .getData('Employee', `getEmployeeById/${id}`, true)
           .pipe(takeUntil(this.ngUnsubscribe))
@@ -132,6 +132,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
             next: (response) => {
               if (response?.success) {
                 this.selectedValue = response?.data;
+                this.rolesList = response.data.rolesList;
                 this.patchFormValues();
               } else {
                 this.selectedValue = [];
@@ -141,6 +142,8 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             },
           });
+      }else{
+        this.getRoles()
       }
     });
   }

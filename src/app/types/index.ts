@@ -25,7 +25,7 @@ interface ICommonRes {
 export interface IReportTo {
   employeeId: string;
   companyId: string;
-  fullName: string;
+  employeeName: string;
 }
 
 

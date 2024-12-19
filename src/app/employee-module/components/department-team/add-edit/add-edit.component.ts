@@ -85,7 +85,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   getReportsToName(value: string): string {
     const val = this.reportList.find((_) => _.employeeId === value);
-    return val ? val.fullName : '';
+    return val ? val.employeeName : '';
   }
 
   ngOnInit(): void {
@@ -190,7 +190,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   getSeniorEmployees(): void {
-    this.apiCalling.getData('Employee', 'getSeniorEmployees', true)
+    this.apiCalling.getData('EmployeeDesignation', 'getReportsTo', true,{employeeId:this.id})
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: any) => this.reportList = res.data,
