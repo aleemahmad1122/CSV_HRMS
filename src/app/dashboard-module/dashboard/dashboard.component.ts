@@ -9,11 +9,10 @@ import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,TranslateModule,FormsModule,DpDatePickerModule,ReactiveFormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, DpDatePickerModule, ReactiveFormsModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -23,13 +22,14 @@ export class DashboardComponent implements OnInit {
     format: environment.dateTimePatterns.date,
   };
 
-  attendanceSummary: AttendanceSummary;
-  employeeLeaveSummary: EmployeeLeaveSummary[];
-  teamSummary: TeamSummary[];
+  attendanceSummary: AttendanceSummary = {} as AttendanceSummary; // Avoid null value
+  employeeLeaveSummary: EmployeeLeaveSummary[] = [];
+  teamSummary: TeamSummary[] = [];
   empId: string;
-  summaryItems:{title:string;count:any;icon:string;color:string;}[]
+  summaryItems: { title: string; count: any; icon: string; color: string; percentage: string | number; }[] = [];
   startDate = '';
   endDate = new Date().toISOString();
+  totalAttendance: number = 0; // Initialize totalAttendance
 
   constructor(
     private api: ApiCallingService,
@@ -37,10 +37,10 @@ export class DashboardComponent implements OnInit {
     private _toaster: ToastrService,
   ) {
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
-        // Set default dates for Month to Date (MTD)
-        const today = new Date();
-        this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-        this.endDate = today.toISOString().split('T')[0];
+    // Set default dates for Month to Date (MTD)
+    const today = new Date();
+    this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+    this.endDate = today.toISOString().split('T')[0];
   }
 
   ngOnInit(): void {
@@ -48,72 +48,98 @@ export class DashboardComponent implements OnInit {
       startDate: this.startDate,
       endDate: this.endDate,
     });
+  }
 
+  ngOnChanges(): void {
+    if (this.attendanceSummary) {
+      this.updateSummaryItems();
+    }
+  }
+
+  private updateSummaryItems(): void {
+    // Ensure attendance data is available before calculating percentages
+    const total = this.totalAttendance || 1; // Avoid division by zero
 
     this.summaryItems = [
       {
         title: 'language.generic.absents',
-        count: () => this.attendanceSummary.absents || 0,
+        count: this.attendanceSummary.absents || 0,
         icon: 'fa-user-times',
-        color: 'danger', // Bootstrap class for red color
+        color: 'danger',
+        percentage: (this.attendanceSummary.absents / total) * 100,
       },
       {
         title: 'language.generic.presents',
-        count: () => this.attendanceSummary.presents || 0,
+        count: this.attendanceSummary.presents || 0,
         icon: 'fa-user-check',
-        color: 'success', // Bootstrap class for green color
+        color: 'success',
+        percentage: (this.attendanceSummary.presents / total) * 100,
       },
       {
         title: 'language.generic.leaves',
-        count: () => this.attendanceSummary.leaves || 0,
+        count: this.attendanceSummary.leaves || 0,
         icon: 'fa-calendar-day',
-        color: 'info', // Bootstrap class for blue color
+        color: 'info',
+        percentage: (this.attendanceSummary.leaves / total) * 100,
       },
       {
         title: 'language.generic.late',
-        count: () => this.attendanceSummary.late || 0,
+        count: this.attendanceSummary.late || 0,
         icon: 'fa-clock',
-        color: 'warning', // Bootstrap class for yellow color
+        color: 'warning',
+        percentage: (this.attendanceSummary.late / total) * 100,
       },
       {
         title: 'language.generic.early',
-        count: () => this.attendanceSummary.early || 0,
+        count: this.attendanceSummary.early || 0,
         icon: 'fa-hourglass-half',
-        color: 'primary', // Bootstrap class for light blue color
+        color: 'primary',
+        percentage: (this.attendanceSummary.early / total) * 100,
       },
       {
         title: 'language.generic.halfDays',
-        count: () => this.attendanceSummary.halfDays || 0,
+        count: this.attendanceSummary.halfDays || 0,
         icon: 'fa-adjust',
-        color: 'secondary', // Bootstrap class for gray color
+        color: 'secondary',
+        percentage: (this.attendanceSummary.halfDays / total) * 100,
       },
       {
         title: 'language.generic.offDays',
-        count: () => this.attendanceSummary.offDays || 0,
+        count: this.attendanceSummary.offDays || 0,
         icon: 'fa-umbrella-beach',
-        color: 'dark', // Bootstrap class for dark gray color
+        color: 'dark',
+        percentage: (this.attendanceSummary.offDays / total) * 100,
       },
       {
         title: 'language.generic.missingAttendance',
-        count: () => this.attendanceSummary.missingAttendance || 0,
+        count: this.attendanceSummary.missingAttendance || 0,
         icon: 'fa-question-circle',
-        color: 'muted', // Bootstrap class for muted color
-      },
-    ]
-
+        color: 'muted',
+        percentage: (this.attendanceSummary.missingAttendance / total) * 100,
+      }
+    ];
   }
 
-  private fetchAttendanceData({startDate,endDate}:{
-    startDate:string;
-    endDate: string;
-  }) {
-    this.api.getData("Dashboard", `getDashboardSummary`, true, { employeeId: this.empId,startDate,endDate }).subscribe({
+  private fetchAttendanceData({ startDate, endDate }: { startDate: string; endDate: string }): void {
+    this.api.getData("Dashboard", `getDashboardSummary`, true, { employeeId: this.empId, startDate, endDate }).subscribe({
       next: (response: ResDasSummary) => {
         if (response.success) {
-          this.attendanceSummary = response.data.attendanceSummary;
+          this.attendanceSummary = response.data.attendanceSummary || {} as AttendanceSummary;
+          this.employeeLeaveSummary = response.data.employeeLeaveSummary || [];
+          this.teamSummary = response.data.teamSummary || [];
 
-          this.employeeLeaveSummary = response.data.employeeLeaveSummary;
-          this.teamSummary = response.data.teamSummary;
+          // Calculate total attendance
+          this.totalAttendance = (
+            this.attendanceSummary.absents +
+            this.attendanceSummary.presents +
+            this.attendanceSummary.leaves +
+            this.attendanceSummary.late +
+            this.attendanceSummary.early +
+            this.attendanceSummary.halfDays +
+            this.attendanceSummary.offDays +
+            this.attendanceSummary.missingAttendance
+          );
+          this.updateSummaryItems();
         } else {
           this.teamSummary = [];
           this._toaster.error(response?.message || 'An error occurred');
@@ -173,6 +199,8 @@ export class DashboardComponent implements OnInit {
     const selectedDate = (event.target as HTMLInputElement).value;
     this.endDate = selectedDate; // Update local state
   }
+
+
 
   applyDateFilter(): void {
 
