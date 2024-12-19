@@ -8,7 +8,7 @@
             <div class="col-md-12 mb-3">
                 <label class="form-label">{{ "language.generic.date" | translate }}
                     <span class="text-danger">*</span></label>
-                <dp-date-picker class="form-control" formControlName="date" placeholder="00:00"
+                <dp-date-picker class="form-control" formControlName="date" placeholder="00:00"     [config]="datePickerConfig"
                    theme="dp-material" (change)="onDateTimeChange($event,'date')"
                     [ngClass]="{
                 'is-invalid':

@@ -11,8 +11,15 @@
   <div class="offcanvas-content pr-5 mr-n5">
 
     <div class="d-flex align-items-center mt-5">
-      <div class="symbol symbol-100 mr-5">
-        <div class="symbol-label" [style.backgroundImage]="'url(' + user.imagePath + ')'"></div>
+      <div class="symbol symbol-100 mr-5"  >
+        <div class="symbol-label" style="position: relative; height: 120; width: 120px;">
+          <img
+          onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+            [src]="user.imagePath"
+            style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"
+          />
+        </div>
+
 
       </div>
       <div class="d-flex flex-column">

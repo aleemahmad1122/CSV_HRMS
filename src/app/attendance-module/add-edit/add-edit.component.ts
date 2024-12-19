@@ -132,35 +132,21 @@ export class AddEditComponent implements OnInit, OnDestroy {
     const date = new Date(dateString);
     return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
+
+
   private formatTimeForSubmission(timeString: string): string {
-    // Split the timeString into hours, minutes, and seconds
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
-
+    const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
     if (
-      isNaN(hours) ||
-      isNaN(minutes) ||
-      isNaN(seconds) ||
-      hours < 0 || hours > 23 ||
-      minutes < 0 || minutes > 59 ||
-      seconds < 0 || seconds > 59
+      isNaN(hours) || isNaN(minutes) || isNaN(seconds) ||
+      hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59
     ) {
-      throw new Error("Invalid time format. Expected HH:mm:ss");
+      throw new Error("Invalid time format. Expected HH:mm or HH:mm:ss");
     }
-
-    // Create a new Date object with today's date and the provided time
     const now = new Date();
-    const localDate = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      hours,
-      minutes,
-      seconds
-    );
-
-    // Return the ISO string in local time format, without fractional seconds and 'Z'
+    const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
     return localDate.toISOString();
   }
+
 
   submitForm(): void {
     this.isSubmitted = true;

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, map, catchError, throwError } from 'rxjs';
 import { UserAuthenticationService } from '../Services/user-authentication.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class InterceptorService {
   constructor(
     private _authService:UserAuthenticationService,
     private _toaster: ToastrService,
-    private _loader: NgxSpinnerService) { }
+    private _loader: NgxSpinnerService,
+    private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let req =  null;
@@ -40,11 +42,12 @@ export class InterceptorService {
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
         if (error.status === 401) {
-          this._toaster.info('Please log in again to continue using the app', 'Your session has expired')
+          this.router.navigate(['/dashboard']);
           this._authService.logout();
         }
         if (error.status === 403) {
-          this._toaster.info('Your session has expired')
+          this.router.navigate(['/dashboard']);
+          // this._toaster.info('Your session has expired')
           // this._authService.logout();
         }
         this._loader.hide();

@@ -233,6 +233,9 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "approve":"Approve",
+      "delete":"Delete",
+      "actionBtns":"Action Buttons",
       "signOut":"Sign Out",
       "userProfile":"User Profile",
       "employeeLeaveSummary":"Employee Leave Summary",
@@ -287,6 +290,7 @@
       "leave": "Leave",
       "employee": "Employee",
       "type": "Type",
+      "reject":"Reject",
       "applyFilter": "Apply Filter",
       "stateDate": "State Date",
       "applyAttendance": "Apply Attendance",
