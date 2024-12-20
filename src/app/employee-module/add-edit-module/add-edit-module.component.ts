@@ -174,7 +174,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      country: ['', Validators.required],
+      country: [''],
       city: ['', Validators.required],
       address: ['', Validators.required],
       phoneNumber: new FormControl(undefined, [Validators.required]),
@@ -264,7 +264,6 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
 
   submitForm(): void {
-
 
     this.addEditForm.controls['phoneNumber'].touched
     const internationalNumber = this.addEditForm.value.phoneNumber?.internationalNumber || '0';
