@@ -87,9 +87,9 @@ export class SetPasswordComponent {
       return ;
     }
 
-    this._apiCalling.postData("auth","setPassword",
+    this._apiCalling.postData("auth","addPassword",
     {
-      "password": this.resetPasswordForm.get('newPassword')?.value,
+      "newPassword": this.resetPasswordForm.get('newPassword')?.value,
       "token": this.token,
     }, true)
     .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
@@ -102,7 +102,7 @@ export class SetPasswordComponent {
         }
       },
       error: (error) => {
-       this._toaster.error("Internal server error occured while processing your request")
+        this._toaster.error("Internal server error occured while processing your request")
       }
     })
   }

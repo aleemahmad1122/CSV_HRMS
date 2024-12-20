@@ -27,10 +27,8 @@
           <div class="mr-2" style="width: 120px;">
             <div class="image-input image-input-outline" style="height: 120px; position: relative;" id="kt_image_5">
               <img
-              onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
-                [src]="imagePreview"
-                style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"
-              />
+                onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
+                [src]="imagePreview" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" />
 
               <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
                 data-action="change" data-toggle="tooltip" title="Change avatar">
@@ -64,6 +62,8 @@
               }
             </div>
           </div>
+
+
           <div>
             <a class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">
               {{addEditForm.get('firstName').value}} {{addEditForm.get('lastName').value}}
@@ -71,6 +71,7 @@
             <div class="text-muted">{{addEditForm.get('role').value || 'N/A'}}</div>
           </div>
         </div>
+        @if(!this.selectedValue?.isPasswordSet){<div class="btn btn-success" (click)="setPass()" >{{'language.generic.reqSetPass' | translate}}</div>}
         }
         <div class="py-9">
           <div class="d-flex align-items-center justify-content-between mb-2">

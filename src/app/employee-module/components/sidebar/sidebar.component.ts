@@ -323,4 +323,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
 
+  setPass(): void {
+    this.apiCalling.postData("auth", "setPasswordEmail",
+      {
+        "role": this.selectedValue?.role || "N/A",
+        "email": this.selectedValue?.email || "N/A",
+        "link": document.getElementsByTagName('base')[0].href || "N/A",
+        "employeeName": this.selectedValue?.firstName || "N/A"
+      }, true)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this.toaster.success(response?.message, 'Success!');
+          } else {
+            this.toaster.error(response?.message, 'Error!');
+          }
+        },
+        error: (error) => {
+          this.toaster.error("Internal server error occured while processing your request")
+        }
+      })
+  }
+
 }

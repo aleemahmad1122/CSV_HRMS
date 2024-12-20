@@ -237,6 +237,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "reqSetPass":"Request for set Password",
       "remaingLeaves":"Remaing Leaves",
       "approve":"Approve",
       "delete":"Delete",
