@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-        @if(!this.selectedValue?.isPasswordSet){
+        @if(!this.isPasswordSet){
         <div class="btn btn-success" (click)="setPass()">
           <i class="fa fa-envelope mr-2"></i
           >{{ "language.generic.reqSetPass" | translate }}

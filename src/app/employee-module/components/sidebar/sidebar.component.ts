@@ -49,8 +49,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ] = []
 
+  isPasswordSet = true
+
   isView: boolean = false;
   selectedValue: any;
+
   defaultImagePath =
     'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg';
   imagePreview: string = this.defaultImagePath;
@@ -108,6 +111,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ];
 
   showOverLay: boolean = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -182,6 +186,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private patchFormValues(): void {
+
+    this.isPasswordSet = this.selectedValue.isPasswordSet
     if (this.selectedValue.imagePath) {
 
       this.defaultImagePath = this.selectedValue.imagePath
