@@ -105,54 +105,63 @@
       </div>
 
 
-      @if(teamSummary.length > 0){<div class="col-lg-3 col-md-6 mb-4">
-        <div class="card bg-info text-white">
-          <div class="card-body">
-            <h5 class="card-title">{{ 'language.generic.teamMembers' | translate}}</h5>
-            <ul class="list-unstyled">
-              @for(team of teamSummary; track $index){
-              <li class="mb-2 d-flex align-items-center">
+<div class="d-flex align-items-center justify-content-center flex-wrap" style="gap:8px" >
+  @if(teamSummary.length > 0) {
+    <div class="LeaveSummary-card">
+      <div class="LeaveSummary-card-inner">
+        <div class="LeaveSummary-card-front">
+          <p>Team Members</p>
+        </div>
+        <div class="LeaveSummary-card-back">
+          <ul class="list-unstyled">
+            @for (team of teamSummary.slice(0, 3); track $index) {
+              <li class="mb-1 d-flex align-items-center">
                 <img
                   onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
-                  [src]="team.imagePath" alt="{{team.fullName}}" class="img-fluid rounded-circle mx-2"
-                  style="width: 50px; height: 50px;">
+                  [src]="team.imagePath"
+                  alt="{{team.fullName}}"
+                  class="img-fluid rounded-circle mx-2"
+                  style="width: 40px; height: 40px;"
+                />
                 <div>
-                  <b>{{team.fullName}}</b><br>
+                  <b>{{team.fullName}}</b><br />
                   <small>Attendance Status: {{team.attendanceStatus ? 'Present' : 'Absent'}}</small>
                 </div>
               </li>
-              }
-            </ul>
-          </div>
-        </div>
-      </div>}
-
-
-      @if(employeeLeaveSummary.length > 0){<div class="col-lg-3 col-md-6 mb-4">
-        <div class="card bg-success text-white">
-          <div class="card-body">
-            <h5 class="card-title">{{ 'language.generic.employeeLeaveSummary' | translate}}</h5>
-            <ul class="list-unstyled">
-              @for(item of employeeLeaveSummary; track $index){
-              <li>{{item.leaveTypeName}}: Total Leaves: {{item.totalLeaves}}</li>
-              <li>Leaves Taken: {{item.leavesTaken}}</li>
-              <li>Remaining Leaves: {{item.remainingLeaves}}</li>
-              }
-            </ul>
-          </div>
-        </div>
-      </div>}
-
-      <div class="team-card">
-        <div class="team-card-inner">
-          <div class="team-card-front">
-            <p>Front Side</p>
-          </div>
-          <div class="team-card-back">
-            <p>Back Side</p>
-          </div>
+            }
+            @if (teamSummary.length > 3) {
+              <li class="text-center">
+                <small>More (+{{teamSummary.length - 3}})</small>
+              </li>
+            }
+          </ul>
         </div>
       </div>
+    </div>
+  }
+
+
+
+  @if(employeeLeaveSummary.length > 0){
+
+  <div class="LeaveSummary-card">
+    <div class="LeaveSummary-card-inner">
+      <div class="LeaveSummary-card-front">
+        <p>Employee Leave Summary</p>
+      </div>
+      <div class="LeaveSummary-card-back">
+        <ul class="list-unstyled">
+          @for(item of employeeLeaveSummary; track $index){
+          <li>{{item.leaveTypeName}}: Total Leaves: {{item.totalLeaves}}</li>
+          <li>Leaves Taken: {{item.leavesTaken}}</li>
+          <li>Remaining Leaves: {{item.remainingLeaves}}</li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div> }
+</div>
+
 
 
     </div>
