@@ -25,6 +25,7 @@ export class LoginComponent implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   loginForm!: FormGroup;
   companyList: CompanyDetail[] = [];
+  showPassword: boolean = false;
   isShowPassword: boolean = false;
   @ViewChild('selectCompanyModal') selectCompanyModal!: ModalDirective;
 

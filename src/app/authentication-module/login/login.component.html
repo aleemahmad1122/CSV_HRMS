@@ -18,7 +18,7 @@
                   Account</a>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
 
 
               <div class="col-md-6 mb-3">
@@ -33,12 +33,14 @@
               </div>
 
 
-              <div class="col-md-6 mb-3">
+              <div class="col-md-6 mb-3 position-relative">
                 <label class="form-label">Password<span class="text-danger">*</span></label>
-                <input type="password" class="form-control" formControlName="password" placeholder="********"
+                <input  [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" placeholder="********"
                   [ngClass]="{'is-invalid': (loginForm.get('password')?.invalid && (loginForm.get('password')?.touched  ))}" />
+                  <i  (click)="showPassword = !showPassword" style="right: 42px; top: 58%; cursor: pointer;"
+                  class="fa-solid position-absolute" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
 
-                <div *ngIf="loginForm.get('password')?.touched" class="invalid-feedback">
+                <div *ngIf="loginForm.get('password')?.touched" class="invalid-feedback position-absolute"  style="bottom: -20px;">
                   <ng-container *ngIf="loginForm.get('password')?.errors?.['required']">Password is
                     required.</ng-container>
                   <ng-container *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6
