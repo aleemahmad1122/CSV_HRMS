@@ -108,9 +108,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   logoutUser(): void {
-    this._dataShare.updateLoginStatus(false);
-    this._router.navigateByUrl('/login');
-    this._toaster.info("You have been logged out due to page refresh.");
+    this._authService.logout()
   }
 
   ngOnDestroy(): void {

@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageManagerService } from './local-storage-manager.service';
 import { Router } from '@angular/router';
+import { ApiCallingService } from './api-calling.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthenticationService {
-  constructor(private _router:Router, private _localStorageManagerService: LocalStorageManagerService) {}
+  constructor(
+    private _router:Router,
+    private _localStorageManagerService: LocalStorageManagerService,
+    private _toaster: ToastrService,
+    private api : ApiCallingService
+    ) {}
 
   saveUser(data:any): void {
     this._localStorageManagerService.saveUserToStorage(data);
@@ -45,7 +52,7 @@ export class UserAuthenticationService {
   }
 
   getUser(): any {
-    return this._localStorageManagerService.getUserFromStorage();;
+    return this._localStorageManagerService.getUserFromStorage();
   }
 
   getUserId(): number {
@@ -53,7 +60,20 @@ export class UserAuthenticationService {
   }
 
   logout(): void {
-    this._localStorageManagerService.clearLocalStorage();
-    this._router.navigateByUrl('/');
+    this.api.postData("Auth", "logout",{},true,this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+    .subscribe({
+      next: (response) => {
+        if (response?.status === 200) {
+          this._toaster.success(response.message);
+          this._localStorageManagerService.clearLocalStorage();
+          this._router.navigateByUrl('/');
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this._toaster.error(error);
+      }
+    });
+
   }
 }
