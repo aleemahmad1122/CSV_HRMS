@@ -6,6 +6,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { AttType } from "../../../types/index";
+
+
 
 @Component({
   selector: 'app-add-edit',
@@ -15,6 +18,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './add-edit.component.css'
 })
 export class AddEditComponent implements OnInit, OnDestroy {
+
+  attType = AttType;
+
   private ngUnsubscribe = new Subject<void>();
   qualificationForm: FormGroup;
   isEditMode = false;
@@ -82,32 +88,18 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.isSubmitted = true;
-
-    // Check form validity
     if (this.qualificationForm.invalid) {
       return;
     }
 
-    // Prepare the request body
-    const body = this.qualificationForm.value;
-    const requestBody = { attachmentType: Number(body.attachment), ...body };
-
-    // Determine API call based on edit mode
+    const body = {
+      ...this.qualificationForm.value,
+      attachmentType: Number(this.qualificationForm.value.attachmentType)
+    };
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData(
-          "AttachmentType",
-          `updateAttachmentType/${this.isEditMode}`,
-          requestBody,
-          true
-        )
-      : this.apiCalling.postData(
-          "AttachmentType",
-          "addAttachmentType",
-          requestBody,
-          true
-        );
+      ? this.apiCalling.putData("AttachmentType", `updateAttachmentType/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("AttachmentType", "addAttachmentType", body, true);
 
-    // Execute API call and handle response
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
@@ -119,11 +111,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('API error:', error);
-        this.toaster.error(
-          "An error occurred while processing your request. Please try again later.",
-          'Error!'
-        );
-      },
+        this.toaster.error("An error occurred while processing your request. Please try again later.");
+      }
     });
   }
 

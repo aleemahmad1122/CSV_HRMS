@@ -659,3 +659,9 @@ export interface EmployeeDetail {
     }
   }
 }
+
+export enum AttType {
+  personal = 0,
+  education = 1,
+  workHistory = 2,
+}
