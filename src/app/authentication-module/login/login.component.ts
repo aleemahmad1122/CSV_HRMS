@@ -39,7 +39,7 @@ export class LoginComponent implements OnDestroy {
   ) {
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[!@#$%^&*])/)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
