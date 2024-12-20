@@ -82,15 +82,32 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   submitForm(): void {
     this.isSubmitted = true;
+
+    // Check form validity
     if (this.qualificationForm.invalid) {
       return;
     }
 
+    // Prepare the request body
     const body = this.qualificationForm.value;
-    const apiCall = this.isEditMode
-      ? this.apiCalling.putData("AttachmentType", `updateAttachmentType/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("AttachmentType", "addAttachmentType", body, true);
+    const requestBody = { attachmentType: Number(body.attachment), ...body };
 
+    // Determine API call based on edit mode
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData(
+          "AttachmentType",
+          `updateAttachmentType/${this.isEditMode}`,
+          requestBody,
+          true
+        )
+      : this.apiCalling.postData(
+          "AttachmentType",
+          "addAttachmentType",
+          requestBody,
+          true
+        );
+
+    // Execute API call and handle response
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
@@ -102,8 +119,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('API error:', error);
-        this.toaster.error("An error occurred while processing your request. Please try again later.");
-      }
+        this.toaster.error(
+          "An error occurred while processing your request. Please try again later.",
+          'Error!'
+        );
+      },
     });
   }
 
