@@ -60,25 +60,6 @@
     </div>
 
     <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.country" | translate }}
-        <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="country" [readOnly]="isView || !this.isEdit"
-        [placeholder]="'language.placeholders.country' | translate" [ngClass]="{
-            'is-invalid':
-              !this.isView &&
-              addEditForm.get('country')?.invalid &&
-              (addEditForm.get('country')?.touched || isSubmitted)
-          }" />
-      <div *ngIf="
-            !this.isView &&
-            addEditForm.get('country')?.invalid &&
-            (addEditForm.get('country')?.touched || isSubmitted)
-          " class="invalid-feedback">
-        {{ "language.errors.countryRequired" | translate }}
-      </div>
-    </div>
-
-    <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.city" | translate }}
         <span class="text-danger">*</span></label>
       <input type="text" class="form-control" formControlName="city" [readOnly]="isView || !this.isEdit"
@@ -97,39 +78,51 @@
       </div>
     </div>
 
-    <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.address" | translate }}
-        <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" formControlName="address" [readOnly]="isView || !this.isEdit"
-        [placeholder]="'language.placeholders.address' | translate" [ngClass]="{
-            'is-invalid':
-              addEditForm.get('address')?.invalid &&
-              (addEditForm.get('address')?.touched || isSubmitted)
-          }" />
-      <div *ngIf="
-            addEditForm.get('address')?.invalid &&
-            (addEditForm.get('address')?.touched || isSubmitted)
-          " class="invalid-feedback">
-        {{ "language.errors.addressRequired" | translate }}
-      </div>
-    </div>
 
-    <div class="col-md-6 mb-3">
-      <label class="form-label">{{ "language.form.phoneNumber" | translate }}
-        <span class="text-danger">*</span></label>
-      <input type="number" class="form-control" formControlName="phoneNumber" [readOnly]="isView || !this.isEdit"
-        [placeholder]="'language.placeholders.phoneNumber' | translate" [ngClass]="{
-            'is-invalid':
-              !this.isView &&
-              addEditForm.get('phoneNumber')?.invalid &&
-              (addEditForm.get('phoneNumber')?.touched || isSubmitted)
-          }" />
-      <div *ngIf="
-            !this.isView &&
-            addEditForm.get('phoneNumber')?.invalid &&
-            (addEditForm.get('phoneNumber')?.touched || isSubmitted)
-          " class="invalid-feedback">
-        {{ "language.errors.phoneNumberRequired" | translate }}
+
+    <div class="col-md-6 mb-3 d-flex flex-column">
+      <label class="form-label">
+        {{ 'language.form.phoneNumber' | translate }}
+        <span class="text-danger">*</span>
+      </label>
+
+      <ngx-intl-tel-input
+      style="display: grid;"
+      [preferredCountries]="preferredCountries"
+      [enableAutoCountrySelect]="true"
+      [enablePlaceholder]="true"
+      [searchCountryFlag]="true"
+      [searchCountryField]="[
+        SearchCountryField.Iso2,
+        SearchCountryField.Name
+      ]"
+      [selectFirstCountry]="false"
+      [selectedCountryISO]="CountryISO.Pakistan"
+      [maxLength]="15"
+      [phoneValidation]="true"
+      [separateDialCode]="separateDialCode"
+      [numberFormat]="PhoneNumberFormat.International"
+      [cssClass]="(addEditForm.get('phoneNumber')?.invalid &&
+      (addEditForm.get('phoneNumber')?.touched || isSubmitted))
+      ? 'is-invalid form-control'
+      : (addEditForm.get('phoneNumber')?.valid &&
+        addEditForm.get('phoneNumber')?.touched)
+      ? ' form-control'
+      : 'form-control'"
+      name="phoneNumber"
+      formControlName="phoneNumber">
+    </ngx-intl-tel-input>
+
+      <!-- Validation Error Messages -->
+      <div class="text-danger mt-1 " style="font-size: 10px;" *ngIf="(addEditForm.get('phoneNumber')?.invalid &&
+      (addEditForm.get('phoneNumber')?.touched || isSubmitted))">
+        <div *ngIf="addEditForm.get('phoneNumber')?.errors?.['required']">
+          {{ 'language.errors.phoneNumberRequired' | translate }}
+        </div>
+        <div *ngIf="addEditForm.get('phoneNumber')?.errors?.['validatePhoneNumber']">
+          {{ 'language.errors.invalidPhoneNumber' | translate }}
+        </div>
+
       </div>
     </div>
 
@@ -203,9 +196,9 @@
       addEditForm.get('joiningStatus')?.invalid &&
       (addEditForm.get('joiningStatus')?.touched || isSubmitted)
   }">
-          <option selected [value]="true">
-            Yes
-          </option>
+        <option selected [value]="true">
+          Yes
+        </option>
         <option [value]="false">
           No
         </option>
@@ -233,6 +226,28 @@
           (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
         " class="invalid-feedback">
         {{ "language.errors.dobRequired" | translate }}
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+    <div class="col-md-12 mb-3">
+      <label class="form-label">{{ "language.form.address" | translate }}
+        <span class="text-danger">*</span></label>
+      <textarea class="form-control" formControlName="address"
+        [placeholder]="'language.placeholders.address' | translate" rows="3" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('address')?.invalid &&
+            (addEditForm.get('address')?.touched || isSubmitted)
+        }"></textarea>
+      <div *ngIf="
+          addEditForm.get('address')?.invalid &&
+          (addEditForm.get('address')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.addressRequired" | translate }}
       </div>
     </div>
 

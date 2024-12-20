@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,6 +8,7 @@ import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
+import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
 
 @Component({
   selector: 'app-add-edit-module',
@@ -18,6 +19,7 @@ import { environment } from '../../../environments/environment.prod';
     TranslateModule,
     RouterModule,
     DpDatePickerModule,
+    NgxIntlTelInputModule
   ],
   templateUrl: './add-edit-module.component.html',
   styleUrls: ['./add-edit-module.component.css'],
@@ -28,6 +30,19 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
   };
+
+  searchCountryField: SearchCountryField[] = [SearchCountryField.Iso2];
+
+  countries: { id: string; name: string }[] = Object.entries(CountryISO).map(([key, value]) => ({
+    name: key,
+    id: value
+  }));
+
+	separateDialCode = false;
+	SearchCountryField = SearchCountryField;
+	CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+	preferredCountries: CountryISO[] = [CountryISO.Pakistan, CountryISO.UnitedStates, CountryISO.UnitedKingdom];
 
 
   private ngUnsubscribe = new Subject<void>();
@@ -162,7 +177,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       country: ['', Validators.required],
       city: ['', Validators.required],
       address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
+      phoneNumber: new FormControl(undefined, [Validators.required]),
       role: ['', Validators.required],
       joiningStatus: [true, Validators.required],
       dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
@@ -249,8 +264,13 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
 
   submitForm(): void {
+
+
+    this.addEditForm.controls['phoneNumber'].touched
+    const internationalNumber = this.addEditForm.value.phoneNumber?.internationalNumber || '0';
+
+    const countryCode = this.addEditForm.value.phoneNumber?.countryCode || 'PK';
     this.isSubmitted = true;
-    console.log(this.addEditForm.invalid);
 
     if (this.addEditForm.invalid) {
       return;
@@ -265,6 +285,12 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       if (key === 'dateOfBirth' || key === 'joiningDate') {
         // Append the formatted date for 'dob' and 'joiningDate'
         formData.append(key, this.formatDateForSubmission(value));
+      }
+      else if(key === 'phoneNumber'){
+        formData.append(key, internationalNumber);
+      }
+      else if(key === 'country'){
+        formData.append(key, countryCode);
       }
       // else if (key === 'employeeImage' && this.selectedFile) {
       //   // Append file if 'employeeImage' is the key and file is selected
