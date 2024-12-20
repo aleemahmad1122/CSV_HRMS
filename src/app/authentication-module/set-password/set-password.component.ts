@@ -46,7 +46,7 @@ export class SetPasswordComponent {
               }
             },
             error: (error) => {
-             this._toaster.error("Internal server error occured while processing your request")
+              this._toaster.error(`${error} Internal server error occured while processing your request`)
             }
           })
         }

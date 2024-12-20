@@ -330,7 +330,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         "email": this.selectedValue?.email || "N/A",
         "link": document.getElementsByTagName('base')[0].href || "N/A",
         "employeeName": this.selectedValue?.firstName || "N/A"
-      }, true)
+      }, true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           if (response?.success) {
