@@ -278,6 +278,7 @@
       "personalInfo": "Personal Info",
       "approvedDate": "Approved Date",
       "approvedBy": "Approved by",
+      "rejectedBy":"Rejected By",
       "organization": "Organization",
       "institution": "Institution",
       "status": "Status",
