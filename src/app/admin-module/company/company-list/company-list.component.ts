@@ -30,10 +30,10 @@ export class CompanyListComponent {
   pageNo = 1;
   totalPages = 0;
 
-  permissions:{isAssign:boolean;permission:string}[] = [];
-  isEdit:boolean;
-  isCreate:boolean;
-  isDelete:boolean;
+  permissions: { isAssign: boolean; permission: string }[] = [];
+  isEdit: boolean;
+  isCreate: boolean;
+  isDelete: boolean;
 
   constructor(
     private apiService: ApiCallingService,
@@ -57,7 +57,7 @@ export class CompanyListComponent {
 
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
-        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee_Company" && p.isAssign);
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Company" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Create_Company" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Company" && p.isAssign);
       } else {

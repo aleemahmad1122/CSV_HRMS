@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'company-structure',
     loadComponent: () => import(`./company/company-list/company-list.component`).then(c => c.CompanyListComponent),
-    data: { breadcrumb: 'Company Structure', permission: "View_Company,Create_Company,Edit_Employee_Company,Delete_Company" },
+    data: { breadcrumb: 'Company Structure', permission: "View_Company,Create_Company,Edit_Company,Delete_Company" },
     title: 'Company Structure',
     resolve: { permission: PermissionService }
   },
@@ -30,7 +30,7 @@ const routes: Routes = [
   {
     path: 'job/:action',
     loadComponent: () => import(`./job/add-edit-job/add-edit-job.component`).then(c => c.AddEditJobComponent),
-    data: { breadcrumb: 'Job' , permission: "Create_Job,Edit_Job" },
+    data: { breadcrumb: 'Job', permission: "Create_Job,Edit_Job" },
     title: 'Job',
     resolve: { permission: PermissionService }
   },
@@ -44,35 +44,35 @@ const routes: Routes = [
   {
     path: 'qualifications/:action',
     loadComponent: () => import(`./qualifications/add-edit-qualification/add-edit-qualification.component`).then(c => c.AddEditQualificationComponent),
-    data: { breadcrumb: 'Qualifications' , permission: "Create_Qualification,Edit_Qualification" },
+    data: { breadcrumb: 'Qualifications', permission: "Create_Qualification,Edit_Qualification" },
     title: 'Qualifications',
     resolve: { permission: PermissionService }
   },
   {
     path: 'projects',
     loadComponent: () => import(`./project/project-list/project-list.component`).then(c => c.ProjectListComponent),
-    data: { breadcrumb: 'Projects',permission: "View_Project,Create_Project,Edit_Project,Delete_Project" },
+    data: { breadcrumb: 'Projects', permission: "View_Project,Create_Project,Edit_Project,Delete_Project" },
     title: 'Projects',
     resolve: { permission: PermissionService }
   },
   {
     path: 'project/:action',
     loadComponent: () => import(`./project/add-edit-project/add-edit-project.component`).then(c => c.AddEditProjectComponent),
-    data: { breadcrumb: 'Project',permission: "Create_Project,Edit_Project" },
+    data: { breadcrumb: 'Project', permission: "Create_Project,Edit_Project" },
     title: 'Project',
     resolve: { permission: PermissionService }
   },
   {
     path: 'clients',
     loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
-    data: { breadcrumb: 'Clients',permission: "View_Client,Create_Client,Edit_Client,Delete_Client" },
+    data: { breadcrumb: 'Clients', permission: "View_Client,Create_Client,Edit_Client,Delete_Client" },
     title: 'Clients',
     resolve: { permission: PermissionService }
   },
   {
     path: 'client/:action',
     loadComponent: () => import(`./client/add-edit-client/add-edit-client.component`).then(c => c.AddEditClientComponent),
-    data: { breadcrumb: 'Client' ,permission: "Edit_Client,Create_Client" },
+    data: { breadcrumb: 'Client', permission: "Edit_Client,Create_Client" },
     title: 'Client',
     resolve: { permission: PermissionService }
   },
@@ -93,70 +93,70 @@ const routes: Routes = [
   {
     path: 'shift',
     loadComponent: () => import(`./shift/shift-list/shift-list.component`).then(c => c.ShiftListComponent),
-    data: { breadcrumb: 'Shift' ,permission: "View_Shift,Create_Shift,Edit_Shift,Delete_Shift" },
+    data: { breadcrumb: 'Shift', permission: "View_Shift,Create_Shift,Edit_Shift,Delete_Shift" },
     title: 'Shift',
     resolve: { permission: PermissionService }
   },
   {
     path: 'shift/:action',
     loadComponent: () => import(`./shift/shift-add-edit/shift-add-edit.component`).then(c => c.ShiftAddEditComponent),
-    data: { breadcrumb: 'Shift' ,permission: "Create_Shift,Edit_Shift" },
+    data: { breadcrumb: 'Shift', permission: "Create_Shift,Edit_Shift" },
     title: 'Shift',
     resolve: { permission: PermissionService }
   },
   {
     path: 'designation',
     loadComponent: () => import(`./designation/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Designation' ,permission: "View_Designation,Create_Designation,Edit_Designation,Delete_Designation" },
+    data: { breadcrumb: 'Designation', permission: "View_Designation,Create_Designation,Edit_Designation,Delete_Designation" },
     title: 'Designation',
     resolve: { permission: PermissionService }
   },
   {
     path: 'designation/:action',
     loadComponent: () => import(`./designation/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Designation' ,permission: "Create_Designation,Edit_Designation" },
+    data: { breadcrumb: 'Designation', permission: "Create_Designation,Edit_Designation" },
     title: 'Designation',
     resolve: { permission: PermissionService }
   },
   {
     path: 'department',
     loadComponent: () => import(`./department/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Department' ,permission: "View_Department,Create_Department,Edit_Department,Delete_Department" },
+    data: { breadcrumb: 'Department', permission: "View_Department,Create_Department,Edit_Department,Delete_Department" },
     title: 'Department',
     resolve: { permission: PermissionService }
   },
   {
     path: 'department/:action',
     loadComponent: () => import(`./department/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Department' ,permission: "Create_Department,Edit_Department" },
+    data: { breadcrumb: 'Department', permission: "Create_Department,Edit_Department" },
     title: 'Department',
     resolve: { permission: PermissionService }
   },
   {
     path: 'team',
     loadComponent: () => import(`./team/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Team' ,permission: "View_Team,Create_Team,Edit_Team,Delete_Team" },
+    data: { breadcrumb: 'Team', permission: "View_Team,Create_Team,Edit_Team,Delete_Team" },
     title: 'Team',
     resolve: { permission: PermissionService }
   },
   {
     path: 'team/:action',
     loadComponent: () => import(`./team/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Team'  ,permission: "Edit_Team,Create_Team" },
+    data: { breadcrumb: 'Team', permission: "Edit_Team,Create_Team" },
     title: 'Team',
     resolve: { permission: PermissionService }
   },
   {
     path: 'attachmentType',
     loadComponent: () => import(`./attachmentFile/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Attachment Type'  ,permission: "View_Attachment_Type,Create_Attachment_Type,Edit_Attachment_Type,Delete_Attachment_Type" },
+    data: { breadcrumb: 'Attachment Type', permission: "View_Attachment_Type,Create_Attachment_Type,Edit_Attachment_Type,Delete_Attachment_Type" },
     title: 'Attachment Type',
     resolve: { permission: PermissionService }
   },
   {
     path: 'attachmentType/:action',
     loadComponent: () => import(`./attachmentFile/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Attachment Type'  ,permission: "Create_Attachment_Type,Edit_Attachment_Type" },
+    data: { breadcrumb: 'Attachment Type', permission: "Create_Attachment_Type,Edit_Attachment_Type" },
     title: 'Attachment File',
     resolve: { permission: PermissionService }
   },
@@ -164,14 +164,14 @@ const routes: Routes = [
   {
     path: 'leave-type-list',
     loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
-    data: { breadcrumb: 'Leave Type List'  ,permission: "View_Leave_Type,Create_Leave_Type,Edit_Leave_Type,Delete_Leave_Type" },
+    data: { breadcrumb: 'Leave Type List', permission: "View_Leave_Type,Create_Leave_Type,Edit_Leave_Type,Delete_Leave_Type" },
     title: 'Leave Type List',
     resolve: { permission: PermissionService }
   },
   {
     path: 'leave-type/:action',
     loadComponent: () => import(`./leave-type/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-    data: { breadcrumb: 'Leave Type'  ,permission: "Edit_Leave_Type,Create_Leave_Type" },
+    data: { breadcrumb: 'Leave Type', permission: "Edit_Leave_Type,Create_Leave_Type" },
     title: 'Leave Type',
     resolve: { permission: PermissionService }
   },
