@@ -70,7 +70,6 @@ export class UserAuthenticationService {
       },
       error: (error) => {
         console.error(error);
-        this._toaster.error(error);
       }
     });
 

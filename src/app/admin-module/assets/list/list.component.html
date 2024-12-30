@@ -74,7 +74,7 @@
         <!--end::Dropdown-->
         <!--begin::Button-->
         @if(isCreate
-        ){ <button routerLink="/admin/job/add" class="btn btn-primary font-weight-bolder">
+        ){ <button routerLink="/admin/assets/add" class="btn btn-primary font-weight-bolder">
           <span class="svg-icon svg-icon-md">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -88,7 +88,7 @@
               </g>
             </svg>
 
-          </span> {{'language.generic.addJob' | translate}}</button>}
+          </span> {{'language.generic.addAsset' | translate}}</button>}
         <!--end::Button-->
       </div>
     </div>
@@ -126,15 +126,15 @@
               <td>
                 <span>
                   <div>
-                    <div [innerHTML]="data.jobTitle || 'N/A' | highlight: searchTerm">
+                    <div [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
               </td>
 
               <td><span>
-                  <div>{{data.jobDescription.slice(0,40) || "N/A"}}
-                    {{data.jobDescription.length > 40 ? '...' : ''}}</div>
+                  <div>{{data.description.slice(0,40) || "N/A"}}
+                    {{data.description.length > 40 ? '...' : ''}}</div>
                 </span></td>
 
 
@@ -151,7 +151,7 @@
 
                     @if(this.isEdit){
                     <li class="w-100 mb-2">
-                      <a [routerLink]="['/admin/job/edit']" [queryParams]="{id: data.jobId}"
+                      <a [routerLink]="['/admin/assets/edit']" [queryParams]="{id: data.assetId}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
@@ -189,7 +189,7 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             {{'language.generic.cancel' | translate}}</button>
-                          <button type="button" (click)="onDelete(data.jobId)" data-bs-dismiss="modal"
+                          <button type="button" (click)="onDelete(data.assetId)" data-bs-dismiss="modal"
                             class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
                         </div>
                       </div>

@@ -3,7 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiCallingService } from "../../shared/Services/api-calling.service";
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
-import { AttendanceSummary, EmployeeLeaveSummary, ResDasSummary, TeamSummary } from "../../types/index";
+import { AttendanceSummary, EmployeeDetail, EmployeeLeaveSummary, ResDasSummary, TeamSummary } from "../../types/index";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +22,8 @@ export class DashboardComponent implements OnInit {
     format: environment.dateTimePatterns.date,
   };
 
+  emp:EmployeeDetail;
+
   attendanceSummary: AttendanceSummary = {} as AttendanceSummary; // Avoid null value
   employeeLeaveSummary: EmployeeLeaveSummary[] = [];
   teamSummary: TeamSummary[] = [];
@@ -29,7 +31,8 @@ export class DashboardComponent implements OnInit {
   summaryItems: { title: string; count: any; icon: string; color: string; percentage: string | number; }[] = [];
   startDate = '';
   endDate = new Date().toISOString();
-  totalAttendance: number = 0; // Initialize totalAttendance
+  totalAttendance: number = 0;
+  checkInTime:string = '';
 
   constructor(
     private api: ApiCallingService,
@@ -37,6 +40,7 @@ export class DashboardComponent implements OnInit {
     private _toaster: ToastrService,
   ) {
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
+    this.emp = this._localStorage.getEmployeeDetail()[0];
     // Set default dates for Month to Date (MTD)
     const today = new Date();
     this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];

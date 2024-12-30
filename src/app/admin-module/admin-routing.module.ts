@@ -175,6 +175,35 @@ const routes: Routes = [
     title: 'Leave Type',
     resolve: { permission: PermissionService }
   },
+
+  {
+    path: 'assets',
+    loadComponent: () => import(`./assets/list/list.component`).then(c => c.ListComponent),
+    data: { breadcrumb: 'Assets List', permission: "View_Asset,Create_Asset,Edit_Asset,Delete_Asset" },
+    title: 'Assets List',
+    resolve: { permission: PermissionService }
+  },
+  {
+    path: 'assets/:action',
+    loadComponent: () => import(`./assets/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+    data: { breadcrumb: 'Assets', permission: "Edit_Asset,Create_Asset" },
+    title: 'Assets List',
+    resolve: { permission: PermissionService }
+  },
+  {
+    path: 'assets-type',
+    loadComponent: () => import(`./assets/type/list/list.component`).then(c => c.ListComponent),
+    data: { breadcrumb: 'Assets Type', permission: "View_Asset_Type,Create_Asset_Type,Edit_Asset_Type,Delete_Asset_Type" },
+    title: 'Assets Type',
+    resolve: { permission: PermissionService }
+  },
+  {
+    path: 'assets-type/:action',
+    loadComponent: () => import(`./assets/type//add-edit/add-edit.component`).then(c => c.AddEditComponent),
+    data: { breadcrumb: 'Assets Type', permission: "Edit_Asset_Type,Create_Asset_Type" },
+    title: 'Assets Type',
+    resolve: { permission: PermissionService }
+  },
 ];
 
 @NgModule({

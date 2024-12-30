@@ -1,0 +1,50 @@
+<div class="d-flex flex-column-fluid px-3">
+  <div class="card card-custom w-100 p-5" >
+
+
+  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+      <div class="row">
+
+
+          <div class="col-md-12 mb-3">
+              <label class="form-label">{{'language.form.title' | translate}} <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="name"
+                  [placeholder]="'language.placeholders.title' | translate"
+                  [ngClass]="{'is-invalid': (addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted))}" />
+              <div *ngIf="addEditForm.get('name')?.invalid && (addEditForm.get('name')?.touched || isSubmitted)"
+                  class="invalid-feedback">
+                  {{'language.errors.titleRequired' | translate}}
+              </div>
+          </div>
+
+
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
+          <textarea class="form-control" formControlName="description"
+              [placeholder]="'language.placeholders.description' | translate"
+              [ngClass]="{'is-invalid': (addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted))}"></textarea>
+          <div *ngIf="addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted)"
+              class="invalid-feedback">
+              {{'language.errors.descriptionRequired' | translate}}
+          </div>
+      </div>
+      </div>
+
+    <div class="row mt-3">
+          <div class="col-12 text-right">
+              <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
+                  {{ 'language.generic.back'| translate }}
+              </button>
+              <button type="submit" class="btn btn-primary font-weight-bold me-3">
+                  {{ 'language.generic.submit'| translate }}
+              </button>
+          </div>
+      </div>
+  </form>
+</div>
+</div>

@@ -74,6 +74,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       show: false
     },
     {
+      name: 'language.generic.assets',
+      route: "/employee/profile/assets",
+      class: "fa-regular fa-typewriter",
+      permissions: "View_Employee_Asset",
+      show: false
+    },
+    {
       name: 'language.employee.shift',
       route: "/employee/profile/shift/edit",
       class: "fa-solid fa-briefcase",

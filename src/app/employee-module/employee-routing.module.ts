@@ -26,6 +26,22 @@ const routes: Routes = [
         canActivate: [ProtectedGuard]
       },
       {
+        path: 'assets',
+        loadComponent: () => import(`./components/asset/list/list.component`).then(c => c.ListComponent),
+        title: 'Add Employee',
+        data: { breadcrumb: 'Work History', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
+        resolve: { permission: PermissionService },
+        canActivate: [ProtectedGuard]
+      },
+      {
+        path: 'assets/:action',
+        loadComponent: () => import(`./components/asset/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+        title: 'Add Employee',
+        data: { breadcrumb: 'Work History', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
+        resolve: { permission: PermissionService },
+        canActivate: [ProtectedGuard]
+      },
+      {
         path: 'work-history',
         loadComponent: () => import(`./components/work-history/work-history.component`).then(c => c.WorkHistoryComponent),
         title: 'Add Employee',

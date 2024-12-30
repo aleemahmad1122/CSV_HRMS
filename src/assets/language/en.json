@@ -10,6 +10,9 @@
       "admin": "Admin"
     },
     "sidebar": {
+      "assetsType":"Assets Type",
+      "assets":"Assets",
+      "assetsList":"Assets List",
       "manageEmployee": "Manage Employee",
       "manageAttendance": "Manage Attendance",
       "manageLeave": "Manage Leave",
@@ -46,6 +49,8 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "assetTypeId":"Asset Type",
+      "selectassetTypeId":"Asset Type",
       "leaveFrom": "Leave From Date",
       "leaveTo": "Leave To Date",
       "rolePriority": "Role Priority",
@@ -166,6 +171,7 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "assetTypeIdRequired":"Asset Type is Required",
       "leaveToRequired": "Leave To Date is Required",
       "leaveFromRequired": "Leave From Date is Required",
       "invalidPhoneNumber": "Invalid phone number",
@@ -237,6 +243,9 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "assets":"Assets",
+      "addAssetType":"Add Asset Type",
+      "addAsset":"Add Asset",
       "fileName":"File Name",
       "reqSetPass": "Set Password Email",
       "remaingLeaves": "Remaing Leaves",

@@ -120,7 +120,7 @@ export interface IRole extends ICommon {
   roleId: string;
   name: string;
   rolePriority: number;
-  textColor:string;
+  textColor: string;
   backgroundColor: string;
   isActive: boolean;
 }
@@ -426,14 +426,6 @@ export interface IClientRes extends ICommonRes {
 }
 
 
-export interface IJobRes extends ICommonRes {
-
-  data: {
-    jobs: Job[]
-    pagination: IPagination
-  };
-
-}
 
 export interface IProjectRes extends ICommonRes {
 
@@ -461,6 +453,55 @@ export interface Job extends ICommon {
   jobTitle: string;
   jobCode: string;
   jobDescription: string;
+}
+
+
+export interface IJobRes extends ICommonRes {
+
+  data: {
+    jobs: Job[]
+    pagination: IPagination
+  };
+
+}
+
+
+export interface IAssetType extends ICommon {
+  assetTypeId: string;
+  companyId: string;
+  name: string;
+  description: string;
+  isActive: boolean;
+}
+
+
+export interface IAssetTypeRes extends ICommonRes {
+
+  data: {
+    assetTypes: IAssetType[]
+    pagination: IPagination
+  };
+
+}
+
+export interface IAsset extends ICommon {
+  assetId: string;
+  assetTypeId: string;
+  companyId: string;
+  name: string;
+  description: string;
+  assetStatus: number;
+  isActive: boolean;
+}
+
+
+export interface IAssetRes extends ICommonRes {
+
+  data: {
+    assets: IAsset[]
+    pagination: IPagination
+  };
+
 }
 
 export interface Qualification extends ICommon {
@@ -493,9 +534,9 @@ export interface Clients extends ICommon {
 export interface Sidebar {
   name: string;
   route: string;
-  permissions:string;
-  show:boolean;
-  class?:string;
+  permissions: string;
+  show: boolean;
+  class?: string;
 }
 
 
@@ -649,13 +690,13 @@ export interface EmployeeDetail {
   imagePath: string,
   role: string;
   roleId: string;
-  rolePermission:{
-    backgroundColor:string;
-    isActive:boolean;
-    name:string;
-    roleId:string;
-    systemModulePermissions:{
-      systemModules:IGetSystemPermissions[]
+  rolePermission: {
+    backgroundColor: string;
+    isActive: boolean;
+    name: string;
+    roleId: string;
+    systemModulePermissions: {
+      systemModules: IGetSystemPermissions[]
     }
   }
 }

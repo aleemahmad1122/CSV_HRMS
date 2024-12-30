@@ -219,4 +219,26 @@ export class LocalStorageManagerService {
       localStorage.removeItem('otpEmail');
     }
   }
+
+getCheckInTime():string{
+  let checkInTime = '';
+  if (isPlatformBrowser(this.platformId)) {
+    checkInTime = localStorage.getItem('checkInTime');
+  }
+  return checkInTime;
+}
+
+saveCheckInTime(checkInTime:string){
+  this.removeCheckInTime();
+  if (isPlatformBrowser(this.platformId)) {
+    localStorage.setItem('checkInTime', checkInTime.toString());
+  }
+}
+
+removeCheckInTime(){
+  if (isPlatformBrowser(this.platformId)) {
+    localStorage.removeItem('checkInTime');
+  }
+}
+
 }

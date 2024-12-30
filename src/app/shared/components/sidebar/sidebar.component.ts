@@ -89,6 +89,18 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       permissions: 'View_Leave_Type',
       show: false,
     },
+    {
+      name: 'language.sidebar.assetsType',
+      route: '/admin/assets-type',
+      permissions: 'View_Asset_Type',
+      show: false,
+    },
+    {
+      name: 'language.sidebar.assets',
+      route: '/admin/assets',
+      permissions: 'View_Asset',
+      show: false,
+    },
   ];
 
   employeeItems: Sidebar[] = [
