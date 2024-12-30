@@ -64,7 +64,6 @@ export class UserAuthenticationService {
     .subscribe({
       next: (response) => {
         if (response?.status === 200) {
-          this._toaster.success(response.message);
           this._localStorageManagerService.clearLocalStorage();
           this._router.navigateByUrl('/');
         }

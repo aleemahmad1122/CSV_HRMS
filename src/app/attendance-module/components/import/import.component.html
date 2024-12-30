@@ -1,56 +1,47 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5" >
-
-    <a href="assets/sample-file.xlsx" class="btn btn-success ml-auto" style="width: 100%; max-width: 200px;" download>
+  <div class="card card-custom w-100 p-5">
+    <button class="btn btn-success ml-auto" style="width: 100%; max-width: 200px;" (click)="downloadFile()">
       Export Sample
-    </a>
+    </button>
 
-
-      <form>
-        <div class="card-body">
-          <div class="form-group row   ">
-            <div class="mb-1 w-75 mx-auto">
-              <ngx-file-drop
+    <form>
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="mb-1 w-75 mx-auto">
+            @if(!preview){<ngx-file-drop
               dropZoneLabel="Drop Excel files here"
-                class="px-5"
-                (onFileDrop)="droppedFiles($event)"
-                [useDragEnter]="true"
-                accept=".xlsx, .xls"
-                [multiple]="false"
-              >
-                <ng-template
-                  ngx-file-drop-content-tmp
-                  let-openFileSelector="openFileSelector"
-                >
-                  <div
-                    class="text-center dragfiles"
-                    role="button"
-                    (click)="openFileSelector()"
-                  >
-                    <i class="bx bxs-cloud-upload fs-xlarge"></i>
-                    <div class="d-flex flex-column">
-                      <span class="fs-14 text-gray-300 fw-500">{{
-                        "language.generic.dragandDrop" | translate
-                      }}</span>
-                      <span class="fs-20 text-dark fw-500">
-                        {{ "language.generic.upload" | translate }}</span
-                      >
-                    </div>
+              class="px-5"
+              (onFileDrop)="droppedFiles($event)"
+              [useDragEnter]="true"
+              accept=".xlsx, .xls"
+              [multiple]="false"
+            >
+              <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+                  <i class="bx bxs-cloud-upload fs-xlarge"></i>
+                  <div class="d-flex flex-column">
+                    <span class="fs-14 text-gray-300 fw-500">{{ "language.generic.dragandDrop" | translate }}</span>
+                    <span class="fs-20 text-dark fw-500">{{ "language.generic.upload" | translate }}</span>
                   </div>
-                </ng-template>
-              </ngx-file-drop>
-            </div>
+                </div>
+              </ng-template>
+            </ngx-file-drop>}
+
+            @if(preview){<div   class="mt-4 flex items-center" style="gap: 6px;">
+              <div class="d-flex align-items-center justify-content-center space-x-2 mb-2 ">
+                @if(isPreviewString()){<p class="text-lg font-medium text-gray-700 m-0"><b>{{ 'language.generic.fileName' | translate}}:</b>  {{ fileName }}</p>}
+                @if(!isPreviewString()){<img [src]="preview" alt="File Preview" class="w-24 h-24 object-cover" />}
+                <button (click)="removeFile()" class="btn btn-light-danger text-sm">Remove</button>
+              </div>
+            </div>}
           </div>
         </div>
-
-
-
-        <div class="card-footer  d-flex align-items-center justify-content-end">
-          <button   class="btn btn-light-danger mr-2" (click)="this.back()">Back</button>
-              <button type="submit" class="btn btn-primary" (click)="this.onSubmit()" >Submit</button>
-        </div>
-      </form>
       </div>
+
+      <div class="card-footer d-flex align-items-center justify-content-end">
+        <button class="btn btn-light-danger mr-2" (click)="back()">Back</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      </div>
+    </form>
   </div>
-
-
+</div>

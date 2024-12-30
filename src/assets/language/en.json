@@ -237,6 +237,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "fileName":"File Name",
       "reqSetPass": "Set Password Email",
       "remaingLeaves": "Remaing Leaves",
       "approve": "Approve",

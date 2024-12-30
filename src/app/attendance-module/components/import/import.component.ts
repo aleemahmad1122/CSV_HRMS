@@ -17,50 +17,67 @@ import { Subject } from 'rxjs';
   templateUrl: './import.component.html',
   styleUrl: './import.component.css'
 })
+
 export class ImportComponent {
-
-  file: NgxFileDropEntry[];
+  file: NgxFileDropEntry[] = [];
+  preview: string | ArrayBuffer | null = null;
+  fileName: string = '';
   ngUnsubscribe = new Subject<void>();
-
 
   constructor(
     private _router: Router,
     private _apiCalling: ApiCallingService,
     private _toaster: ToastrService,
-  ){
-
-  }
-
-
-  public   droppedFiles(file: NgxFileDropEntry[]) {
-this.file = file
-
-  }
-
-
+  ) {}
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-
   }
 
 
+  public droppedFiles(files: NgxFileDropEntry[]) {
+    this.file = files;
+    const droppedFile = files[0]; // Get the first file
+
+    // Check if the dropped file is an actual file
+    if (droppedFile.fileEntry.isFile) {
+      const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+      fileEntry.file((file: File) => {
+        // For preview, we can read the file as data URL (e.g., for images or PDFs)
+        this.fileName = file.name; // Store the file name
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.preview = reader.result; // Set the preview to the file content
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+
+  isPreviewString(): boolean {
+    return typeof this.preview === 'string';
+  }
+
+  removeFile(): void {
+    this.file = [];
+    this.preview = null;
+    this.fileName = '';
+  }
+
   onSubmit(): void {
     const formData = new FormData();
-
     try {
-      if (this.file && this.file.length > 0) {
-        const entry = this.file[0]; // Get the first file from the array
+      if (this.file.length > 0) {
+        const entry = this.file[0]; // Get the first file
 
         if (entry.fileEntry.isFile) {
           const fileEntry = entry.fileEntry as FileSystemFileEntry;
 
-          // Read the file and append it to FormData
           fileEntry.file((file: File) => {
             formData.append('file', file, file.name);
 
-            // After appending, send the API request
             this._apiCalling
               .postData('Attendance', 'bulkImportAttendance', formData, true)
               .pipe(takeUntil(this.ngUnsubscribe))
@@ -90,10 +107,18 @@ this.file = file
     }
   }
 
+  // Download sample file logic
+  downloadFile(): void {
+    const fileUrl = 'assets/attendance-sample.xlsx';
+    const anchor = document.createElement('a');
+    anchor.href = fileUrl;
+    anchor.download = 'attendance-sample.xlsx';
+    anchor.click();
+  }
 
-
+  // Back navigation
   back(): void {
     this._router.navigate([window.history.back()]);
   }
-
 }
+

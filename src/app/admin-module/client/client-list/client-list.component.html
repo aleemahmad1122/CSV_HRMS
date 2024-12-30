@@ -164,17 +164,9 @@
                     {{'language.generic.actions' | translate}}
                   </button>
                   <ul class="dropdown-menu px-2 ">
-                    @if(this.isDelete){
-                    <li class="w-100 mb-2">
-                             <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                          class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                          title="Delete">
-                          {{'language.generic.delete' | translate}}
-                        </button>
-                    </li>
-                    }
+
                     @if(this.isEdit){
-                    <li class="w-100">
+                    <li class="w-100  mb-2">
                       <a [routerLink]="['/admin/client/edit']" [queryParams]="{id: data.clientId}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
@@ -183,6 +175,15 @@
                     </li>
 
                     }
+                    @if(this.isDelete){
+                      <li class="w-100">
+                               <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                            class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                            title="Delete">
+                            {{'language.generic.delete' | translate}}
+                          </button>
+                      </li>
+                      }
                   </ul>
                 </div>
                   <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
