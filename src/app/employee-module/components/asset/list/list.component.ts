@@ -8,12 +8,13 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConvertTimePipe } from '../../../../shared/pipes/convert-time.pipe';
+import { HighlightPipe } from '../../../../shared/pipes/highlight.pipe';
 
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,ConvertTimePipe],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,ConvertTimePipe,HighlightPipe],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -146,7 +147,7 @@ export class ListComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeAsset', `deleteEmployeeWorkHistory/${id}`, {},true,this.id)
+    this.apiService.deleteData('EmployeeAsset', `deleteEmployeeAsset/${id}`, {},true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {

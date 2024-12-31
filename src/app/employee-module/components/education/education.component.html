@@ -109,7 +109,7 @@
 
 
         <th           >
-          <span > {{'language.generic.organization' | translate}} </span>
+          <span > {{'language.generic.positionTitle' | translate}} </span>
         </th>
 
 
@@ -147,8 +147,7 @@
         <td      aria-label="64616-103" class="datatable-cell">
           <span  >
             <div class="d-flex align-items-center">
-              <div class="text-dark-75   font-size-lg mb-0">
-                {{ data.educationTitle}}
+              <div class="text-dark-75   font-size-lg mb-0"     [innerHTML]="data.educationTitle || 'N/A' | highlight: searchTerm">
               </div>
             </div>
           </span>

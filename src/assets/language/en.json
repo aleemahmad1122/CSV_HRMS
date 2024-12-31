@@ -49,6 +49,7 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "issuedDate":"Issued Date",
       "assetTypeId":"Asset Type",
       "selectassetTypeId":"Asset Type",
       "leaveFrom": "Leave From Date",
@@ -171,6 +172,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "assetRequired":"Asset is Required",
+      "issuedDateRequired":"Issued Date is Required",
       "assetTypeIdRequired":"Asset Type is Required",
       "leaveToRequired": "Leave To Date is Required",
       "leaveFromRequired": "Leave From Date is Required",
@@ -243,6 +246,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "asset":"Asset",
       "positionTitle":"Position Title",
       "issuedDate":"Issued Date",
       "assets":"Assets",

@@ -7,11 +7,12 @@ import { ExportService } from '../../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 
 @Component({
   selector: 'app-work-history',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,HighlightPipe],
   templateUrl: './work-history.component.html',
   styleUrl: './work-history.component.css'
 })
