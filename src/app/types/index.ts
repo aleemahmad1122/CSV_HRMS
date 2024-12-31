@@ -75,6 +75,29 @@ export interface IEmployeeWorkHistoryRes extends ICommonRes {
 }
 
 
+export interface IEmployeeAsset extends ICommon {
+  employeeAssetId:string;
+  companyId: string;
+  employeeId:string;
+  assetId: string;
+  issuedDate: string;
+  offSet: null | string | number;
+  description: string;
+  isActive: boolean;
+  assetStatus: number;
+}
+
+
+export interface IEmployeeAssetRes extends ICommonRes {
+
+  data:  {
+    assets:IEmployeeAsset[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IEmployeeShift extends ICommon {
   shiftId: string;
   description: string;

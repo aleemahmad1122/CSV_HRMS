@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IEmployeeWorkHistory,IEmployeeWorkHistoryRes } from '../../../../types/index';
+import { IEmployeeAsset,IEmployeeAssetRes } from '../../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
@@ -20,7 +20,7 @@ export class ListComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: IEmployeeWorkHistory[] = [];
+  dataList: IEmployeeAsset[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -65,9 +65,9 @@ export class ListComponent {
 
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
-        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee_Work_History" && p.isAssign);
-        this.isCreate = this.permissions.some(p => p.permission === "Create_Employee_Work_History" && p.isAssign);
-        this.isDelete = this.permissions.some(p => p.permission === "Delete_Employee_Work_History" && p.isAssign);
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee_Asset" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Employee_Asset" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Employee_Asset" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
@@ -88,7 +88,7 @@ export class ListComponent {
       this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
+          next: (res: IEmployeeAssetRes) => this.handleResponse(res),
           error: () => (this.dataList = []),
         });
     }
@@ -98,16 +98,16 @@ export class ListComponent {
     this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm,employeeId:this.id  })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
+        next: (res: IEmployeeAssetRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IEmployeeWorkHistoryRes): void {
+  private handleResponse(response: IEmployeeAssetRes): void {
     if (response?.success) {
-      const { employeeWorkHistoryDetails, pagination } = response.data;
+      const { assets, pagination } = response.data;
       Object.assign(this, {
-        dataList: employeeWorkHistoryDetails,
+        dataList: assets,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -149,7 +149,7 @@ export class ListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeWorkHistoryId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeAssetId !== id);
         },
         error: (err) => console.error('Error deleting Employee Work Histories:', err),
       });
