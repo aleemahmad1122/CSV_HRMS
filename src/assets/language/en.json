@@ -243,6 +243,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "positionTitle":"Position Title",
+      "issuedDate":"Issued Date",
       "assets":"Assets",
       "addAssetType":"Add Asset Type",
       "addAsset":"Add Asset",

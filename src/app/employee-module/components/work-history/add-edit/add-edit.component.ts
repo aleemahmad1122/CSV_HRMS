@@ -24,7 +24,6 @@ declare const $: any;
 })
 export class AddEditComponent {
 
-
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
   };
@@ -247,6 +246,7 @@ export class AddEditComponent {
   trackByFn(index: number, type: any): any {
     return type.attachmentTypeId;
   }
+
 
   private convertToDatetimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);

@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'employee/:action',
         loadComponent: () => import(`./add-edit-module/add-edit-module.component`).then(c => c.AddEditModuleComponent),
-        title: 'Add Employee',
+
         data: { breadcrumb: '', permission: "Create_Employee,Edit_Employee,View_Personal_Info" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
@@ -28,23 +28,21 @@ const routes: Routes = [
       {
         path: 'assets',
         loadComponent: () => import(`./components/asset/list/list.component`).then(c => c.ListComponent),
-        title: 'Add Employee',
-        data: { breadcrumb: 'Work History', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
+        data: { breadcrumb: 'Assets', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
       },
       {
         path: 'assets/:action',
         loadComponent: () => import(`./components/asset/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-        title: 'Add Employee',
-        data: { breadcrumb: 'Work History', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
+        data: { breadcrumb: 'Asset', permission: "View_Employee_Asset,Create_Employee_Asset,Edit_Employee_Asset,Delete_Employee_Asset"  },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
       },
       {
         path: 'work-history',
         loadComponent: () => import(`./components/work-history/work-history.component`).then(c => c.WorkHistoryComponent),
-        title: 'Add Employee',
+
         data: { breadcrumb: 'Work History', permission: "Create_Employee_Work_History,Edit_Employee_Work_History,Delete_Employee_Work_History,View_Employee_Work_History" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
@@ -52,7 +50,7 @@ const routes: Routes = [
       {
         path: 'work-history/:action',
         loadComponent: () => import(`./components/work-history/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-        title: 'Add Employee',
+
         data: { breadcrumb: 'Work History', permission: "Create_Employee_Work_History,Edit_Employee_Work_History" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
@@ -60,7 +58,7 @@ const routes: Routes = [
       {
         path: 'education-history',
         loadComponent: () => import(`./components/education/education.component`).then(c => c.EducationComponent),
-        title: 'Add Employee',
+
         data: { breadcrumb: 'Education History', permission: "View_Employee_Education,Delete_Employee_Education,Edit_Employee_Education,Create_Employee_Education" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
@@ -68,7 +66,7 @@ const routes: Routes = [
       {
         path: 'education-history/:action',
         loadComponent: () => import(`./components/education/add-edit/add-edit.component`).then(c => c.AddEditComponent),
-        title: 'Add Employee',
+
         data: { breadcrumb: 'Education History', permission: "Edit_Employee_Education,Create_Employee_Education" },
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]

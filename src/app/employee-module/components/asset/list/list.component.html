@@ -1,0 +1,283 @@
+<form class="d-flex w-25" role="search">
+  <div class="form-group">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate"
+        name="searchTerm" (input)="search($event)">
+    </div>
+  </div>
+</form>
+
+
+<div class="card-toolbar d-flex align-items-center justify-content-end pb-5">
+
+  <div class="mr-2 dropdown dropdown-inline">
+    <select class="form-control datatable-input" data-col-index="2" (change)="onStatusChange($event)">
+
+      <option value="0">{{ 'language.generic.all' | translate }}</option>
+      <option value="1" selected>{{ 'language.generic.active' | translate }}</option>
+      <option value="2">{{ 'language.generic.Inactive' | translate }}</option>
+    </select>
+  </div>
+
+
+  <div class="dropdown dropdown-inline mr-2">
+    <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
+      <span class="svg-icon svg-icon-md">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+          height="24px" viewBox="0 0 24 24" version="1.1">
+          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <rect x="0" y="0" width="24" height="24"></rect>
+            <path
+              d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z"
+              fill="#000000" opacity="0.3"></path>
+            <path
+              d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z"
+              fill="#000000"></path>
+          </g>
+        </svg>
+
+      </span> {{'language.generic.export' | translate}} </button>
+    <!--begin::Dropdown Menu-->
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+      <!--begin::Navigation-->
+      <ul class="navi flex-column navi-hover py-2">
+        <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">
+          {{'language.generic.chooseAnOption' | translate}}
+        </li>
+
+        <li class="navi-item">
+          <a style="cursor: pointer;" class="navi-link" (click)="exportData('excel')">
+            <span class="navi-icon">
+              <i class="la la-file-excel-o"></i>
+            </span>
+            <span class="navi-text"> {{'language.generic.excel' | translate}} </span>
+          </a>
+        </li>
+      </ul>
+      <!--end::Navigation-->
+    </div>
+    <!--end::Dropdown Menu-->
+  </div>
+  @if(isCreate){<button routerLink="/employee/profile/assets/add" [queryParams]="{id:this.id}"
+  class="btn btn-primary font-weight-bolder">
+  <span class="svg-icon svg-icon-md">
+    <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+      viewBox="0 0 24 24" version="1.1">
+      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24"></rect>
+        <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+        <path
+          d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
+          fill="#000000" opacity="0.3"></path>
+      </g>
+    </svg>
+
+  </span> {{'language.generic.addAsset' | translate}}</button>}
+</div>
+
+
+    <div  >
+      <table class="table table-striped w-100">
+      <thead  >
+        <tr  >
+          <th  >
+            <span ># </span>
+          </th>
+
+          <th           >
+            <span >{{'language.generic.name' | translate}}</span>
+          </th>
+
+
+          <th           >
+            <span > {{'language.form.category' | translate}} </span>
+          </th>
+
+          <th           >
+            <span > {{'language.generic.issuedDate' | translate}} </span>
+          </th>
+
+          <th           >
+            <span > {{'language.generic.description' | translate}} </span>
+          </th>
+
+
+          @if(isEdit || isDelete){<th       ><span
+              > {{'language.generic.actions' | translate}}</span></th>}
+        </tr>
+      </thead>
+      <tbody class="datatable-body">
+        @for (data of dataList; track $index) {
+
+        <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
+          <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
+            <span ><span class="font-weight-bolder ">
+                {{ (pageNo - 1) * pageSize + $index + 1 }}
+              </span></span>
+          </td>
+
+
+          <td      aria-label="64616-103" class="datatable-cell">
+            <span >
+              <div class="d-flex align-items-center">
+                <div class="text-dark-75   font-size-lg mb-0">
+                  {{ data.assetName || 'N/A'}}
+                </div>
+              </div>
+            </span>
+          </td>
+
+          <td      aria-label="64616-103" class="datatable-cell">
+            <span >
+              <div class="d-flex align-items-center">
+                <div class="text-dark-75   font-size-lg mb-0">
+                  {{ data.assetTypeName || 'N/A'}}
+                </div>
+              </div>
+            </span>
+          </td>
+
+          <td      aria-label="64616-103" class="datatable-cell">
+            <span >
+              <div class="d-flex align-items-center">
+                <div class="text-dark-75   font-size-lg mb-0">
+                  {{ (data.issuedDate  | convertTime: 'date')  || "N/A"}}
+                </div>
+              </div>
+            </span>
+          </td>
+
+          <td      aria-label="64616-103" class="datatable-cell">
+            <span >
+              <div class="d-flex align-items-center">
+                <div class="text-dark-75   font-size-lg mb-0">
+                  {{data.description.slice(0,40) || "N/A"}}
+                  {{data.description.length > 40 ? '...' : ''}}
+                </div>
+              </div>
+            </span>
+          </td>
+
+
+
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{'language.generic.actions' | translate}}
+              </button>
+              <ul class="dropdown-menu px-2 ">
+
+                @if(this.isEdit){
+                <li class="w-100  mb-2">
+                  <a [routerLink]="['/employee/profile/assets/edit']"
+                  [queryParams]="{editId: data.employeeAssetId,id:this.id}"
+                    class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
+                    title="Edit details">
+                    {{'language.generic.edit' | translate}}
+                  </a>
+                </li>
+
+                }
+                @if(this.isDelete){
+                  <li class="w-100">
+                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Delete">
+                        {{'language.generic.delete' | translate}}
+                      </button>
+                  </li>
+                  }
+              </ul>
+            </div>
+              <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        {{'language.msg.areYouAbsolutely' | translate}}
+                      </h1>
+                      <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                        aria-label="Close">x</button>
+                    </div>
+                    <div class="modal-body">
+                      {{'language.msg.actionCannotBeUndone' | translate}}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{'language.generic.cancel' | translate}}</button>
+                      <button type="button" (click)="onDelete(data.employeeAssetId)" data-bs-dismiss="modal"
+                        class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>  </td>
+        </tr>
+
+        }
+        @if(this.dataList.length < 1){
+          <tr>
+            <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+        </tr>
+          }
+      </tbody>
+    </table>
+
+
+    <!--begin::Pagination-->
+    @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div class="d-flex flex-wrap py-2 mr-3">
+        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
+          <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+        </a>
+
+        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)"
+          [class.disabled]="pageNo === 1">
+          <i class="ki ki-bold-arrow-back icon-xs"></i>
+        </a>
+
+        <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
+          <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="i + 1 === pageNo"
+            (click)="changePage(i + 1)">
+            {{ i + 1 }}
+          </a>
+        </span>
+
+        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
+          [class.disabled]="pageNo === totalPages">
+          <i class="ki ki-bold-arrow-next icon-xs"></i>
+        </a>
+
+        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
+          [class.disabled]="pageNo === totalPages">
+          <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+        </a>
+      </div>
+
+      <div class="d-flex align-items-center py-3">
+        <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+          [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+          <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+        </select>
+
+        <span class="text-muted">
+          {{'language.generic.totalRecords' | translate}} {{ totalCount }}
+        </span>
+      </div>
+
+    </div>}
+
+    <!--end:: Pagination-->
+
+
+
+  </div>

@@ -7,12 +7,13 @@ import { ExportService } from '../../../../shared/Services/export.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConvertTimePipe } from '../../../../shared/pipes/convert-time.pipe';
 
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule,TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule,TranslateModule,ConvertTimePipe],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -85,7 +86,7 @@ export class ListComponent {
     private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
       // Call the API with the active status filter
-      this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
+      this.apiService.getData('EmployeeAsset', 'getEmployeeAssets', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: (res: IEmployeeAssetRes) => this.handleResponse(res),
@@ -95,7 +96,7 @@ export class ListComponent {
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm,employeeId:this.id  })
+    this.apiService.getData('EmployeeAsset', 'getEmployeeAssets', true, { searchQuery: searchTerm,employeeId:this.id  })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: IEmployeeAssetRes) => this.handleResponse(res),
@@ -136,7 +137,7 @@ export class ListComponent {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize,employeeId:this.id  };
-    this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, params)
+    this.apiService.getData('EmployeeAsset', 'getEmployeeAssets', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -145,7 +146,7 @@ export class ListComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('EmployeeWorkHistory', `deleteEmployeeWorkHistory/${id}`, {},true,this.id)
+    this.apiService.deleteData('EmployeeAsset', `deleteEmployeeWorkHistory/${id}`, {},true,this.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
