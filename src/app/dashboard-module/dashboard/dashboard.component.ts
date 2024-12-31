@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, NgZone } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiCallingService } from "../../shared/Services/api-calling.service";
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,8 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import * as bootstrap from 'bootstrap';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +18,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit , AfterViewInit {
 
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
@@ -38,6 +40,7 @@ export class DashboardComponent implements OnInit {
     private api: ApiCallingService,
     private _localStorage: LocalStorageManagerService,
     private _toaster: ToastrService,
+    private ngZone: NgZone
   ) {
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.emp = this._localStorage.getEmployeeDetail()[0];
@@ -46,6 +49,10 @@ export class DashboardComponent implements OnInit {
     this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
     this.endDate = today.toISOString().split('T')[0];
   }
+
+    ngAfterViewInit(): void {
+      this.initializeTooltips();
+    }
 
   ngOnInit(): void {
     this.fetchAttendanceData({
@@ -145,6 +152,11 @@ export class DashboardComponent implements OnInit {
             this.attendanceSummary.missingAttendance
           );
           this.updateSummaryItems();
+
+          // Wait for view to be updated
+          setTimeout(() => {
+            this.initializeTooltips();
+          }, 100);
         } else {
           this.teamSummary = [];
           this._toaster.error(response?.message || 'An error occurred');
@@ -235,6 +247,11 @@ export class DashboardComponent implements OnInit {
                 this.attendanceSummary.missingAttendance
               );
               this.updateSummaryItems();
+
+              // Wait for view to be updated
+              setTimeout(() => {
+                this.initializeTooltips();
+              }, 100);
             } else {
               this._toaster.error(response?.message || 'An error occurred');
               this.teamSummary = [];
@@ -253,5 +270,27 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  private initializeTooltips(): void {
+    this.ngZone.runOutsideAngular(() => {
+      // Dispose existing tooltips
+      const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltips.forEach((element) => {
+        const tooltip = bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+          tooltip.dispose();
+        }
+      });
+
+      // Initialize new tooltips with configuration
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltipTriggerList.forEach((tooltipTriggerEl) => {
+        new bootstrap.Tooltip(tooltipTriggerEl, {
+          trigger: 'hover',
+          placement: 'top',
+          container: 'body'
+        });
+      });
+    });
+  }
 
 }
