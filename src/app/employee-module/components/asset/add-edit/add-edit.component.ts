@@ -165,7 +165,8 @@ export class AddEditComponent   implements OnInit, OnDestroy {
     const { asset, issuedDate,...rest } = this.addEditForm.value;
     const payload = {
       issuedDate: this.formatDateForSubmission(issuedDate),
-      ...rest
+      ...rest,
+      offSet: this.addEditForm.value.offSet.toString()
     }
 
     const apiCall = this.isEditMode
