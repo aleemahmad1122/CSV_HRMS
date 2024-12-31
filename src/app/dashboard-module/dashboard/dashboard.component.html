@@ -71,7 +71,7 @@
               <a href="#" class="text-dark-75 text-hover-primary font-size-h5 font-weight-bold mr-3">{{emp.firstName + '
                 ' + emp.lastName}}</a>
               <a href="#">
-                <i class="flaticon2-correct text-success font-size-h5"></i>
+                <i class="flaticon2-correct text-success font-size-h5">{{emp.role || 'N/A'}}</i>
               </a>
             </div>
             <!-- <div class="my-lg-0 my-3">
@@ -86,8 +86,8 @@
               <div class="d-flex flex-wrap mb-4">
                 <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
                   <i class="flaticon2-new-email mr-2 font-size-lg"></i>{{emp.email || 'N/A'}}</a>
-                <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                  <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{emp.role || 'N/A'}}</a>
+                <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2  text-capitalize">
+                  <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i> Role: {{emp.role || 'N/A'}}</a>
               </div>
               <!-- <span class="font-weight-bold text-dark-50">I distinguish three main text objectives could be merely
                 to inform people.</span>
@@ -185,7 +185,7 @@
           </div>
           }
           @if (teamSummary.length > 3) {
-          <div class="symbol symbol-30 symbol-circle symbol-light">
+          <div class="symbol symbol-30 symbol-circle symbol-light -ml-2">
             <span class="symbol-label font-weight-bold">{{teamSummary.length - 3}}+</span>
           </div>
           }
