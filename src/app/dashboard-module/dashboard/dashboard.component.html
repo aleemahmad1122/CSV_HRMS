@@ -185,11 +185,10 @@
           </div>
           }
           @if (teamSummary.length > 3) {
-          <div class="symbol symbol-30 symbol-circle symbol-light " style="margin-left: -14px;">
+          <div class="symbol symbol-30 symbol-circle symbol-light cursor-pointer" style="margin-left: -14px;" data-bs-toggle="modal" data-bs-target="#teamModal">
             <span class="symbol-label font-weight-bold">{{teamSummary.length - 3}}+</span>
           </div>
           }
-
         </div>
         <!--end::Item-->
       </div>
@@ -329,3 +328,30 @@
 
     </div>
   </div>
+
+<!-- Add this modal at the bottom of your file -->
+<div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="teamModalLabel">Team Members</h5>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
+      </div>
+      <div class="modal-body">
+        <div class="list-group">
+          @for (team of teamSummary; track $index) {
+          <div class="list-group-item d-flex align-items-center">
+            <img [src]="team.imagePath"
+                 class="rounded-circle me-3"
+                 style="width: 40px; height: 40px;"
+                 onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'">
+            <div>
+              <h6 class="mb-0 mx-3">{{team.fullName}}</h6>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
