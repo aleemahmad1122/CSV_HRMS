@@ -6,7 +6,7 @@ import { FilterPipe } from '../../pipes/filter.pipe';
 import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { FormsModule } from '@angular/forms';
 import { LocalStorageManagerService } from "../../Services/local-storage-manager.service"
-import { EmployeeDetail } from '../../../types';
+import { EmployeeDetail, ICheckInSummary } from '../../../types';
 
 @Component({
   selector: 'app-topbar',
@@ -19,6 +19,7 @@ export class TopbarComponent {
   user: EmployeeDetail;
   currentLang = 'en';
   currentLangFlag = '226-united-states.svg';
+  checkInTime: ICheckInSummary;
   Lang = 'en';
   languages = [
     { code: 'en', name: 'language.en', flag: '226-united-states.svg' },
@@ -28,10 +29,11 @@ export class TopbarComponent {
     { code: 'de', name: 'language.de', flag: '162-germany.svg' },
     { code: 'ja', name: 'language.ja', flag: '063-japan.svg' }
   ];
+  formattedCheckInTime: string = '';
 
   constructor(
     public _translateService: TranslateService,
-    public _localStorage : LocalStorageManagerService
+    public _localStorage: LocalStorageManagerService
   ) {
     _translateService.addLangs(['en', 'ar', 'es', 'fr', 'de', 'ja']);
     _translateService.setDefaultLang('en');
@@ -40,6 +42,22 @@ export class TopbarComponent {
 
     this.user = this._localStorage.getEmployeeDetail()[0];
 
+    this.checkInTime = this._localStorage.getCheckInTime();
+    this.calculateCheckInDuration();
+  }
+
+  calculateCheckInDuration(): void {
+    if (this.checkInTime?.checkInTime) {
+      const checkIn = new Date(this.checkInTime.checkInTime);
+      const now = new Date();
+      const diffMs = now.getTime() - checkIn.getTime();
+
+      // Convert to hours and minutes
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      this.formattedCheckInTime = `${hours}h ${minutes}m`;
+    }
   }
 
   changeLang(langCode: string): void {
