@@ -3,7 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiCallingService } from "../../shared/Services/api-calling.service";
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
-import { AttendanceSummary, EmployeeDetail, EmployeeLeaveSummary, ResDasSummary, TeamSummary } from "../../types/index";
+import { AttendanceSummary, EmployeeDetail, EmployeeLeaveSummary, ICheckInSummary, ResDasSummary, TeamSummary } from "../../types/index";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,13 +18,13 @@ import * as bootstrap from 'bootstrap';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit , AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
 
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
   };
 
-  emp:EmployeeDetail;
+  emp: EmployeeDetail;
 
   attendanceSummary: AttendanceSummary = {} as AttendanceSummary; // Avoid null value
   employeeLeaveSummary: EmployeeLeaveSummary[] = [];
@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit , AfterViewInit {
   startDate = '';
   endDate = new Date().toISOString();
   totalAttendance: number = 0;
-  checkInTime:string = '';
+  checkInSummary: ICheckInSummary;
 
   constructor(
     private api: ApiCallingService,
@@ -50,9 +50,9 @@ export class DashboardComponent implements OnInit , AfterViewInit {
     this.endDate = today.toISOString().split('T')[0];
   }
 
-    ngAfterViewInit(): void {
-      this.initializeTooltips();
-    }
+  ngAfterViewInit(): void {
+    this.initializeTooltips();
+  }
 
   ngOnInit(): void {
     this.fetchAttendanceData({
@@ -139,6 +139,13 @@ export class DashboardComponent implements OnInit , AfterViewInit {
           this.attendanceSummary = response.data.attendanceSummary || {} as AttendanceSummary;
           this.employeeLeaveSummary = response.data.employeeLeaveSummary || [];
           this.teamSummary = response.data.teamSummary || [];
+
+          // Store check-in time in localStorage
+          if (response.data.checkInSummary) {
+            console.log(response.data);
+
+            this._localStorage.saveCheckInTime(response.data.checkInSummary);
+          }
 
           // Calculate total attendance
           this.totalAttendance = (

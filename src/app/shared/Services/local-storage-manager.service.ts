@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { CompanyDetail, EmployeeDetail } from "../../types/index";
+import { CompanyDetail, EmployeeDetail, ICheckInSummary } from "../../types/index";
 
 @Injectable({
   providedIn: 'root'
@@ -220,25 +220,25 @@ export class LocalStorageManagerService {
     }
   }
 
-getCheckInTime():string{
-  let checkInTime = '';
-  if (isPlatformBrowser(this.platformId)) {
-    checkInTime = localStorage.getItem('checkInTime');
+  getCheckInTime(): ICheckInSummary | null {
+    if (isPlatformBrowser(this.platformId)) {
+      const stored = localStorage.getItem('checkInTime');
+      return stored ? JSON.parse(stored) : null;
+    }
+    return null;
   }
-  return checkInTime;
-}
 
-saveCheckInTime(checkInTime:string){
-  this.removeCheckInTime();
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.setItem('checkInTime', checkInTime.toString());
+  saveCheckInTime(checkInTime: ICheckInSummary): void {
+    this.removeCheckInTime();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('checkInTime', JSON.stringify(checkInTime));
+    }
   }
-}
 
-removeCheckInTime(){
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.removeItem('checkInTime');
+  removeCheckInTime(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('checkInTime');
+    }
   }
-}
 
 }

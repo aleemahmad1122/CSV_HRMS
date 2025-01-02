@@ -672,7 +672,12 @@ export interface EmployeeLeaveSummary {
   remainingLeaves: number
 }
 
+export interface ICheckInSummary {
+  checkInTime: string | null;
+  offSet: string | number | null
+}
 export interface ResDasSummaryData {
+  checkInSummary: ICheckInSummary;
   attendanceSummary: AttendanceSummary;
   teamSummary: TeamSummary[];
   employeeLeaveSummary: EmployeeLeaveSummary[];
