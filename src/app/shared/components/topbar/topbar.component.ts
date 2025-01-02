@@ -1,9 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { DataShareService } from '../../Services/data-share.service';
-import { FilterPipe } from '../../pipes/filter.pipe';
-import { HighlightPipe } from '../../pipes/highlight.pipe';
 import { FormsModule } from '@angular/forms';
 import { LocalStorageManagerService } from "../../Services/local-storage-manager.service"
 import { EmployeeDetail, ICheckInSummary } from '../../../types';
@@ -11,7 +8,7 @@ import { EmployeeDetail, ICheckInSummary } from '../../../types';
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [CommonModule, FilterPipe, HighlightPipe, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css'
 })
