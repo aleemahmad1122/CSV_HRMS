@@ -195,7 +195,7 @@
                     </li>
                     }
 
-                    @if(data.leaveStatus == 0 ){
+                    @if(data.leaveStatus == 0  || isHrApproval){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(1)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
                         class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon w-100 text-center"
@@ -214,7 +214,7 @@
                       </a>
                     </li> }
 
-                    @if(data.leaveStatus == 0 ){
+                    @if(data.leaveStatus == 0  || isHrApproval){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
                         class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
@@ -261,7 +261,7 @@
                   </div>
                 </div>
 
-                @if (data.leaveStatus == 0) {
+                @if (data.leaveStatus == 0  || isHrApproval) {
                 <!-- Modal -->
                 <div class="modal fade" [id]="'statusModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">
@@ -269,7 +269,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          {{'language.msg.areYouAbsolutely' | translate}}
+                          {{'language.msg.updateStatus' | translate}}
                         </h1>
                         <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
                           aria-label="Close">x</button>
@@ -308,7 +308,7 @@
                 </div>
 
                 }
-                @if (data.leaveStatus != 0) {
+                @if (data.leaveStatus != 0  || isHrApproval) {
                 <!-- Modal -->
                 <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">

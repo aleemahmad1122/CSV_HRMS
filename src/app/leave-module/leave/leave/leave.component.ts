@@ -47,6 +47,7 @@ export class LeaveComponent implements AfterViewInit {
   isCreate: boolean = false;
   isDelete: boolean = false;
   isApproval: boolean = false;
+  isHrApproval: boolean = false;
 
   empId: string;
 
@@ -105,11 +106,14 @@ export class LeaveComponent implements AfterViewInit {
 
 
       if (Array.isArray(permissionsData)) {
+        console.log(permissionsData);
+
         this.permissions = permissionsData;
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Leave" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Apply_Leave" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Leave" && p.isAssign);
         this.isApproval = this.permissions.some(p => p.permission === "Leave_Approval" && p.isAssign);
+        this.isHrApproval = this.permissions.some(p => p.permission === "HR_Approval" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }

@@ -43,11 +43,10 @@ export class ImportComponent {
     if (droppedFile.fileEntry.isFile) {
       const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
-        // For preview, we can read the file as data URL (e.g., for images or PDFs)
-        this.fileName = file.name; // Store the file name
+        this.fileName = file.name;
         const reader = new FileReader();
         reader.onload = () => {
-          this.preview = reader.result; // Set the preview to the file content
+          this.preview = reader.result;
         };
         reader.readAsDataURL(file);
       });
@@ -69,7 +68,7 @@ export class ImportComponent {
     const formData = new FormData();
     try {
       if (this.file.length > 0) {
-        const entry = this.file[0]; // Get the first file
+        const entry = this.file[0];
 
         if (entry.fileEntry.isFile) {
           const fileEntry = entry.fileEntry as FileSystemFileEntry;
@@ -78,7 +77,7 @@ export class ImportComponent {
             formData.append('file', file, file.name);
 
             this._apiCalling
-              .postData('Attendance', 'bulkImportAttendance', formData, true)
+              .postData('Employee', 'importEmployees', formData, true)
               .pipe(takeUntil(this.ngUnsubscribe))
               .subscribe({
                 next: (response) => {
@@ -106,16 +105,14 @@ export class ImportComponent {
     }
   }
 
-  // Download sample file logic
   downloadFile(): void {
-    const fileUrl = 'assets/attendance-sample.xlsx';
+    const fileUrl = 'assets/employee-sample.xlsx';
     const anchor = document.createElement('a');
     anchor.href = fileUrl;
-    anchor.download = 'attendance-sample.xlsx';
+    anchor.download = 'employee-sample.xlsx';
     anchor.click();
   }
 
-  // Back navigation
   back(): void {
     this._router.navigate([window.history.back()]);
   }

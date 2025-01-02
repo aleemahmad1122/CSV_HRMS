@@ -486,6 +486,7 @@
       "employeeDeptManagementHeading": "Employee department & team management made easy"
     },
     "msg": {
+      "updateStatus":"Update Stauts",
       "areYouAbsolutely": "Are you sure?",
       "actionCannotBeUndone": "This action cannot be undone. This will delete and remove your data from our servers."
     }
