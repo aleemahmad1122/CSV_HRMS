@@ -96,7 +96,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
 
     getEmpAssTypes():void{
     this.apiCalling
-      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['asset']}`, true)
+      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
@@ -139,7 +139,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
     return this.fb.group({
       issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       assetId: ['', Validators.required],
-      asset: ['', Validators.required],
+      assetTypeId: ['', Validators.required],
       description: ['', Validators.required],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
@@ -150,9 +150,11 @@ export class AddEditComponent   implements OnInit, OnDestroy {
       this.addEditForm.patchValue({
         issuedDate: this.convertToDatetimeLocalFormat(this.selectedValue.issuedDate),
         assetId: this.selectedValue.assetId,
+        assetTypeId: this.selectedValue.assetTypeId,
         description: this.selectedValue.description,
         offSet: Number(this.selectedValue.offSet),
       });
+      this.empAssTypesList.push({assetId:this.selectedValue.assetId,assetName:this.selectedValue.assetName})
     }
   }
 
@@ -162,7 +164,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
       return;
     }
 
-    const { asset, issuedDate,...rest } = this.addEditForm.value;
+    const { assetTypeId, issuedDate,...rest } = this.addEditForm.value;
     const payload = {
       issuedDate: this.formatDateForSubmission(issuedDate),
       ...rest,

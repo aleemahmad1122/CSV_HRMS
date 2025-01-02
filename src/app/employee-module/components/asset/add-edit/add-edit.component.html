@@ -8,18 +8,18 @@
   <div class="col-md-12 mb-3">
     <label class="form-label">{{ "language.form.assetTypeId" | translate }}
       <span class="text-danger">*</span></label>
-    <select class="form-control custom-select" (change)="getEmpAssTypes()" formControlName="asset" [ngClass]="{
+    <select class="form-control custom-select" (change)="getEmpAssTypes()" formControlName="assetTypeId" [ngClass]="{
         'is-invalid':
-          addEditForm.get('asset')?.invalid &&
-          (addEditForm.get('asset')?.touched || isSubmitted)
+          addEditForm.get('assetTypeId')?.invalid &&
+          (addEditForm.get('assetTypeId')?.touched || isSubmitted)
       }">
    @for(item of typesList; track item) {
     <option [value]="item.assetTypeId">{{ item.name }}</option>
     }
     </select>
     <div *ngIf="
-        addEditForm.get('asset')?.invalid &&
-        (addEditForm.get('asset')?.touched || isSubmitted)
+        addEditForm.get('assetTypeId')?.invalid &&
+        (addEditForm.get('assetTypeId')?.touched || isSubmitted)
       " class="invalid-feedback">
       {{ "language.errors.assetTypeIdRequired" | translate }}
     </div>

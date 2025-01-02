@@ -110,6 +110,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       permissions: 'View_Employee',
       show: false,
     },
+    {
+      name: 'language.sidebar.importEmployee',
+      route: '/employee/import',
+      permissions: 'Import_Employees',
+      show: false,
+    },
   ];
 
   attendanceItems: Sidebar[] = [

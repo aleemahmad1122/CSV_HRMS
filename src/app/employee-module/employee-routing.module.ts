@@ -13,6 +13,14 @@ const routes: Routes = [
     canActivate: [ProtectedGuard]
   },
   {
+    path: 'import',
+    loadComponent: () => import(`./components/import/import.component`).then(c => c.ImportComponent),
+    title: 'Import Employees',
+    data: { breadcrumb: 'Import Employees', permission: "Import_Employees" },
+    resolve: { permission: PermissionService },
+    canActivate: [ProtectedGuard]
+  },
+  {
     path: "profile",
     loadComponent: () => import(`./components/sidebar/sidebar.component`).then(c => c.SidebarComponent),
     data: { breadcrumb: 'Profile' },
@@ -95,6 +103,7 @@ const routes: Routes = [
         resolve: { permission: PermissionService },
         canActivate: [ProtectedGuard]
       },
+
     ]
   }
 

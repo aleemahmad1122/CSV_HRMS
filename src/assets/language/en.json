@@ -13,6 +13,7 @@
       "assetsType":"Assets Type",
       "assets":"Assets",
       "assetsList":"Assets List",
+      "importEmployee": "Import Employee",
       "manageEmployee": "Manage Employee",
       "manageAttendance": "Manage Attendance",
       "manageLeave": "Manage Leave",
