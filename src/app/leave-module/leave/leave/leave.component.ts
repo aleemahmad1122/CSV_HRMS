@@ -338,6 +338,7 @@ export class LeaveComponent implements AfterViewInit {
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       employeeId: this.selectedEmpId,
+      startDate: this.startDate,
       endDate: this.endDate,
     };
 

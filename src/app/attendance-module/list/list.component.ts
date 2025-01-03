@@ -17,7 +17,7 @@ import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe,HighlightPipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })
@@ -93,7 +93,7 @@ export class ListComponent implements AfterViewInit {
 
     this.submitForm = this.fb.group({
       attendanceStatus: [0],
-      comment: ['', Validators.required ],
+      comment: ['', Validators.required],
     });
   }
 
@@ -284,26 +284,26 @@ export class ListComponent implements AfterViewInit {
   }
 
 
-  onSubmit(id:string){
+  onSubmit(id: string) {
     this.isSubmitted = true;
     if (!this.submitForm.valid) {
       return;
     }
 
     this.apiService
-    .patchData('Attendance', `processAttendance/${id}`,this.submitForm.value, true)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe({
-      next: (response: any) => {
-        if (response?.success) {
-          this.getData()
+      .patchData('Attendance', `processAttendance/${id}`, this.submitForm.value, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.getData()
 
-        }
-      },
-      error: () => {
-        this.userReporting = []; // Handle error scenario
-      },
-    });
+          }
+        },
+        error: () => {
+          this.userReporting = []; // Handle error scenario
+        },
+      });
 
   }
 
@@ -327,6 +327,7 @@ export class ListComponent implements AfterViewInit {
       pageNo: this.pageNo,
       pageSize: this.pageSize,
       employeeId: this.selectedEmpId,
+      startDate: this.startDate,
       endDate: this.endDate,
     };
 
