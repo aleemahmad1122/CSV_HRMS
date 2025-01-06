@@ -41,11 +41,7 @@ export class InterceptorService {
         } else {
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
-        if (error.status === 401) {
-          this.router.navigate(['/dashboard']);
-          this._authService.logout();
-        }
-        if (error.status === 403) {
+        if (error.status === 403 || error.status  === 401) {
           this._toaster.info('Your session has expired')
           this._authService.logout();
           setTimeout(() => {

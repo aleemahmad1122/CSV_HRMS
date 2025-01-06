@@ -118,7 +118,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('API error:', error);
-        this.toaster.error("An error occurred while processing your request. Please try again later.");
+
       }
     });
   }
