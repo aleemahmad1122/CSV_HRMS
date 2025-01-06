@@ -148,22 +148,25 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.isView = view === 'true';
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling
-          .getData('Employee', `getEmployeeById/${id}`, true)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe({
-            next: (response) => {
-              if (response?.success) {
-                this.selectedValue = response?.data;
-                this.patchFormValues();
-              } else {
-                this.selectedValue = [];
-              }
-            },
-            error: () => {
-              this.selectedValue = [];
-            },
-          });
+        this.selectedValue = this._localStorage.getEmployeeDetail()[0];
+
+        this.patchFormValues();
+        // this.apiCalling
+        //   .getData('Employee', `getEmployeeById/${id}`, true)
+        //   .pipe(takeUntil(this.ngUnsubscribe))
+        //   .subscribe({
+        //     next: (response) => {
+        //       if (response?.success) {
+        //         this.selectedValue = response?.data;
+        //         this.patchFormValues();
+        //       } else {
+        //         this.selectedValue = [];
+        //       }
+        //     },
+        //     error: () => {
+        //       this.selectedValue = [];
+        //     },
+        //   });
       }
     });
   }
@@ -186,14 +189,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       phoneNumber: ['',],
       role: ['',],
       joiningStatus: [true,],
-      dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,],
-      joiningDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,],
       cnic: ['', Validators.required],
     });
   }
 
   private patchFormValues(): void {
-
     this.isPasswordSet = this.selectedValue.isPasswordSet
     if (this.selectedValue.imagePath) {
 
@@ -211,8 +211,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         phoneNumber: this.selectedValue.phoneNumber,
         cnic: this.selectedValue.cnic,
         joiningStatus: this.selectedValue.joiningStatus,
-        dateOfBirth: this.convertToDatetimeLocalFormat(this.selectedValue.dateOfBirth),
-        joiningDate: this.convertToDatetimeLocalFormat(this.selectedValue.joiningDate),
         role: this.selectedValue.role,
       });
       this.imagePreview = this.selectedValue.imagePath || this.defaultImagePath;

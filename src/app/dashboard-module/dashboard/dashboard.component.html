@@ -84,14 +84,14 @@
           <div class="d-flex flex-wrap justify-content-between mt-1">
             <div class="d-flex flex-column flex-grow-1 pr-8">
               <div class="d-flex flex-wrap mb-4">
-                <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                <a  class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
                   <i class="flaticon2-new-email mr-2 font-size-lg"></i>{{emp.email || 'N/A'}}</a>
-                <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2  text-capitalize">
+                <a  class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2  text-capitalize">
                   <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i> Role: {{emp.role || 'N/A'}}</a>
               </div>
               <div class="d-flex flex-wrap mb-4">
-                <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                  <i class="fa-thin fa-briefcase mr-2"></i>N/A</a>
+                <a  class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                  <i class="fa-thin fa-briefcase mr-2"></i> Designation: {{emp.designation || 'N/A'}}</a>
               </div>
               <!-- <span class="font-weight-bold text-dark-50">I distinguish three main text objectives could be merely
                 to inform people.</span>
@@ -337,7 +337,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="teamModalLabel">Team Members</h5>
+      <h5 class="modal-title" id="teamModalLabel">{{'language.generic.teamMembers' | translate }}</h5>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
       </div>
       <div class="modal-body">

@@ -247,6 +247,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "attendanceInfo":"Attendance Info",
+      "leaveInfo":"Leave Info",
       "asset":"Asset",
       "positionTitle":"Position Title",
       "issuedDate":"Issued Date",

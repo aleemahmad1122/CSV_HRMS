@@ -1,5 +1,5 @@
 [build]
-  publish = "dist/mccl-client/browser"
+  publish = "dist/csvhrms/browser"
   command = "ng build --configuration production"
 
 [[redirects]]

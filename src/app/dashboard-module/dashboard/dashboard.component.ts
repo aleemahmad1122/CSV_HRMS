@@ -143,7 +143,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           // Store check-in time in localStorage
           if (response.data.checkInSummary) {
 
-            // this._localStorage.saveCheckInTime(response.data.checkInSummary);
+            this._localStorage.saveCheckInTime(response.data.checkInSummary);
           }
 
           // Calculate total attendance
@@ -264,7 +264,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             }
           },
           error: (error) => {
-            this._toaster.error(
+            this._toaster.error(error.message ||
               'An error occurred while processing your request. Please try again later.',
               'Error'
             );

@@ -1,5 +1,5 @@
 {
-  "name": "mccl-client",
+  "name": "csvhrms",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm i --legacy-peer-deps && ng s -o",
-    "server": "node dist/mccl-client/server/server.mjs"
+    "server": "node dist/csvhrms/server/server.mjs"
   },
   "private": true,
   "dependencies": {

@@ -716,11 +716,16 @@ export interface EmployeeDetail {
   employeeId: string;
   companyId: string;
   email: string;
-  firstName: string,
-  lastName: string,
-  imagePath: string,
+  firstName: string;
+  lastName: string;
+  imagePath: string;
+  phoneNumber:number | string;
+  city:string;
+  country:string;
+  designation:string;
   role: string;
   roleId: string;
+  isPasswordSet:any;
   rolePermission: {
     backgroundColor: string;
     isActive: boolean;
