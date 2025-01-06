@@ -24,7 +24,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   };
 
   timePickerConfig = {
-    hour12: false,  // Use 24-hour format
+    hour12: true,  // Use 24-hour format
     timePicker: true,  // Enable time picker
     format: environment.dateTimePatterns.time,  // Set the time format for the picker
   };

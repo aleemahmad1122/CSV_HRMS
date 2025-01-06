@@ -42,6 +42,15 @@ export class LeaveComponent implements AfterViewInit {
   submitForm!: FormGroup;
 
 
+
+  fileOptions: { value: string; name: string }[] = [
+    { value: "MTD", name: "Month to Date" },
+    { value: "YTD", name: "Year to Date" },
+    { value: "PreviousYear", name: "Previous Year" },
+    { value: "PreviousMonth", name: "Previous Month" },
+    { value: "Last7Days", name: "Last 7 Days" }
+  ];
+
   permissions: { isAssign: boolean; permission: string }[] = [];
   isEdit: boolean = false;
   isCreate: boolean = false;
@@ -187,44 +196,72 @@ export class LeaveComponent implements AfterViewInit {
   }
 
 
+
   setFilter(option: string): void {
     const today = new Date();
-    switch (option) {
-      case 'YTD': // Year to Date
-        this.startDate = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
-        this.endDate = today.toISOString().split('T')[0];
-        break;
-      case 'MTD': // Month to Date
-        this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-        this.endDate = today.toISOString().split('T')[0];
-        break;
-      case 'QTD': // Quarter to Date
-        const currentQuarter = Math.floor(today.getMonth() / 3);
-        this.startDate = new Date(today.getFullYear(), currentQuarter * 3, 1).toISOString().split('T')[0];
-        this.endDate = today.toISOString().split('T')[0];
-        break;
-      case 'PreviousYear':
-        const lastYear = today.getFullYear() - 1;
-        this.startDate = new Date(lastYear, 0, 1).toISOString().split('T')[0];
-        this.endDate = new Date(lastYear, 11, 31).toISOString().split('T')[0];
-        break;
-      case 'PreviousMonth':
-        const firstDayPrevMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        const lastDayPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-        this.startDate = firstDayPrevMonth.toISOString().split('T')[0];
-        this.endDate = lastDayPrevMonth.toISOString().split('T')[0];
-        break;
-      case 'Last7Days':
-        const lastWeek = new Date(today);
-        lastWeek.setDate(today.getDate() - 6); // Go back 6 days from today
-        this.startDate = lastWeek.toISOString().split('T')[0];
-        this.endDate = today.toISOString().split('T')[0];
-        break;
-      default:
-        break;
-    }
-  }
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
 
+    const formatDate = (date: Date): string => {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    };
+
+    switch (option) {
+
+      case 'MTD':
+        this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
+        this.endDate = formatDate(endOfDay);
+        break;
+
+        case 'YTD':
+          this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
+          this.endDate = formatDate(endOfDay);
+          break;
+
+
+      case 'QTD': {
+        const quarterStartMonth = Math.floor(today.getMonth() / 3) * 3;
+        this.startDate = formatDate(new Date(today.getFullYear(), quarterStartMonth, 1));
+        this.endDate = formatDate(endOfDay);
+        break;
+      }
+
+      case 'PreviousYear': {
+        const lastYear = today.getFullYear() - 1;
+        this.startDate = formatDate(new Date(lastYear, 0, 1));
+        this.endDate = formatDate(new Date(lastYear, 11, 31, 23, 59, 59, 999));
+        break;
+      }
+
+      case 'PreviousMonth': {
+        const previousMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const previousMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
+        this.startDate = formatDate(previousMonthStart);
+        this.endDate = formatDate(previousMonthEnd);
+        break;
+      }
+
+      case 'Last7Days': {
+        const lastWeek = new Date(today);
+        lastWeek.setDate(today.getDate() - 6);
+        lastWeek.setHours(0, 0, 0, 0);
+        this.startDate = formatDate(lastWeek);
+        this.endDate = formatDate(endOfDay);
+        break;
+      }
+
+      default:
+        console.error(`Invalid filter option: ${option}`);
+        this.startDate = '';
+        this.endDate = '';
+        return;
+    }
+
+    // this.applyDateFilter();
+  }
 
   onStartDateChange(event: Event): void {
     const selectedDate = (event.target as HTMLInputElement).value;

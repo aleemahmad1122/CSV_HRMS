@@ -6,20 +6,11 @@
       <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">{{ "language.generic.selectFilter" | translate }}
           <span class="text-danger"></span></label>
-        <select class="form-control custom-select" data-col-index="2" (change)="setFilter(selectFilter.value)"
-          #selectFilter>
-          <option value="" disabled selected>Select a filter</option>
-          <option value="MTD" title="Filter data from the start of the current month to today" selected>Month to Date
-            (MTD)</option>
-          <option value="YTD" title="Filter data from the start of the current year to today">Year to Date (YTD)
-          </option>
-          <option value="QTD" title="Filter data from the start of the current quarter to today">Quarter to Date (QTD)
-          </option>
-          <option value="PreviousYear" title="Filter data for the entire previous year">Previous Year</option>
-          <option value="PreviousMonth" title="Filter data for the entire previous month">Previous Month</option>
-          <option value="Last7Days" title="Filter data for the last 7 days">Last 7 Days</option>
-
-        </select>
+          <select class="form-control custom-select" data-col-index="2" #selectFilter (change)="setFilter(selectFilter.value)">
+            @for(opt of fileOptions; track $index){
+              <option [value]="opt.value">{{opt.name}}</option>
+            }
+          </select>
       </div>
 
       <div class="" style="flex: 1;">

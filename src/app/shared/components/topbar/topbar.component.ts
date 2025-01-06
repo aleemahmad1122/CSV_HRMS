@@ -27,6 +27,7 @@ export class TopbarComponent {
     { code: 'ja', name: 'language.ja', flag: '063-japan.svg' }
   ];
   formattedCheckInTime: string = '';
+  private timerInterval: any;
 
   constructor(
     public _translateService: TranslateService,
@@ -41,6 +42,19 @@ export class TopbarComponent {
 
     this.checkInTime = this._localStorage.getCheckInTime() || null;
     this.calculateCheckInDuration();
+    this.startTimer();
+  }
+
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
+
+  startTimer(): void {
+    this.timerInterval = setInterval(() => {
+      this.calculateCheckInDuration();
+    }, 60000);
   }
 
   calculateCheckInDuration(): void {

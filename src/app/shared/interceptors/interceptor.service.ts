@@ -12,16 +12,16 @@ import { Router } from '@angular/router';
 export class InterceptorService {
 
   constructor(
-    private _authService:UserAuthenticationService,
+    private _authService: UserAuthenticationService,
     private _toaster: ToastrService,
     private _loader: NgxSpinnerService,
     private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let req =  null;
+    let req = null;
     if (this._authService.isLogin()) {
       const idToken = this._authService.getToken();
-      req = request.clone({headers: request.headers.set('Authorization',`Bearer ${idToken}`)});
+      req = request.clone({ headers: request.headers.set('Authorization', `Bearer ${idToken}`) });
     } else {
       req = request;
     }
@@ -46,9 +46,11 @@ export class InterceptorService {
           this._authService.logout();
         }
         if (error.status === 403) {
-          this.router.navigate(['/dashboard']);
-          // this._toaster.info('Your session has expired')
-          // this._authService.logout();
+          this._toaster.info('Your session has expired')
+          this._authService.logout();
+          setTimeout(() => {
+            window.location.reload();
+          }, 200);
         }
         this._loader.hide();
         return throwError(() => error);
