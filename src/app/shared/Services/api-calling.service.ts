@@ -12,8 +12,8 @@ export class ApiCallingService {
 
 
 
-  companyId: string | null = null;
-  employeeId: string | null = null;
+  companyId: string | null = '';
+  employeeId: string | null = '';
 
 
   constructor(
@@ -59,7 +59,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId || '' };
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
@@ -103,9 +103,9 @@ export class ApiCallingService {
   catchApiErrors(): OperatorFunction<any, any> {
     return catchError(error => {
       this._loader.hide();
-      return throwError(() =>
-        this._toaster.error("Internal server error occurred while processing your request")
-      )
-    })
+      const errorMessage = error.error?.message || "Internal server error occurred while processing your request";
+      this._toaster.error(errorMessage);
+      return throwError(() => error);
+    });
   }
 }

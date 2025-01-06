@@ -40,7 +40,7 @@ export class LoginComponent implements OnDestroy {
   ) {
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -83,26 +83,27 @@ export class LoginComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
-          if (response?.status === 400 && !response.success) {
+          if (!response.success) {
             this._toaster.error(response.message);
             return;
           }
 
           this.companyList = response.data?.companyDetail || [];
+
+          // Store employee details before company selection
+          this._localStorageService.setEmployeeDetail(response.data?.employeeDetail || []);
+          this._authService.setToken(response.data?.employeeDetail[0]?.token);
+
           if (this.companyList.length > 1) {
-            $('#selectCompanyModal').modal('show');
+            this.selectCompanyModal.show(); // Using ViewChild reference instead of jQuery
           } else if (this.companyList.length === 1) {
             this.selectCompany(this.companyList[0]);
           } else {
             this._toaster.error("No companies found for this user.");
           }
-
-          this._authService.setToken(response.data?.employeeDetail[0]?.token);
-          this._localStorageService.setEmployeeDetail(response.data?.employeeDetail || []);
         },
         error: (error) => {
-          console.error(error); // Log the error for debugging
-          this._toaster.error("Internal server error occurred while processing your request.");
+          console.error('Login error:', error);
         }
       });
   }

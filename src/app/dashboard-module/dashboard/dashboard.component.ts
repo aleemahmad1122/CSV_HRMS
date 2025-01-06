@@ -142,9 +142,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
           // Store check-in time in localStorage
           if (response.data.checkInSummary) {
-            console.log(response.data);
 
-            this._localStorage.saveCheckInTime(response.data.checkInSummary);
+            // this._localStorage.saveCheckInTime(response.data.checkInSummary);
           }
 
           // Calculate total attendance

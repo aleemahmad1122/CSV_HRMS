@@ -211,6 +211,10 @@ a:hover {
   border: 2px solid red !important;
 }
 
+.b-2-red {
+  border: 2px solid red !important;
+}
+
 
 #selectCompanyModal{
   .modal-dialog{

@@ -16,7 +16,7 @@ export class TopbarComponent {
   user: EmployeeDetail;
   currentLang = 'en';
   currentLangFlag = '226-united-states.svg';
-  checkInTime: ICheckInSummary;
+  checkInTime: ICheckInSummary | null;
   Lang = 'en';
   languages = [
     { code: 'en', name: 'language.en', flag: '226-united-states.svg' },
@@ -39,7 +39,7 @@ export class TopbarComponent {
 
     this.user = this._localStorage.getEmployeeDetail()[0];
 
-    this.checkInTime = this._localStorage.getCheckInTime();
+    this.checkInTime = this._localStorage.getCheckInTime() || null;
     this.calculateCheckInDuration();
   }
 
