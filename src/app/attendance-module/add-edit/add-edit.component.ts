@@ -124,7 +124,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (checkInDate && checkOutDate) {
       const checkIn = new Date(checkInDate);
       const checkOut = new Date(checkOutDate);
-      if (checkOut < checkIn || checkOut > checkIn) {
+      if (checkOut < checkIn) {
         return { minLengthCheckOutDate: true };
       }
     }
