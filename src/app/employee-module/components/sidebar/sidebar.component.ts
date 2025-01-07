@@ -142,8 +142,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
-      this.isEditMode = id;
-      this.id = id;
+      this.isEditMode = !!id;
+      this.id = id || '';
       const view = params['view'];
       this.isView = view === 'true';
 
@@ -164,11 +164,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             },
           });
+      } else {
+        this.selectedValue = {};
       }
     });
   }
 
   ngOnDestroy(): void {
+      localStorage.removeItem('empProImg')
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -250,6 +253,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
+          localStorage.setItem('empProImg', e.target.result as string)
           this.imagePreview = e.target.result as string;
         }
       };

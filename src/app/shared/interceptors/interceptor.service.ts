@@ -43,9 +43,6 @@ export class InterceptorService {
         }
         if (error.status === 403 || error.status  === 401) {
           this._authService.logout();
-          setTimeout(() => {
-            window.location.reload();
-          }, 200);
         }
         this._loader.hide();
         return throwError(() => error);

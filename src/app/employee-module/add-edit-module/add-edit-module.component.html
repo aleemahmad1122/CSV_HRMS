@@ -158,7 +158,7 @@
     <div class="col-md-6 mb-3" style="overflow: hidden;">
       <label class="form-label">{{ "language.form.joiningDate" | translate }}
         <span class="text-danger">*</span></label>
-      <dp-date-picker class="form-control" formControlName="joiningDate" placeholder="00/00/00"
+      <dp-date-picker class="form-control" formControlName="joiningDate" placeholder="00/00/00" [disabled]="isView || !this.isEdit"
         [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'joiningDate')" [ngClass]="{
           'is-invalid':
             addEditForm.get('joiningDate')?.invalid &&
