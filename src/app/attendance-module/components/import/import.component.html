@@ -6,14 +6,14 @@
 
     <form>
       <div class="card-body">
-        <div class="form-group row">
+        <div class="form-group ">
           <div class="mb-1 w-75 mx-auto">
             @if(!preview){<ngx-file-drop
               dropZoneLabel="Drop Excel files here"
               class="px-5"
               (onFileDrop)="droppedFiles($event)"
               [useDragEnter]="true"
-              accept=".xlsx, .xls"
+              accept=".xlsx"
               [multiple]="false"
             >
               <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
@@ -27,8 +27,8 @@
               </ng-template>
             </ngx-file-drop>}
 
-            @if(preview){<div   class="mt-4 flex items-center" style="gap: 6px;">
-              <div class="d-flex align-items-center justify-content-center space-x-2 mb-2 ">
+            @if(preview){<div   class="mt-4 mx-4 flex items-center" style="gap: 6px;">
+              <div class="d-flex align-items-center justify-content-center space-x-2 mb-2 " style="flex-direction: column; gap: 10px;">
                 @if(isPreviewString()){<p class="text-lg font-medium text-gray-700 m-0"><b>{{ 'language.generic.fileName' | translate}}:</b>  {{ fileName }}</p>}
                 @if(!isPreviewString()){<img [src]="preview" alt="File Preview" class="w-24 h-24 object-cover" />}
                 <button (click)="removeFile()" class="btn btn-light-danger text-sm">Remove</button>
