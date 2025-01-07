@@ -1,84 +1,78 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5" >
+  <div class="card card-custom w-100 p-5">
     <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
 
-        <div class="row">
+      <div class="row">
 
-            <div class="col-md-12 mb-3">
-                <label class="form-label">{{ "language.generic.attendanceDate" | translate }}
-                    <span class="text-danger">*</span></label>
-                <dp-date-picker class="form-control" formControlName="date" placeholder="00:00"     [config]="datePickerConfig"
-                   theme="dp-material" (onChange)="getEmpAttByDate()"
-                    [ngClass]="{
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{ "language.generic.attendanceDate" | translate }}
+            <span class="text-danger">*</span></label>
+          <dp-date-picker class="form-control" formControlName="date" placeholder="00:00" [config]="datePickerConfig"
+            theme="dp-material" (onChange)="getEmpAttByDate()" [ngClass]="{
                 'is-invalid':
                   addEditForm.get('date')?.invalid &&
                   (addEditForm.get('date')?.touched || isSubmitted)
               }"></dp-date-picker>
-                <div *ngIf="
+          <div *ngIf="
                 addEditForm.get('date')?.invalid &&
                 (addEditForm.get('date')?.touched || isSubmitted)
               " class="invalid-feedback">
-                    {{ "language.errors.dateequired" | translate }}
-                </div>
-            </div>
+            {{ "language.errors.dateequired" | translate }}
+          </div>
         </div>
+      </div>
 
 
-        <div class="row">
+      <div class="row">
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.generic.checkInDate" | translate }}
-                    <span class="text-danger">*</span></label>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.generic.checkInDate" | translate }}
+            <span class="text-danger">*</span></label>
 
-                <dp-date-picker class="form-control"
-                    formControlName="checkInDate"
-                    placeholder="00:00"
-                    [config]="datePickerConfig"
-                    theme="dp-material"
-                    (change)="onDateTimeChange($event,'checkInDate')"
-                    [disabled]="checkInDateEnabled"
-                    [ngClass]="{
+          <dp-date-picker class="form-control" formControlName="checkInDate" placeholder="00:00"
+            [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkInDate')"
+            [disabled]="checkInDateEnabled" [ngClass]="{
                         'is-invalid': (addEditForm.get('checkInDate')?.invalid &&
-                                     (addEditForm.get('checkInDate')?.touched || isSubmitted)) ||
-                                     addEditForm.get('checkInDate')?.errors?.['invalidCheckOut']
+                                      (addEditForm.get('checkInDate')?.touched || isSubmitted)) ||
+                                      addEditForm.get('checkInDate')?.errors?.['invalidCheckOut']
                     }">
-                </dp-date-picker>
-                <div *ngIf="addEditForm.get('checkInDate')?.errors?.['invalidCheckOut']" class="invalid-feedback">
-                    {{ "language.errors.checkInDateMustBeBeforeCheckOut" | translate }}
-                </div>
+          </dp-date-picker>
+          <div *ngIf="addEditForm.get('checkInDate')?.errors?.['invalidCheckOut']" class="invalid-feedback">
+            {{ "language.errors.checkInDateMustBeBeforeCheckOut" | translate }}
+          </div>
 
-                <div *ngIf="
+          <div *ngIf="
                     addEditForm.get('checkInDate')?.invalid &&
                     (addEditForm.get('checkInDate')?.touched || isSubmitted)
                   " class="invalid-feedback">
-                    {{ "language.errors.checkInDateequired" | translate }}
-                </div>
-            </div>
+            {{ "language.errors.checkInDateequired" | translate }}
+          </div>
+        </div>
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.generic.checkIn" | translate }}
-                    <span class="text-danger">*</span></label>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.generic.checkIn" | translate }}
+            <span class="text-danger">*</span></label>
 
-                <dp-date-picker class="form-control" [mode]="'time'"   [disabled]="checkInEnabled" formControlName="checkIn" placeholder="00:00"
-                    [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkIn')"
-                    [ngClass]="{
+          <dp-date-picker class="form-control" [mode]="'time'" [disabled]="checkInEnabled" formControlName="checkIn"
+            placeholder="00:00" [config]="timePickerConfig" theme="dp-material"
+            (change)="onDateTimeChange($event,'checkIn')" [ngClass]="{
                     'is-invalid':
                       addEditForm.get('checkIn')?.invalid &&
                       (addEditForm.get('checkIn')?.touched || isSubmitted)
                   }"></dp-date-picker>
 
-                <div *ngIf="
+          <div *ngIf="
                     addEditForm.get('checkIn')?.invalid &&
                     (addEditForm.get('checkIn')?.touched || isSubmitted)
                   " class="invalid-feedback">
-                    {{ "language.errors.checkInequired" | translate }}
-                </div>
-            </div>
-
-
-
+            {{ "language.errors.checkInequired" | translate }}
+          </div>
         </div>
+
+
+
+      </div>
 
 
       <div class="row">
@@ -86,82 +80,84 @@
 
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.generic.checkOutDate" | translate }}
-              <span class="text-danger">*</span></label>
+            <span class="text-danger">*</span></label>
 
-          <dp-date-picker class="form-control"
-              formControlName="checkOutDate"
-              placeholder="00:00"
-              [config]="datePickerConfig"
-              theme="dp-material"
-              (change)="onDateTimeChange($event,'checkOutDate')"
-              [disabled]="checkOutDateEnabled"
-              [ngClass]="{
+          <dp-date-picker class="form-control" formControlName="checkOutDate" placeholder="00:00"
+            [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOutDate')"
+            [disabled]="checkOutDateEnabled"
+            [minDate]="addEditForm.get('checkInDate')?.value ? addEditForm.get('checkInDate')?.value : null" [ngClass]="{
                   'is-invalid': (addEditForm.get('checkOutDate')?.invalid &&
                                 (addEditForm.get('checkOutDate')?.touched || isSubmitted)) ||
                                 addEditForm.get('checkOutDate')?.errors?.['invalidCheckOut']
               }">
           </dp-date-picker>
           <div *ngIf="addEditForm.get('checkOutDate')?.errors?.['invalidCheckOut']" class="invalid-feedback">
-              {{ "language.errors.checkOutDateMustBeAfterCheckIn" | translate }}
+            {{ "language.errors.checkOutDateMustBeAfterCheckIn" | translate }}
           </div>
 
-          <div *ngIf="
-              addEditForm.get('checkOutDate')?.invalid &&
-              (addEditForm.get('checkOutDate')?.touched || isSubmitted)
-            " class="invalid-feedback">
-              {{ "language.errors.checkOutDateequired" | translate }}
+          <div *ngIf="addEditForm.get('checkOutDate')?.touched" class="invalid-feedback ">
+            <ng-container *ngIf="addEditForm.get('checkOutDate')?.errors?.['required']">
+              {{ "language.errors.checkOutDateGreaterThenToCheckInDate" | translate }}
+            </ng-container>
           </div>
-      </div>
+
+          <div *ngIf="addEditForm.get('checkOutDate')?.touched" class="invalid-feedback ">
+            <div *ngIf="addEditForm.get('checkOutDate')?.errors?.['minLengthCheckOutDate']">
+              {{ "language.errors.checkOutDateGreaterThenToCheckInDate" | translate }}
+            </div>
+          </div>
+
+        </div>
 
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">{{ "language.generic.checkOut" | translate }}
-                    <span class="text-danger">*</span></label>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.generic.checkOut" | translate }}
+            <span class="text-danger">*</span></label>
 
-                <dp-date-picker class="form-control" [mode]="'time'" formControlName="checkOut" placeholder="00:00"
-                    [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOut')"       [disabled]="checkOutEnabled"
-                    [ngClass]="{
+          <dp-date-picker class="form-control" [mode]="'time'" formControlName="checkOut" placeholder="00:00"
+            [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOut')"
+            [disabled]="checkOutEnabled" [ngClass]="{
                     'is-invalid':
                       addEditForm.get('checkOut')?.invalid &&
                       (addEditForm.get('checkOut')?.touched || isSubmitted)
                   }"></dp-date-picker>
 
-                <div *ngIf="
+          <div *ngIf="
                     addEditForm.get('checkOut')?.invalid &&
                     (addEditForm.get('checkOut')?.touched || isSubmitted)
                   " class="invalid-feedback">
-                    {{ "language.errors.checkOutRequired" | translate }}
-                </div>
-            </div>
-
-
+            {{ "language.errors.checkOutRequired" | translate }}
+          </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12 mb-3">
-                <label class="form-label">{{'language.generic.reason' | translate}} <span
-                        class="text-danger"></span></label>
-                <textarea class="form-control" formControlName="comment"
-                    [placeholder]="'language.generic.reason' | translate" rows="3"
-                    [ngClass]="{'is-invalid': (addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted))}"></textarea>
-                <div *ngIf="addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted)"
-                    class="invalid-feedback">
-                    {{'language.errors.commentRequired' | translate}}
-                </div>
-            </div>
-        </div>
 
-        <div class="row mt-3">
-            <div class="col-12 text-right">
-                <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3"
-                    (click)="goBack()">
-                    {{ 'language.generic.back'| translate }}
-                </button>
-                <button  type="submit" class="btn btn-primary font-weight-bold me-3">
-                    {{ 'language.generic.submit'| translate }}
-                </button>
-            </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">{{'language.generic.reason' | translate}}
+            <span class="text-danger">*</span>
+          </label>
+          <textarea class="form-control" formControlName="comment" [placeholder]="'language.generic.reason' | translate"
+            rows="3"
+            [ngClass]="{'is-invalid': (addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted))}"></textarea>
+          <div *ngIf="addEditForm.get('comment')?.invalid && (addEditForm.get('comment')?.touched || isSubmitted)"
+            class="invalid-feedback">
+            {{'language.errors.reasonRequired' | translate}}
+          </div>
         </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12 text-right">
+          <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
+            {{ 'language.generic.back'| translate }}
+          </button>
+          <button type="submit" class="btn btn-primary font-weight-bold me-3">
+            {{ 'language.generic.submit'| translate }}
+          </button>
+        </div>
+      </div>
     </form>
-</div>
+  </div>
 </div>

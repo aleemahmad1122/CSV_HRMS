@@ -761,7 +761,7 @@
 
     <p style="color: white; margin-top: auto; text-transform: capitalize;">
       @if(checkInTime?.checkInTime){
-        Check-in time: <span>{{formattedCheckInTime}}</span>
+          {{"language.generic.check-in" | translate}}: <span>{{formattedCheckInTime}}</span>
       }
       @if(!checkInTime?.checkInTime){
         You're not checked in yet!

@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -90,7 +90,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.addEditForm.get('date')?.valueChanges.subscribe(value => {
+      this.addEditForm.patchValue({
+          checkInDate: value // Update checkInDate whenever date changes
+      });
+  });
   }
 
   ngOnDestroy(): void {
@@ -104,10 +108,27 @@ export class AddEditComponent implements OnInit, OnDestroy {
       checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
       date: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       checkInDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`],
-      checkOutDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`],
-      comment: [''],
+      checkOutDate: [
+        `${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,
+        [ this.checkOutDateValidator.bind(this)]
+      ],
+      comment: ['', Validators.required],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
+  }
+
+  private checkOutDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const checkInDate = this.addEditForm?.get('checkInDate')?.value;
+    const checkOutDate = control.value;
+
+    if (checkInDate && checkOutDate) {
+      const checkIn = new Date(checkInDate);
+      const checkOut = new Date(checkOutDate);
+      if (checkOut < checkIn || checkOut > checkIn) {
+        return { minLengthCheckOutDate: true };
+      }
+    }
+    return null;
   }
 
   private patchFormValues(): void {
@@ -116,7 +137,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         checkIn: this.convertToTimeLocalFormat(this.selectedValue.checkIn),
         checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
         date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
-        checkInDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkInDate),
+        checkInDate:  this.addEditForm.value['date'],
         checkOutDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkOutDate),
         comment: this.selectedValue.comment,
         offSet: this.selectedValue.offSet,
@@ -145,7 +166,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0]
   }
-  onDateTimeChange(event: Event, valueName: string): void {
+  onDateTimeChange(event: any, valueName: string): void {
+
+console.log(this.addEditForm);
+
+
     const input = event.target as HTMLInputElement;
     if (input.value) {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
@@ -262,7 +287,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   isCheckInDateEnabled(): void {
-    this.checkInDateEnabled = !(!this.employeeAttendanceByDate?.checkInDate);
+    // this.checkInDateEnabled = !(!this.employeeAttendanceByDate?.checkInDate);
+    this.checkInDateEnabled = true;
   }
 
   isCheckOutDateEnabled(): void {

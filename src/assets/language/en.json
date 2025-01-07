@@ -173,6 +173,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "checkOutDateGreaterThenToCheckInDate":"Check Out Date Should be greater then to Check In Date",
+      "reasonRequired":"Reason is Required",
       "checkOutDateDateequired":"Check Out Date is Required",
       "checkInDateequired":"Check In Date is Required",
       "assetRequired":"Asset is Required",
@@ -249,6 +251,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "check-in":"Check-in",
       "checkOutDate":"Check Out Date",
       "checkInDate":"Check In Date",
       "attendanceDate":"Attendance Date",

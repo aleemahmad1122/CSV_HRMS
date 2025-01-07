@@ -97,19 +97,28 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   private convertToTimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      // If invalid date, try parsing time string
+      const timeParts = dateString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (timeParts) {
+        let hours = parseInt(timeParts[1]);
+        const minutes = parseInt(timeParts[2]);
+        const period = timeParts[3].toUpperCase();
 
-    // Convert to 12-hour format
+        if (period === 'PM' && hours < 12) hours += 12;
+        if (period === 'AM' && hours === 12) hours = 0;
+
+        return `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')} ${period}`;
+      }
+      return '';
+    }
+
     let hours = date.getHours();
     const minutes = date.getMinutes();
+    const period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
 
-    // Convert 24-hour to 12-hour format
-    hours = hours % 12;
-    hours = hours ? hours : 12; // If hours is 0, set to 12
-
-    // Format with leading zeros for minutes only
-    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
-
-    return formattedTime;
+    return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
 
@@ -130,30 +139,26 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   }
 
   private formatDateForSubmission(timeString: string): string {
-    // Split the timeString into hours, minutes, and seconds
-    const [hours, minutes] = timeString.split(':').map(Number);
+    const [time, period] = timeString.split(' ');
+    const [hours, minutes] = time.split(':').map(Number);
 
-    if (
-      isNaN(hours) ||
-      isNaN(minutes) ||
-      hours < 0 || hours > 23 ||
-      minutes < 0 || minutes > 59
-    ) {
-      throw new Error("Invalid time format. Expected HH:mm:ss");
+    let adjustedHours = hours;
+    if (period === 'PM' && hours !== 12) {
+      adjustedHours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      adjustedHours = 0;
     }
 
-    // Create a new Date object with today's date and the provided time
     const now = new Date();
-    const localDate = new Date(
+    const date = new Date(
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      hours,
+      adjustedHours,
       minutes
     );
 
-    // Return the ISO string in local time format, without fractional seconds and 'Z'
-    return localDate.toISOString();
+    return date.toISOString();
   }
 
 
