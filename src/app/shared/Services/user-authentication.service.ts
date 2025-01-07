@@ -9,13 +9,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UserAuthenticationService {
   constructor(
-    private _router:Router,
+    private _router: Router,
     private _localStorageManagerService: LocalStorageManagerService,
     private _toaster: ToastrService,
-    private api : ApiCallingService
-    ) {}
+    private api: ApiCallingService
+  ) { }
 
-  saveUser(data:any): void {
+  saveUser(data: any): void {
     this._localStorageManagerService.saveUserToStorage(data);
   }
 
@@ -31,7 +31,7 @@ export class UserAuthenticationService {
     return this._localStorageManagerService.getUserRole();
   }
 
-  updateUser(data:any): void {
+  updateUser(data: any): void {
     this._localStorageManagerService.updateUserToStorage(data);
   }
 
@@ -44,7 +44,7 @@ export class UserAuthenticationService {
   }
 
   isLogin(): boolean {
-      return this._localStorageManagerService.isLoginValidationFromStorage();
+    return this._localStorageManagerService.isLoginValidationFromStorage();
   }
 
   isAdmin(): boolean {
@@ -56,22 +56,24 @@ export class UserAuthenticationService {
   }
 
   getUserId(): number {
-      return this._localStorageManagerService.getUserIdFromStorage();
+    return this._localStorageManagerService.getUserIdFromStorage();
   }
 
   logout(): void {
-    // this.api.postData("Auth", "logout",{},true,this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
-    // .subscribe({
-    //   next: (response) => {
-    //     if (response?.status === 200) {
-    //       this._localStorageManagerService.clearLocalStorage();
-    //       this._router.navigateByUrl('/');
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error(error);
-    //   }
-    // });
+    setTimeout(() => {
+      this.api.postData("Auth", "logout", {}, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+        .subscribe({
+          next: (response) => {
+            if (response?.status === 200) {
+              this._localStorageManagerService.clearLocalStorage();
+              this._router.navigateByUrl('/');
+            }
+          },
+          error: (error) => {
+            console.error(error);
+          }
+        });
+    }, 300);
     this._localStorageManagerService.clearLocalStorage();
     this._router.navigateByUrl('/');
   }
