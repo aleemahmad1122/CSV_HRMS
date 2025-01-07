@@ -51,6 +51,8 @@ export class AddEditComponent {
   editId: string;
   itemAttachment: any[] = [];
   attachmentTypes: IAttachmentType[] = [];
+
+  submitted = false;
   id: string = '';
   patchData: any
 
@@ -139,7 +141,6 @@ export class AddEditComponent {
 
   private patchFormValues(data: any): void {
     if (data) {
-      console.log('API Response:', data);
 
       // Patch main form values
       const workHistoryData = {
@@ -291,6 +292,7 @@ export class AddEditComponent {
 
 
   onSubmit(): void {
+    this.submitted = true;
     if (this.mainForm.invalid) {
       this.mainForm.markAllAsTouched();
       return;
@@ -392,7 +394,6 @@ export class AddEditComponent {
           localStorage.setItem('attachments', JSON.stringify([]));
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
-            this.back();
           } else {
             this._toaster.error(response?.message, 'Error!');
           }

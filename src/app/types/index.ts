@@ -148,6 +148,7 @@ export interface IRole extends ICommon {
   rolePriority: number;
   textColor: string;
   backgroundColor: string;
+  description?:string;
   isActive: boolean;
 }
 

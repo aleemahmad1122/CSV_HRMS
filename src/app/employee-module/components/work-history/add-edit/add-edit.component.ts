@@ -365,7 +365,6 @@ export class AddEditComponent {
           localStorage.setItem('attachments', JSON.stringify([]));
           if (response?.success) {
             this._toaster.success(response?.message, 'Success!');
-            this.back();
           } else {
             this._toaster.error(response?.message, 'Error!');
           }

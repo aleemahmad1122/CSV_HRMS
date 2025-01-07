@@ -102,7 +102,7 @@
           </div>
 
           <div *ngIf="addEditForm.get('checkOutDate')?.touched" class="invalid-feedback ">
-            <div *ngIf="addEditForm.get('checkOutDate')?.errors?.['minLengthCheckOutDate']">
+            <div *ngIf="addEditForm.get('checkOutDate')?.errors?.['minlength']">
               {{ "language.errors.checkOutDateGreaterThenToCheckInDate" | translate }}
             </div>
           </div>

@@ -1,0 +1,56 @@
+.pdf-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+  height: 600px;
+}
+
+.pdf-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+}
+
+/* Custom border for form controls */
+.form-control {
+  border: 2px solid #ccc; /* Default border color */
+  border-radius: 4px;
+}
+
+/* Add custom border color when the input is focused */
+.form-control:focus {
+  border-color: #007bff; /* Change border color on focus */
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+}
+
+/* Border color for invalid fields */
+.form-control.ng-invalid.ng-touched {
+  border-color: #dc3545; /* Red border for invalid fields */
+}
+
+/* Border color for valid fields */
+.form-control.ng-valid.ng-touched {
+  border-color: #28a745; /* Green border for valid fields */
+}
+
+/* Border color for select inputs */
+.form-select:focus {
+  border-color: #007bff; /* Change border color for select on focus */
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+}
+
+.form-select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}
+
+.form-select.ng-valid.ng-touched {
+  border-color: #28a745;
+}
+

@@ -162,7 +162,6 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
