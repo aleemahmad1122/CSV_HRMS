@@ -59,7 +59,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId || '' };
+    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId   };
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 

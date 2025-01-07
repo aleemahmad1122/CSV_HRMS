@@ -339,7 +339,7 @@ export class LeaveComponent implements AfterViewInit {
     }
 
     this.apiService
-      .patchData('Leave', `processLeave/${id}`, this.submitForm.value, true)
+      .patchData('Leave', `processLeave/${id}`, this.submitForm.value, true,this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {
