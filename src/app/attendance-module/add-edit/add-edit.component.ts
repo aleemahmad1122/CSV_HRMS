@@ -36,11 +36,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
 
-  checkInDateEnabled:boolean;
-  checkOutDateEnabled:boolean;
+  checkInDateEnabled: boolean;
+  checkOutDateEnabled: boolean;
 
-  checkInEnabled:boolean;
-  checkOutEnabled:boolean;
+  checkInEnabled: boolean;
+  checkOutEnabled: boolean;
 
   employeeAttendanceByDate?: {
     attendanceId: string;
@@ -137,7 +137,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     hours = hours ? hours : 12; // If hours is 0, set to 12
 
     // Format with leading zeros for minutes only
-    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
+    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${date.getHours() > 11 ? 'PM' : 'AM'}`;
 
     return formattedTime;
   }
@@ -160,34 +160,34 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   getEmpAttByDate(): void {
     if (!this.addEditForm.get('date')?.value) {
-        return;
+      return;
     }
 
     this.apiCalling.getData("Attendance", `getEmployeeAttendanceByDate`, true,
-        { employeeId: this.id, date: this.addEditForm.value['date'] })
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-            next: (response) => {
-                if (response?.success) {
-                    this.employeeAttendanceByDate = response?.data;
-                } else {
-                    this.employeeAttendanceByDate = undefined;
-                    this.toaster.info(response.message);
-                }
-                // Call these after setting employeeAttendanceByDate
-                this.isCheckInDateEnabled();
-                this.isCheckOutDateEnabled();
-                this.isCheckInEnabled();
-                this.isCheckOutEnabled();
-            },
-            error: (error) => {
-                this.employeeAttendanceByDate = undefined;
-                            this.isCheckInDateEnabled();
-                this.isCheckOutDateEnabled();
-                this.isCheckInEnabled();
-                this.isCheckOutEnabled();
-            }
-        });
+      { employeeId: this.id, date: this.addEditForm.value['date'] })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this.employeeAttendanceByDate = response?.data;
+          } else {
+            this.employeeAttendanceByDate = undefined;
+            this.toaster.info(response.message);
+          }
+          // Call these after setting employeeAttendanceByDate
+          this.isCheckInDateEnabled();
+          this.isCheckOutDateEnabled();
+          this.isCheckInEnabled();
+          this.isCheckOutEnabled();
+        },
+        error: (error) => {
+          this.employeeAttendanceByDate = undefined;
+          this.isCheckInDateEnabled();
+          this.isCheckOutDateEnabled();
+          this.isCheckInEnabled();
+          this.isCheckOutEnabled();
+        }
+      });
   }
 
   private formatDateForSubmission(dateString: string): string {
@@ -196,17 +196,24 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  private formatTimeForSubmission(timeString: string): string | void {
-   if(timeString){ const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
-    if (
-      isNaN(hours) || isNaN(minutes) || isNaN(seconds) ||
-      hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59
-    ) {
-      throw new Error("Invalid time format. Expected HH:mm or HH:mm:ss");
-    }
-    const now = new Date();
-    const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
-    return localDate.toISOString();}
+  private formatTimeForSubmission(date: string, time: string): string | void {
+    let dateTime = `${date} ${time}`
+    return new Date(
+      new Date(dateTime).getFullYear(), new Date(dateTime).getMonth(), new Date(dateTime).getDate(),
+      new Date(dateTime).getHours(), new Date(dateTime).getMinutes(), new Date(dateTime).getSeconds()).toISOString()
+
+    // if (timeString) {
+    //   const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
+    //   if (
+    //     isNaN(hours) || isNaN(minutes) || isNaN(seconds) ||
+    //     hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59
+    //   ) {
+    //     throw new Error("Invalid time format. Expected HH:mm or HH:mm:ss");
+    //   }
+    //   const now = new Date();
+    //   const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
+    //   return localDate.toISOString();
+    // }
   }
 
 
@@ -221,9 +228,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     const values = {
       ...formValue,
       offSet: formValue.offSet,
-      date: this.formatDateForSubmission(formValue.date),
-      checkIn: this.formatTimeForSubmission(formValue.checkIn),
-      checkOut: this.formatTimeForSubmission(formValue.checkOut)
+      checkInDate: this.formatDateForSubmission(formValue.date),
+      checkIn: this.formatTimeForSubmission(formValue.checkInDate, formValue.checkIn),
+      checkOut: this.formatTimeForSubmission(formValue.checkOutDate, formValue.checkOut)
     };
 
 
