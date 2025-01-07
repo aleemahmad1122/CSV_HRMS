@@ -148,25 +148,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.isView = view === 'true';
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.selectedValue = this._localStorage.getEmployeeDetail()[0];
-
-        this.patchFormValues();
-        // this.apiCalling
-        //   .getData('Employee', `getEmployeeById/${id}`, true)
-        //   .pipe(takeUntil(this.ngUnsubscribe))
-        //   .subscribe({
-        //     next: (response) => {
-        //       if (response?.success) {
-        //         this.selectedValue = response?.data;
-        //         this.patchFormValues();
-        //       } else {
-        //         this.selectedValue = [];
-        //       }
-        //     },
-        //     error: () => {
-        //       this.selectedValue = [];
-        //     },
-        //   });
+        this.apiCalling
+          .getData('Employee', `getEmployeeById/${id}`, true)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe({
+            next: (response) => {
+              if (response?.success) {
+                this.selectedValue = response?.data;
+                this.patchFormValues();
+              } else {
+                this.selectedValue = [];
+              }
+            },
+            error: () => {
+              this.selectedValue = [];
+            },
+          });
       }
     });
   }

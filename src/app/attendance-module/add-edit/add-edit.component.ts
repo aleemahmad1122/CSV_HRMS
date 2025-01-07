@@ -24,9 +24,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
   };
 
   timePickerConfig = {
-    hour12: true,  // Use 24-hour format
-    timePicker: true,  // Enable time picker
-    format: environment.dateTimePatterns.time,  // Set the time format for the picker
+    hour12: true,
+    timePicker: true,
+    format: environment.dateTimePatterns.time,
   };
 
 
@@ -35,6 +35,23 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
+
+  checkInDateEnabled:boolean;
+  checkOutDateEnabled:boolean;
+
+  checkInEnabled:boolean;
+  checkOutEnabled:boolean;
+
+  employeeAttendanceByDate?: {
+    attendanceId: string;
+    employeeId: string;
+    attendanceDate: string;
+    checkInDate: string;
+    checkIn: string;
+    checkOutDate: string;
+    checkOut: string;
+  } = undefined;
+
 
   id: string;
 
@@ -83,9 +100,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      checkIn: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      checkIn: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
+      checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
       date: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      checkInDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`],
+      checkOutDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`],
       comment: [''],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
@@ -97,6 +116,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
         checkIn: this.convertToTimeLocalFormat(this.selectedValue.checkIn),
         checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
         date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
+        checkInDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkInDate),
+        checkOutDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkOutDate),
         comment: this.selectedValue.comment,
         offSet: this.selectedValue.offSet,
       });
@@ -105,15 +126,18 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
   private convertToTimeLocalFormat(dateString: string): string {
-    const date = new Date(dateString); // Parse the input string into a Date object
+    const date = new Date(dateString);
 
-    // Extract local time components
-    const hours = date.getHours(); // Get the hour in local time
-    const minutes = date.getMinutes(); // Get the minutes in local time
-    const seconds = date.getSeconds(); // Get the seconds in local time
+    // Convert to 12-hour format
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
 
-    // Format the time with leading zeros for consistency
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    // Convert 24-hour to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // If hours is 0, set to 12
+
+    // Format with leading zeros for minutes only
+    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
 
     return formattedTime;
   }
@@ -125,17 +149,55 @@ export class AddEditComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.value) {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
-      this.addEditForm.patchValue({ valueName: formattedValue });
+      this.addEditForm.patchValue({ [valueName]: formattedValue });
+
+      // Validate check-out time whenever related fields change
+      if (['checkIn', 'checkOut', 'checkInDate', 'checkOutDate'].includes(valueName)) {
+        this.validateCheckOutTime();
+      }
     }
   }
+
+  getEmpAttByDate(): void {
+    if (!this.addEditForm.get('date')?.value) {
+        return;
+    }
+
+    this.apiCalling.getData("Attendance", `getEmployeeAttendanceByDate`, true,
+        { employeeId: this.id, date: this.addEditForm.value['date'] })
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+            next: (response) => {
+                if (response?.success) {
+                    this.employeeAttendanceByDate = response?.data;
+                } else {
+                    this.employeeAttendanceByDate = undefined;
+                    this.toaster.info(response.message);
+                }
+                // Call these after setting employeeAttendanceByDate
+                this.isCheckInDateEnabled();
+                this.isCheckOutDateEnabled();
+                this.isCheckInEnabled();
+                this.isCheckOutEnabled();
+            },
+            error: (error) => {
+                this.employeeAttendanceByDate = undefined;
+                            this.isCheckInDateEnabled();
+                this.isCheckOutDateEnabled();
+                this.isCheckInEnabled();
+                this.isCheckOutEnabled();
+            }
+        });
+  }
+
   private formatDateForSubmission(dateString: string): string {
     const date = new Date(dateString);
     return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
   }
 
 
-  private formatTimeForSubmission(timeString: string): string {
-    const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
+  private formatTimeForSubmission(timeString: string): string | void {
+   if(timeString){ const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
     if (
       isNaN(hours) || isNaN(minutes) || isNaN(seconds) ||
       hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59
@@ -144,7 +206,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     }
     const now = new Date();
     const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
-    return localDate.toISOString();
+    return localDate.toISOString();}
   }
 
 
@@ -190,5 +252,41 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this._router.navigate([window.history.back()]);
+  }
+
+  isCheckInDateEnabled(): void {
+    this.checkInDateEnabled = !(!this.employeeAttendanceByDate?.checkInDate);
+  }
+
+  isCheckOutDateEnabled(): void {
+    this.checkOutDateEnabled = !(!this.employeeAttendanceByDate?.checkOutDate);
+  }
+
+  isCheckInEnabled(): void {
+    this.checkInEnabled = !(!this.employeeAttendanceByDate?.checkIn);
+  }
+
+  isCheckOutEnabled(): void {
+    this.checkOutEnabled = !(!this.employeeAttendanceByDate?.checkOut);
+  }
+
+  validateCheckOutTime(): void {
+    const checkInDate = new Date(this.addEditForm.get('checkInDate')?.value);
+    const checkInTime = this.addEditForm.get('checkIn')?.value;
+    const checkOutDate = new Date(this.addEditForm.get('checkOutDate')?.value);
+    const checkOutTime = this.addEditForm.get('checkOut')?.value;
+
+    if (checkInDate && checkInTime && checkOutDate && checkOutTime) {
+      const [checkInHours, checkInMinutes] = checkInTime.split(':');
+      const [checkOutHours, checkOutMinutes] = checkOutTime.split(':');
+
+      const fullCheckInDate = new Date(checkInDate.setHours(checkInHours, checkInMinutes));
+      const fullCheckOutDate = new Date(checkOutDate.setHours(checkOutHours, checkOutMinutes));
+
+      if (fullCheckOutDate <= fullCheckInDate) {
+        this.addEditForm.get('checkOut')?.setErrors({ invalidCheckOut: true });
+        this.addEditForm.get('checkOutDate')?.setErrors({ invalidCheckOut: true });
+      }
+    }
   }
 }

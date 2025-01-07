@@ -331,7 +331,7 @@ export class ListComponent implements AfterViewInit {
     }
 
     this.apiService
-      .patchData('Attendance', `processAttendance/${id}`, this.submitForm.value, true)
+      .patchData('Attendance', `processAttendance/${id}`, this.submitForm.value, true,this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {

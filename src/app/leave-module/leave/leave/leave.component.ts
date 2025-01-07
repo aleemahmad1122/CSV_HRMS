@@ -51,6 +51,7 @@ export class LeaveComponent implements AfterViewInit {
     { value: "Last7Days", name: "Last 7 Days" }
   ];
 
+
   permissions: { isAssign: boolean; permission: string }[] = [];
   isEdit: boolean = false;
   isCreate: boolean = false;
@@ -81,7 +82,7 @@ export class LeaveComponent implements AfterViewInit {
     private activatedRoute: ActivatedRoute
 
   ) {
-
+    this.setFilter('MTD')
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
@@ -90,9 +91,6 @@ export class LeaveComponent implements AfterViewInit {
     this.loadPermissions();
 
 
-    const today = new Date();
-    this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-    this.endDate = today.toISOString().split('T')[0];
 
     this.initializeSearch();
     this.getData();

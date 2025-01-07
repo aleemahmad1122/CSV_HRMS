@@ -173,6 +173,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "checkOutDateDateequired":"Check Out Date is Required",
+      "checkInDateequired":"Check In Date is Required",
       "assetRequired":"Asset is Required",
       "issuedDateRequired":"Issued Date is Required",
       "assetTypeIdRequired":"Asset Type is Required",
@@ -247,6 +249,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "checkOutDate":"Check Out Date",
+      "checkInDate":"Check In Date",
       "attendanceDate":"Attendance Date",
       "attendanceInfo":"Attendance Info",
       "leaveInfo":"Leave Info",

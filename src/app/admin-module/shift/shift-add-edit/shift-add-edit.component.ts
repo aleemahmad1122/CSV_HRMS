@@ -96,14 +96,18 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
 
   private convertToTimeLocalFormat(dateString: string): string {
-    const date = new Date(dateString); // Parse the input string into a Date object
+    const date = new Date(dateString);
 
-    // Extract local time components
-    const hours = date.getHours(); // Get the hour in local time
-    const minutes = date.getMinutes(); // Get the minutes in local time
+    // Convert to 12-hour format
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
 
-    // Format the time with leading zeros (HH:mm)
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    // Convert 24-hour to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // If hours is 0, set to 12
+
+    // Format with leading zeros for minutes only
+    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
 
     return formattedTime;
   }

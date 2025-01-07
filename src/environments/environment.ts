@@ -6,7 +6,7 @@ export const environment = {
     fileFormat: '.png, .jpg, .jpeg, .pdf, .xlsx, .docx, .doc, .csv, .mp4',
     dateTimePatterns: {
       date: 'YYYY-MM-DD',
-      time:'HH:mm',
+      time:'h:mm',
       dateTime: 'YYYY-MM-DD HH:mm',
   },
     defaultDate: new Date().toISOString()

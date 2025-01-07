@@ -53,12 +53,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private _toaster: ToastrService,
     private ngZone: NgZone
   ) {
+    this.setFilter('MTD')
+
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.emp = this._localStorage.getEmployeeDetail()[0];
-    // Set default dates for Month to Date (MTD)
-    const today = new Date();
-    this.startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
-    this.endDate = today.toISOString().split('T')[0];
+
   }
 
   ngAfterViewInit(): void {
