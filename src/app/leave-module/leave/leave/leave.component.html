@@ -20,7 +20,8 @@
         </div>
       </form>
 
-      @if(isCreate){<button routerLink="/leave/leave/add" [queryParams]="{id:this.empId}" class="btn btn-primary">
+      @if(isCreate){<button routerLink="/leave/leave/add" [queryParams]="{id:( isHr ? this.selectedEmpId : this.empId)}"
+        class="btn btn-primary">
         {{ 'language.generic.applyLeave' | translate }}
       </button>}
     </div>
@@ -43,11 +44,12 @@
       <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">{{ "language.generic.selectFilter" | translate }}
           <span class="text-danger"></span></label>
-          <select class="form-control custom-select" data-col-index="2" #selectFilter (change)="setFilter(selectFilter.value)">
-            @for(opt of fileOptions; track $index){
-              <option [value]="opt.value">{{opt.name}}</option>
-            }
-          </select>
+        <select class="form-control custom-select" data-col-index="2" #selectFilter
+          (change)="setFilter(selectFilter.value)">
+          @for(opt of fileOptions; track $index){
+          <option [value]="opt.value">{{opt.name}}</option>
+          }
+        </select>
       </div>
 
       <div class="" style="flex: 1;">
@@ -178,8 +180,7 @@
 
                     @if(this.isEdit && data.leaveStatus == 0 ){
                     <li class="w-100 mb-2">
-                      <a [routerLink]="['/leave/leave/edit']"
-                      [queryParams]="{ id:this.empId,editId: data.leaveId,}"
+                      <a [routerLink]="['/leave/leave/edit']" [queryParams]="{ id:this.empId,editId: data.leaveId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
@@ -187,7 +188,8 @@
                     </li>
                     }
 
-                    @if(data.leaveStatus == 0  || isHrApproval){
+                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    data.employeeId != this.empId)){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(1)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
                         class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon w-100 text-center"
@@ -197,16 +199,10 @@
                     </li> }
 
 
-                    @if(isDelete && data.leaveStatus != 0){
-                    <li class="w-100 mb-2">
-                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                        title="Edit details">
-                        {{'language.generic.delete' | translate}}
-                      </a>
-                    </li> }
 
-                    @if(data.leaveStatus == 0  || isHrApproval){
+
+                    @if((  (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    data.employeeId != this.empId)){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
                         class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
@@ -222,6 +218,16 @@
                         {{'language.generic.view' | translate}}
                       </a>
                     </li>}
+
+                    @if(isDelete && data.leaveStatus != 0){
+                    <li class="w-100 mb-2">
+                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{'language.generic.delete' | translate}}
+                      </a>
+                    </li> }
+
                   </ul>
                 </div>
 
@@ -253,7 +259,11 @@
                   </div>
                 </div>
 
-                @if (data.leaveStatus == 0  || isHrApproval) {
+
+
+
+                @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                data.employeeId != this.empId)){
                 <!-- Modal -->
                 <div class="modal fade" [id]="'statusModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">
@@ -300,7 +310,10 @@
                 </div>
 
                 }
-                @if (data.leaveStatus != 0  || isHrApproval) {
+
+
+
+                @if( data.leaveStatus != 0  ){
                 <!-- Modal -->
                 <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">
@@ -308,7 +321,8 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveInfo' | translate }}</h5>
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                          aria-label="Close">x</button>
                       </div>
                       <div class="modal-body">
                         <div class="row px-3">
@@ -320,7 +334,8 @@
                           </div>
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">
-                            <b>{{ (data.leaveStatus == 1 ? 'language.generic.approvedBy' : 'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy}}
+                            <b>{{ (data.leaveStatus == 1 ? 'language.generic.approvedBy' :
+                              'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy}}
                           </div>
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">

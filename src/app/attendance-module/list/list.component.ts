@@ -58,6 +58,7 @@ export class ListComponent implements AfterViewInit {
 
   selectedEmpId: string;
 
+
   msg: string = '';
 
   startDate = '';
@@ -72,6 +73,7 @@ export class ListComponent implements AfterViewInit {
 
 
   permissions: { isAssign: boolean; permission: string }[] = [];
+  isHr:boolean;
   isEdit: boolean = false;
   isCreate: boolean = false;
   isDelete: boolean = false;
@@ -116,13 +118,13 @@ export class ListComponent implements AfterViewInit {
     this.activatedRoute.data.subscribe(data => {
       const permissionsData = data['permission'];
 
-
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Attendance" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Apply_Attendance" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Attendance" && p.isAssign);
         this.isApproval = this.permissions.some(p => p.permission === "Attendance_Approval" && p.isAssign);
+        this.isHr = this.permissions.some(p => p.permission === "HR_Approval" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
