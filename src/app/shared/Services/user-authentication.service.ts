@@ -60,18 +60,19 @@ export class UserAuthenticationService {
   }
 
   logout(): void {
-    this.api.postData("Auth", "logout",{},true,this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
-    .subscribe({
-      next: (response) => {
-        if (response?.status === 200) {
-          this._localStorageManagerService.clearLocalStorage();
-          this._router.navigateByUrl('/');
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
-
+    // this.api.postData("Auth", "logout",{},true,this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+    // .subscribe({
+    //   next: (response) => {
+    //     if (response?.status === 200) {
+    //       this._localStorageManagerService.clearLocalStorage();
+    //       this._router.navigateByUrl('/');
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error(error);
+    //   }
+    // });
+    this._localStorageManagerService.clearLocalStorage();
+    this._router.navigateByUrl('/');
   }
 }
