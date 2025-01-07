@@ -201,7 +201,7 @@
 
 
 
-                    @if((  (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
                     data.employeeId != this.empId)){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
