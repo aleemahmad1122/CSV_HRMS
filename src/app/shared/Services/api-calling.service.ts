@@ -105,7 +105,7 @@ export class ApiCallingService {
     return catchError(error => {
       this._loader.hide();
       const errorMessage = error.error?.message || "Internal server error occurred while processing your request";
-      this._toaster.error(errorMessage);
+      // this._toaster.error(errorMessage);
       return throwError(() => error);
     });
   }
