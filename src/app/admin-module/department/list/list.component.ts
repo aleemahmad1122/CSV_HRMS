@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { IDesignations } from '../../../types';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list',
@@ -38,6 +39,7 @@ export class ListComponent  {
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private toaster: ToastrService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -147,7 +149,9 @@ export class ListComponent  {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.departmentId !== id);
+          if (res?.success){ this.dataList = this.dataList.filter((d) => d.departmentId !== id)}else{
+            this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
+          };;
         },
         error: (err) => console.error('Error deleting Department:', err),
       });

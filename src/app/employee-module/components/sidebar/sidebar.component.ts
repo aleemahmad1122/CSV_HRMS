@@ -143,7 +143,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe((params) => {
       const id = params['id'];
       this.isEditMode = !!id;
-      this.id = id || '';
+      this.id = params['id'];
       const view = params['view'];
       this.isView = view === 'true';
 

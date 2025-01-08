@@ -9,6 +9,7 @@ import { takeUntil, debounceTime } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-role-list',
@@ -38,6 +39,7 @@ export class RoleListComponent implements OnDestroy {
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private toaster: ToastrService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -150,7 +152,9 @@ export class RoleListComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.roleId !== id);
+          if (res?.success){ this.dataList = this.dataList.filter((d) => d.roleId !== id)}else{
+            this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
+          };
         },
         error: (err) => console.error('Error deleting Role:', err),
       });

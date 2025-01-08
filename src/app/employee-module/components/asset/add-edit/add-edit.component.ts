@@ -96,7 +96,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
 
     getEmpAssTypes():void{
     this.apiCalling
-      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true)
+      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true,{employeeId:this.id})
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {

@@ -8,6 +8,7 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-job-list',
@@ -37,6 +38,7 @@ export class JobListComponent {
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private toaster: ToastrService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -141,7 +143,9 @@ export class JobListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.jobId !== id);
+          if (res?.success){ this.dataList = this.dataList.filter((d) => d.jobId !== id)}else{
+            this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
+          };
         },
         error: (err) => console.error('Error deleting Job:', err),
       });

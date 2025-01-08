@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-shift-list',
@@ -37,6 +38,7 @@ export class ShiftListComponent {
 
   constructor(
     private apiService: ApiCallingService,
+    private toaster: ToastrService,
     private exportService: ExportService,
     private activatedRoute: ActivatedRoute
   ) {
@@ -146,7 +148,11 @@ export class ShiftListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.shiftId !== id);
+          if (res?.success) {
+            this.dataList = this.dataList.filter((d) => d.shiftId !== id)
+          }else{
+            this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
+          };
         },
         error: (err) => console.error('Error deleting Shift:', err),
       });

@@ -37,7 +37,7 @@
 
 /* Border color for valid fields */
 .form-control.ng-valid.ng-touched {
-  border-color: #28a745; /* Green border for valid fields */
+  /* border-color: #28a745; Green border for valid fields */
 }
 
 /* Border color for select inputs */
@@ -51,6 +51,6 @@
 }
 
 .form-select.ng-valid.ng-touched {
-  border-color: #28a745;
+   /* border-color: #28a745; Green border for valid fields */
 }
 

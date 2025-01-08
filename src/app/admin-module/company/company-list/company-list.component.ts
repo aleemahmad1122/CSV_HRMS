@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from "../../../shared/pipes/highlight.pipe";
 import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-company-list',
@@ -38,6 +39,7 @@ export class CompanyListComponent {
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
+    private toaster: ToastrService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -144,7 +146,9 @@ export class CompanyListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.companyId !== id);
+          if (res?.success){ this.dataList = this.dataList.filter((d) => d.companyId !== id)}else{
+            this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
+          };
         },
         error: (err) => console.error('Error deleting Company:', err),
       });
