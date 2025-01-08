@@ -143,7 +143,7 @@ export class JobListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success){ this.dataList = this.dataList.filter((d) => d.jobId !== id)}else{
+          if (res?.success){ this.getData()}else{
             this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
           };
         },

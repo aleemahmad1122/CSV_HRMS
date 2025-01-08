@@ -156,9 +156,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
     hours = hours % 12;
     hours = hours ? hours : 12; // If hours is 0, set to 12
 
-    // Format with leading zeros for minutes only
-    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${date.getHours() > 11 ? 'PM' : 'AM'}`;
-console.warn(formattedTime);
+    // Format with leading zeros for hours and minutes
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${date.getHours() >= 12 ? 'PM' : 'AM'}`;
 
     return formattedTime;
   }
