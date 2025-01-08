@@ -99,7 +99,7 @@ export class AddEditComponent {
               this.patchData = response.data;
               this.patchFormValues(this.patchData);
             } else {
-              this._toaster.error('Error fetching Work History', 'Error!');
+              this._toaster.error(response.message ||  'Error fetching Work History', 'Error!');
             }
           },
           error: () => {
@@ -113,8 +113,6 @@ export class AddEditComponent {
 
   private patchFormValues(data: any): void {
     if (data) {
-      console.log('API Response:', data);
-
       // Patch main form values
       const workHistoryData = {
         positionTitle: data.positionTitle || '',

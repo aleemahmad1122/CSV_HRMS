@@ -9,8 +9,8 @@ autocomplete="off">
           <th>Attachment Type</th>
           <th>Designation</th>
           <th>Organization</th>
-          <th>StartDate</th>
-          <th>EndDate</th>
+          <th>Start Date</th>
+          <th>End Date</th>
           <th>Attachment</th>
           <th>Actions</th>
         </tr>
@@ -58,7 +58,7 @@ autocomplete="off">
             </td>
 
             <td>
-              <dp-date-picker class="form-control" formControlName="endDate" name="endDate" placeholder="00/00/00"
+              <dp-date-picker class="form-control" formControlName="endDate"   name="endDate" placeholder="00/00/00"
                 [config]="datePickerConfig" theme="dp-material"
                 (change)="onDateTimeChange($event,'endDate')"></dp-date-picker>
             </td>
