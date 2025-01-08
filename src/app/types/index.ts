@@ -423,6 +423,7 @@ export interface IAttendanceList extends ICommon {
   employeeId: string;
   date: null | string;
   firstName: string;
+  remarks:string;
   lastName: string;
   checkIn: null | string;
   checkOut: null | string;

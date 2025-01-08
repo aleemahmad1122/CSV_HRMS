@@ -163,6 +163,12 @@
                 </span>
               </th>
 
+              <th>
+                <span>
+                  {{ "language.generic.remarks" | translate }}
+                </span>
+              </th>
+
 
 
               @if(isDelete || isEdit || isApproval){<th>
@@ -225,6 +231,8 @@
                 </span>
               </td>
 
+
+
               <td>
 
                 <span>
@@ -241,6 +249,16 @@
                       </div>
 
 
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+              <td>
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{(data.remarks || 'N/A')}}
                     </div>
                   </div>
                 </span>
