@@ -32,7 +32,7 @@
 
           <dp-date-picker class="form-control" [ngStyle]="{'background-color': checkInDateEnabled ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}" formControlName="checkInDate" placeholder="00:00"
             [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkInDate')"
-            [disabled]="isEditMode || checkInDateEnabled" [ngClass]="{
+            [disabled]="checkInDateEnabled" [ngClass]="{
                         'is-invalid': (addEditForm.get('checkInDate')?.invalid &&
                                       (addEditForm.get('checkInDate')?.touched || isSubmitted)) ||
                                       addEditForm.get('checkInDate')?.errors?.['invalidCheckOut']
@@ -54,7 +54,7 @@
           <label class="form-label">{{ "language.generic.checkIn" | translate }}
             <span class="text-danger">*</span></label>
 
-          <dp-date-picker [ngStyle]="{'background-color': checkInEnabled ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}" class="form-control" [mode]="'time'" [disabled]="isEditMode || checkInEnabled" formControlName="checkIn"
+          <dp-date-picker [ngStyle]="{'background-color': checkInEnabled ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}" class="form-control" [mode]="'time'" [disabled]="checkInEnabled" formControlName="checkIn"
             placeholder="00:00" [config]="timePickerConfig" theme="dp-material"
             (change)="onDateTimeChange($event,'checkIn')" [ngClass]="{
                     'is-invalid':
@@ -84,7 +84,7 @@
 
           <dp-date-picker class="form-control" [ngStyle]="{'background-color': checkOutDateEnabled ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}" formControlName="checkOutDate" placeholder="00:00"
             [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOutDate')"
-            [disabled]="isEditMode || checkOutDateEnabled"
+            [disabled]="checkOutDateEnabled"
             [minDate]="addEditForm.get('checkInDate')?.value ? addEditForm.get('checkInDate')?.value : null" [ngClass]="{
                   'is-invalid': (addEditForm.get('checkOutDate')?.invalid &&
                                 (addEditForm.get('checkOutDate')?.touched || isSubmitted)) ||
@@ -116,16 +116,16 @@
 
           <dp-date-picker [ngStyle]="{'background-color': checkOutEnabled ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}" class="form-control" [mode]="'time'" formControlName="checkOut" placeholder="00:00"
             [config]="timePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'checkOut')"
-            [disabled]="isEditMode || checkOutEnabled" [ngClass]="{
+            [disabled]="checkOutEnabled" [ngClass]="{
                     'is-invalid':
                       addEditForm.get('checkOut')?.invalid &&
                       (addEditForm.get('checkOut')?.touched || isSubmitted)
                   }"></dp-date-picker>
 
-          <div *ngIf="
-                    addEditForm.get('checkOut')?.invalid &&
-                    (addEditForm.get('checkOut')?.touched || isSubmitted)
-                  " class="invalid-feedback">
+          <div *ngIf="addEditForm.get('checkOut')?.errors?.['invalidCheckOut']" class="invalid-feedback">
+            {{ "language.errors.checkOutDateMustBeAfterCheckIn" | translate }}
+          </div>
+          <div *ngIf="addEditForm.get('checkOut')?.touched && addEditForm.get('checkOut')?.invalid" class="invalid-feedback">
             {{ "language.errors.checkOutRequired" | translate }}
           </div>
         </div>

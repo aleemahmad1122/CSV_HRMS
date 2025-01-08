@@ -176,10 +176,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
       this.addEditForm.patchValue({ [valueName]: formattedValue });
 
-      // Validate check-out time whenever related fields change
-      if (['checkIn', 'checkOut', 'checkInDate', 'checkOutDate'].includes(valueName)) {
         this.validateCheckOutTime();
-      }
     }
   }
 
@@ -270,7 +267,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
           this.toaster.success(response.message, 'Success!');
           this.goBack();
         } else {
-          this.toaster.error(response?.message || 'An error occurred', 'Error!');
+          this.toaster.error(response?.message + ' ' + response?.data || 'An error occurred', 'Error!');
         }
       },
       error: (error) => {
@@ -290,18 +287,19 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   isCheckOutDateEnabled(): void {
-    this.checkOutDateEnabled = !(!this.employeeAttendanceByDate?.checkOutDate);
+    this.checkOutDateEnabled = !(!this.employeeAttendanceByDate?.checkOutDate) && !this.isEditMode;
   }
 
   isCheckInEnabled(): void {
-    this.checkInEnabled = !(!this.employeeAttendanceByDate?.checkIn);
+    this.checkInEnabled = !(!this.employeeAttendanceByDate?.checkIn) && !this.isEditMode;
   }
 
   isCheckOutEnabled(): void {
-    this.checkOutEnabled = !(!this.employeeAttendanceByDate?.checkOut);
+    this.checkOutEnabled = !(!this.employeeAttendanceByDate?.checkOut) && !this.isEditMode;
   }
 
   validateCheckOutTime(): void {
+
     const checkInDate = new Date(this.addEditForm.get('checkInDate')?.value);
     const checkInTime = this.addEditForm.get('checkIn')?.value;
     const checkOutDate = new Date(this.addEditForm.get('checkOutDate')?.value);
