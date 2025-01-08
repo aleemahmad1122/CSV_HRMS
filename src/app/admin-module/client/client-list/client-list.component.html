@@ -145,14 +145,13 @@
                 </span></td>
               <td data-field="ShipDate" aria-label="10/15/2017" ><span >
                   <div class=" text-primary mb-0">
-                    {{data.details.length || 'N/A'}}</div>
+                    {{data.details || 'N/A'}}</div>
                 </span></td>
 
 
               <td  ><span >
                   <div class="d-flex align-items-center">
-                    <div class="text-dark-75   font-size-lg mb-0">{{data.address.slice(0,30) ||
-                      "N/A"}} {{data.address.length > 30 ? '...' : ''}}</div>
+                    <div class="text-dark-75   font-size-lg mb-0">{{data.address ||   "N/A"}}  </div>
                   </div>
                 </span></td>
 

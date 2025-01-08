@@ -1,19 +1,19 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
-
+import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
 
 interface ClientType  { clientTypeId: number | string; clientTypeName: string}
 
 @Component({
   selector: 'app-add-edit-client',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,NgxIntlTelInputModule],
   templateUrl: './add-edit-client.component.html',
   styleUrl: './add-edit-client.component.css'
 })
@@ -23,6 +23,19 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
   isEditMode :boolean | string= false;
   isSubmitted = false;
   selectedValue: any;
+
+  searchCountryField: SearchCountryField[] = [SearchCountryField.Iso2];
+
+  countries: { id: string; name: string }[] = Object.entries(CountryISO).map(([key, value]) => ({
+    name: key,
+    id: value
+  }));
+
+	separateDialCode = false;
+	SearchCountryField = SearchCountryField;
+	CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+	preferredCountries: CountryISO[] = [CountryISO.Pakistan, CountryISO.UnitedStates, CountryISO.UnitedKingdom];
 
   clients: ClientType[] = [
     { clientTypeId: 1, clientTypeName: 'Client 1' },
@@ -77,7 +90,7 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
       details: [''],
       address: ['', Validators.required],
-      contactNumber: ['', Validators.required],
+      contactNumber:new FormControl(undefined, [Validators.required]),
       email: ['', [Validators.required, Validators.email]],
       website: ['', [Validators.required, Validators.pattern('https?://.+')]],
     });
@@ -97,6 +110,10 @@ export class AddEditClientComponent implements OnInit, OnDestroy {
   }
 
   submitForm(): void {
+
+    const internationalNumber = this.addEditForm.value['contactNumber']?.internationalNumber || '0';
+  this.addEditForm.value['contactNumber'] = internationalNumber;
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
