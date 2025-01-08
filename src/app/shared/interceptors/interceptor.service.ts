@@ -42,7 +42,10 @@ export class InterceptorService {
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
         if (error.status === 403 || error.status  === 401) {
+          console.log(error);
+
           this._authService.logout();
+          window.location.reload()
         }
         this._loader.hide();
         return throwError(() => error);
