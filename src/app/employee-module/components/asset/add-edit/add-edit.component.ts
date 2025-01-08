@@ -13,11 +13,11 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule,DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
-export class AddEditComponent   implements OnInit, OnDestroy {
+export class AddEditComponent implements OnInit, OnDestroy {
 
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
@@ -25,14 +25,14 @@ export class AddEditComponent   implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<void>();
 
-  id:string = ''
+  id: string = ''
   addEditForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
-  typesList:IAssetType[];
+  typesList: IAssetType[];
 
-  empAssTypesList:{assetId:string;assetName:string;}[] = [];
+  empAssTypesList: { assetId: string; assetName: string; }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -54,20 +54,20 @@ export class AddEditComponent   implements OnInit, OnDestroy {
       this.isEditMode = editId;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData('EmployeeAsset', `getEmployeeAssetById/${editId}`,  true,{employeeId:this.id})
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
+        this.apiCalling.getData('EmployeeAsset', `getEmployeeAssetById/${editId}`, true, { employeeId: this.id })
+          .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+            next: (response) => {
+              if (response?.success) {
                 this.selectedValue = response?.data;
                 this.patchFormValues();
-            } else {
+              } else {
+                this.selectedValue = [];
+              }
+            },
+            error: (error) => {
               this.selectedValue = [];
             }
-          },
-          error: (error) => {
-            this.selectedValue = [];
-          }
-        });
+          });
         // this.patchFormValues(); // Removed this line
       }
       this.getTypes()
@@ -75,15 +75,19 @@ export class AddEditComponent   implements OnInit, OnDestroy {
   }
 
 
-  private getTypes():void{
+  private getTypes(): void {
     this.apiCalling
-      .getData('AssetType', `getAssetType`, true)
+      .getData('AssetType', `getAssetType`, true, { employeeId: this.id })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
           if (response) {
             this.typesList = response?.data?.assetTypes;
+            this.addEditForm.patchValue({ assetTypeId: this.typesList?.[0]?.assetTypeId });
             this.patchFormValues();
+            if (!this.isEditMode) {
+              this.getEmpAssTypes()
+            }
           } else {
             this.typesList = [];
           }
@@ -94,9 +98,9 @@ export class AddEditComponent   implements OnInit, OnDestroy {
       });
   }
 
-    getEmpAssTypes():void{
+  getEmpAssTypes(): void {
     this.apiCalling
-      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true,{employeeId:this.id})
+      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true, { employeeId: this.id })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
@@ -139,7 +143,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
     return this.fb.group({
       issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       assetId: ['', Validators.required],
-      assetTypeId: ['', Validators.required],
+      assetTypeId: [this.isEditMode ? '' : this.typesList?.[0]?.assetTypeId || '', Validators.required],
       description: ['', Validators.required],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
@@ -154,7 +158,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
         description: this.selectedValue.description,
         offSet: Number(this.selectedValue.offSet),
       });
-      this.empAssTypesList.push({assetId:this.selectedValue.assetId,assetName:this.selectedValue.assetName})
+      this.empAssTypesList.push({ assetId: this.selectedValue.assetId, assetName: this.selectedValue.assetName })
     }
   }
 
@@ -164,7 +168,7 @@ export class AddEditComponent   implements OnInit, OnDestroy {
       return;
     }
 
-    const { assetTypeId, issuedDate,...rest } = this.addEditForm.value;
+    const { assetTypeId, issuedDate, ...rest } = this.addEditForm.value;
     const payload = {
       issuedDate: this.formatDateForSubmission(issuedDate),
       ...rest,
@@ -172,8 +176,8 @@ export class AddEditComponent   implements OnInit, OnDestroy {
     }
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData('EmployeeAsset', `updateEmployeeAsset/${this.isEditMode}`, payload, true,this.id)
-      : this.apiCalling.postData('EmployeeAsset', "addEmployeeAsset", payload, true,this.id);
+      ? this.apiCalling.putData('EmployeeAsset', `updateEmployeeAsset/${this.isEditMode}`, payload, true, this.id)
+      : this.apiCalling.postData('EmployeeAsset', "addEmployeeAsset", payload, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
