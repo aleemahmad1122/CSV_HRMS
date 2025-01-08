@@ -106,6 +106,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/Team']);
+    this.router.navigate([window.history.back()]);
   }
 }

@@ -145,7 +145,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
     }
   }
 
-
   private convertToTimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);
 
@@ -159,18 +158,20 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     // Format with leading zeros for minutes only
     const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')} ${date.getHours() > 11 ? 'PM' : 'AM'}`;
+console.warn(formattedTime);
 
     return formattedTime;
   }
+
+
   private convertToDatetimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0]
   }
-  onDateTimeChange(event: any, valueName: string): void {
-
-console.log(this.addEditForm);
 
 
+
+  onDateTimeChange(event: Event, valueName: string): void {
     const input = event.target as HTMLInputElement;
     if (input.value) {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
@@ -226,7 +227,6 @@ console.log(this.addEditForm);
     return new Date(
       new Date(dateTime).getFullYear(), new Date(dateTime).getMonth(), new Date(dateTime).getDate(),
       new Date(dateTime).getHours(), new Date(dateTime).getMinutes(), new Date(dateTime).getSeconds()).toISOString()
-
     // if (timeString) {
     //   const [hours, minutes, seconds = 0] = timeString.split(':').map(Number); // Defaults seconds to 0
     //   if (
@@ -240,7 +240,6 @@ console.log(this.addEditForm);
     //   return localDate.toISOString();
     // }
   }
-
 
   submitForm(): void {
     this.isSubmitted = true;

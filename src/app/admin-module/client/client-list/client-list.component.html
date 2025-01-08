@@ -106,9 +106,10 @@
               <th      >
                 <span > {{'language.generic.title' | translate}} </span>
               </th>
-              <th       ><span>
-                  {{'language.generic.contactNumber' | translate}}
-                </span></th>
+              <th       >
+                 {{'language.generic.contactNumber' | translate}}
+
+              </th>
 
               <th ><span >
                   {{'language.form.details' | translate}} </span></th>
@@ -140,12 +141,11 @@
                 </span>
               </td>
               <td   ><span >
-                  <div class="font-weight-bolder font-size-lg mb-0">{{data.contactNumber.slice(0,20) || "N/A" }}
-                    {{data.contactNumber.length > 20 ? '...' : ''}}</div>
+                  <div class=" font-size-lg mb-0">{{data.contactNumber || "N/A" }} </div>
                 </span></td>
               <td data-field="ShipDate" aria-label="10/15/2017" ><span >
-                  <div class="font-weight-bolder text-primary mb-0">{{data.details.slice(0,15) || "N/A"}}
-                    {{data.details.length > 15 ? '...' : ''}}</div>
+                  <div class=" text-primary mb-0">
+                    {{data.details.length || 'N/A'}}</div>
                 </span></td>
 
 

@@ -145,7 +145,7 @@
       <div class="col-md-6 mb-3">
         <label class="form-label">{{'language.form.registrationNumber' | translate}} <span
             class="text-danger">*</span></label>
-        <input type="text" class="form-control" formControlName="registrationNumber"
+        <input type="number" class="form-control" formControlName="registrationNumber"
           [placeholder]="'language.placeholders.registrationNumber' | translate"
           [ngClass]="{'is-invalid': (companyForm.get('registrationNumber')?.invalid && (companyForm.get('registrationNumber')?.touched || isSubmitted))}" />
         <div

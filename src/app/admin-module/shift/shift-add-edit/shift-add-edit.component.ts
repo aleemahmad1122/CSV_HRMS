@@ -97,28 +97,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   private convertToTimeLocalFormat(dateString: string): string {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      // If invalid date, try parsing time string
-      const timeParts = dateString.match(/(\d+):(\d+)\s*(AM|PM)/i);
-      if (timeParts) {
-        let hours = parseInt(timeParts[1]);
-        const minutes = parseInt(timeParts[2]);
-        const period = timeParts[3].toUpperCase();
-
-        if (period === 'PM' && hours < 12) hours += 12;
-        if (period === 'AM' && hours === 12) hours = 0;
-
-        return `${hours % 12 || 12}:${minutes.toString().padStart(2, '0')} ${period}`;
-      }
-      return '';
-    }
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const period = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-
-    return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
+    return date.toISOString().split("T")[0]
   }
 
 
