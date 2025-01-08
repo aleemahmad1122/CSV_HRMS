@@ -251,6 +251,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "missing":"Missing",
       "check-in":"Check-in",
       "checkOutDate":"Check Out Date",
       "checkInDate":"Check In Date",

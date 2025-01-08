@@ -36,7 +36,7 @@ export class ExportService {
   private exportToExcel(data: any[]): void {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clients');
-    XLSX.writeFile(workbook, 'clients.xlsx');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Download');
+    XLSX.writeFile(workbook, 'download.xlsx');
   }
 }
