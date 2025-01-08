@@ -271,7 +271,7 @@
         <button type="button" class="btn btn-light-danger font-weight-bold button-spacing" (click)="goBack()">
           {{ "language.generic.back" | translate }}
         </button>
-        <button type="submit" class="btn btn-primary font-weight-bold me-3">
+        <button type="submit" class="btn btn-primary font-weight-bold me-3" [disabled]="!this.companyForm.valid">
           {{ "language.generic.submit" | translate }}
         </button>
       </div>
