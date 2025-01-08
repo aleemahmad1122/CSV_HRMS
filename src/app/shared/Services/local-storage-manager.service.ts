@@ -134,12 +134,12 @@ export class LocalStorageManagerService {
   }
 
   isLoginValidationFromStorage(): boolean {
-    let token = '';
+    let emp = '';
     if (isPlatformBrowser(this.platformId)) {
-      token = localStorage.getItem('token') || '';
+      emp = localStorage.getItem('employeeDetail') || '';
     }
 
-    return token !== '' ? true : false;
+    return emp.length > 0 ? true : false;
   }
 
   isAdminValidationFromStorage(): boolean {

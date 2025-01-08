@@ -44,7 +44,6 @@ export class AppComponent {
         this.isLogin = true;
       } else {
         this.isLogin = false;
-        this._authService.logout()
       }
     });
 

@@ -60,20 +60,20 @@ export class UserAuthenticationService {
   }
 
   logout(): void {
-    setTimeout(() => {
-      this.api.postData("Auth", "logout", {}, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
-        .subscribe({
-          next: (response) => {
-            if (response?.status === 200) {
-              this._localStorageManagerService.clearLocalStorage();
-              this._router.navigateByUrl('/');
-            }
-          },
-          error: (error) => {
-            console.error(error);
-          }
-        });
-    }, 300);
+    // setTimeout(() => {
+    //   this.api.postData("Auth", "logout", {}, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+    //     .subscribe({
+    //       next: (response) => {
+    //         if (response?.status === 200) {
+    //           this._localStorageManagerService.clearLocalStorage();
+    //           this._router.navigateByUrl('/');
+    //         }
+    //       },
+    //       error: (error) => {
+    //         console.error(error);
+    //       }
+    //     });
+    // }, 300);
     this._localStorageManagerService.clearLocalStorage();
     this._router.navigateByUrl('/');
   }
