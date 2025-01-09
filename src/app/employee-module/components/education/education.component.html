@@ -108,12 +108,12 @@
       </th>
 
 
-        <th           >
+        <th  (click)="sort('educationTitle')" class="cursor-pointer" >
           <span > {{'language.generic.positionTitle' | translate}} </span>
         </th>
 
 
-        <th           >
+        <th (click)="sort('institution')" class="cursor-pointer" >
           <span >  {{'language.generic.institution' | translate}}</span>
         </th>
 
@@ -133,9 +133,6 @@
         [ngClass]="{ 'inactive-row': !data.isActive }"
       >
         <td
-          class="datatable-cell-sorted datatable-cell-left datatable-cell"
-          data-field="RecordID"
-          aria-label="1"
         >
           <span
             ><span class="font-weight-bolder px-3">
@@ -144,7 +141,7 @@
           >
         </td>
 
-        <td      aria-label="64616-103" class="datatable-cell">
+        <td>
           <span  >
             <div class="d-flex align-items-center">
               <div class="text-dark-75   font-size-lg mb-0"     [innerHTML]="data.educationTitle || 'N/A' | highlight: searchTerm">
@@ -153,7 +150,7 @@
           </span>
         </td>
 
-        <td      aria-label="64616-103" class="datatable-cell">
+        <td >
           <span  >
             <div class="d-flex align-items-center">
               <div class="text-dark-75   font-size-lg mb-0">

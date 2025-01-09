@@ -13,6 +13,7 @@ import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
+import { SortingService } from "../../shared/Services/sorting.service";
 
 @Component({
   selector: 'app-list',
@@ -79,10 +80,15 @@ export class ListComponent implements AfterViewInit {
   isDelete: boolean = false;
   isApproval: boolean = false;
 
+
+  sortField: string = 'firstName';
+  sortDirection: boolean = true;
+
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private _localStorage: LocalStorageManagerService,
+    private sortingService: SortingService,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute
   ) {
@@ -105,6 +111,18 @@ export class ListComponent implements AfterViewInit {
       attendanceStatus: [0],
       comment: ['', Validators.required],
     });
+  }
+
+
+
+  sort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = !this.sortDirection; // Toggle sort direction
+    } else {
+      this.sortField = field; // Set new sort field
+      this.sortDirection = true; // Reset to ascending
+    }
+    this.dataList = this.sortingService.sort(this.dataList as any, this.sortField as keyof typeof this.dataList[0], this.sortDirection) as any;
   }
 
   setStatus(status: number): void {

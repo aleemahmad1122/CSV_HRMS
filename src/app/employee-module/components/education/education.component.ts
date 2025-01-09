@@ -8,6 +8,7 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
+import { SortingService } from "../../../shared/Services/sorting.service";
 
 @Component({
   selector: 'app-education',
@@ -36,10 +37,15 @@ export class EducationComponent {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
+
+  sortField: string = 'educationTitle';
+  sortDirection: boolean = true;
+
   constructor(
     private apiService: ApiCallingService,
     private route: ActivatedRoute,
     private exportService: ExportService,
+    private sortingService: SortingService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -47,6 +53,16 @@ export class EducationComponent {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(_ => this.id = _['id']);
     this.getData();
     this.loadPermissions();
+  }
+
+  sort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = !this.sortDirection; // Toggle sort direction
+    } else {
+      this.sortField = field; // Set new sort field
+      this.sortDirection = true; // Reset to ascending
+    }
+    this.dataList = this.sortingService.sort(this.dataList as any, this.sortField as keyof typeof this.dataList[0], this.sortDirection) as any;
   }
 
   private initializeSearch(): void {

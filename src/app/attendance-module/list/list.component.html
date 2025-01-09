@@ -132,38 +132,38 @@
                 <span># </span>
               </th>
 
-              <th>
+              <th (click)="sort('firstName')" class="cursor-pointer" >
                 <span>
                   {{ "language.generic.empName" | translate }}
                 </span>
               </th>
 
-              <th>
+              <th (click)="sort('attendanceDateTime')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.attendanceDate" | translate }}
                 </span>
               </th>
 
-              <th>
+              <th (click)="sort('checkIn')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.checkIn" | translate }}
                 </span>
               </th>
 
-              <th>
+              <th (click)="sort('checkOut')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.checkOut" | translate }}
                 </span>
               </th>
 
 
-              <th>
+              <th (click)="sort('attendanceStatus')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.status" | translate }}
                 </span>
               </th>
 
-              <th>
+              <th (click)="sort('remarks')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.remarks" | translate }}
                 </span>

@@ -92,20 +92,20 @@
             <span ># </span>
           </th>
 
-          <th           >
+          <th     (click)="sort('assetName')" class="cursor-pointer"      >
             <span >{{'language.generic.name' | translate}}</span>
           </th>
 
 
-          <th           >
+          <th     (click)="sort('assetTypeName')" class="cursor-pointer"         >
             <span > {{'language.form.category' | translate}} </span>
           </th>
 
-          <th           >
+          <th     (click)="sort('issuedDate')" class="cursor-pointer"             >
             <span > {{'language.generic.issuedDate' | translate}} </span>
           </th>
 
-          <th           >
+          <th       (click)="sort('description')" class="cursor-pointer"         >
             <span > {{'language.generic.description' | translate}} </span>
           </th>
 
@@ -158,8 +158,7 @@
             <span >
               <div class="d-flex align-items-center">
                 <div class="text-dark-75   font-size-lg mb-0">
-                  {{data.description.slice(0,40) || "N/A"}}
-                  {{data.description.length > 40 ? '...' : ''}}
+                  {{data.description || "N/A"}}
                 </div>
               </div>
             </span>
