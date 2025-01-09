@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from "../../../shared/pipes/highlight.pipe";
 import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 import { ToastrService } from 'ngx-toastr';
+import { SortingService } from "../../../shared/Services/sorting.service";
 
 @Component({
   selector: 'app-company-list',
@@ -36,10 +37,17 @@ export class CompanyListComponent {
   isCreate: boolean;
   isDelete: boolean;
 
+
+
+
+  sortField: string = 'name';
+  sortDirection: boolean = true;
+
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private toaster: ToastrService,
+    private sortingService: SortingService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -47,6 +55,16 @@ export class CompanyListComponent {
     this.loadPermissions();
   }
 
+
+  sort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = !this.sortDirection; // Toggle sort direction
+    } else {
+      this.sortField = field; // Set new sort field
+      this.sortDirection = true; // Reset to ascending
+    }
+    this.dataList = this.sortingService.sort(this.dataList as any, this.sortField as keyof typeof this.dataList[0], this.sortDirection) as any;
+  }
   private initializeSearch(): void {
     this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))
       .subscribe((term) => this.getData(term));

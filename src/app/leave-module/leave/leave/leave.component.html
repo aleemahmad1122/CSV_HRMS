@@ -128,7 +128,7 @@
                 <span># </span>
               </th>
 
-              <th data-field="OrderID">
+              <th (click)="sort('firstName')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.empName" | translate }}
                 </span>
@@ -136,7 +136,7 @@
 
 
 
-              <th data-field="OrderID">
+              <th (click)="sort('leaveReason')" class="cursor-pointer">
                 <span>
                   {{ "language.form.leaveReason" | translate }}
                 </span>
@@ -144,7 +144,7 @@
 
 
 
-              <th data-field="OrderID">
+              <th (click)="sort('leaveStatus')" class="cursor-pointer">
                 <span>
                   {{ "language.form.status" | translate }}
                 </span>

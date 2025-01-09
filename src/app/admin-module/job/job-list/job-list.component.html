@@ -101,13 +101,13 @@
           <thead>
             <tr>
               <!-- Add width to columns for better control -->
-              <th style="width: 5%">
+              <th >
                 <span># </span>
               </th>
-              <th style="width: 35%">
+              <th  (click)="sort('jobTitle')" class="cursor-pointer">
                 <span>{{'language.generic.title' | translate}}</span>
               </th>
-              <th style="width: 40%">
+              <th (click)="sort('jobDescription')" class="cursor-pointer"  >
                 <span>{{'language.form.details' | translate}}</span>
               </th>
               @if(isEdit || isDelete){ <th style="width: 20%">
@@ -133,8 +133,7 @@
               </td>
 
               <td><span>
-                  <div>{{data.jobDescription.slice(0,40) || "N/A"}}
-                    {{data.jobDescription.length > 40 ? '...' : ''}}</div>
+                  <div>{{data.jobDescription || "N/A"}} </div>
                 </span></td>
 
 
