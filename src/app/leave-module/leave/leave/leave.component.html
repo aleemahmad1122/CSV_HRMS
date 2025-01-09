@@ -74,7 +74,7 @@
       <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">{{ "language.generic.user" | translate }}
           <span class="text-danger"></span></label>
-        <select [(ngModel)]="empId" (change)="onUserSelect($event)" class="form-control custom-select">
+        <select [(ngModel)]="userId" (change)="onUserSelect($event)" class="form-control custom-select">
 
           @for (item of userReporting; track $index) {
           <option [value]="item.employeeId">{{item.fullName}}</option>

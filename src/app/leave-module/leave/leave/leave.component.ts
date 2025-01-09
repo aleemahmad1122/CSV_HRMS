@@ -61,6 +61,7 @@ export class LeaveComponent implements AfterViewInit {
   isHr: boolean = false;
 
   empId: string;
+  userId: string;
 
   selectedEmpId: string;
 
@@ -92,6 +93,7 @@ export class LeaveComponent implements AfterViewInit {
   ) {
     this.setFilter('MTD')
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
+    this.userId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
     this.getUserReporting()

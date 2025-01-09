@@ -62,6 +62,8 @@ export class ListComponent implements AfterViewInit {
 
   msg: string = '';
 
+  userId:string
+
   startDate = '';
   endDate = new Date().toISOString();
 
@@ -97,6 +99,7 @@ export class ListComponent implements AfterViewInit {
     this.setFilter('MTD')
     this.loadPermissions();
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
+    this.userId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
 
     this.getUserReporting()
