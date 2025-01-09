@@ -258,7 +258,18 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{(data.remarks || 'N/A')}}
+                      <div>
+                        <span [ngClass]="{
+                            'label-warning': data.remarks.toLowerCase().includes('pending'),
+                            'label-success': data.remarks.toLowerCase().includes('present'),
+                            'label-danger': data.remarks.toLowerCase().includes('missing entry')
+                          }" class="label label-lg  label-inline mr-2">
+                          {{getremarksStatusText(data.remarks)}}
+                        </span>
+
+                      </div>
+
+
                     </div>
                   </div>
                 </span>
