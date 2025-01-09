@@ -222,14 +222,27 @@
                     </li>
 
                     }
-                    @if(this.isDelete){
-                    <li class="w-100">
-                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                        title="Delete">
-                        {{ "language.generic.delete" | translate }}
-                      </button>
-                    </li>
+                    @if(data.isActive){
+                      @if(this.isDelete){
+                        <li class="w-100 ">
+                             <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                            class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                            title="Delete">
+                            {{ "language.generic.inActive" | translate }}
+                          </button>
+                        </li>
+                        }
+                    }
+                    @if(!data.isActive){
+                      @if(this.isDelete){
+                        <li class="w-100 ">
+                             <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                            class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center"
+                            title="Delete">
+                            {{'language.generic.active' | translate}}
+                          </button>
+                        </li>
+                        }
                     }
                   </ul>
                 </div>
