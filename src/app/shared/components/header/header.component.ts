@@ -51,6 +51,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     // Subscribe to the breadcrumbs observable to get updates
     this.breadcrumbService.breadcrumbs$.subscribe(breadcrumbs => {
+      console.log(breadcrumbs);
+
       this.breadcrumbs = breadcrumbs;
     });
   }

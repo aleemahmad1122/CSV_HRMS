@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { takeUntil } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-import',
@@ -17,16 +19,19 @@ import { Subject } from 'rxjs';
   templateUrl: './import.component.html',
   styleUrl: './import.component.css'
 })
-export class ImportComponent {
+export class ImportComponent  {
   file: NgxFileDropEntry[] = [];
-  preview: string | ArrayBuffer | null = null;
+  preview: string | ArrayBuffer | boolean | null = null;
   fileName: string = '';
   ngUnsubscribe = new Subject<void>();
+  data: any[] = []; // To hold the parsed data
+  tableHeaders: string[] = []; // Initialize as an empty array
 
   constructor(
     private _router: Router,
     private _apiCalling: ApiCallingService,
     private _toaster: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnDestroy() {
@@ -39,20 +44,51 @@ export class ImportComponent {
     this.file = files;
     const droppedFile = files[0]; // Get the first file
 
-    // Check if the dropped file is an actual file
     if (droppedFile.fileEntry.isFile) {
       const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
       fileEntry.file((file: File) => {
-        this.fileName = file.name;
+        this.fileName = file.name; // Store the file name
         const reader = new FileReader();
-        reader.onload = () => {
-          this.preview = reader.result;
+        reader.onload = (e) => {
+          const fileContent = e.target?.result;
+          if (typeof fileContent === 'string') {
+            this.parseExcelFile(fileContent); // Parse the file content
+            this.preview = fileContent; // Set preview to trigger display
+            this.preview = true; // Ensure preview is set to true
+          }
         };
-        reader.readAsDataURL(file);
+        reader.readAsBinaryString(file); // Read as binary string for Excel files
       });
     }
   }
 
+  private parseExcelFile(fileContent: string): void {
+    const workbook = XLSX.read(fileContent, { type: 'binary' });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const jsonData:any = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); // Convert to JSON
+
+    // Check if jsonData is not empty
+    if (jsonData.length > 0) {
+      if (jsonData[0]?.length === 0 as any) {
+        console.warn('The first row is empty. Please check the file content.');
+      } else {
+        console.warn(jsonData);
+      }
+
+      this.tableHeaders = jsonData[0] as string[]; // Ensure this is treated as a string array
+      this.data = jsonData.slice(1); // Remaining rows as data
+    } else {
+      this.tableHeaders = []; // Initialize as an empty array
+      this.data = [];
+    }
+
+    // Trigger change detection
+    this.cdr.detectChanges();
+
+    console.log('Parsed data:', this.data);
+    console.log('Table headers:', this.tableHeaders);
+  }
 
   isPreviewString(): boolean {
     return typeof this.preview === 'string';
@@ -83,7 +119,7 @@ export class ImportComponent {
                 next: (response) => {
                   if (response?.success) {
                     this._toaster.success(response?.message, 'Success!');
-                    this.back();
+                    // this.back();
                   } else {
                     this._toaster.error(response?.message, 'Error!');
                   }
