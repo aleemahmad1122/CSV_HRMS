@@ -70,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       name: 'language.generic.personalInfo',
       route: "/employee/profile/employee/edit",
       class: "fa-solid fa-user",
-      permissions: "View_Employee",
+      permissions: "View_Personal_Info",
       show: false
     },
     {
