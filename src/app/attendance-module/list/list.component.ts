@@ -175,19 +175,6 @@ export class ListComponent implements AfterViewInit {
     }
   }
 
-  getremarksStatusText(status: string): string {
-    // Check if the status includes 'pending', 'approved', or 'rejected'
-    if (status.toLowerCase().includes('pending')) {
-      return status;
-    } else if (status.toLowerCase().includes('missing entry')) {
-      return status;
-    } else if (status.toLowerCase().includes('present')) {
-      return status;
-    } else {
-      return status;
-    }
-  }
-
   onUserSelect(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedEmpId = selectElement.value;
