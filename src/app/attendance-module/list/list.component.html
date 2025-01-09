@@ -276,7 +276,7 @@
                     @if(this.isEdit && data.attendanceStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/attendance/attendance/edit']"
-                        [queryParams]="{ id:this.empId,editId: data.attendanceId,}"
+                        [queryParams]="{ id:this.selectedEmpId,editId: data.attendanceId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
