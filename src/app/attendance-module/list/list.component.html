@@ -284,7 +284,7 @@
                   </button>
                   <ul class="dropdown-menu px-2 ">
 
-                    @if(this.isEdit && data.attendanceStatus == 0 ){
+                    @if(data.isActive && this.isEdit && data.attendanceStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/attendance/attendance/edit']"
                         [queryParams]="{ id:this.selectedEmpId,editId: data.attendanceId,}"

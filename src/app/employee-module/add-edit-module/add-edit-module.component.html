@@ -143,9 +143,6 @@
             addEditForm.get('role')?.invalid &&
             (addEditForm.get('role')?.touched || isSubmitted)
         }">
-        <option value="">
-          {{ "language.form.selectrole" | translate }}
-        </option>
         @for(role of rolesList; track role) {
         <option [value]="role.roleId">{{ role.name }}</option>
         }

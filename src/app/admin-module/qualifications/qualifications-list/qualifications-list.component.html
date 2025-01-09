@@ -148,9 +148,9 @@
                     </button>
                     <ul class="dropdown-menu px-2 ">
 
-                      @if(this.isEdit){
-                      <li class="w-100  mb-2">
-                        <a  [routerLink]="['/admin/qualifications/edit']" [queryParams]="{id: data.qualificationId}"
+                      @if(data.isActive && this.isEdit){
+                      <li class="w-100 mb-2">
+                        <a [routerLink]="['/admin/qualifications/edit']" [queryParams]="{id: data.qualificationId}"
                           class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                           title="Edit details">
                           {{'language.generic.edit' | translate}}

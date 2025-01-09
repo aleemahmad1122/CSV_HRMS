@@ -24,12 +24,6 @@ export const routes: Routes = [
     canActivate: [ProtectedGuard]
   },
 
-  {
-    path: 'profile',
-    loadChildren: () => import('./profile-module/profile.module').then(m => m.ProfileModule),
-    data: { breadcrumb: 'Profile' },
-    canActivate: [ProtectedGuard]
-  },
 
 
   {
