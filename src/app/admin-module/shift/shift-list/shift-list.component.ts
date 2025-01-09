@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 import { ConvertTimePipe } from "../../../shared/pipes/convert-time.pipe";
 import { ToastrService } from 'ngx-toastr';
+import { SortingService } from '../../../shared/Services/sorting.service';
 
 @Component({
   selector: 'app-shift-list',
@@ -36,10 +37,17 @@ export class ShiftListComponent {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
+
+
+  sortField: string = 'name';
+  sortDirection: boolean = true;
+
+
   constructor(
     private apiService: ApiCallingService,
     private toaster: ToastrService,
     private exportService: ExportService,
+    private sortingService: SortingService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
@@ -47,6 +55,18 @@ export class ShiftListComponent {
 
     this.loadPermissions();
   }
+
+
+  sort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = !this.sortDirection; // Toggle sort direction
+    } else {
+      this.sortField = field; // Set new sort field
+      this.sortDirection = true; // Reset to ascending
+    }
+    this.dataList = this.sortingService.sort(this.dataList as any, this.sortField as keyof typeof this.dataList[0], this.sortDirection) as any;
+  }
+
 
   private initializeSearch(): void {
     this.searchSubject.pipe(debounceTime(500), takeUntil(this.ngUnsubscribe))

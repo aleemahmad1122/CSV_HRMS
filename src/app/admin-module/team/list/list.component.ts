@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 import { ToastrService } from 'ngx-toastr';
+import { SortingService } from '../../../shared/Services/sorting.service';
 
 @Component({
   selector: 'app-list',
@@ -35,16 +36,32 @@ export class ListComponent {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
+  sortField: string = 'name';
+  sortDirection: boolean = true;
+
+
   constructor(
     private apiService: ApiCallingService,
     private exportService: ExportService,
     private toaster: ToastrService,
+    private sortingService: SortingService,
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
     this.getData();
 
     this.loadPermissions();
+  }
+
+
+  sort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = !this.sortDirection; // Toggle sort direction
+    } else {
+      this.sortField = field; // Set new sort field
+      this.sortDirection = true; // Reset to ascending
+    }
+    this.dataList = this.sortingService.sort(this.dataList as any, this.sortField as keyof typeof this.dataList[0], this.sortDirection) as any;
   }
 
   private initializeSearch(): void {

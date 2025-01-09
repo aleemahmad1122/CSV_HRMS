@@ -136,6 +136,7 @@ export class ListComponent implements AfterViewInit {
     this.activatedRoute.data.subscribe(data => {
       const permissionsData = data['permission'];
 
+
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Attendance" && p.isAssign);
@@ -404,4 +405,7 @@ export class ListComponent implements AfterViewInit {
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
   }
+
+
+
 }

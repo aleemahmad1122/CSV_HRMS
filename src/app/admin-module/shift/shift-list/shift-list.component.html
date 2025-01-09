@@ -98,21 +98,21 @@
           <thead class="datatable-head">
             <tr class="datatable-row" style="left: 0px;">
               <th data-field="RecordID"
-                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
+                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" >
                 <span ># </span>
               </th>
 
-              <th      >
+              <th (click)="sort('name')" class="cursor-pointer">
                 <span > {{'language.generic.title' | translate}} </span>
               </th>
 
 
 
-              <th data-field="CompanyName"      ><span >
+              <th (click)="sort('startTime')" class="cursor-pointer" ><span >
                   {{'language.generic.startTime' | translate}} </span></th>
 
 
-              <th data-field="CompanyName"      >
+              <th (click)="sort('endTime')" class="cursor-pointer" >
                 <span >
                   {{'language.generic.endTime' | translate}}
                 </span>
@@ -120,7 +120,7 @@
 
 
 
-              <th data-field="CompanyName"      >
+              <th (click)="sort('earlyMinutes')" class="cursor-pointer" >
                 <span >
                      {{'language.generic.earlyMinutes' | translate}}
                 </span>
@@ -129,7 +129,7 @@
 
 
 
-              <th data-field="CompanyName"      >
+              <th (click)="sort('graceMinutes')" class="cursor-pointer" >
                 <span >
                {{'language.generic.graceMinutes' | translate}}
                 </span>

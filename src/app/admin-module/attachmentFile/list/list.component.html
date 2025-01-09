@@ -103,15 +103,15 @@
                 <span style="width: 40px;"># </span>
               </th>
 
-              <th      >
+              <th (click)="sort('name')" class="cursor-pointer">
                 <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
               </th>
 
-              <th      >
+              <th (click)="sort('attachmentType')" class="cursor-pointer">
                 <span style="width: 250px;"> {{'language.generic.type' | translate}} </span>
               </th>
 
-              <th      >
+              <th (click)="sort('description')" class="cursor-pointer">
                 <span style="width: 250px;"> {{'language.generic.description' | translate}} </span>
               </th>
 
@@ -154,8 +154,7 @@
                 <span style="width: 250px;">
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{data?.description?.slice(0,15) || "N/A"}}
-                      {{data?.description?.length > 15 ? '...' : ''}}
+                      {{data?.description  || "N/A"}}
                     </div>
                   </div>
                 </span>
