@@ -95,6 +95,7 @@
           <span class="text-danger"></span>
         </label>
         <ng-select
+        [clearable]="false"
           [items]="fileOptions"
           bindLabel="name"
           [(ngModel)]="selectedOption"
