@@ -4,13 +4,19 @@
     <div class="d-flex justify-content-between flex-wrap  align-items-center p-3" style="gap: 4px;">
 
       <div class="" style="flex: 1; min-width: 200px;">
-        <label class="form-label">{{ "language.generic.selectFilter" | translate }}
-          <span class="text-danger"></span></label>
-          <select class="form-control custom-select" data-col-index="2" #selectFilter (change)="setFilter(selectFilter.value)">
-            @for(opt of fileOptions; track $index){
-              <option [value]="opt.value">{{opt.name}}</option>
-            }
-          </select>
+        <label class="form-label">
+          {{ "language.generic.selectFilter" | translate }}
+          <span class="text-danger"></span>
+        </label>
+        <ng-select
+          [items]="fileOptions"
+          bindLabel="name"
+          [(ngModel)]="selectedOption"
+          bindValue="value"
+          [searchable]="true"
+          placeholder="Select an option"
+          (change)="setFilter($event?.value)">
+        </ng-select>
       </div>
 
       <div class="" style="flex: 1;">

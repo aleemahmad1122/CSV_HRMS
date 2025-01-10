@@ -14,11 +14,12 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 import { SortingService } from "../../shared/Services/sorting.service";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe,NgSelectModule],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })
@@ -41,6 +42,7 @@ export class ListComponent implements AfterViewInit {
   totalPages = 0;
 
 
+  selectedOption: string = 'MTD';
 
   fileOptions: { value: string; name: string }[] = [
     { value: "MTD", name: "Month to Date" },

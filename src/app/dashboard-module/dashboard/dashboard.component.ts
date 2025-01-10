@@ -9,12 +9,12 @@ import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import * as bootstrap from 'bootstrap';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule, DpDatePickerModule, ReactiveFormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, DpDatePickerModule, ReactiveFormsModule, NgSelectModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   totalAttendance: number = 0;
   checkInSummary: ICheckInSummary;
 
-
+  selectedOption: string = 'MTD';
 
   fileOptions: { value: string; name: string }[] = [
     { value: "MTD", name: "Month to Date" },
@@ -190,6 +190,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
   setFilter(option: string): void {
+
     const today = new Date();
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
@@ -208,10 +209,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.endDate = formatDate(endOfDay);
         break;
 
-        case 'YTD':
-          this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
-          this.endDate = formatDate(endOfDay);
-          break;
+      case 'YTD':
+        this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
+        this.endDate = formatDate(endOfDay);
+        break;
 
 
       case 'QTD': {

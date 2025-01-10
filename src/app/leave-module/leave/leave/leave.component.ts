@@ -14,11 +14,12 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../../environments/environment.prod"
 import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 import { SortingService } from "../../../shared/Services/sorting.service";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-leave',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe,NgSelectModule],
   templateUrl: './leave.component.html',
   styleUrl: './leave.component.css'
 })
@@ -41,6 +42,9 @@ export class LeaveComponent implements AfterViewInit {
   totalPages = 0;
 
   submitForm!: FormGroup;
+
+
+  selectedOption: string = 'MTD';
 
 
 
