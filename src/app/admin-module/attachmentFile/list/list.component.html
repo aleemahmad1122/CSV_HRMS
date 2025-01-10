@@ -104,15 +104,15 @@
               </th>
 
               <th (click)="sort('name')" class="cursor-pointer">
-                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.title' | translate}} </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('attachmentType')" class="cursor-pointer">
-                <span style="width: 250px;"> {{'language.generic.type' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.type' | translate}} </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('description')" class="cursor-pointer">
-                <span style="width: 250px;"> {{'language.generic.description' | translate}} </span>
+                <span style="width: 250px;"> {{'language.generic.description' | translate}} </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               @if(isDelete || isEdit){<th      >

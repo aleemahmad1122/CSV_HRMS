@@ -108,26 +108,26 @@
               <th  (click)="sort('firstName')" class="cursor-pointer">
                 <span style="width: 250px">
                   {{ "language.generic.name" | translate }}
-                </span>
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('city')" class="cursor-pointer" >
                 <span style="width: 124px">
                   {{ "language.form.country" | translate }} /
                   {{ "language.form.city" | translate }}
-                </span>
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('phoneNumber')" class="cursor-pointer">
                 <span style="width: 124px">
                   {{ "language.form.phoneNumber" | translate }}
-                </span>
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('role')" class="cursor-pointer">
                 <span style="width: 124px">
                   {{ "language.form.role" | translate }}
-                </span>
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               @if(isEdit || isDelete){

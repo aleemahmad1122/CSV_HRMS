@@ -106,11 +106,11 @@
               </th>
 
               <th (click)="sort('name')" class="cursor-pointer">
-                <span > {{'language.generic.title' | translate}} </span>
+                <span > {{'language.generic.title' | translate}} </span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('description')" class="cursor-pointer"  ><span >
-                  {{'language.form.details' | translate}} </span></th>
+                  {{'language.form.details' | translate}} </span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i></th>
 
               @if(isEdit || isDelete){<th data-field="Actions" data-autohide-disabled="false"><span
                   > {{'language.generic.actions' | translate}}</span></th>}

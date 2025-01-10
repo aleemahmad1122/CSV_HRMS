@@ -102,14 +102,14 @@
               </th>
 
               <th (click)="sort('designationTitle')" class="cursor-pointer" >
-                <span > {{'language.generic.title' | translate}}</span>
+                <span > {{'language.generic.title' | translate}}</span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               <th (click)="sort('designationCode')" class="cursor-pointer" >
-                <span > {{'language.generic.code' | translate}}</span>
+                <span > {{'language.generic.code' | translate}}</span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
               <th (click)="sort('description')" class="cursor-pointer" >
-                <span > {{'language.generic.description' | translate}}</span>
+                <span > {{'language.generic.description' | translate}}</span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
               @if(isEdit || isDelete){ <th      >
                 <span > {{'language.generic.actions' | translate}}</span>

@@ -105,10 +105,10 @@
                 <span># </span>
               </th>
               <th  (click)="sort('jobTitle')" class="cursor-pointer">
-                <span>{{'language.generic.title' | translate}}</span>
+                <span>{{'language.generic.title' | translate}}</span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
               <th (click)="sort('jobDescription')" class="cursor-pointer"  >
-                <span>{{'language.form.details' | translate}}</span>
+                <span>{{'language.form.details' | translate}}</span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
               @if(isEdit || isDelete){ <th style="width: 20%">
                 <span>{{'language.generic.actions' | translate}}</span>

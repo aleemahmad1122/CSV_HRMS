@@ -109,24 +109,24 @@
               </th>
 
               <th (click)="sort('name')" class="cursor-pointer">
-                <span> {{'language.generic.title' | translate}} </span>
+                <span> {{'language.generic.title' | translate}} </span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
 
 
               <th (click)="sort('foundedDate')" class="cursor-pointer">
-                <span> {{'language.company.foundedDate' | translate}} </span>
+                <span> {{'language.company.foundedDate' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
 
               <th (click)="sort('phoneNumber')" class="cursor-pointer">
-                <span> {{'language.company.phoneNumber' | translate}} </span>
+                <span> {{'language.company.phoneNumber' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
 
 
               <th (click)="sort('registrationNumber')" class="cursor-pointer">
-                <span> {{'language.company.registrationNumber' | translate}} </span>
+                <span> {{'language.company.registrationNumber' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
               @if(this.isDelete || isEdit){<th data-field="Actions" data-autohide-disabled="false"><span
