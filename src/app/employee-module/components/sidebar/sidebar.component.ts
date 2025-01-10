@@ -63,7 +63,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
   allowedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
+  isEdit: boolean = false;
 
+  permissions: { isAssign: boolean; permission: string }[] = [];
 
   tabList: Sidebar[] = [
     {
@@ -131,12 +133,27 @@ export class SidebarComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.initializePermissions()
-
+    this.loadPermissions();
 
     this.router.events.subscribe(() => {
       this.activRoute = this.router.url;
     });
     this.addEditForm = this.createForm();
+  }
+
+
+  private loadPermissions(): void {
+    this.route.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+
+      if (Array.isArray(permissionsData)) {
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
+    });
   }
 
   ngOnInit(): void {
