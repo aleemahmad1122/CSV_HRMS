@@ -138,15 +138,19 @@
       </div>}
       <label class="form-label">{{ "language.form.role" | translate }}
         <span class="text-danger">*</span></label>
-      <select class="form-control custom-select" formControlName="role" [ngClass]="{
+        <ng-select
+        [items]="rolesList"
+        bindLabel="name"
+        bindValue="roleId"
+        formControlName="role"
+        [searchable]="true"
+        [ngClass]="{
           'is-invalid':
             addEditForm.get('role')?.invalid &&
             (addEditForm.get('role')?.touched || isSubmitted)
-        }">
-        @for(role of rolesList; track role) {
-        <option [value]="role.roleId">{{ role.name }}</option>
-        }
-      </select>
+        }"
+        placeholder="Select an option" >
+      </ng-select>
       <div *ngIf="
           addEditForm.get('role')?.invalid &&
           (addEditForm.get('role')?.touched || isSubmitted)

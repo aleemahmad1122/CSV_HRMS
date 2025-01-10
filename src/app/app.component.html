@@ -1,7 +1,10 @@
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="ball-atom" [fullScreen]="true">
-    <p style="color: white"></p>
+  <p style="color: white"></p>
 </ngx-spinner>
 
+
+
+@if(isOnline){
 @if(!this.isLogin) {
 <router-outlet />
 }
@@ -12,16 +15,16 @@
 @if(this.isLogin) {
 <app-mob-nav></app-mob-nav>
 <div class="d-flex flex-column flex-root">
-    <div class="d-flex flex-row flex-column-fluid page">
-        <app-sidebar></app-sidebar>
-        <div class="d-flex flex-column flex-row-fluid wrapper" style="padding-top: 50px !important;" id="kt_wrapper">
-            <app-header></app-header>
-            <div class="content d-flex flex-column flex-column-fluid " id="kt_content" style="min-height: 100dvh;">
-                <router-outlet />
-            </div>
-            <app-footer></app-footer>
-        </div>
+  <div class="d-flex flex-row flex-column-fluid page">
+    <app-sidebar></app-sidebar>
+    <div class="d-flex flex-column flex-row-fluid wrapper" style="padding-top: 50px !important;" id="kt_wrapper">
+      <app-header></app-header>
+      <div class="content d-flex flex-column flex-column-fluid " id="kt_content" style="min-height: 100dvh;">
+        <router-outlet />
+      </div>
+      <app-footer></app-footer>
     </div>
+  </div>
 </div>
 <app-user-panel></app-user-panel>
 <app-quick-cart></app-quick-cart>
@@ -29,4 +32,15 @@
 <app-chat-modal></app-chat-modal>
 <app-scrolltop></app-scrolltop>
 <app-demo-panel></app-demo-panel>
+}
+}@else {
+<div class="container">
+  <div class="content">
+    <h1>Check Your Internet Connection</h1>
+    <p class="description">
+      It seems you're offline. Please reconnect to access the app.
+    </p>
+    <button class="retry-button" (click)="retry()">Retry</button>
+  </div>
+</div>
 }

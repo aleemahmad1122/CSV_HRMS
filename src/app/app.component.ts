@@ -1,5 +1,5 @@
 import * as Components from "./shared/components/index";
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { UserAuthenticationService } from './shared/Services/user-authentication.service';
@@ -30,7 +30,7 @@ import { DataShareService } from './shared/Services/data-share.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'CSV_HRMS-Client';
   isLogin: boolean;
   constructor(
@@ -50,5 +50,21 @@ export class AppComponent {
   }
 
 
+  isOnline: boolean = navigator.onLine;
+
+  ngOnInit() {
+    // Initialize connection status
+    this.checkConnectionStatus();
+  }
+
+  @HostListener('window:online', ['$event'])
+  @HostListener('window:offline', ['$event'])
+  checkConnectionStatus() {
+    this.isOnline = navigator.onLine;
+  }
+
+  retry():void{
+    window.location.reload()
+  }
 
 }

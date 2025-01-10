@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-add-edit-module',
@@ -19,6 +20,7 @@ import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} f
     TranslateModule,
     RouterModule,
     DpDatePickerModule,
+    NgSelectModule,
     NgxIntlTelInputModule
   ],
   templateUrl: './add-edit-module.component.html',
