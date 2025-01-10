@@ -23,15 +23,16 @@
                   {{ 1 + $index }}
                 </td>
 
-                <td>
-                  <select class="form-control form-select" name="attachmentTypeId" formControlName="attachmentTypeId">
-                    <option value="">Select Type</option>
-                    <ng-container *ngFor="let type of attachmentTypes; trackBy: trackByFn">
-                      <option [value]="type.attachmentTypeId">
-                        {{ type.name }}
-                      </option>
-                    </ng-container>
-                  </select>
+                <td  >
+
+                  <ng-select
+                  [items]="attachmentTypes"
+                  bindLabel="name"
+                  bindValue="attachmentTypeId"
+                  formControlName="attachmentTypeId"
+                  [searchable]="true"
+                  placeholder="Select an option" >
+                </ng-select>
                 </td>
 
 

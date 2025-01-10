@@ -7,11 +7,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { IAssetType } from '../../../types';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })

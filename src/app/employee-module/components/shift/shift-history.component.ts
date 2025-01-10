@@ -8,11 +8,12 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConvertTimePipe } from '../../../shared/pipes/convert-time.pipe';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-shift-history',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule,ConvertTimePipe],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,ConvertTimePipe,NgSelectModule],
   templateUrl: './shift-history.component.html',
   styleUrl: './shift-history.component.css'
 })

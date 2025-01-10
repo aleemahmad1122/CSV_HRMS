@@ -8,11 +8,12 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment.prod';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-shift-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule],
   templateUrl: './shift-add-edit.component.html',
   styleUrl: './shift-add-edit.component.css'
 })
@@ -26,6 +27,16 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   selectedAddEditValue: any;
 
   selectedStartTime: Date | null = null;
+
+
+  timeList: number[] = [
+    5,
+    10,
+    15,
+    20,
+    25,
+    30,
+  ]
 
   constructor(
     private fb: FormBuilder,
@@ -117,7 +128,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     hour12: true,
     timePicker: true,
     showSeconds: false,
-    format:environment.dateTimePatterns.time,
+    format: environment.dateTimePatterns.time,
   };
 
 

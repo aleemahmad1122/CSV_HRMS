@@ -7,13 +7,14 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { AttType } from "../../../types/index";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule,NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -21,11 +22,21 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   attType = AttType;
 
+
+  attTypeList:{value:number;name:string;}[] = [{value:0,name:"language.generic.personal"},{value:2,name:"language.generic.education"},{value:3,name:"language.generic.workHistory"}]
+
   private ngUnsubscribe = new Subject<void>();
   qualificationForm: FormGroup;
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
+
+  attachmentTypes = [
+    { value: 'personal', label: 'Personal' },
+    { value: 'education', label: 'Education' },
+    { value: 'workHistory', label: 'Work History' },
+  ];
+
 
   constructor(
     private fb: FormBuilder,

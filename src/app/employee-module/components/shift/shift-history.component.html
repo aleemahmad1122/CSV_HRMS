@@ -1,5 +1,3 @@
-
-
 <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
   <div class="row">
     <div class="col-md-12 mb-3">
@@ -10,40 +8,35 @@
 
       <!-- Input field for editing (shows the name based on shiftId) -->
       <div *ngIf="!isEdit">
-        <input
-          type="text"
-          class="form-control"
-          [value]="getShiftName(addEditForm.get('shiftId')?.value)"
-          readonly>
+        <input type="text" class="form-control" [value]="getShiftName(addEditForm.get('shiftId')?.value)" readonly>
       </div>
 
       <!-- Select dropdown for non-edit mode -->
       <div *ngIf="isEdit">
-        <select
-          class="form-control custom-select"
-          formControlName="shiftId"
-          [ngClass]="{
-            'is-invalid':
-              addEditForm.get('shiftId')?.invalid &&
-              (addEditForm.get('shiftId')?.touched || isSubmitted)
-          }">
-          <option value="">
-            {{ "language.form.selectShift" | translate }}
-          </option>
-          <option
-            *ngFor="let shift of shiftList"
-            [value]="shift.shiftId">
-            {{ shift.name }}
-            ({{ "language.generic.startTime" | translate }}: {{shift.startTime | convertTime: 'time'}} & {{ "language.generic.endTime" | translate }}: {{shift.endTime | convertTime: 'time'}})
-          </option>
-        </select>
+
+        <ng-select [items]="shiftList" [bindLabel]="null" bindValue="shiftId" formControlName="shiftId"
+          [searchable]="true" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('shiftId')?.invalid &&
+            (addEditForm.get('shiftId')?.touched || isSubmitted)
+        }" placeholder="{{ 'language.form.selectShift' | translate }}">
+          <ng-template ng-label-tmp let-item="item">
+            {{ item.name }}
+            ({{ 'language.generic.startTime' | translate }}: {{ item.startTime | convertTime: 'time' }} & {{
+            'language.generic.endTime' | translate }}: {{ item.endTime | convertTime: 'time' }})
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            {{ item.name }}
+            ({{ 'language.generic.startTime' | translate }}: {{ item.startTime | convertTime: 'time'}} & {{
+            'language.generic.endTime' | translate }}: {{ item.endTime | convertTime: 'time' }})
+          </ng-template>
+        </ng-select>
+
       </div>
 
       <!-- Error message -->
-      <div
-        *ngIf="addEditForm.get('shiftId')?.invalid &&
-          (addEditForm.get('shiftId')?.touched || isSubmitted)"
-        class="invalid-feedback">
+      <div *ngIf="addEditForm.get('shiftId')?.invalid &&
+          (addEditForm.get('shiftId')?.touched || isSubmitted)" class="invalid-feedback">
         {{ "language.errors.shiftRequired" | translate }}
       </div>
     </div>
@@ -55,7 +48,7 @@
     <div class="col-md-12 mb-3">
       <label class="form-label">{{ "language.form.description" | translate }}
         <span class="text-danger">*</span></label>
-      <textarea class="form-control" formControlName="description"  [readOnly]="!this.isEdit"
+      <textarea class="form-control" formControlName="description" [readOnly]="!this.isEdit"
         [placeholder]="'language.placeholders.description' | translate" rows="3" [ngClass]="{
           'is-invalid':
             addEditForm.get('description')?.invalid &&
@@ -65,7 +58,7 @@
           addEditForm.get('description')?.invalid &&
           (addEditForm.get('description')?.touched || isSubmitted)
         " class="invalid-feedback">
-      {{ "language.errors.descriptionRequired" | translate }}
+        {{ "language.errors.descriptionRequired" | translate }}
       </div>
     </div>
   </div>

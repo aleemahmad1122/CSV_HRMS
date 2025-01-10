@@ -8,6 +8,7 @@ import { ApiCallingService } from '../../../shared/Services/api-calling.service'
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment.prod';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 interface Status {
   statusId: number | string;
@@ -17,7 +18,7 @@ interface Status {
 @Component({
   selector: 'app-add-edit-project',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule,NgSelectModule],
   templateUrl: './add-edit-project.component.html',
   styleUrls: ['./add-edit-project.component.css']
 })
@@ -28,6 +29,8 @@ export class AddEditProjectComponent implements OnInit, OnDestroy {
   };
   addEditForm: FormGroup;
   currencies: string[] = ['USD', 'EUR', 'PKR', 'GBP', 'AUD'];
+
+
 
   isEditMode = false;
   isSubmitted = false;

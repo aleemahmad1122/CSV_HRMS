@@ -20,15 +20,14 @@
           <div class="col-md-6 mb-3">
             <label class="form-label">{{ "language.form.assetTypeId" | translate }}
               <span class="text-danger">*</span></label>
-            <select class="form-control custom-select" formControlName="assetTypeId" [ngClass]="{
+
+              <ng-select [items]="typesList" bindLabel="name" bindValue="assetTypeId" [clearable]="false" [searchable]="true"
+              placeholder="Select an option" formControlName="assetTypeId" [ngClass]="{
                 'is-invalid':
-                  addEditForm.get('assetTypeId')?.invalid &&
-                  (addEditForm.get('assetTypeId')?.touched || isSubmitted)
-              }">
-           @for(item of typesList; track item) {
-            <option [value]="item.assetTypeId">{{ item.name }}</option>
-            }
-            </select>
+                        addEditForm.get('assetTypeId')?.invalid &&
+                        (addEditForm.get('assetTypeId')?.touched || isSubmitted)
+                }">
+            </ng-select>
             <div *ngIf="
                 addEditForm.get('assetTypeId')?.invalid &&
                 (addEditForm.get('assetTypeId')?.touched || isSubmitted)

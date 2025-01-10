@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IAttachmentTypeRes, IAttachmentType } from "../../../../types/index";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../../environments/environment.prod';
+import { NgSelectModule } from '@ng-select/ng-select';
 declare const $: any;
 
 
@@ -18,7 +19,7 @@ declare const $: any;
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [NgxFileDropModule, CommonModule, FormsModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule,NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })

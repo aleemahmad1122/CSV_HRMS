@@ -8,16 +8,22 @@
         <div class="col-md-12 mb-3">
           <label class="form-label">{{ "language.form.assetTypeId" | translate }}
             <span class="text-danger">*</span></label>
-          <select class="form-control custom-select" (change)="getEmpAssTypes()" formControlName="assetTypeId"
+
+
+            <ng-select
+            [items]="typesList"
+            bindLabel="name"
+            bindValue="assetTypeId"
+            formControlName="assetTypeId"
+            (change)="getEmpAssTypes()"
+            [searchable]="true"
             [ngClass]="{
-        'is-invalid':
-          addEditForm.get('assetTypeId')?.invalid &&
-          (addEditForm.get('assetTypeId')?.touched || isSubmitted)
-      }">
-            @for(item of typesList; track item) {
-            <option [value]="item.assetTypeId">{{ item.name }}</option>
-            }
-          </select>
+              'is-invalid':
+                addEditForm.get('role')?.invalid &&
+                (addEditForm.get('role')?.touched || isSubmitted)
+            }"
+            placeholder="Select an option" >
+          </ng-select>
           <div *ngIf="
         addEditForm.get('assetTypeId')?.invalid &&
         (addEditForm.get('assetTypeId')?.touched || isSubmitted)
@@ -51,16 +57,21 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.generic.asset" | translate }}
             <span class="text-danger">*</span></label>
-          @if(empAssTypesList?.length > 0){<select class="form-control custom-select" formControlName="assetId"
+          @if(empAssTypesList?.length > 0){
+
+            <ng-select
+            [items]="empAssTypesList"
+            bindLabel="assetName"
+            bindValue="assetId"
+            formControlName="assetId"
+            [searchable]="true"
             [ngClass]="{
-                'is-invalid':
-                  addEditForm.get('assetId')?.invalid &&
-                  (addEditForm.get('assetId')?.touched || isSubmitted)
-              }">
-            @for(item of empAssTypesList; track item) {
-            <option [value]="item.assetId">{{ item.assetName }}</option>
-            }
-          </select>}
+              'is-invalid':
+                addEditForm.get('role')?.invalid &&
+                (addEditForm.get('role')?.touched || isSubmitted)
+            }"
+            placeholder="Select an option" >
+          </ng-select> }
 
 
           @if(empAssTypesList?.length < 1){ <div>

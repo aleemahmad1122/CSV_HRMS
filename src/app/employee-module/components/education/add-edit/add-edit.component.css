@@ -18,11 +18,6 @@
   font-size: 0.9em;
 }
 
-/* Custom border for form controls */
-.form-control {
-  border: 2px solid #ccc; /* Default border color */
-  border-radius: 4px;
-}
 
 /* Add custom border color when the input is focused */
 .form-control:focus {

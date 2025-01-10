@@ -9,11 +9,12 @@ import { ToastrService } from 'ngx-toastr';
 import { IAssetType } from '../../../../types';
 import { environment } from '../../../../../environments/environment.prod';
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule,NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })

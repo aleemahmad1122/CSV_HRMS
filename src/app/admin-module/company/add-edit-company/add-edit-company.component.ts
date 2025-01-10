@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment.prod';
 import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
+import { NgSelectModule } from '@ng-select/ng-select';
 
 interface Typess {
   typeId: string;
@@ -20,7 +21,7 @@ interface Typess {
 @Component({
   selector: 'app-add-edit-company',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule, DpDatePickerModule, NgxIntlTelInputModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TranslateModule, DpDatePickerModule, NgxIntlTelInputModule,NgSelectModule],
   templateUrl: './add-edit-company.component.html',
   styleUrl: './add-edit-company.component.css'
 })

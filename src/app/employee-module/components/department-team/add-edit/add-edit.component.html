@@ -5,18 +5,22 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.departmentId" | translate }}
         <span class="text-danger">*</span></label>
-      @if(isEdit){<select class="form-control custom-select" formControlName="departmentId" [ngClass]="{
+      @if(isEdit){
+
+        <ng-select
+        [items]="departmentList"
+        bindLabel="name"
+        bindValue="departmentId"
+        formControlName="departmentId"
+        [searchable]="true"
+        [ngClass]="{
           'is-invalid':
             addEditForm.get('departmentId')?.invalid &&
             (addEditForm.get('departmentId')?.touched || isSubmitted)
-        }" [disabled]="isViewMode">
-        <option value="">
-          {{ "language.form.selectDepartment" | translate }}
-        </option>
-        <option *ngFor="let department of departmentList" [value]="department.departmentId">
-          {{ department.name }}
-        </option>
-      </select>}
+        }" [disabled]="isViewMode"
+        placeholder="Select an option" >
+      </ng-select>
+ }
       <div *ngIf="!isEdit">
         <input
           type="text"
@@ -35,18 +39,21 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.designationId" | translate }}
         <span class="text-danger">*</span></label>
-        @if(isEdit){<select class="form-control custom-select" formControlName="designationId" [ngClass]="{
-          'is-invalid':
-            addEditForm.get('designationId')?.invalid &&
-            (addEditForm.get('designationId')?.touched || isSubmitted)
-        }" [disabled]="isViewMode">
-        <option value="">
-          {{ "language.form.selectDesignation" | translate }}
-        </option>
-        <option *ngFor="let designation of designationList" [value]="designation.designationId">
-          {{ designation.designationTitle }}
-        </option>
-      </select>}
+        @if(isEdit){
+
+          <ng-select
+          [items]="designationList"
+          bindLabel="designationTitle"
+          bindValue="designationId"
+          formControlName="designationId"
+          [searchable]="true"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('designationId')?.invalid &&
+              (addEditForm.get('designationId')?.touched || isSubmitted)
+          }" [disabled]="isViewMode"
+          placeholder="Select an option" >
+        </ng-select> }
       <div *ngIf="!isEdit">
         <input
           type="text"
@@ -65,16 +72,21 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.teamId" | translate }}
         <span class="text-danger">*</span></label>
-        @if(isEdit){<select class="form-control custom-select" formControlName="teamId" [ngClass]="{
-          'is-invalid':
-            addEditForm.get('teamId')?.invalid &&
-            (addEditForm.get('teamId')?.touched || isSubmitted)
-        }" [disabled]="isViewMode">
-        <option value="">{{ "language.form.selectTeam" | translate }}</option>
-        <option *ngFor="let team of teamList" [value]="team.teamId">
-          {{ team.name }}
-        </option>
-      </select>}
+        @if(isEdit){
+
+          <ng-select
+          [items]="teamList"
+          bindLabel="name"
+          bindValue="teamId"
+          formControlName="teamId"
+          [searchable]="true"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('teamId')?.invalid &&
+              (addEditForm.get('teamId')?.touched || isSubmitted)
+          }" [disabled]="isViewMode"
+          placeholder="Select an option" >
+        </ng-select> }
       <div *ngIf="!isEdit">
         <input
           type="text"
@@ -93,16 +105,23 @@
     <div class="col-md-6 mb-3">
       <label class="form-label">{{ "language.form.reportsTo" | translate }}
         <span class="text-danger">*</span></label>
-        @if(isEdit){ <select class="form-control custom-select" formControlName="reportsTo" [ngClass]="{
-          'is-invalid':
-            addEditForm.get('reportsTo')?.invalid &&
-            (addEditForm.get('reportsTo')?.touched || isSubmitted)
-        }" [disabled]="isViewMode">
-        <option value="">{{ "language.form.selectReportTo" | translate }}</option>
-        <option *ngFor="let report of reportList" [value]="report.employeeId">
-          {{ report.employeeName }}
-        </option>
-      </select>}
+        @if(isEdit){
+
+
+          <ng-select
+          [items]="reportList"
+          bindLabel="employeeName"
+          bindValue="employeeId"
+          formControlName="reportsTo"
+          [searchable]="true"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('reportsTo')?.invalid &&
+              (addEditForm.get('reportsTo')?.touched || isSubmitted)
+          }" [disabled]="isViewMode"
+          placeholder="Select an option" >
+        </ng-select>
+           }
       <div *ngIf="!isEdit">
         <input
           type="text"

@@ -16,22 +16,23 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.generic.attachmentType" | translate }}
             <span class="text-danger">*</span></label>
-          <select class="form-control custom-select" formControlName="attachmentType" [ngClass]="{
-                  'is-invalid':
-                    qualificationForm.get('attachmentType')?.invalid &&
-                    (qualificationForm.get('attachmentType')?.touched || isSubmitted)
-                }">
-            <option [value]="attType.personal">
-              {{ "language.generic.personal" | translate }}
-            </option>
-            <option [value]="attType.education">
-              {{ "language.generic.education" | translate }}
-            </option>
-            <option [value]="attType.workHistory">
-              {{ "language.generic.workHistory" | translate }}
-            </option>
 
-          </select>
+            <ng-select [clearable]="false" [items]="attTypeList"   [bindLabel]="null"
+            bindValue="value" [searchable]="true"
+            placeholder="Select an option" formControlName="attachmentType" [ngClass]="{
+              'is-invalid':
+                      qualificationForm.get('attachmentType')?.invalid &&
+                      (qualificationForm.get('attachmentType')?.touched || isSubmitted)
+              }">
+               <ng-template ng-label-tmp let-item="item">
+                {{ item?.name | translate }}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{ item?.name | translate }}
+              </ng-template>
+          </ng-select>
+
+
           <div *ngIf="
                   qualificationForm.get('attachmentType')?.invalid &&
                   (qualificationForm.get('attachmentType')?.touched || isSubmitted)

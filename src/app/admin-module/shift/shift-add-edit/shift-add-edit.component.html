@@ -1,5 +1,5 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 px-3" >
+  <div class="card card-custom w-100 px-3">
     <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
         <div class="col-md-12 mb-3">
@@ -62,18 +62,14 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.generic.earlyMinutes" | translate }}
             <span class="text-danger">*</span></label>
-          <select class="form-control custom-select" formControlName="earlyMinutes" [ngClass]="{
-              'is-invalid':
-                addEditForm.get('earlyMinutes')?.invalid &&
-                (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
-            }">
-            <option  value="5">5</option>
-            <option  value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="25">25</option>
-            <option value="30">30</option>
-          </select>
+
+          <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+            placeholder="Select an option" formControlName="earlyMinutes" [ngClass]="{
+    'is-invalid':
+            addEditForm.get('earlyMinutes')?.invalid &&
+            (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
+    }">
+          </ng-select>
           <div *ngIf="
               addEditForm.get('earlyMinutes')?.invalid &&
               (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
@@ -85,18 +81,14 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.generic.graceMinutes" | translate }}
             <span class="text-danger">*</span></label>
-          <select class="form-control custom-select" formControlName="graceMinutes" [ngClass]="{
-              'is-invalid':
-                addEditForm.get('graceMinutes')?.invalid &&
-                (addEditForm.get('graceMinutes')?.touched || isSubmitted)
-            }">
-            <option  value="5">5</option>
-            <option  value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="25">25</option>
-            <option value="30">30</option>
-          </select>
+
+            <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+            placeholder="Select an option" formControlName="graceMinutes" [ngClass]="{
+    'is-invalid':
+            addEditForm.get('graceMinutes')?.invalid &&
+            (addEditForm.get('graceMinutes')?.touched || isSubmitted)
+    }">
+          </ng-select>
           <div *ngIf="
               addEditForm.get('graceMinutes')?.invalid &&
               (addEditForm.get('graceMinutes')?.touched || isSubmitted)
