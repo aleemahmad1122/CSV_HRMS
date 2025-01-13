@@ -148,7 +148,7 @@ export interface IRole extends ICommon {
   rolePriority: number;
   textColor: string;
   backgroundColor: string;
-  description?:string;
+  description?: string;
   isActive: boolean;
 }
 
@@ -423,7 +423,7 @@ export interface IAttendanceList extends ICommon {
   employeeId: string;
   date: null | string;
   firstName: string;
-  remarks:string;
+  remarks: string;
   lastName: string;
   checkIn: null | string;
   checkOut: null | string;
@@ -683,6 +683,10 @@ export interface ResDasSummaryData {
   attendanceSummary: AttendanceSummary;
   teamSummary: TeamSummary[];
   employeeLeaveSummary: EmployeeLeaveSummary[];
+  absentData: { date: string; }[];
+  lateData: { attendanceDate: string; checkIn: string; checkOut: string; }[];
+  earlyData: { attendanceDate: string; checkIn: string; checkOut: string; }[];
+  missingData: { attendanceDate: string; checkIn: string; checkOut: string; }[];
 }
 export interface ResDasSummary {
   message: string;
@@ -721,13 +725,13 @@ export interface EmployeeDetail {
   firstName: string;
   lastName: string;
   imagePath: string;
-  phoneNumber:number | string;
-  city:string;
-  country:string;
-  designation:string;
+  phoneNumber: number | string;
+  city: string;
+  country: string;
+  designation: string;
   role: string;
   roleId: string;
-  isPasswordSet:any;
+  isPasswordSet: any;
   rolePermission: {
     backgroundColor: string;
     isActive: boolean;

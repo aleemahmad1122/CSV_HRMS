@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit, Inject } from '@angular/core';
+import { Sidebar } from "../../../types/index";
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
-import { Sidebar } from "../../../types/index";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AfterViewInit, Component, OnInit, Inject } from '@angular/core';
 import { LocalStorageManagerService } from '../../Services/local-storage-manager.service';
 
 @Component({
@@ -13,6 +13,9 @@ import { LocalStorageManagerService } from '../../Services/local-storage-manager
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
+
+
+
   isCollapsed = false;
   activRoute: string = '';
 
@@ -126,6 +129,18 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       show: false,
     },
     {
+      name: 'language.sidebar.attendanceRequest',
+      route: '/attendance/attendance-list',
+      permissions: 'View_Attendance',
+      show: false,
+    },
+    {
+      name: 'language.sidebar.remoteWorkRequest',
+      route: '/attendance/attendance-list',
+      permissions: 'View_Attendance',
+      show: false,
+    },
+    {
       name: 'language.sidebar.attendanceImport',
       route: '/attendance/import',
       permissions: 'Import_Attendance',
@@ -136,6 +151,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   leaveItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageLeave',
+      route: '/leave/leave-list',
+      permissions: 'View_Leave',
+      show: false,
+    },
+    {
+      name: 'language.sidebar.leaveRequest',
       route: '/leave/leave-list',
       permissions: 'View_Leave',
       show: false,

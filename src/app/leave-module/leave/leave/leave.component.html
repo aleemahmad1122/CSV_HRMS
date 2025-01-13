@@ -5,8 +5,8 @@
 
 
     <div class="d-flex justify-content-between  align-items-center pt-4 px-5">
-
-      <form class="d-flex  mt-2   w-25-md" role="search">
+      <div></div>
+      <!-- <form class="d-flex  mt-2   w-25-md" role="search">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-prepend">
@@ -18,9 +18,9 @@
               name="searchTerm" (input)="search($event)">
           </div>
         </div>
-      </form>
+      </form> -->
 
-      <div class="d-flex align-items-center" style="gap: 6px;" >
+      <div class="d-flex align-items-center" style="gap: 6px;">
 
         <div class="dropdown dropdown-inline mr-2">
           <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown"
@@ -63,11 +63,11 @@
           <!--end::Dropdown Menu-->
         </div>
 
-        @if(isCreate){<button routerLink="/leave/leave/add" [queryParams]="{id:( isHr ? this.selectedEmpId : this.empId)}"
-        class="btn btn-primary">
-        {{ 'language.generic.applyLeave' | translate }}
-      </button>}
-    </div>
+        @if(isCreate){<button routerLink="/leave/leave/add"
+          [queryParams]="{id:( isHr ? this.selectedEmpId : this.empId)}" class="btn btn-primary">
+          {{ 'language.generic.applyLeave' | translate }}
+        </button>}
+      </div>
     </div>
 
     <div class="d-flex align-items-center justify-content-between p-5 flex-wrap" style="gap: 8px ;">
@@ -78,14 +78,8 @@
         <label class="form-label">{{ "language.generic.user" | translate }}
           <span class="text-danger"></span>
         </label>
-        <ng-select
-          [items]="userReporting"
-          bindLabel="fullName"
-          [(ngModel)]="selectedEmpId"
-          bindValue="employeeId"
-          [searchable]="true"
-          placeholder="Select an option"
-          (change)="onUserSelect($event?.value)">
+        <ng-select [items]="userReporting" bindLabel="fullName" [(ngModel)]="selectedEmpId" bindValue="employeeId"
+          [searchable]="true" placeholder="Select an option" (change)="onUserSelect($event?.value)">
         </ng-select>
       </div>
 
@@ -94,15 +88,8 @@
           {{ "language.generic.selectFilter" | translate }}
           <span class="text-danger"></span>
         </label>
-        <ng-select
-        [clearable]="false"
-          [items]="fileOptions"
-          bindLabel="name"
-          [(ngModel)]="selectedOption"
-          bindValue="value"
-          [searchable]="true"
-          placeholder="Select an option"
-          (change)="setFilter($event?.value)">
+        <ng-select [clearable]="false" [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption"
+          bindValue="value" [searchable]="true" placeholder="Select an option" (change)="setFilter($event?.value)">
         </ng-select>
       </div>
 
@@ -301,7 +288,8 @@
                           aria-label="Close">x</button>
                       </div>
                       <div class="modal-body">
-                                 {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
+                        {{( data?.isActive ? 'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )|
+                        translate}}
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -367,7 +355,7 @@
 
 
 
-                @if( data.leaveStatus != 0  ){
+                @if( data.leaveStatus != 0 ){
                 <!-- Modal -->
                 <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">

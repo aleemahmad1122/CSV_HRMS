@@ -10,6 +10,9 @@
       "admin": "Admin"
     },
     "sidebar": {
+      "remoteWorkRequest":"Remote Work Request",
+      "attendanceRequest":"Attendance Request",
+      "leaveRequest":"Leave Request",
       "assetsType":"Assets Type",
       "assets":"Assets",
       "assetsList":"Assets List",
@@ -251,6 +254,10 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "earlyDataSummary":"Early Data Summary",
+      "missingDataSummary":"Missing Data Summary",
+      "lateSummary":"Late Summary",
+      "absentSummary":"Absent Summary",
       "remarks":"Remarks",
       "missing":"Missing",
       "check-in":"Check-in",
