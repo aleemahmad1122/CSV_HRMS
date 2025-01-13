@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
   }
 
 
-  isOnline: boolean = navigator.onLine;
+  isOnline: boolean = false;
 
   ngOnInit() {
     // Initialize connection status
