@@ -161,7 +161,7 @@
         </td>
 
 
-        <td>
+        @if(this.isEdit || isDelete){<td>
           <div class="btn-group">
             <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -213,7 +213,7 @@
                   </div>
                 </div>
               </div>
-            </div>  </td>
+            </div>  </td>}
       </tr>
 
       } @if(this.dataList.length < 1){

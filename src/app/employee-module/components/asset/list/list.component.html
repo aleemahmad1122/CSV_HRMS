@@ -30,8 +30,8 @@
       aria-haspopup="true" aria-expanded="false">
       <span class="svg-icon svg-icon-md">
         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-          height="24px" viewBox="0 0 24 24" version="1.1">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+          viewBox="0 0 24 24" version="1.1">
           <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <rect x="0" y="0" width="24" height="24"></rect>
             <path
@@ -66,216 +66,220 @@
     <!--end::Dropdown Menu-->
   </div>
   @if(isCreate){<button routerLink="/employee/profile/assets/add" [queryParams]="{id:this.id}"
-  class="btn btn-primary font-weight-bolder">
-  <span class="svg-icon svg-icon-md">
-    <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-      viewBox="0 0 24 24" version="1.1">
-      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect x="0" y="0" width="24" height="24"></rect>
-        <circle fill="#000000" cx="9" cy="15" r="6"></circle>
-        <path
-          d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
-          fill="#000000" opacity="0.3"></path>
-      </g>
-    </svg>
+    class="btn btn-primary font-weight-bolder">
+    <span class="svg-icon svg-icon-md">
+      <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+        viewBox="0 0 24 24" version="1.1">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <rect x="0" y="0" width="24" height="24"></rect>
+          <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+          <path
+            d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
+            fill="#000000" opacity="0.3"></path>
+        </g>
+      </svg>
 
-  </span> {{'language.generic.addAsset' | translate}}</button>}
+    </span> {{'language.generic.addAsset' | translate}}</button>}
 </div>
 
 
-    <div  >
-      <table class="table table-striped w-100">
-      <thead  >
-        <tr  >
-          <th  >
-            <span ># </span>
-          </th>
+<div>
+  <table class="table table-striped w-100">
+    <thead>
+      <tr>
+        <th>
+          <span># </span>
+        </th>
 
-          <th     (click)="sort('assetName')" class="cursor-pointer" >
-            <span >{{'language.generic.name' | translate}}</span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
-          </th>
-
-
-          <th     (click)="sort('assetTypeName')" class="cursor-pointer" >
-            <span > {{'language.form.category' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
-          </th>
-
-          <th     (click)="sort('issuedDate')" class="cursor-pointer" >
-            <span > {{'language.generic.issuedDate' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
-          </th>
-
-          <th       (click)="sort('description')" class="cursor-pointer" >
-            <span > {{'language.generic.description' | translate}} </span>  <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
-          </th>
+        <th (click)="sort('assetName')" class="cursor-pointer">
+          <span>{{'language.generic.name' | translate}}</span> <i class="fa-solid fa-sort mx-2"
+            style="font-size: 12px;"></i>
+        </th>
 
 
-          @if(isEdit || isDelete){<th       ><span
-              > {{'language.generic.actions' | translate}}</span></th>}
-        </tr>
-      </thead>
-      <tbody class="datatable-body">
-        @for (data of dataList; track $index) {
+        <th (click)="sort('assetTypeName')" class="cursor-pointer">
+          <span> {{'language.form.category' | translate}} </span> <i class="fa-solid fa-sort mx-2"
+            style="font-size: 12px;"></i>
+        </th>
 
-        <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
-          <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-            <span ><span class="font-weight-bolder ">
-                {{ (pageNo - 1) * pageSize + $index + 1 }}
-              </span></span>
-          </td>
+        <th (click)="sort('issuedDate')" class="cursor-pointer">
+          <span> {{'language.generic.issuedDate' | translate}} </span> <i class="fa-solid fa-sort mx-2"
+            style="font-size: 12px;"></i>
+        </th>
+
+        <th (click)="sort('description')" class="cursor-pointer">
+          <span> {{'language.generic.description' | translate}} </span> <i class="fa-solid fa-sort mx-2"
+            style="font-size: 12px;"></i>
+        </th>
 
 
-          <td      aria-label="64616-103" class="datatable-cell">
-            <span >
-              <div class="d-flex align-items-center">
-                <div class="text-dark-75   font-size-lg mb-0" [innerHTML]="data.assetName || 'N/A' | highlight: searchTerm">
-                </div>
+        @if(isEdit || isDelete){<th><span> {{'language.generic.actions' | translate}}</span></th>}
+      </tr>
+    </thead>
+    <tbody class="datatable-body">
+      @for (data of dataList; track $index) {
+
+      <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
+        <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
+          <span><span class="font-weight-bolder ">
+              {{ (pageNo - 1) * pageSize + $index + 1 }}
+            </span></span>
+        </td>
+
+
+        <td aria-label="64616-103" class="datatable-cell">
+          <span>
+            <div class="d-flex align-items-center">
+              <div class="text-dark-75   font-size-lg mb-0"
+                [innerHTML]="data.assetName || 'N/A' | highlight: searchTerm">
               </div>
-            </span>
-          </td>
-
-          <td      aria-label="64616-103" class="datatable-cell">
-            <span >
-              <div class="d-flex align-items-center">
-                <div class="text-dark-75   font-size-lg mb-0">
-                  {{ data.assetTypeName || 'N/A'}}
-                </div>
-              </div>
-            </span>
-          </td>
-
-          <td      aria-label="64616-103" class="datatable-cell">
-            <span >
-              <div class="d-flex align-items-center">
-                <div class="text-dark-75   font-size-lg mb-0">
-                  {{ (data.issuedDate  | convertTime: 'date')  || "N/A"}}
-                </div>
-              </div>
-            </span>
-          </td>
-
-          <td      aria-label="64616-103" class="datatable-cell">
-            <span >
-              <div class="d-flex align-items-center">
-                <div class="text-dark-75   font-size-lg mb-0">
-                  {{data.description || "N/A"}}
-                </div>
-              </div>
-            </span>
-          </td>
-
-
-
-          <td>
-            <div class="btn-group">
-              <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{'language.generic.actions' | translate}}
-              </button>
-              <ul class="dropdown-menu px-2 ">
-
-                @if(this.isEdit){
-                <li class="w-100  mb-2">
-                  <a [routerLink]="['/employee/profile/assets/edit']"
-                  [queryParams]="{editId: data.employeeAssetId,id:this.id}"
-                    class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
-                    title="Edit details">
-                    {{'language.generic.edit' | translate}}
-                  </a>
-                </li>
-
-                }
-                @if(this.isDelete){
-                  <li class="w-100">
-                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                        title="Delete">
-                        {{ "language.generic.inActive" | translate }}
-                      </button>
-                  </li>
-                  }
-              </ul>
             </div>
-              <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        {{'language.msg.areYouAbsolutely' | translate}}
-                      </h1>
-                      <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
-                        aria-label="Close">x</button>
-                    </div>
-                    <div class="modal-body">
-                               {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        {{'language.generic.cancel' | translate}}</button>
-                      <button type="button" (click)="onDelete(data.employeeAssetId)" data-bs-dismiss="modal"
-                        class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
-                    </div>
-                  </div>
+          </span>
+        </td>
+
+        <td aria-label="64616-103" class="datatable-cell">
+          <span>
+            <div class="d-flex align-items-center">
+              <div class="text-dark-75   font-size-lg mb-0">
+                {{ data.assetTypeName || 'N/A'}}
+              </div>
+            </div>
+          </span>
+        </td>
+
+        <td aria-label="64616-103" class="datatable-cell">
+          <span>
+            <div class="d-flex align-items-center">
+              <div class="text-dark-75   font-size-lg mb-0">
+                {{ (data.issuedDate | convertTime: 'date') || "N/A"}}
+              </div>
+            </div>
+          </span>
+        </td>
+
+        <td aria-label="64616-103" class="datatable-cell">
+          <span>
+            <div class="d-flex align-items-center">
+              <div class="text-dark-75   font-size-lg mb-0">
+                {{data.description || "N/A"}}
+              </div>
+            </div>
+          </span>
+        </td>
+
+
+
+        @if(this.isEdit || this.isDelete){<td>
+          <div class="btn-group">
+            <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{'language.generic.actions' | translate}}
+            </button>
+            <ul class="dropdown-menu px-2 ">
+
+              @if(this.isEdit){
+              <li class="w-100  mb-2">
+                <a [routerLink]="['/employee/profile/assets/edit']"
+                  [queryParams]="{editId: data.employeeAssetId,id:this.id}"
+                  class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
+                  title="Edit details">
+                  {{'language.generic.edit' | translate}}
+                </a>
+              </li>
+
+              }
+              @if(this.isDelete){
+              <li class="w-100">
+                <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                  class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                  title="Delete">
+                  {{ "language.generic.inActive" | translate }}
+                </button>
+              </li>
+              }
+            </ul>
+          </div>
+          <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    {{'language.msg.areYouAbsolutely' | translate}}
+                  </h1>
+                  <button type="button" class="btn-close border-0" data-bs-dismiss="modal" aria-label="Close">x</button>
                 </div>
-              </div>  </td>
-        </tr>
+                <div class="modal-body">
+                  {{( data?.isActive ? 'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )|
+                  translate}}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{'language.generic.cancel' | translate}}</button>
+                  <button type="button" (click)="onDelete(data.employeeAssetId)" data-bs-dismiss="modal"
+                    class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>}
+      </tr>
 
+      }
+      @if(this.dataList.length < 1){ <tr>
+        <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+        </tr>
         }
-        @if(this.dataList.length < 1){
-          <tr>
-            <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
-        </tr>
-          }
-      </tbody>
-    </table>
+    </tbody>
+  </table>
 
 
-    <!--begin::Pagination-->
-    @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
-      <div class="d-flex flex-wrap py-2 mr-3">
-        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
-          <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+  <!--begin::Pagination-->
+  @if(this.dataList.length > 0){<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <div class="d-flex flex-wrap py-2 mr-3">
+      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
+        <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+      </a>
+
+      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)"
+        [class.disabled]="pageNo === 1">
+        <i class="ki ki-bold-arrow-back icon-xs"></i>
+      </a>
+
+      <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
+        <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="i + 1 === pageNo"
+          (click)="changePage(i + 1)">
+          {{ i + 1 }}
         </a>
+      </span>
 
-        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)"
-          [class.disabled]="pageNo === 1">
-          <i class="ki ki-bold-arrow-back icon-xs"></i>
-        </a>
+      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
+        [class.disabled]="pageNo === totalPages">
+        <i class="ki ki-bold-arrow-next icon-xs"></i>
+      </a>
 
-        <span *ngFor="let page of [].constructor(totalPages); let i = index" [hidden]="i > 4 && i < totalPages - 5">
-          <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="i + 1 === pageNo"
-            (click)="changePage(i + 1)">
-            {{ i + 1 }}
-          </a>
-        </span>
+      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
+        [class.disabled]="pageNo === totalPages">
+        <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+      </a>
+    </div>
 
-        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
-          [class.disabled]="pageNo === totalPages">
-          <i class="ki ki-bold-arrow-next icon-xs"></i>
-        </a>
+    <div class="d-flex align-items-center py-3">
+      <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+        [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+        <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+      </select>
 
-        <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
-          [class.disabled]="pageNo === totalPages">
-          <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-        </a>
-      </div>
+      <span class="text-muted">
+        {{'language.generic.totalRecords' | translate}} {{ totalCount }}
+      </span>
+    </div>
 
-      <div class="d-flex align-items-center py-3">
-        <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
-          [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
-          <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
-        </select>
+  </div>}
 
-        <span class="text-muted">
-          {{'language.generic.totalRecords' | translate}} {{ totalCount }}
-        </span>
-      </div>
-
-    </div>}
-
-    <!--end:: Pagination-->
+  <!--end:: Pagination-->
 
 
 
-  </div>
+</div>
