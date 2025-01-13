@@ -130,13 +130,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'language.sidebar.attendanceRequest',
-      route: '/attendance/attendance-list',
+      route: '/attendance/request',
       permissions: 'View_Attendance',
       show: false,
     },
     {
       name: 'language.sidebar.remoteWorkRequest',
-      route: '/attendance/attendance-list',
+      route: '/attendance/remote',
       permissions: 'View_Attendance',
       show: false,
     },
@@ -157,7 +157,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'language.sidebar.leaveRequest',
-      route: '/leave/leave-list',
+      route: '/leave/request',
       permissions: 'View_Leave',
       show: false,
     },
