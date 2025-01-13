@@ -158,7 +158,9 @@
           aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-file-1 mr-2"></i>
-            <span class="menu-text">{{'language.sidebar.leave' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.leave' | translate}}</span>  <span class="menu-label">
+              <span class="label label-rounded label-primary">6</span>
+            </span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -179,7 +181,7 @@
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{ item.name | translate }}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span> @if($index == 1){<span class="label label-danger label-inline">new</span>}
                 </a>
                 }
               </li>
