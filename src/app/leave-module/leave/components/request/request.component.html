@@ -1,1 +1,456 @@
-<p>request works!</p>
+<div class="d-flex flex-column-fluid px-3">
+
+  <div class="card card-custom mx-auto w-100">
+
+
+
+    <div class="d-flex justify-content-between  align-items-center pt-4 px-5">
+      <div></div>
+      <!-- <form class="d-flex  mt-2   w-25-md" role="search">
+        <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" [placeholder]="'language.placeholders.searchByName' | translate"
+              name="searchTerm" (input)="search($event)">
+          </div>
+        </div>
+      </form> -->
+
+      <div class="d-flex align-items-center" style="gap: 6px;">
+
+        <div class="dropdown dropdown-inline mr-2">
+          <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="svg-icon svg-icon-md">
+              <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <rect x="0" y="0" width="24" height="24"></rect>
+                  <path
+                    d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z"
+                    fill="#000000" opacity="0.3"></path>
+                  <path
+                    d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z"
+                    fill="#000000"></path>
+                </g>
+              </svg>
+
+            </span> {{'language.generic.export' | translate}} </button>
+          <!--begin::Dropdown Menu-->
+          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+            <!--begin::Navigation-->
+            <ul class="navi flex-column navi-hover py-2">
+              <li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">
+                {{'language.generic.chooseAnOption' | translate}}
+              </li>
+
+              <li class="navi-item">
+                <a style="cursor: pointer;" class="navi-link" (click)="exportData('excel')">
+                  <span class="navi-icon">
+                    <i class="la la-file-excel-o"></i>
+                  </span>
+                  <span class="navi-text"> {{'language.generic.excel' | translate}} </span>
+                </a>
+              </li>
+            </ul>
+            <!--end::Navigation-->
+          </div>
+          <!--end::Dropdown Menu-->
+        </div>
+
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between p-5 flex-wrap" style="gap: 8px ;">
+
+
+
+      <div class="" style="flex: 1; min-width: 200px;">
+        <label class="form-label">{{ "language.generic.user" | translate }}
+          <span class="text-danger"></span>
+        </label>
+        <ng-select [items]="userReporting" bindLabel="fullName" [(ngModel)]="selectedEmpId" bindValue="employeeId"
+          [searchable]="true" placeholder="Select an option" (change)="onUserSelect($event?.value)">
+        </ng-select>
+      </div>
+
+      <div class="" style="flex: 1; min-width: 200px;">
+        <label class="form-label">
+          {{ "language.generic.selectFilter" | translate }}
+          <span class="text-danger"></span>
+        </label>
+        <ng-select [clearable]="false" [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption"
+          bindValue="value" [searchable]="true" placeholder="Select an option" (change)="setFilter($event?.value)">
+        </ng-select>
+      </div>
+
+      <div class="" style="flex: 1;">
+        <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
+        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
+          theme="dp-material" (change)="onStartDateChange($event)"></dp-date-picker>
+      </div>
+
+      <div class="" style="flex: 1;">
+        <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
+        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
+          [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
+      </div>
+      <div class="flex-column d-flex">
+        <label class="form-label" style="opacity: 0;">{{ 'language.generic.endDate' | translate }}</label>
+        <button class="btn btn-secondary " (click)="applyDateFilter()">
+          {{ 'language.generic.applyFilter' | translate }} <i class="fa fa-search ml-2" style="color: gray;"
+            aria-hidden="true"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!--begin::Body-->
+    <div class="card-body" style="overflow-x: auto">
+      <!--begin: Datatable-->
+      <div>
+        <table class="table table-striped w-100">
+          <thead class="datatable-head">
+            <tr class="datatable-row" style="left: 0px">
+              <th data-field="RecordID"
+                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" data-sort="asc">
+                <span># </span>
+              </th>
+
+              <th (click)="sort('firstName')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.empName" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
+
+
+              <th (click)="sort('leaveReason')" class="cursor-pointer">
+                <span>
+                  {{ "language.form.leaveReason" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
+
+
+              <th (click)="sort('leaveStatus')" class="cursor-pointer">
+                <span>
+                  {{ "language.form.status" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
+
+              @if(isDelete || isEdit || isApproval){<th>
+                <span style="width: 124px">
+                  {{ "language.generic.actions" | translate }}
+                </span>
+              </th>}
+            </tr>
+          </thead>
+
+          <tbody class="datatable-body">
+            @for (data of dataList; track $index) {
+            <tr data-row="0" class="datatable-row" style="left: 0px">
+              <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
+                <span><span class="font-weight-bolder">
+                    {{ (pageNo - 1) * pageSize + $index + 1 }}
+                  </span></span>
+              </td>
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0"
+                      [innerHTML]="data.firstName + ' ' + data.lastName || 'N/A' | highlight: searchTerm">
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{data.leaveReason || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      <div>
+                        <span [ngClass]="{
+                                              'label-warning': data.leaveStatus === 0,
+                                              'label-success': data.leaveStatus === 1,
+                                              'label-danger': data.leaveStatus === 2
+                                            }" class="label label-lg  label-inline mr-2"> {{
+                          getLeaveStatusText(data.leaveStatus) }}</span>
+
+                      </div>
+
+
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+              <td>
+
+                <div class="btn-group">
+                  <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{'language.generic.actions' | translate}}
+                  </button>
+                  <ul class="dropdown-menu px-2 ">
+
+                    @if(data.isActive && this.isEdit && data.leaveStatus == 0 ){
+                    <li class="w-100 mb-2">
+                      <a [routerLink]="['/leave/leave/edit']" [queryParams]="{ id:this.empId,editId: data.leaveId,}"
+                        class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{'language.generic.edit' | translate}}
+                      </a>
+                    </li>
+                    }
+
+                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    data.employeeId != this.empId)){
+                    <li class="w-100 mb-2">
+                      <a (click)="setStatus(1)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
+                        class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{'language.generic.approve' | translate}}
+                      </a>
+                    </li> }
+
+
+
+
+                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    data.employeeId != this.empId)){
+                    <li class="w-100 mb-2">
+                      <a (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{'language.generic.reject' | translate}}
+                      </a>
+                    </li> }
+
+                    @if (data.leaveStatus != 0) {<li class="w-100 mb-2">
+                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#leaveModal-' + $index"
+                        class="btn btn-sm btn-default btn-text-warning btn-hover-warning btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{'language.generic.view' | translate}}
+                      </a>
+                    </li>}
+
+                    @if(isDelete && data.leaveStatus != 0){
+                    <li class="w-100 mb-2">
+                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Edit details">
+                        {{ "language.generic.inActive" | translate }}
+                      </a>
+                    </li> }
+
+                  </ul>
+                </div>
+
+
+
+
+                <!-- Modal -->
+                <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          {{'language.msg.areYouAbsolutely' | translate}}
+                        </h1>
+                        <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                          aria-label="Close">x</button>
+                      </div>
+                      <div class="modal-body">
+                        {{( data?.isActive ? 'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )|
+                        translate}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          {{'language.generic.cancel' | translate}}</button>
+                        <button type="button" (click)="onDelete(data.leaveId)" data-bs-dismiss="modal"
+                          class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                data.employeeId != this.empId)){
+                <!-- Modal -->
+                <div class="modal fade" [id]="'statusModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          {{'language.msg.updateStatus' | translate}}
+                        </h1>
+                        <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                          aria-label="Close">x</button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <form [formGroup]="submitForm" class="col-md-12 mb-3">
+                            <label class="form-label">{{ "language.form.comment" | translate }}
+                              <span class="text-danger">*</span></label>
+                            <textarea class="form-control" formControlName="comment"
+                              [placeholder]="'language.placeholders.comment' | translate" [ngClass]="{
+                                'is-invalid':
+                                  submitForm.get('comment')?.invalid &&
+                                  (submitForm.get('comment')?.touched || isSubmitted)
+                              }"></textarea>
+                            <div *ngIf="
+                                submitForm.get('comment')?.invalid &&
+                                (submitForm.get('comment')?.touched || isSubmitted)
+                              " class="invalid-feedback">
+                              {{ "language.errors.commentRequired" | translate }}
+                            </div>
+                          </form>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          {{'language.generic.cancel' | translate}}</button>
+
+
+                        <button type="button" (click)="onSubmit(data.leaveId)" data-bs-dismiss="modal"
+                          class="btn btn-primary">{{'language.generic.continue' | translate}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                }
+
+
+
+                @if( data.leaveStatus != 0 ){
+                <!-- Modal -->
+                <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveInfo' | translate }}</h5>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                          aria-label="Close">x</button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row px-3">
+
+
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
+                            <b>{{'language.generic.date' | translate}}:</b> {{data.approvedDate | convertTime:
+                            'date' }}
+                          </div>
+
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
+                            <b>{{ (data.leaveStatus == 1 ? 'language.generic.approvedBy' :
+                              'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy}}
+                          </div>
+
+                          <div class="d-flex w-100 mb-2" style="gap: 4px;">
+                            <b>{{'language.generic.comment' | translate}}:</b> {{data.approvedComment}}
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                }
+
+              </td>
+            </tr>
+            } @if(this.dataList.length < 1){ <tr>
+              <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+          </tbody>
+        </table>
+
+        <!--begin::Pagination-->
+
+        @if(this.dataList.length > 0){
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex flex-wrap py-2 mr-3">
+              <!-- First Page -->
+              <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
+                <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+              </a>
+
+              <!-- Previous Page -->
+              <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)" [class.disabled]="pageNo === 1">
+                <i class="ki ki-bold-arrow-back icon-xs"></i>
+              </a>
+
+              <!-- Pagination Pages -->
+              <ng-container *ngFor="let page of visiblePages">
+                <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="page === pageNo"
+                  (click)="changePage(page)">
+                  {{ page }}
+                </a>
+              </ng-container>
+
+              <!-- Next Page -->
+              <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
+                [class.disabled]="pageNo === totalPages">
+                <i class="ki ki-bold-arrow-next icon-xs"></i>
+              </a>
+
+              <!-- Last Page -->
+              <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
+                [class.disabled]="pageNo === totalPages">
+                <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+              </a>
+            </div>
+
+            <!-- Page Size and Total Records -->
+            <div class="d-flex align-items-center py-3">
+              <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+                [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+                <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+              </select>
+              <span class="text-muted">
+                {{ 'language.generic.totalRecords' | translate }} {{ totalCount }}
+              </span>
+            </div>
+          </div>
+        }
+
+        <!--end:: Pagination-->
+      </div>
+      <!--end: Datatable-->
+    </div>
+    <!--end::Body-->
+  </div>
+
+</div>

@@ -13,14 +13,14 @@ const routes: Routes = [
   {
     path: 'remote',
     loadComponent: () => import(`./components/remote/remote.component`).then(c => c.RemoteComponent),
-    data: { breadcrumb: 'Manage Attendances',permission:"View_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval,HR_Approval" },
+    data: { breadcrumb: 'Manage Attendances',permission:"View_Remote_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval,HR_Approval" },
     title: 'Attendances Remote',
     resolve: { permission: PermissionService },
   },
   {
     path: 'request',
     loadComponent: () => import(`./components/request/request.component`).then(c => c.RequestComponent),
-    data: { breadcrumb: 'Manage Attendances',permission:"View_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval,HR_Approval" },
+    data: { breadcrumb: 'Manage Attendances',permission:"View_Missing_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval,HR_Approval" },
     title: 'Attendances Request',
     resolve: { permission: PermissionService },
   },

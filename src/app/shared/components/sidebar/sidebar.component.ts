@@ -4,6 +4,7 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AfterViewInit, Component, OnInit, Inject } from '@angular/core';
 import { LocalStorageManagerService } from '../../Services/local-storage-manager.service';
+import { ApiCallingService } from "../../Services/api-calling.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,10 @@ import { LocalStorageManagerService } from '../../Services/local-storage-manager
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
 
-
+  missingAttendanceReq: number = 0;
+  remoteAttendanceReq: number = 0;
+  totalAttendanceReq: number = 0;
+  totalLeavesReq: number = 0;
 
   isCollapsed = false;
   activRoute: string = '';
@@ -131,13 +135,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.attendanceRequest',
       route: '/attendance/request',
-      permissions: 'View_Attendance',
+      permissions: 'View_Missing_Attendance',
       show: false,
     },
     {
       name: 'language.sidebar.remoteWorkRequest',
       route: '/attendance/remote',
-      permissions: 'View_Attendance',
+      permissions: 'View_Remote_Attendance',
       show: false,
     },
     {
@@ -158,7 +162,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.leaveRequest',
       route: '/leave/request',
-      permissions: 'View_Leave',
+      permissions: 'View_Leave_Requests',
       show: false,
     },
   ];
@@ -166,9 +170,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(DOCUMENT) private _document: Document,
     private _router: Router,
+    private apiService: ApiCallingService,
     private _localStorage: LocalStorageManagerService,
     public translate: TranslateService
-  ) { }
+  ) {
+    this.getNotificationsCount()
+  }
 
   ngOnInit(): void {
     this.loadScript();
@@ -181,6 +188,34 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
   }
+
+  private getNotificationsCount(): void {
+
+    // Call the API with the active status filter
+    this.apiService.getData('Dashboard', 'getNotificationsCount', true, { employeeId: this._localStorage.getEmployeeDetail()[0].employeeId })
+      .subscribe({
+        next: (res: {
+          message: string;
+          status: number;
+          success: boolean;
+          data: {
+            missingAttendanceReq: number;
+            remoteAttendanceReq: number;
+            totalAttendanceReq: number;
+            totalLeavesReq: number;
+          }
+        }) => {
+
+          this.missingAttendanceReq = res.data.missingAttendanceReq;
+          this.remoteAttendanceReq = res.data.remoteAttendanceReq;
+          this.totalAttendanceReq = res.data.totalAttendanceReq;
+          this.totalLeavesReq = res.data.totalLeavesReq;
+        },
+        error: () => '',
+      });
+  }
+
+
 
   private loadScript(): void {
     const script = this._document.createElement('script');

@@ -16,7 +16,7 @@ const routes: Routes = [
         loadComponent: () => import(`./leave/components/request/request.component`).then(c => c.RequestComponent),
         title: 'Leave Request',
         resolve: { permission: PermissionService },
-        data: { breadcrumb: 'Leave List',permission:"View_Leave,Apply_Leave,Edit_Leave,Leave_Approval,HR_Approval" }
+        data: { breadcrumb: 'Leave List',permission:"View_Leave_Requests,Apply_Leave,Edit_Leave,Leave_Approval,HR_Approval" }
     },
     {
         path: 'leave/:action',

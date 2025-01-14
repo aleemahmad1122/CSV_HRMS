@@ -9,7 +9,8 @@
         alt="Logo" src="https://cybersoftvantage.com/logo.png" width="35px" height="80px"
         style="object-fit: contain;" />
 
-      <h1  [ngStyle]="{'display': isCollapsed ? 'none' : 'block'}"  class="text-white ml-3" style="font-size: 20px; font-weight: bold;">CSV_HRMS</h1>
+      <h1 [ngStyle]="{'display': isCollapsed ? 'none' : 'block'}" class="text-white ml-3"
+        style="font-size: 20px; font-weight: bold;">CSV_HRMS</h1>
     </a>
     <!--end::Logo-->
     <!--begin::Toggle-->
@@ -52,8 +53,8 @@
           </a>
         </li>
 
-        @if(this.adminItems.length > 0){<li routerLinkActive="menu-item-active menu-item-open" class="menu-item menu-item-submenu "
-          aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.adminItems.length > 0){<li routerLinkActive="menu-item-active menu-item-open"
+          class="menu-item menu-item-submenu " aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon2-user-1 mr-2"></i>
             <span class="menu-text">{{'language.sidebar.admin' | translate}}</span>
@@ -86,8 +87,8 @@
         </li>}
 
 
-        @if(this.employeeItems.length > 0){ <li routerLinkActive="menu-item-active menu-item-open" class="menu-item menu-item-submenu"
-          aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.employeeItems.length > 0){ <li routerLinkActive="menu-item-active menu-item-open"
+          class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon2-group mr-2"></i>
             <span class="menu-text">{{'language.sidebar.employee' | translate}}</span>
@@ -124,7 +125,9 @@
           class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-user-ok mr-2"></i>
-            <span class="menu-text">{{'language.sidebar.attendance' | translate}}</span>
+            <span class="menu-text">{{'language.sidebar.attendance' | translate}}</span> <span class="menu-label">
+              @if(totalAttendanceReq){<span class="label label-rounded label-primary">{{totalAttendanceReq}}</span>}
+            </span>
             <i class="menu-arrow"></i>
           </a>
           <div class="menu-submenu">
@@ -144,7 +147,10 @@
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{ item.name | translate }}</span>
+                  <span class="menu-text">{{ item.name | translate }}</span> @if(($index == 1 && missingAttendanceReq)
+                  || ($index == 2 && remoteAttendanceReq)){<span class="menu-label">
+                    <span class="label label-danger label-inline">new</span>
+                  </span>}
                 </a>
                 }
               </li>
@@ -154,12 +160,12 @@
         </li>}
 
 
-        @if(this.leaveItems.length > 0){ <li routerLinkActive="menu-item-active menu-item-open" class="menu-item menu-item-submenu"
-          aria-haspopup="true" data-menu-toggle="hover">
+        @if(this.leaveItems.length > 0){ <li routerLinkActive="menu-item-active menu-item-open"
+          class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-file-1 mr-2"></i>
-            <span class="menu-text">{{'language.sidebar.leave' | translate}}</span>  <span class="menu-label">
-              <span class="label label-rounded label-primary">6</span>
+            <span class="menu-text">{{'language.sidebar.leave' | translate}}</span> <span class="menu-label">
+              @if(totalLeavesReq){<span class="label label-rounded label-primary">{{totalLeavesReq}}</span>}
             </span>
             <i class="menu-arrow"></i>
           </a>
@@ -181,7 +187,10 @@
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
-                  <span class="menu-text">{{ item.name | translate }}</span> @if($index == 1){<span class="label label-danger label-inline">new</span>}
+                  <span class="menu-text">{{ item.name | translate }}</span>
+                  @if($index == 1 && totalLeavesReq){<span class="menu-label">
+                    <span class="label label-danger label-inline">new</span>
+                  </span>}
                 </a>
                 }
               </li>
