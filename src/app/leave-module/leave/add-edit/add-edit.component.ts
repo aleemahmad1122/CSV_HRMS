@@ -1,19 +1,20 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
-import { ILeaveType, ILeaveTypeRes } from '../../../types';
 import { environment } from '../../../../environments/environment.prod';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { LocalStorageManagerService } from '../../../shared/Services/local-storage-manager.service';
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule, ReactiveFormsModule, FormsModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -30,7 +31,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
   selectedValue: any;
 
 
-  leaveType:  {
+  empId: string = "";
+
+  userReporting: {
+    employeeId: string;
+    fullName: string;
+  }[] = []
+
+
+  leaveType: {
     leaveTypeId: string;
     leaveTypeName: string;
     remainingLeaves: number;
@@ -44,8 +53,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private _localStrong: LocalStorageManagerService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+
+    this.empId = this._localStrong.getEmployeeDetail()[0].employeeId;
 
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       this.id = params['id'];
@@ -72,7 +84,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     });
     this.addEditForm = this.createForm();
 
-
+    this.getUserReporting()
   }
 
   ngOnInit(): void {
@@ -80,6 +92,30 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
 
+  onUserSelect(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.id = selectElement.value;
+  }
+
+  getUserReporting(): void {
+    this.apiCalling
+      .getData('Attendance', 'getUserReportings', true, {
+        employeeId: this.empId
+      })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.userReporting = response.data;
+          } else {
+            this.userReporting = []; // Handle case when response is not successful
+          }
+        },
+        error: () => {
+          this.userReporting = []; // Handle error scenario
+        },
+      });
+  }
 
   private getRemainingLeaves(): void {
     this.apiCalling.getData('Leave', 'getRemainingLeaves', true, { employeeId: this.id })

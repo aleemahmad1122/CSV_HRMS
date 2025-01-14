@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,12 +9,13 @@ import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
 
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule, ReactiveFormsModule, FormsModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -23,6 +24,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
   };
+
+
+
+  empId: string = "";
+
+  userReporting: {
+    employeeId: string;
+    fullName: string;
+  }[] = []
+
 
   timePickerConfig = {
     hour12: true,
@@ -68,8 +79,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private _localStrong: LocalStorageManagerService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+
+
+    this.empId = this._localStrong.getEmployeeDetail()[0].employeeId;
+
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       this.id = params['id'];
       const editId = params['editId'];
@@ -94,6 +110,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
       }
     });
     this.addEditForm = this.createForm();
+
+
+    this.getUserReporting()
   }
 
   ngOnInit(): void {
@@ -103,6 +122,35 @@ export class AddEditComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+
+
+  onUserSelect(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.id = selectElement.value;
+  }
+
+
+  getUserReporting(): void {
+    this.apiCalling
+      .getData('Attendance', 'getUserReportings', true, {
+        employeeId: this.empId
+      })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.userReporting = response.data;
+          } else {
+            this.userReporting = []; // Handle case when response is not successful
+          }
+        },
+        error: () => {
+          this.userReporting = []; // Handle error scenario
+        },
+      });
+  }
+
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
