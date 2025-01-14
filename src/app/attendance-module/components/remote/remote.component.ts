@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { IAttendanceList, IAttendanceListRes } from '../../../types/index';
+import { AttendanceRequests, AttendanceRequestsRes } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -32,7 +32,7 @@ export class RemoteComponent  implements AfterViewInit {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: IAttendanceList[] = [];
+  dataList: AttendanceRequests[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -307,7 +307,7 @@ export class RemoteComponent  implements AfterViewInit {
         .getData('Attendance', 'getRemoteAttendanceRequest', true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: IAttendanceListRes) => this.handleResponse(res),
+          next: (res: AttendanceRequestsRes) => this.handleResponse(res),
           error: () => (this.dataList = []),
         });
     } else {
@@ -333,16 +333,16 @@ export class RemoteComponent  implements AfterViewInit {
       .getData('Attendance', 'getRemoteAttendanceRequest', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IAttendanceListRes) => this.handleResponse(res),
+        next: (res: AttendanceRequestsRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IAttendanceListRes): void {
+  private handleResponse(response: AttendanceRequestsRes): void {
     if (response?.success) {
-      const { attendances, pagination } = response.data;
+      const { attendanceRequests, pagination } = response.data;
       Object.assign(this, {
-        dataList: attendances,
+        dataList: attendanceRequests,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,

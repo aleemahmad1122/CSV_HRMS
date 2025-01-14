@@ -126,7 +126,9 @@
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-user-ok mr-2"></i>
             <span class="menu-text">{{'language.sidebar.attendance' | translate}}</span> <span class="menu-label">
-              @if(totalAttendanceReq){<span class="label label-rounded label-primary">{{totalAttendanceReq}}</span>}
+              @if(totalAttendanceReq){<span class="menu-label">
+                <span class="label label-danger label-inline">{{totalAttendanceReq > 9 ? (totalAttendanceReq + '+ ') : totalAttendanceReq}} {{"language.generic.new" | translate}}</span>
+              </span>}
             </span>
             <i class="menu-arrow"></i>
           </a>
@@ -148,9 +150,13 @@
                     <span></span>
                   </i>
                   <span class="menu-text">{{ item.name | translate }}</span> @if(($index == 1 && missingAttendanceReq)
-                  || ($index == 2 && remoteAttendanceReq)){<span class="menu-label">
-                    <span class="label label-danger label-inline">new</span>
-                  </span>}
+                  || ($index == 2 && remoteAttendanceReq)){
+
+                    <span class="menu-label">
+                      <span class="label label-rounded label-primary">{{$index == 1 ? missingAttendanceReq : ''}} {{$index == 2 ? remoteAttendanceReq : ''}}</span>
+                    </span>
+
+                  }
                 </a>
                 }
               </li>
@@ -165,7 +171,9 @@
           <a href="javascript:;" class="menu-link menu-toggle">
             <i class="flaticon-file-1 mr-2"></i>
             <span class="menu-text">{{'language.sidebar.leave' | translate}}</span> <span class="menu-label">
-              @if(totalLeavesReq){<span class="label label-rounded label-primary">{{totalLeavesReq}}</span>}
+              @if(totalLeavesReq){     <span class="menu-label">
+                <span class="label label-danger label-inline">{{totalLeavesReq > 9 ? (totalLeavesReq + '+ ') : totalLeavesReq}} {{"language.generic.new" | translate}}</span>
+              </span>}
             </span>
             <i class="menu-arrow"></i>
           </a>
@@ -188,9 +196,12 @@
                     <span></span>
                   </i>
                   <span class="menu-text">{{ item.name | translate }}</span>
-                  @if($index == 1 && totalLeavesReq){<span class="menu-label">
-                    <span class="label label-danger label-inline">new</span>
-                  </span>}
+                  @if($index == 1 && totalLeavesReq){
+                    <span class="menu-label">
+                      <span class="label label-rounded label-primary">{{totalLeavesReq}}</span>
+
+                    </span>
+               }
                 </a>
                 }
               </li>
