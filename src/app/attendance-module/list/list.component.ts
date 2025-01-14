@@ -377,6 +377,7 @@ export class ListComponent implements AfterViewInit {
 
   }
 
+
   generatePages() {
     const maxVisiblePages = 3; // Maximum number of visible pages
     const half = Math.floor(maxVisiblePages / 2);

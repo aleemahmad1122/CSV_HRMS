@@ -254,6 +254,11 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "leaveSummary":"Leave Summary",
+      "remainingLeaves":"Remaing Leave",
+      "leavesTaken":"Leave Taken",
+      "leaveTypeName":"Leave Type",
+      "totalLeaves":"Total Leave",
       "earlyDataSummary":"Early Data Summary",
       "missingDataSummary":"Missing Data Summary",
       "lateSummary":"Late Summary",

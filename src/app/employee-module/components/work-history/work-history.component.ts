@@ -42,6 +42,10 @@ export class WorkHistoryComponent{
   sortField: string = 'positionTitle';
   sortDirection: boolean = true;
 
+
+  pages: (number | string)[] = [];
+  visiblePages: number[] = [];
+
   constructor(
     private apiService: ApiCallingService,
     private route: ActivatedRoute,
@@ -50,11 +54,10 @@ export class WorkHistoryComponent{
     private activatedRoute: ActivatedRoute
   ) {
     this.initializeSearch();
-
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(_ => this.id = _['id']);
     this.getData();
-
     this.loadPermissions();
+    this.generatePages()
   }
 
 
@@ -105,7 +108,7 @@ export class WorkHistoryComponent{
       this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm, activeStatus: isActive,employeeId:this.id })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
+          next: (res: IEmployeeWorkHistoryRes) => {this.handleResponse(res);    this.generatePages()},
           error: () => (this.dataList = []),
         });
     }
@@ -115,7 +118,7 @@ export class WorkHistoryComponent{
     this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, { searchQuery: searchTerm,employeeId:this.id  })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeWorkHistoryRes) => this.handleResponse(res),
+        next: (res: IEmployeeWorkHistoryRes) => {this.handleResponse(res);    this.generatePages()},
         error: () => (this.dataList = []),
       });
   }
@@ -139,24 +142,62 @@ export class WorkHistoryComponent{
     this.searchSubject.next(term); // Debounce the API call
   }
 
-  changePage(newPage: number): void {
-    if (newPage > 0 && newPage <= this.totalPages) {
+
+
+  generatePages() {
+    const maxVisiblePages = 3; // Maximum number of visible pages
+    const half = Math.floor(maxVisiblePages / 2);
+
+    let start = Math.max(1, this.pageNo - half);
+    let end = Math.min(this.totalPages, this.pageNo + half);
+
+    // Make sure at least one page is visible
+    if (this.pageNo === 1) {
+      start = 1;
+      end = Math.min(this.totalPages, maxVisiblePages); // Show first few pages
+    } else if (end - start + 1 < maxVisiblePages) {
+      if (start === 1) {
+        end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+      } else if (end === this.totalPages) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+    }
+
+
+    this.visiblePages = [];
+    for (let i = start; i <= end; i++) {
+      this.visiblePages.push(i);
+    }
+    // If no pages are visible, ensure at least the first page is shown
+    if (this.visiblePages.length === 0) {
+      this.visiblePages.push(1);
+    }
+
+
+  }
+
+  changePage(newPage: number) {
+    if (newPage >= 1 && newPage <= this.totalPages) {
       this.pageNo = newPage;
-      this.getPaginatedData();
+      this.getPaginatedData()
+      this.generatePages();
     }
   }
 
-  changePageSize(size: number): void {
-    Object.assign(this, { pageSize: size, pageNo: 1 });
-    this.getPaginatedData();
+  changePageSize(newSize: number) {
+    this.pageSize = newSize;
+    this.pageNo = 1;
+    this.getPaginatedData()
+    this.generatePages();
   }
+
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize,employeeId:this.id  };
     this.apiService.getData('EmployeeWorkHistory', 'getEmployeeWorkHistories', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res) => this.handleResponse(res),
+        next: (res) => {this.handleResponse(res);    this.generatePages()},
         error: (err) => console.error('Error fetching data:', err),
       });
   }

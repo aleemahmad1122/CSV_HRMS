@@ -196,7 +196,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         icon: 'fa-user-check',
         color: 'success',
         percentage: ((this.attendanceSummary.presents / total) * 100).toFixed(2),
-        id: "presentModal"
+        id: ""
       },
       {
         title: 'language.generic.leaves',
@@ -204,7 +204,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         icon: 'fa-calendar-day',
         color: 'info',
         percentage: ((this.attendanceSummary.leaves / total) * 100).toFixed(2),
-        id: ""
+        id: "employeeLeaveSummaryModal"
       },
       {
         title: 'language.generic.late',

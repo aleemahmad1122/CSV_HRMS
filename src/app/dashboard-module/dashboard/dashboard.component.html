@@ -184,7 +184,7 @@
 
 
         <div class="d-flex flex-wrap " style="gap: 8px;">
-          @for(item of summaryItems; track $index){ <div data-bs-toggle="modal" [attr.data-bs-target]="'#'+item.id"
+          @for(item of summaryItems; track $index){ <div data-bs-toggle="modal"   [ngStyle]="{'cursor': item.id ? 'pointer' : 'default'}"  [attr.data-bs-target]="'#'+item.id"
             class="card px-5 py-4  bg-gradient text-secondary  dash-card">
 
             <div class="d-flex justify-content-between flex-wrap  align-items-center ">
@@ -435,6 +435,34 @@
                   'time') || 'N/A' }}</h6>
                 <h6 class="mb-3 mx-3"><b>{{'language.generic.checkOut' | translate}}:</b> {{(item.checkOut |
                   convertTime: 'time') || 'N/A' }}</h6>
+              </div>
+            </div>
+            }}@else{
+            <h1 style="text-align: center;font-size: 12px;">{{'language.generic.noRecords' | translate}}</h1>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="employeeLeaveSummaryModal" tabindex="-1" aria-labelledby="employeeLeaveSummaryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group">
+            @if(employeeLeaveSummary.length > 0){@for (item of employeeLeaveSummary; track $index) {
+            <div class="list-group-item d-flex align-items-center">
+
+              <div>
+                <h6 class="mb-3 mx-3"><b>{{'language.generic.leaveTypeName' | translate}}:</b> {{item.leaveTypeName || 'N/A'}}</h6>
+                <h6 class="mb-3 mx-3"><b>{{'language.generic.totalLeaves' | translate}}:</b> {{item.totalLeaves || 'N/A'}}</h6>
+                <h6 class="mb-3 mx-3"><b>{{'language.generic.leavesTaken' | translate}}:</b> {{item.leavesTaken || 'N/A'}}</h6>
+                <h6 class="mb-3 mx-3"><b>{{'language.generic.remainingLeaves' | translate}}:</b> {{item.remainingLeaves || 'N/A'}}</h6>
               </div>
             </div>
             }}@else{

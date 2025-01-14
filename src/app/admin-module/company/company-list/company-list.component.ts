@@ -39,6 +39,8 @@ export class CompanyListComponent {
 
 
 
+  pages: (number | string)[] = [];
+  visiblePages: number[] = [];
 
   sortField: string = 'name';
   sortDirection: boolean = true;
@@ -53,6 +55,7 @@ export class CompanyListComponent {
     this.initializeSearch();
     this.getData();
     this.loadPermissions();
+    this.generatePages()
   }
 
 
@@ -136,24 +139,62 @@ export class CompanyListComponent {
     this.searchSubject.next(term); // Debounce the API call
   }
 
-  changePage(newPage: number): void {
-    if (newPage > 0 && newPage <= this.totalPages) {
+  generatePages() {
+    const maxVisiblePages = 3; // Maximum number of visible pages
+    const half = Math.floor(maxVisiblePages / 2);
+
+    let start = Math.max(1, this.pageNo - half);
+    let end = Math.min(this.totalPages, this.pageNo + half);
+
+    // Make sure at least one page is visible
+    if (this.pageNo === 1) {
+      start = 1;
+      end = Math.min(this.totalPages, maxVisiblePages); // Show first few pages
+    } else if (end - start + 1 < maxVisiblePages) {
+      if (start === 1) {
+        end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+      } else if (end === this.totalPages) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+    }
+
+
+    this.visiblePages = [];
+    for (let i = start; i <= end; i++) {
+      this.visiblePages.push(i);
+    }
+    // If no pages are visible, ensure at least the first page is shown
+    if (this.visiblePages.length === 0) {
+      this.visiblePages.push(1);
+    }
+
+
+  }
+
+  changePage(newPage: number) {
+    if (newPage >= 1 && newPage <= this.totalPages) {
       this.pageNo = newPage;
-      this.getPaginatedData();
+      this.getPaginatedData()
+      this.generatePages();
     }
   }
 
-  changePageSize(size: number): void {
-    Object.assign(this, { pageSize: size, pageNo: 1 });
-    this.getPaginatedData();
+  changePageSize(newSize: number) {
+    this.pageSize = newSize;
+    this.pageNo = 1;
+    this.getPaginatedData()
+    this.generatePages();
   }
+
+
+
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
     this.apiService.getData('Company', 'getCompanies', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res) => this.handleResponse(res),
+        next: (res) => {this.handleResponse(res);    this.generatePages()},
         error: (err) => console.error('Error fetching data:', err),
       });
   }
