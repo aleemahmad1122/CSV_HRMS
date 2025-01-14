@@ -1,14 +1,14 @@
 <div class="d-flex flex-column-fluid px-3">
   <div class="card card-custom w-100 p-5">
 
-    <div class="" style="flex: 1; min-width: 200px;margin-bottom: 12px;">
+    @if(userReporting.length > 1){<div class="" style="flex: 1; min-width: 200px;margin-bottom: 12px;">
       <label class="form-label">{{ "language.generic.user" | translate }}
         <span class="text-danger"></span>
       </label>
       <ng-select  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="id" bindValue="employeeId"
         [searchable]="true" placeholder="Select an option" (change)="onUserSelect($event?.value)">
       </ng-select>
-    </div>
+    </div>}
 
     <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
 
