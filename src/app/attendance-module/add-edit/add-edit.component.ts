@@ -8,12 +8,13 @@ import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -28,6 +29,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
     timePicker: true,
     format: environment.dateTimePatterns.time,
   };
+
+
+  types: { name: string; value: number; }[] = [
+    { name: "Missing Attendance", value: 1 },
+    { name: "Remote Request", value: 2 }
+  ];
 
 
   private ngUnsubscribe = new Subject<void>();
@@ -92,9 +99,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.addEditForm.get('date')?.valueChanges.subscribe(value => {
       this.addEditForm.patchValue({
-          checkInDate: value // Update checkInDate whenever date changes
+        checkInDate: value
       });
-  });
+    });
   }
 
   ngOnDestroy(): void {
@@ -108,14 +115,17 @@ export class AddEditComponent implements OnInit, OnDestroy {
       checkOut: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
       date: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       checkInDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`],
+      attendanceRequestType: 1,
       checkOutDate: [
         `${this.convertToDatetimeLocalFormat(environment.defaultDate)}`,
-        [ this.checkOutDateValidator.bind(this)]
+        [this.checkOutDateValidator.bind(this)]
       ],
       comment: ['', Validators.required],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
+
+
 
   private checkOutDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const checkInDate = this.addEditForm?.get('checkInDate')?.value;
@@ -137,9 +147,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
         checkIn: this.convertToTimeLocalFormat(this.selectedValue.checkIn),
         checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
         date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
-        checkInDate:  this.addEditForm.value['date'],
+        checkInDate: this.addEditForm.value['date'],
         checkOutDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkOutDate),
         comment: this.selectedValue.comment,
+        attendanceRequestType: this.selectedValue.attendanceRequestType,
         offSet: this.selectedValue.offSet,
       });
     }
@@ -176,7 +187,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const formattedValue = this.convertToDatetimeLocalFormat(input.value);
       this.addEditForm.patchValue({ [valueName]: formattedValue });
 
-        this.validateCheckOutTime();
+      this.validateCheckOutTime();
     }
   }
 
