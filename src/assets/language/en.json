@@ -254,6 +254,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "info":"Info",
       "new":"New",
       "attendanceType":"Attendance Type",
       "leaveSummary":"Leave Summary",

@@ -294,7 +294,7 @@
                   </button>
                   <ul class="dropdown-menu px-2 ">
 
-                    @if(data.isActive && this.isEdit && data.attendanceStatus == 0 ){
+                    <!-- @if(data.isActive && this.isEdit && data.attendanceStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/attendance/attendance/edit']"
                         [queryParams]="{ id:this.selectedEmpId,editId: data.attendanceId,}"
@@ -303,7 +303,7 @@
                         {{'language.generic.edit' | translate}}
                       </a>
                     </li>
-                    }
+                    } -->
 
                     @if((data.employeeId != this.empId && (isHr || isApproval || data.attendanceStatus == 0)) ||
                     (data.attendanceStatus == 0 && data.employeeId != this.empId)){
@@ -383,7 +383,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          {{'language.msg.updateStatus' | translate}}
+                          {{"language.sidebar.remoteWorkRequest" | translate}}   {{'language.msg.updateStatus' | translate}}
                         </h1>
                         <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
                           aria-label="Close">x</button>

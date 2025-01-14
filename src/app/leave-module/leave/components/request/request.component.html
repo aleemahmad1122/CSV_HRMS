@@ -214,7 +214,7 @@
                   </button>
                   <ul class="dropdown-menu px-2 ">
 
-                    @if(data.isActive && this.isEdit && data.leaveStatus == 0 ){
+                    <!-- @if(data.isActive && this.isEdit && data.leaveStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/leave/leave/edit']" [queryParams]="{ id:this.empId,editId: data.leaveId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
@@ -222,7 +222,7 @@
                         {{'language.generic.edit' | translate}}
                       </a>
                     </li>
-                    }
+                    } -->
 
                     @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
                     data.employeeId != this.empId)){
@@ -308,7 +308,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          {{'language.msg.updateStatus' | translate}}
+                          {{"language.sidebar.leaveRequest" | translate}}            {{'language.msg.updateStatus' | translate}}
                         </h1>
                         <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
                           aria-label="Close">x</button>

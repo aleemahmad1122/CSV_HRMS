@@ -273,7 +273,7 @@
                         <span [ngClass]="{
                             'label-warning': data.remarks.toLowerCase().includes('pending'),
                             'label-success': data.remarks.toLowerCase().includes('present'),
-                            'label-danger': data.remarks.toLowerCase().includes('missing entry')
+                            'label-danger': (data.remarks.toLowerCase().includes('missing entry') || data.remarks.toLowerCase().includes('rejected')),
                           }" class="label label-lg  label-inline mr-2">
                           {{data.remarks}}
                         </span>
@@ -356,17 +356,17 @@
 
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">
-                            <b>{{'language.generic.date' | translate}}:</b> {{data.approvedDate | convertTime:
-                            'date' }}
+                            <b>{{'language.generic.date' | translate}}:</b> {{(data.approvedDate | convertTime:
+                            'date' ) || "N/A"}}
                           </div>
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">
                             <b>{{(data.attendanceStatus == 1 ? 'language.generic.approvedBy' :
-                              'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy}}
+                              'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy || "N/A"}}
                           </div>
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">
-                            <b>{{'language.generic.comment' | translate}}:</b> {{data.approvedComment}}
+                            <b>{{'language.generic.comment' | translate}}:</b> {{data.approvedComment || "N/A"}}
                           </div>
 
                         </div>
@@ -384,7 +384,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          {{'language.msg.updateStatus' | translate}}
+                          {{"language.sidebar.manageAttendance" | translate}}   {{'language.msg.updateStatus' | translate}}
                         </h1>
                         <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
                           aria-label="Close">x</button>
