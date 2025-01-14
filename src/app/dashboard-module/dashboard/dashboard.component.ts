@@ -99,9 +99,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
       { presents: 15, absents: 5, leaves: 4, late: 1, early: 3, halfDays: 0, offDays: 6, missingAttendance: 1 },
       { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
-      { presents: 15, absents: 5, leaves: 4, late: 1, early: 3, halfDays: 0, offDays: 6, missingAttendance: 1 },
-      { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
-      { presents: 15, absents: 5, leaves: 4, late: 1, early: 3, halfDays: 0, offDays: 6, missingAttendance: 1 },
       // Add data for all 31 days...
     ];
 
@@ -154,13 +151,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         enabled: false,
       },
       chart: {
-        type: 'column', // Use column chart for daily data
+        type: 'column',
       },
       title: {
         text: 'Attendance Summary - January',
       },
       xAxis: {
-        categories: Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`), // Labels for each day of the month
+        categories: Array.from({ length: daysInMonth }, (_, i) => `Week ${i + 1}`),
       },
       yAxis: {
         title: {
@@ -170,7 +167,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       series: seriesData.map((series) => ({
         name: series.name,
         type: 'column',
-        data: series.data, // Daily data for each type
+        data: series.data,
       })),
     };
   }
@@ -178,8 +175,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
   private updateSummaryItems(): void {
-    // Ensure attendance data is available before calculating percentages
-    const total = this.totalAttendance || 1; // Avoid division by zero
+
+    const total = this.totalAttendance || 1;
 
     this.summaryItems = [
       {
