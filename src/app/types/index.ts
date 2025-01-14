@@ -444,6 +444,35 @@ export interface IAttendanceListRes extends ICommonRes {
 }
 
 
+export interface AttendanceRequests extends ICommon {
+  attendanceId: string;
+  employeeId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  comment: string;
+  attendanceDateTime: string;
+  checkIn: string;
+  checkOut: string;
+  activeTime: string;
+  attendanceStatus: number;
+  approvedBy: null | string;
+  approvedDate: string;
+  approvedComment: null | string;
+  isActive: boolean;
+}
+
+
+export interface AttendanceRequestsRes extends ICommonRes {
+
+  data: {
+    attendanceRequests: AttendanceRequests[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IClientRes extends ICommonRes {
 
   data: {

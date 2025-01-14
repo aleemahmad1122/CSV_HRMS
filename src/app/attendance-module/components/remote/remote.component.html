@@ -66,17 +66,17 @@
           <!--end::Dropdown Menu-->
         </div>
 
-        @if(isCreate){<button routerLink="/attendance/attendance/add"
+        <!-- @if(isCreate){<button routerLink="/attendance/attendance/add"
         [queryParams]="{id:(isHr ? this.selectedEmpId : this.empId)}" class="btn btn-primary">
         {{ 'language.generic.applyAttendance' | translate }}
-      </button>}
+      </button>} -->
     </div>
     </div>
 
 
     <div class="d-flex align-items-center justify-content-between p-5 flex-wrap" style="gap: 8px;">
 
-      <div class="" style="flex: 1; min-width: 200px;">
+      <!-- <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">{{ "language.generic.user" | translate }}
           <span class="text-danger"></span>
         </label>
@@ -89,7 +89,7 @@
           placeholder="Select an option"
           (change)="onUserSelect($event?.value)">
         </ng-select>
-      </div>
+      </div> -->
 
       <div class="" style="flex: 1; min-width: 200px;">
         <label class="form-label">

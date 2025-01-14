@@ -7,10 +7,10 @@
                 @for(item of this.breadcrumbs; track $index){
                 <li class="breadcrumb-item">
                     @if($index === 0){
-                    <span style="color: gray;">{{item.label }}</span>
+                    <span style="color: gray;cursor: pointer;" (click)="goBack()">{{item.label }}</span>
                     }
                     @if($index !== 0){
-                    <a [routerLinkActive]="'active'">{{ item.label }}</a>
+                    <a [routerLinkActive]="'active'" [routerLink]="item.url" >{{ item.label }}</a>
                     }
                 </li>
                 }

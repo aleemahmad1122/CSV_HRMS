@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { IAttendanceList, IAttendanceListRes } from '../../../types/index';
+import { AttendanceRequests, AttendanceRequestsRes } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -16,6 +16,7 @@ import { HighlightPipe } from '../../../shared/pipes/highlight.pipe';
 import { SortingService } from "../../../shared/Services/sorting.service";
 import { NgSelectModule } from '@ng-select/ng-select';
 
+
 @Component({
   selector: 'app-request',
   standalone: true,
@@ -23,7 +24,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   templateUrl: './request.component.html',
   styleUrl: './request.component.css'
 })
-export class RequestComponent   implements AfterViewInit {
+export class RequestComponent implements AfterViewInit {
 
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
@@ -32,7 +33,7 @@ export class RequestComponent   implements AfterViewInit {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: IAttendanceList[] = [];
+  dataList: AttendanceRequests[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -307,7 +308,7 @@ export class RequestComponent   implements AfterViewInit {
         .getData('Attendance', 'getMissingAttendanceRequest', true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: IAttendanceListRes) => this.handleResponse(res),
+          next: (res: AttendanceRequestsRes) => this.handleResponse(res),
           error: () => (this.dataList = []),
         });
     } else {
@@ -333,16 +334,16 @@ export class RequestComponent   implements AfterViewInit {
       .getData('Attendance', 'getMissingAttendanceRequest', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IAttendanceListRes) => this.handleResponse(res),
+        next: (res: AttendanceRequestsRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IAttendanceListRes): void {
+  private handleResponse(response: AttendanceRequestsRes): void {
     if (response?.success) {
-      const { attendances, pagination } = response.data;
+      const { attendanceRequests, pagination } = response.data;
       Object.assign(this, {
-        dataList: attendances,
+        dataList: attendanceRequests,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -453,4 +454,3 @@ export class RequestComponent   implements AfterViewInit {
 
 
 }
-
