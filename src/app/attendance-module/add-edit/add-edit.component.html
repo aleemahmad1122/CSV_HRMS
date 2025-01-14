@@ -38,7 +38,7 @@
           <label class="form-label">{{ "language.generic.attendanceType" | translate }}
             <span class="text-danger">*</span></label>
 
-                  <ng-select [items]="types" bindLabel="name" bindValue="value" [searchable]="true"
+                  <ng-select  [clearable]="false" [items]="types" bindLabel="name" bindValue="value" [searchable]="true"
                     placeholder="Select an option" formControlName="attendanceRequestType" [ngClass]="{
           'is-invalid':
             addEditForm.get('attendanceRequestType')?.invalid &&
