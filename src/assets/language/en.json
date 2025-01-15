@@ -255,6 +255,13 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "monday":"Monday",
+      "tuesday":"Tuesday",
+      "wednesday":"Wednesday",
+      "thursday":"Thursday",
+      "friday":"Friday",
+      "saturday":"Saturday",
+      "sunday":"Sunday",
       "workingDays":"Working Days",
       "info":"Info",
       "new":"New",

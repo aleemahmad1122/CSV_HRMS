@@ -127,7 +127,7 @@
             <i class="flaticon-user-ok mr-2"></i>
             <span class="menu-text">{{'language.sidebar.attendance' | translate}}</span> <span class="menu-label">
               @if(totalAttendanceReq){<span class="menu-label">
-                <span class="label label-danger label-inline">{{totalAttendanceReq > 9 ? (totalAttendanceReq + '+ ') : totalAttendanceReq}} {{"language.generic.new" | translate}}</span>
+                <span class="label label-rounded label-primary">{{totalAttendanceReq > 9 ? (totalAttendanceReq + '+ ') : totalAttendanceReq}} </span>
               </span>}
             </span>
             <i class="menu-arrow"></i>
@@ -172,7 +172,7 @@
             <i class="flaticon-file-1 mr-2"></i>
             <span class="menu-text">{{'language.sidebar.leave' | translate}}</span> <span class="menu-label">
               @if(totalLeavesReq){     <span class="menu-label">
-                <span class="label label-danger label-inline">{{totalLeavesReq > 9 ? (totalLeavesReq + '+ ') : totalLeavesReq}} {{"language.generic.new" | translate}}</span>
+                <span class="label label-rounded label-primary">{{totalLeavesReq > 9 ? (totalLeavesReq + '+ ') : totalLeavesReq}} </span>
               </span>}
             </span>
             <i class="menu-arrow"></i>
