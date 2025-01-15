@@ -176,6 +176,7 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "workingDaysRequired":"Working Days is Required",
       "checkOutDateGreaterThenToCheckInDate":"Check Out Date Should be greater then to Check In Date",
       "reasonRequired":"Reason is Required",
       "checkOutDateDateequired":"Check Out Date is Required",
@@ -254,6 +255,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "workingDays":"Working Days",
       "info":"Info",
       "new":"New",
       "attendanceType":"Attendance Type",

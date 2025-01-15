@@ -82,7 +82,7 @@
           <label class="form-label">{{ "language.generic.graceMinutes" | translate }}
             <span class="text-danger">*</span></label>
 
-            <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+          <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
             placeholder="Select an option" formControlName="graceMinutes" [ngClass]="{
     'is-invalid':
             addEditForm.get('graceMinutes')?.invalid &&
@@ -95,6 +95,43 @@
             " class="invalid-feedback">
             {{ "language.errors.graceMinutesRequired" | translate }}
           </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-12 mb-3">
+        <label class="form-label">
+          {{ "language.generic.workingDays" | translate }}
+          <span class="text-danger">*</span>
+        </label>
+        <div class="days-btn-container  mx-auto">
+          <input class="day-btn" id="monday" type="checkbox" (change)="onDayChange('Monday', $event)" />
+          <label class="day-label" for="monday">M</label>
+
+          <input class="day-btn" id="tuesday" type="checkbox" (change)="onDayChange('Tuesday', $event)" />
+          <label class="day-label" for="tuesday">T</label>
+
+          <input class="day-btn" id="wednesday" type="checkbox" (change)="onDayChange('Wednesday', $event)" />
+          <label class="day-label" for="wednesday">W</label>
+
+          <input class="day-btn" id="thursday" type="checkbox" (change)="onDayChange('Thursday', $event)" />
+          <label class="day-label" for="thursday">T</label>
+
+          <input class="day-btn" id="friday" type="checkbox" (change)="onDayChange('Friday', $event)" />
+          <label class="day-label" for="friday">F</label>
+
+          <input class="day-btn" id="saturday" type="checkbox" (change)="onDayChange('Saturday', $event)" />
+          <label class="day-label" for="saturday">S</label>
+
+          <input class="day-btn" id="sunday" type="checkbox" (change)="onDayChange('Sunday', $event)" />
+          <label class="day-label" for="sunday">S</label>
+        </div>
+
+        <div *ngIf="
+            addEditForm.get('workingDays')?.invalid &&
+            (addEditForm.get('workingDays')?.touched || isSubmitted)
+          " class="invalid-feedback">
+          {{ "language.errors.workingDaysRequired" | translate }}
         </div>
       </div>
 

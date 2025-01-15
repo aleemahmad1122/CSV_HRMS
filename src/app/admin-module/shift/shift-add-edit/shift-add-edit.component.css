@@ -1,0 +1,36 @@
+/* From Uiverse.io by hayyangovinda */
+.days-btn-container {
+  display: flex;
+  width: 300px;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 34px;
+}
+
+.day-btn {
+  display: none; /* Hide the original checkbox */
+}
+
+.day-label {
+  background-color: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  color: #22a3ff;
+  cursor: pointer;
+  border: 2px solid #004577;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+}
+
+/* Apply styles for the selected state */
+.day-btn:checked + .day-label {
+  background-color: #ffe53b;
+  background-image: linear-gradient(147deg, #000000 0%, #2571ff 74%);
+  border: none;
+  color: white;
+}

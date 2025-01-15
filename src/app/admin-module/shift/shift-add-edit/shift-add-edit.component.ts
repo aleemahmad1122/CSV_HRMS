@@ -19,6 +19,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
 })
 export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
+  week: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  selectedDays: string[] = [];
+
 
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
@@ -28,15 +31,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   selectedStartTime: Date | null = null;
 
-
-  timeList: number[] = [
-    5,
-    10,
-    15,
-    20,
-    25,
-    30,
-  ]
+  timeList: number[] = [5, 10, 15, 20, 25, 30,]
 
   constructor(
     private fb: FormBuilder,
@@ -82,6 +77,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
+      workingDays: ['', [Validators.required]],
       startTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       endTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       graceMinutes: [5],
@@ -95,6 +91,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     if (this.selectedAddEditValue) {
       this.addEditForm.patchValue({
         name: this.selectedAddEditValue.name,
+        workingDays: this.selectedAddEditValue.workingDays,
         startTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.startTime),
         endTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.endTime),
         graceMinutes: this.selectedAddEditValue.graceMinutes,
@@ -102,6 +99,9 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         description: this.selectedAddEditValue.description,
         offSet: this.selectedAddEditValue.offSet,
       });
+      if (this.selectedAddEditValue.workingDays) {
+        this.selectedDays = this.selectedAddEditValue.workingDays.split(',');
+      }
     }
   }
 
@@ -130,6 +130,20 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     showSeconds: false,
     format: environment.dateTimePatterns.time,
   };
+
+
+  onDayChange(day: string, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    if (isChecked) {
+      this.selectedDays.push(day);
+    } else {
+      this.selectedDays = this.selectedDays.filter((d) => d !== day);
+    }
+
+    // Update the form control with the comma-separated string
+    this.addEditForm.get('workingDays')?.setValue(this.selectedDays.join(','));
+  }
 
 
   onDateTimeChange(event: Event, valueName: string): void {
@@ -183,6 +197,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
 
     const body = { ...values };
+
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Shift", "addShift", body, true);
