@@ -91,11 +91,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
       const editId = params['editId'];
       this.isEditMode = editId;
 
-      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+      if (this.isEditMode) {
         this.apiCalling.getData("Attendance", `getAttendanceById/${editId}`, true, { employeeId: this.id })
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
+                console.log(response);
+
                 this.selectedValue = response?.data;
                 this.patchFormValues(); // Call patchFormValues here after setting selectedValue
               } else {
@@ -106,7 +108,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             }
           });
-        // this.patchFormValues(); // Removed this line
+        this.patchFormValues();
       }
     });
     this.addEditForm = this.createForm();
@@ -190,13 +192,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   private patchFormValues(): void {
+    console.log("fdfd",this.selectedValue);
+
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        checkIn: this.convertToTimeLocalFormat(this.selectedValue.checkIn),
-        checkOut: this.convertToTimeLocalFormat(this.selectedValue.checkOut),
-        date: this.convertToDatetimeLocalFormat(this.selectedValue.date),
+        checkIn: this.selectedValue.checkIn && this.convertToTimeLocalFormat(this.selectedValue.checkIn),
+        checkOut: this.selectedValue.checkOut && this.convertToTimeLocalFormat(this.selectedValue.checkOut),
+        date: this.selectedValue.date && this.convertToDatetimeLocalFormat(this.selectedValue.date),
         checkInDate: this.addEditForm.value['date'],
-        checkOutDate: this.convertToDatetimeLocalFormat(this.selectedValue.checkOutDate),
+        checkOutDate: this.selectedValue.checkOutDate && this.convertToDatetimeLocalFormat(this.selectedValue.checkOutDate),
         comment: this.selectedValue.comment,
         attendanceRequestType: this.selectedValue.attendanceRequestType,
         offSet: this.selectedValue.offSet,
