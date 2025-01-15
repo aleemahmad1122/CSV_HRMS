@@ -190,6 +190,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     const formValue = this.addEditForm.value;
     const values = {
       ...formValue,
+      workingDays:this.selectedDays.join(','),
       startTime: this.formatDateForSubmission(formValue.startTime),
       endTime: this.formatDateForSubmission(formValue.endTime)
     };
