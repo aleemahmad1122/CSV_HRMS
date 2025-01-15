@@ -49,10 +49,10 @@
                 (addEditForm.get('endTime')?.touched || isSubmitted)
             }"></dp-date-picker>
           <div *ngIf="
-                 addEditForm.get('endTime')?.invalid &&
-                 (addEditForm.get('endTime')?.touched || isSubmitted)
-               " class="invalid-feedback">
-            {{ "language.errors.endTimeequired" | translate }}
+                  addEditForm.get('endTime')?.invalid &&
+                  (addEditForm.get('endTime')?.touched || isSubmitted)
+                " class="invalid-feedback">
+              {{ "language.errors.endTimeequired" | translate }}
           </div>
         </div>
       </div>
@@ -104,28 +104,71 @@
           {{ "language.generic.workingDays" | translate }}
           <span class="text-danger">*</span>
         </label>
-        <div class="days-btn-container  mx-auto">
-          <input class="day-btn" id="monday" type="checkbox" (change)="onDayChange('Monday', $event)" />
+        <div class="days-btn-container mx-auto">
+          <input
+            class="day-btn"
+            id="monday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Monday')"
+            (change)="onDayChange('Monday', $event)"
+          />
           <label class="day-label" for="monday">M</label>
 
-          <input class="day-btn" id="tuesday" type="checkbox" (change)="onDayChange('Tuesday', $event)" />
+          <input
+            class="day-btn"
+            id="tuesday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Tuesday')"
+            (change)="onDayChange('Tuesday', $event)"
+          />
           <label class="day-label" for="tuesday">T</label>
 
-          <input class="day-btn" id="wednesday" type="checkbox" (change)="onDayChange('Wednesday', $event)" />
+          <input
+            class="day-btn"
+            id="wednesday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Wednesday')"
+            (change)="onDayChange('Wednesday', $event)"
+          />
           <label class="day-label" for="wednesday">W</label>
 
-          <input class="day-btn" id="thursday" type="checkbox" (change)="onDayChange('Thursday', $event)" />
+          <input
+            class="day-btn"
+            id="thursday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Thursday')"
+            (change)="onDayChange('Thursday', $event)"
+          />
           <label class="day-label" for="thursday">T</label>
 
-          <input class="day-btn" id="friday" type="checkbox" (change)="onDayChange('Friday', $event)" />
+          <input
+            class="day-btn"
+            id="friday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Friday')"
+            (change)="onDayChange('Friday', $event)"
+          />
           <label class="day-label" for="friday">F</label>
 
-          <input class="day-btn" id="saturday" type="checkbox" (change)="onDayChange('Saturday', $event)" />
+          <input
+            class="day-btn"
+            id="saturday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Saturday')"
+            (change)="onDayChange('Saturday', $event)"
+          />
           <label class="day-label" for="saturday">S</label>
 
-          <input class="day-btn" id="sunday" type="checkbox" (change)="onDayChange('Sunday', $event)" />
+          <input
+            class="day-btn"
+            id="sunday"
+            type="checkbox"
+            [checked]="selectedDays.includes('Sunday')"
+            (change)="onDayChange('Sunday', $event)"
+          />
           <label class="day-label" for="sunday">S</label>
         </div>
+
 
         <div *ngIf="
             addEditForm.get('workingDays')?.invalid &&

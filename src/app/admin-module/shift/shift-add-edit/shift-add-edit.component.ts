@@ -100,8 +100,9 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         offSet: this.selectedAddEditValue.offSet,
       });
       if (this.selectedAddEditValue.workingDays) {
-        this.selectedDays = this.selectedAddEditValue.workingDays.split(',');
+        this.selectedDays = this.selectedAddEditValue.workingDays.split(',').map(day => day.trim());
       }
+
     }
   }
 
@@ -192,7 +193,6 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       startTime: this.formatDateForSubmission(formValue.startTime),
       endTime: this.formatDateForSubmission(formValue.endTime)
     };
-    console.log(formValue);
 
 
 
