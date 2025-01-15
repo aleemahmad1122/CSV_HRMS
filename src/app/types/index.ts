@@ -34,6 +34,7 @@ export interface IShift extends ICommon {
   name: string;
   startTime: string;
   endTime: string;
+  workingDays:string;
   graceMinutes: number;
   earlyMinutes: number;
 }

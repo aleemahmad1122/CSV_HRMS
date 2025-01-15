@@ -4,7 +4,7 @@
   <div class="card card-custom w-100">
 
     <div class="card-header flex-wrap border-0 pt-6 pb-0">
-  <form class="d-flex  mt-2   w-25-md" role="search">
+      <form class="d-flex  mt-2   w-25-md" role="search">
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-prepend">
@@ -93,45 +93,47 @@
     <!--begin::Body-->
     <div class="card-body" style="overflow-x: auto;">
       <!--begin: Datatable-->
-      <div >
+      <div>
         <table class="table table-striped w-100">
           <thead class="datatable-head">
             <tr class="datatable-row" style="left: 0px;">
               <th data-field="RecordID"
-                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted" >
-                <span ># </span>
+                class="datatable-cell-left datatable-cell datatable-cell-sort datatable-cell-sorted">
+                <span># </span>
               </th>
 
               <th (click)="sort('name')" class="cursor-pointer">
-                <span > {{'language.generic.title' | translate}} </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+                <span> {{'language.generic.title' | translate}} </span><i class="fa-solid fa-sort mx-2"
+                  style="font-size: 12px;"></i>
               </th>
 
 
 
-              <th (click)="sort('startTime')" class="cursor-pointer" ><span >
-                  {{'language.generic.startTime' | translate}} </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i></th>
+              <th (click)="sort('startTime')" class="cursor-pointer"><span>
+                  {{'language.generic.startTime' | translate}} </span><i class="fa-solid fa-sort mx-2"
+                  style="font-size: 12px;"></i></th>
 
 
-              <th (click)="sort('endTime')" class="cursor-pointer" >
-                <span >
+              <th (click)="sort('endTime')" class="cursor-pointer">
+                <span>
                   {{'language.generic.endTime' | translate}}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
 
 
-              <th (click)="sort('earlyMinutes')" class="cursor-pointer" >
-                <span >
-                     {{'language.generic.earlyMinutes' | translate}}
+              <th (click)="sort('earlyMinutes')" class="cursor-pointer">
+                <span>
+                  {{'language.generic.earlyMinutes' | translate}}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
 
 
 
-              <th (click)="sort('graceMinutes')" class="cursor-pointer" >
-                <span >
-               {{'language.generic.graceMinutes' | translate}}
+              <th (click)="sort('graceMinutes')" class="cursor-pointer">
+                <span>
+                  {{'language.generic.graceMinutes' | translate}}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
@@ -140,7 +142,7 @@
 
 
 
-              @if(isEdit || isDelete){<th data-field="Actions" data-autohide-disabled="false"      ><span
+              @if(isEdit || isDelete){<th data-field="Actions" data-autohide-disabled="false"><span
                   style="width: 130px;"> {{'language.generic.actions' | translate}}</span></th>}
             </tr>
           </thead>
@@ -148,34 +150,37 @@
             @for (data of dataList; track $index) {
             <tr data-row="0" class="datatable-row" style="left: 0px;" [ngClass]="{ 'inactive-row': !data.isActive }">
               <td class="datatable-cell-sorted datatable-cell-left datatable-cell" data-field="RecordID" aria-label="1">
-                <span ><span class="font-weight-bolder">
+                <span><span class="font-weight-bolder">
                     {{ (pageNo - 1) * pageSize + $index + 1 }}
                   </span></span>
               </td>
               <td aria-label="64616-103" class="datatable-cell">
-                <span >
+                <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0"
                       [innerHTML]="data.name || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
+                <p style="color: #9f9f9f; font-size: 10px;margin: 0;word-spacing: 2px;">
+                    {{data.workingDays.replace(',', ' ') || 'N/A'}}
+                </p>
               </td>
 
-              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span >
+              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span>
                   <div class="font-weight-bolder text-primary mb-0">{{data.startTime | convertTime: 'time'}} </div>
                 </span></td>
 
-              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span >
+              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span>
                   <div class="font-weight-bolder text-primary mb-0">{{data.endTime | convertTime: 'time'}} </div>
                 </span></td>
 
-              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span >
+              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span>
                   <div class="font-weight-bolder text-primary mb-0">{{data.earlyMinutes || "N/A"}} {{data.earlyMinutes
                     ? "mins" : ""}} </div>
                 </span></td>
 
-              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span >
+              <td data-field="ShipDate" aria-label="10/15/2017" class="datatable-cell"><span>
                   <div class="font-weight-bolder text-primary mb-0">{{data.graceMinutes || "N/A"}} {{data.graceMinutes
                     ? "mins" : ""}}</div>
                 </span></td>
@@ -190,8 +195,8 @@
                   <ul class="dropdown-menu px-2 ">
 
                     @if(data.isActive && this.isEdit){
-                      <li class="w-100 mb-2">
-                        <a [routerLink]="['/admin/shift/edit']" [queryParams]="{id: data.shiftId}"
+                    <li class="w-100 mb-2">
+                      <a [routerLink]="['/admin/shift/edit']" [queryParams]="{id: data.shiftId}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
@@ -199,119 +204,119 @@
                     </li>
 
                     }
-                         @if(data.isActive){
+                    @if(data.isActive){
                     @if(this.isDelete){
-                      <li class="w-100 ">
-                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                          class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                          title="Delete">
-                          {{ "language.generic.inActive" | translate }}
-                        </button>
-                      </li>
-                      }
-                  }
-                  @if(!data.isActive){
+                    <li class="w-100 ">
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Delete">
+                        {{ "language.generic.inActive" | translate }}
+                      </button>
+                    </li>
+                    }
+                    }
+                    @if(!data.isActive){
                     @if(this.isDelete){
-                      <li class="w-100 ">
-                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                          class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center"
-                          title="Delete">
-                          {{'language.generic.active' | translate}}
-                        </button>
-                      </li>
-                      }
-                  }
+                    <li class="w-100 ">
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center" title="Delete">
+                        {{'language.generic.active' | translate}}
+                      </button>
+                    </li>
+                    }
+                    }
                   </ul>
                 </div>
 
 
-                  <!-- Modal -->
-                  <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            {{'language.msg.areYouAbsolutely' | translate}}
-                          </h1>
-                          <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
-                            aria-label="Close">x</button>
-                        </div>
-                        <div class="modal-body">
-                                   {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            {{'language.generic.cancel' | translate}}</button>
-                          <button type="button" (click)="onDelete(data.shiftId)" data-bs-dismiss="modal"
-                            class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
-                        </div>
+                <!-- Modal -->
+                <div class="modal fade" [id]="'modal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          {{'language.msg.areYouAbsolutely' | translate}}
+                        </h1>
+                        <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
+                          aria-label="Close">x</button>
+                      </div>
+                      <div class="modal-body">
+                        {{( data?.isActive ? 'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )|
+                        translate}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                          {{'language.generic.cancel' | translate}}</button>
+                        <button type="button" (click)="onDelete(data.shiftId)" data-bs-dismiss="modal"
+                          class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                </td>
+              </td>
             </tr>
             }
-            @if(this.dataList.length < 1){
-              <tr>
-                <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
-            </tr>
+            @if(this.dataList.length < 1){ <tr>
+              <td colspan="10" class="text-center py-4">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
               }
           </tbody>
         </table>
 
 
-    <!--begin::Pagination-->
+        <!--begin::Pagination-->
 
-    @if(this.dataList.length > 0){
-      <div class="d-flex justify-content-between align-items-center flex-wrap">
-        <div class="d-flex flex-wrap py-2 mr-3">
-          <!-- First Page -->
-          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
-            <i class="ki ki-bold-double-arrow-back icon-xs"></i>
-          </a>
-
-          <!-- Previous Page -->
-          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)" [class.disabled]="pageNo === 1">
-            <i class="ki ki-bold-arrow-back icon-xs"></i>
-          </a>
-
-          <!-- Pagination Pages -->
-          <ng-container *ngFor="let page of visiblePages">
-            <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="page === pageNo"
-              (click)="changePage(page)">
-              {{ page }}
+        @if(this.dataList.length > 0){
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="d-flex flex-wrap py-2 mr-3">
+            <!-- First Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
+              <i class="ki ki-bold-double-arrow-back icon-xs"></i>
             </a>
-          </ng-container>
 
-          <!-- Next Page -->
-          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
-            [class.disabled]="pageNo === totalPages">
-            <i class="ki ki-bold-arrow-next icon-xs"></i>
-          </a>
+            <!-- Previous Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)"
+              [class.disabled]="pageNo === 1">
+              <i class="ki ki-bold-arrow-back icon-xs"></i>
+            </a>
 
-          <!-- Last Page -->
-          <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
-            [class.disabled]="pageNo === totalPages">
-            <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-          </a>
+            <!-- Pagination Pages -->
+            <ng-container *ngFor="let page of visiblePages">
+              <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="page === pageNo"
+                (click)="changePage(page)">
+                {{ page }}
+              </a>
+            </ng-container>
+
+            <!-- Next Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
+              [class.disabled]="pageNo === totalPages">
+              <i class="ki ki-bold-arrow-next icon-xs"></i>
+            </a>
+
+            <!-- Last Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
+              [class.disabled]="pageNo === totalPages">
+              <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+            </a>
+          </div>
+
+          <!-- Page Size and Total Records -->
+          <div class="d-flex align-items-center py-3">
+            <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+              [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+              <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+            </select>
+            <span class="text-muted">
+              {{ 'language.generic.totalRecords' | translate }} {{ totalCount }}
+            </span>
+          </div>
         </div>
+        }
 
-        <!-- Page Size and Total Records -->
-        <div class="d-flex align-items-center py-3">
-          <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
-            [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
-            <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
-          </select>
-          <span class="text-muted">
-            {{ 'language.generic.totalRecords' | translate }} {{ totalCount }}
-          </span>
-        </div>
-      </div>
-    }
-
-    <!--end:: Pagination-->
+        <!--end:: Pagination-->
 
 
 
