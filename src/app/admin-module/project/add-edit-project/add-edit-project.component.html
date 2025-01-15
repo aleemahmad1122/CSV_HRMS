@@ -25,7 +25,7 @@
             <span class="text-danger">*</span>
           </label>
 
-          <ng-select [items]="currencies" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+          <ng-select [clearable]="false" [items]="currencies" [bindLabel]="null" [bindValue]="null" [searchable]="true"
             placeholder="Select an option" formControlName="currency" [ngClass]="{
               'is-invalid':
                       addEditForm.get('currency')?.invalid &&

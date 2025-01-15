@@ -234,7 +234,7 @@
           <label class="form-label">{{ "language.form.industry" | translate }}
             <span class="text-danger">*</span></label>
 
-                  <ng-select [items]="types" bindLabel="typeName" bindValue="typeId" [searchable]="true"
+                  <ng-select [clearable]="false" [items]="types" bindLabel="typeName" bindValue="typeId" [searchable]="true"
                     placeholder="Select an option" formControlName="industry" [ngClass]="{
           'is-invalid':
             companyForm.get('industry')?.invalid &&

@@ -63,7 +63,7 @@
           <label class="form-label">{{ "language.generic.earlyMinutes" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+          <ng-select [items]="timeList" [clearable]="false" [bindLabel]="null" [bindValue]="null" [searchable]="true"
             placeholder="Select an option" formControlName="earlyMinutes" [ngClass]="{
     'is-invalid':
             addEditForm.get('earlyMinutes')?.invalid &&
@@ -82,7 +82,7 @@
           <label class="form-label">{{ "language.generic.graceMinutes" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
+          <ng-select [clearable]="false" [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
             placeholder="Select an option" formControlName="graceMinutes" [ngClass]="{
     'is-invalid':
             addEditForm.get('graceMinutes')?.invalid &&
