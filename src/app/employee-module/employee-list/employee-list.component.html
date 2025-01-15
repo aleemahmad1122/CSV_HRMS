@@ -105,13 +105,13 @@
                 <span style="width: 40px"># </span>
               </th>
 
-              <th  (click)="sort('firstName')" class="cursor-pointer">
+              <th (click)="sort('firstName')" class="cursor-pointer">
                 <span style="width: 250px">
                   {{ "language.generic.name" | translate }}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
-              <th (click)="sort('city')" class="cursor-pointer" >
+              <th (click)="sort('city')" class="cursor-pointer">
                 <span style="width: 124px">
                   {{ "language.form.country" | translate }} /
                   {{ "language.form.city" | translate }}
@@ -212,37 +212,48 @@
                     {{ "language.generic.actions" | translate }}
                   </button>
                   <ul class="dropdown-menu px-2">
+
+
+                    @if( this.isHr){
+                    <li class="w-100 mb-2">
+                      <a (click)="setPass(data)"
+                        class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon w-100 text-center"
+                        title="Edit details"> {{ "language.generic.passwordReq" | translate }}
+                      </a>
+                    </li>
+                    }
+
                     @if(data.isActive && this.isEdit){
-                      <li class="w-100 mb-2">
-                        <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{ id: data.employeeId }"
+                    <li class="w-100 mb-2">
+                      <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{ id: data.employeeId }"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{ "language.generic.edit" | translate }}
                       </a>
                     </li>
-
                     }
+
+
                     @if(data.isActive){
-                      @if(this.isDelete){
-                        <li class="w-100 ">
-                             <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                            class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
-                            title="Delete">
-                            {{ "language.generic.inActive" | translate }}
-                          </button>
-                        </li>
-                        }
+                    @if(this.isDelete){
+                    <li class="w-100 ">
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
+                        title="Delete">
+                        {{ "language.generic.inActive" | translate }}
+                      </button>
+                    </li>
+                    }
                     }
                     @if(!data.isActive){
-                      @if(this.isDelete){
-                        <li class="w-100 ">
-                             <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
-                            class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center"
-                            title="Delete">
-                            {{'language.generic.active' | translate}}
-                          </button>
-                        </li>
-                        }
+                    @if(this.isDelete){
+                    <li class="w-100 ">
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                        class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center" title="Delete">
+                        {{'language.generic.active' | translate}}
+                      </button>
+                    </li>
+                    }
                     }
                   </ul>
                 </div>
@@ -260,7 +271,8 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
+                        {{( data?.isActive ? 'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )|
+                        translate}}
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -285,56 +297,57 @@
           </tbody>
         </table>
 
- <!--begin::Pagination-->
+        <!--begin::Pagination-->
 
- @if(this.dataList.length > 0){
-  <div class="d-flex justify-content-between align-items-center flex-wrap">
-    <div class="d-flex flex-wrap py-2 mr-3">
-      <!-- First Page -->
-      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
-        <i class="ki ki-bold-double-arrow-back icon-xs"></i>
-      </a>
+        @if(this.dataList.length > 0){
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="d-flex flex-wrap py-2 mr-3">
+            <!-- First Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(1)" [class.disabled]="pageNo === 1">
+              <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+            </a>
 
-      <!-- Previous Page -->
-      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)" [class.disabled]="pageNo === 1">
-        <i class="ki ki-bold-arrow-back icon-xs"></i>
-      </a>
+            <!-- Previous Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo - 1)"
+              [class.disabled]="pageNo === 1">
+              <i class="ki ki-bold-arrow-back icon-xs"></i>
+            </a>
 
-      <!-- Pagination Pages -->
-      <ng-container *ngFor="let page of visiblePages">
-        <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="page === pageNo"
-          (click)="changePage(page)">
-          {{ page }}
-        </a>
-      </ng-container>
+            <!-- Pagination Pages -->
+            <ng-container *ngFor="let page of visiblePages">
+              <a class="btn btn-icon btn-sm border-0 btn-light mr-2 my-1" [class.active]="page === pageNo"
+                (click)="changePage(page)">
+                {{ page }}
+              </a>
+            </ng-container>
 
-      <!-- Next Page -->
-      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
-        [class.disabled]="pageNo === totalPages">
-        <i class="ki ki-bold-arrow-next icon-xs"></i>
-      </a>
+            <!-- Next Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(pageNo + 1)"
+              [class.disabled]="pageNo === totalPages">
+              <i class="ki ki-bold-arrow-next icon-xs"></i>
+            </a>
 
-      <!-- Last Page -->
-      <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
-        [class.disabled]="pageNo === totalPages">
-        <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-      </a>
-    </div>
+            <!-- Last Page -->
+            <a class="btn btn-icon btn-sm btn-light mr-2 my-1" (click)="changePage(totalPages)"
+              [class.disabled]="pageNo === totalPages">
+              <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+            </a>
+          </div>
 
-    <!-- Page Size and Total Records -->
-    <div class="d-flex align-items-center py-3">
-      <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
-        [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
-        <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
-      </select>
-      <span class="text-muted">
-        {{ 'language.generic.totalRecords' | translate }} {{ totalCount }}
-      </span>
-    </div>
-  </div>
-}
+          <!-- Page Size and Total Records -->
+          <div class="d-flex align-items-center py-3">
+            <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+              [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+              <option *ngFor="let size of [10, 20, 30, 50, 100]" [value]="size">{{ size }}</option>
+            </select>
+            <span class="text-muted">
+              {{ 'language.generic.totalRecords' | translate }} {{ totalCount }}
+            </span>
+          </div>
+        </div>
+        }
 
-<!--end:: Pagination-->
+        <!--end:: Pagination-->
       </div>
       <!--end: Datatable-->
     </div>

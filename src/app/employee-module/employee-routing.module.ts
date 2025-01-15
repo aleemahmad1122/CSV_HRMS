@@ -8,7 +8,7 @@ const routes: Routes = [
     path: 'employee-list',
     loadComponent: () => import(`./employee-list/employee-list.component`).then(c => c.EmployeeListComponent),
     title: 'Manage Employee',
-    data: { breadcrumb: 'Manage Employee', permission: "Create_Employee,Edit_Employee,View_Employee,Delete_Employee" },
+    data: { breadcrumb: 'Manage Employee', permission: "HR_Approval,Create_Employee,Edit_Employee,View_Employee,Delete_Employee" },
     resolve: { permission: PermissionService },
     canActivate: [ProtectedGuard]
   },

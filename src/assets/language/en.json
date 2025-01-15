@@ -255,6 +255,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "passwordReq":"Password Request",
       "monday":"Monday",
       "tuesday":"Tuesday",
       "wednesday":"Wednesday",

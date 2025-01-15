@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IEmployee, IEmployeeRes } from '../../types/index';
+import { EmployeeDetail, IEmployee, IEmployeeRes } from '../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
@@ -40,9 +40,10 @@ export class EmployeeListComponent {
 
   permissions: { isAssign: boolean; permission: string }[] = [];
   isEdit: boolean = false;
+  isHr: boolean = false;
   isCreate: boolean = false;
   isDelete: boolean = false;
-
+  emp:EmployeeDetail;
 
 
   pages: (number | string)[] = [];
@@ -58,7 +59,7 @@ export class EmployeeListComponent {
     this.initializeSearch();
     this.getData();
     this.loadPermissions();
-    this.generatePages()
+    this.generatePages();
   }
 
 
@@ -88,6 +89,7 @@ export class EmployeeListComponent {
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Create_Employee" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Employee" && p.isAssign);
+        this.isHr = this.permissions.some(p => p.permission === "HR_Approval"  && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
@@ -219,6 +221,30 @@ export class EmployeeListComponent {
 
   exportData(format: string): void {
     this.exportService.exportData(format, this.dataList);
+  }
+
+
+
+  setPass(emp:any): void {
+    this.apiService.postData("auth", "setPasswordEmail",
+      {
+        "role": emp?.role || "N/A",
+        "email": emp?.email || "N/A",
+        "link": document.getElementsByTagName('base')[0].href || "N/A",
+        "employeeName": emp?.firstName || "N/A"
+      }, true,)
+      .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+        next: (response) => {
+          if (response?.success) {
+            this.toaster.success(response?.message, 'Success!');
+          } else {
+            this.toaster.error(response?.message, 'Error!');
+          }
+        },
+        error: (error) => {
+          this.toaster.error("Internal server error occured while processing your request")
+        }
+      })
   }
 
 
