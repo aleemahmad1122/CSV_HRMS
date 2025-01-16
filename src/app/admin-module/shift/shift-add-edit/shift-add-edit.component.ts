@@ -34,11 +34,26 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   ]
 
 
-  // table
   attendanceFlag: { value: number; name: string; }[] = [
     {
+      value: 0,
+      name: "Late"
+    },
+    {
       value: 1,
-      name: "late"
+      name: "Early"
+    },
+    {
+      value: 2,
+      name: "ShortLeave"
+    },
+    {
+      value: 3,
+      name: "HalfDay"
+    },
+    {
+      value: 4,
+      name: "Absent"
     },
   ]
   patchData: any
@@ -97,7 +112,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      shiftCode: ['01', [Validators.required]],
+      shiftCode: ['', [Validators.required]],
       shiftName: ['', [Validators.required, Validators.maxLength(100)]],
       workingDays: ['', [Validators.required]],
       startTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
@@ -247,7 +262,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   // table
   addRow() {
     const formData = this.fb.group({
-      attendanceFlag: [this.patchData?.attendanceFlag || 1, [Validators.required]],
+      attendanceFlag: [this.patchData?.attendanceFlag || 0, [Validators.required]],
       fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       hours: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],

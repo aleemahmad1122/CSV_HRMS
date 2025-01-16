@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <div class="table-responsive text-nowrap">
+      <div >
         <table class="table table-striped">
           <thead>
             <tr>
@@ -345,8 +345,7 @@
                 </td>
 
 
-                <td>
-                  @if($index !== 0) {
+                <td style="position: relative;" >
                   <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
                     <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
@@ -362,7 +361,7 @@
                         </g>
                       </svg></span>
                   </button>
-                  }
+                  @if($index == 0){<span style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;" ></span>}
                 </td>
               </tr>
               }
