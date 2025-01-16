@@ -69,7 +69,6 @@
                     </span>
                   </button>
                 </td>
-
                 <td style="position: relative;" >
                   <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
                     <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +85,7 @@
                         </g>
                       </svg></span>
                   </button>
-                  @if($index !== 0){<span style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;" ></span>}
+                  @if($index == 0){<span style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;" ></span>}
                 </td>
               </tr>
               }

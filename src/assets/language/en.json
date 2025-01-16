@@ -259,6 +259,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "addMore":"Add More",
       "isBtwShiftTime":"Is Btw Shift Time",
       "hours":"hours",
       "flagEndsOnNextDay":"Flag Ends On Next Day",
@@ -266,8 +267,8 @@
       "fromTime": "From Time",
       "flagStartsOnNextDay": "Flag Starts On Next Day",
       "attendanceFlag": "Attendance Flag",
-      "shiftEndsFromPreviousDay": "Shift Ends From PreviousDay",
-      "shiftStartsFromPreviousDay": "Shift Starts From PreviousDay",
+      "shiftEndsOnNextDay": "Shift Ends On Next Day",
+      "shiftStartsFromPreviousDay": "Shift Starts From Previous Day",
       "mins": "mins",
       "forCheckOut": "Check Out",
       "forCheckIn": "Check In",

@@ -119,8 +119,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       endTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       description: [''],
       offSet: [new Date().getTimezoneOffset().toString()],
-      shiftStartsFromPreviousDay: [false, Validators.required],
-      shiftEndsFromPreviousDay: [false, Validators.required],
+      shiftStartsPreviousDay: [false, Validators.required],
+      shiftEndsNextDay: [false, Validators.required],
       shiftPolicies: this.fb.array([])
     });
   }
@@ -134,8 +134,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         endTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.endTime),
         description: this.selectedAddEditValue.description,
         offSet: this.selectedAddEditValue.offSet,
-        shiftStartsFromPreviousDay: this.selectedAddEditValue.shiftStartsFromPreviousDay,
-        shiftEndsFromPreviousDay: this.selectedAddEditValue.shiftEndsFromPreviousDay,
+        shiftStartsPreviousDay: this.selectedAddEditValue.shiftStartsPreviousDay,
+        shiftEndsNextDay: this.selectedAddEditValue.shiftEndsNextDay,
         shiftPolicies: this.selectedAddEditValue.shiftPolicies,
       });
       if (this.selectedAddEditValue.workingDays) {
@@ -164,11 +164,36 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   }
 
 
+  private convertToHourLocalFormat(dateString: string): string {
+    const date = new Date(dateString);
+
+    // Convert to 12-hour format
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Convert 24-hour to 12-hour format
+    hours = hours % 12 || 12; // If hours is 0, set to 12
+
+    // Format with leading zeros for hours and minutes
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+    return formattedTime;
+  }
+
+
+
   datePickerConfig = {
     hour12: true,
     timePicker: true,
     showSeconds: false,
     format: environment.dateTimePatterns.time,
+  };
+
+  hourConfig = {
+    hour12: true,
+    timePicker: true,
+    showSeconds: false,
+    format: 'hh:mm',
   };
 
 
@@ -190,6 +215,15 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.value) {
       const formattedValue = this.convertToTimeLocalFormat(input.value);
+      this.addEditForm.patchValue({ valueName: formattedValue });
+    }
+  }
+
+
+  onHourChange(event: Event, valueName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value) {
+      const formattedValue = this.convertToHourLocalFormat(input.value);
       this.addEditForm.patchValue({ valueName: formattedValue });
     }
   }
@@ -263,12 +297,12 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   addRow() {
     const formData = this.fb.group({
       attendanceFlag: [this.patchData?.attendanceFlag || 0, [Validators.required]],
-      fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      hours: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      isBetWeenShift: [this.patchData?.isBetWeenShift || '', [Validators.required]],
-      startsNextDay: [this.patchData?.startsNextDay || false, [Validators.required]],
-      endsNextDay: [this.patchData?.endsNextDay || false, [Validators.required]],
+      fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
+      toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
+      hours: [`${this.convertToHourLocalFormat(environment.defaultDate)}`],
+      isBetWeenShift: [this.patchData?.isBetWeenShift || ''],
+      startsNextDay: [this.patchData?.startsNextDay || false],
+      endsNextDay: [this.patchData?.endsNextDay || false],
     });
     this.shiftPolicies.push(formData);
   }

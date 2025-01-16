@@ -83,35 +83,35 @@
 
           <ng-select [items]="shiftStartsFromPreviousDayOpt" [clearable]="false" [bindLabel]="'label'"
             [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
-            formControlName="shiftStartsFromPreviousDay" [ngClass]="{
+            formControlName="shiftStartsPreviousDay" [ngClass]="{
     'is-invalid':
-            addEditForm.get('shiftStartsFromPreviousDay')?.invalid &&
-            (addEditForm.get('shiftStartsFromPreviousDay')?.touched || isSubmitted)
+            addEditForm.get('shiftStartsPreviousDay')?.invalid &&
+            (addEditForm.get('shiftStartsPreviousDay')?.touched || isSubmitted)
     }">
           </ng-select>
           <div *ngIf="
-              addEditForm.get('shiftStartsFromPreviousDay')?.invalid &&
-              (addEditForm.get('shiftStartsFromPreviousDay')?.touched || isSubmitted)
+              addEditForm.get('shiftStartsPreviousDay')?.invalid &&
+              (addEditForm.get('shiftStartsPreviousDay')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.earlyMinutesRequired" | translate }}
           </div>
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.generic.shiftEndsFromPreviousDay" | translate }}
+          <label class="form-label">{{ "language.generic.shiftEndsOnNextDay" | translate }}
             <span class="text-danger">*</span></label>
 
           <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
             [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
-            formControlName="shiftEndsFromPreviousDay" [ngClass]="{
+            formControlName="shiftEndsNextDay" [ngClass]="{
     'is-invalid':
-            addEditForm.get('shiftEndsFromPreviousDay')?.invalid &&
-            (addEditForm.get('shiftEndsFromPreviousDay')?.touched || isSubmitted)
+            addEditForm.get('shiftEndsNextDay')?.invalid &&
+            (addEditForm.get('shiftEndsNextDay')?.touched || isSubmitted)
     }">
           </ng-select>
           <div *ngIf="
-              addEditForm.get('shiftEndsFromPreviousDay')?.invalid &&
-              (addEditForm.get('shiftEndsFromPreviousDay')?.touched || isSubmitted)
+              addEditForm.get('shiftEndsNextDay')?.invalid &&
+              (addEditForm.get('shiftEndsNextDay')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.shiftEndsFromPreviousDayRequired" | translate }}
           </div>
@@ -263,7 +263,7 @@
           </thead>
           <tbody class="table-border-bottom-0">
             <ng-container formArrayName="shiftPolicies">
-              @for(item of shiftPolicies?.controls; track $index) {
+              @for(tableItem of shiftPolicies?.controls; track $index) {
               <tr [formGroupName]="$index">
                 <td>
                   {{ 1 + $index }}
@@ -278,17 +278,20 @@
                 </td>
 
 
-                <td>
+                <td style="position: relative;">
                   <dp-date-picker class="form-control" [mode]="'time'" formControlName="fromTime" placeholder="00:00"
                     [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'fromTime')"
                     [ngClass]="{
-    'is-invalid':
-    addEditForm.get('fromTime')?.invalid &&
-    (addEditForm.get('fromTime')?.touched || isSubmitted)
-  }"></dp-date-picker>
+                'is-invalid':
+                addEditForm.get('fromTime')?.invalid &&
+                (addEditForm.get('fromTime')?.touched || isSubmitted)
+              }"></dp-date-picker>
+                @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                  <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                }
                 </td>
 
-                <td>
+                <td style="position: relative;">
 
                   <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
                     [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
@@ -298,50 +301,65 @@
           (addEditForm.get('startsNextDay')?.touched || isSubmitted)
   }">
                   </ng-select>
+                  @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  }
                 </td>
 
-                <td>
+                <td style="position: relative;">
                   <dp-date-picker class="form-control" [mode]="'time'" formControlName="toTime" placeholder="00:00"
-                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'toTime')"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onHourChange($event,'toTime')"
                     [ngClass]="{
-    'is-invalid':
-    addEditForm.get('toTime')?.invalid &&
-    (addEditForm.get('toTime')?.touched || isSubmitted)
-  }"></dp-date-picker>
+                  'is-invalid':
+                  addEditForm.get('toTime')?.invalid &&
+                  (addEditForm.get('toTime')?.touched || isSubmitted)
+                }"></dp-date-picker>
+                    @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                      <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                    }
                 </td>
 
 
-                <td>
+                <td style="position: relative;">
 
                   <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
                     [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
-                    formControlName="startsNextDay" [ngClass]="{
-  'is-invalid':
-          addEditForm.get('startsNextDay')?.invalid &&
-          (addEditForm.get('startsNextDay')?.touched || isSubmitted)
-  }">
+                            formControlName="startsNextDay" [ngClass]="{
+                'is-invalid':
+                        addEditForm.get('startsNextDay')?.invalid &&
+                        (addEditForm.get('startsNextDay')?.touched || isSubmitted)
+          }">
                   </ng-select>
+                  @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  }
                 </td>
-                <td>
-                  <dp-date-picker class="form-control" [mode]="'time'" formControlName="hours" placeholder="00:00"
-                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'hours')"
+                <td style="position: relative;" >
+                  <dp-date-picker class="form-control" [mode]="'time'" formControlName="hours" placeholder="00"
+                    [config]="hourConfig" theme="dp-material" (change)="onDateTimeChange($event,'hours')"
                     [ngClass]="{
-    'is-invalid':
-    addEditForm.get('hours')?.invalid &&
-    (addEditForm.get('hours')?.touched || isSubmitted)
-  }"></dp-date-picker>
+                      'is-invalid':
+                      addEditForm.get('hours')?.invalid &&
+                      (addEditForm.get('hours')?.touched || isSubmitted)
+                    }"></dp-date-picker>
+                    @if(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2){
+                      <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                    }
                 </td>
 
-                <td>
+                <td style="position: relative;" >
 
                   <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
                     [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
                     formControlName="isBetWeenShift" [ngClass]="{
-  'is-invalid':
-          addEditForm.get('isBetWeenShift')?.invalid &&
-          (addEditForm.get('isBetWeenShift')?.touched || isSubmitted)
-  }">
+              'is-invalid':
+                        addEditForm.get('isBetWeenShift')?.invalid &&
+                        (addEditForm.get('isBetWeenShift')?.touched || isSubmitted)
+                }">
                   </ng-select>
+                  @if(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  }
                 </td>
 
 
@@ -370,7 +388,7 @@
             <tr>
               <td colspan="12">
                 <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
-                  Add more
+                  {{"language.generic.addMore" | translate}}
                 </button>
               </td>
 
