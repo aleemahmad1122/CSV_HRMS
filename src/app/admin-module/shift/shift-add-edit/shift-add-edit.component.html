@@ -296,10 +296,10 @@
                   <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
                     [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
                     formControlName="startsNextDay" [ngClass]="{
-  'is-invalid':
-          addEditForm.get('startsNextDay')?.invalid &&
-          (addEditForm.get('startsNextDay')?.touched || isSubmitted)
-  }">
+                    'is-invalid':
+                            addEditForm.get('startsNextDay')?.invalid &&
+                            (addEditForm.get('startsNextDay')?.touched || isSubmitted)
+                      }">
                   </ng-select>
                   @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
                     <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>

@@ -95,13 +95,13 @@
               <td colspan="5">
                 @if(!this.isEdit){
                 <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
-                  Add more
+                  {{"language.generic.addMore" | translate}}
                 </button>
                 }
               </td>
               <td colspan="4" align="right">
                 <button class="btn btn-danger mt-1 mb-1 mx-3" type="button" (click)="back()">
-                  Back
+                  {{ "language.generic.back" | translate }}
                 </button>
                 <button class="btn btn-success mt-1 mb-1" type="submit" [disabled]="!this.mainForm.valid">
                   {{ "language.generic.save" | translate }}
