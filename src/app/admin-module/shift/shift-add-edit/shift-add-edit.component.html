@@ -127,93 +127,21 @@
 
         <div class="d-flex align-item-center py-4" style="gap: 30px;flex-wrap: wrap;">
 
-          <div class="checkbox-wrapper-46">
-            <input id="monday" type="checkbox" [checked]="selectedDays.includes('Monday')"
-              (change)="onDayChange('Monday', $event)" class="inp-cbx" />
-            <label for="monday" class="cbx">
+          <div *ngFor="let day of days" class="checkbox-wrapper-46">
+            <input
+              [id]="day.id"
+              type="checkbox"
+              [checked]="selectedDays.includes(day.name)"
+              (change)="onDayChange(day.name, $event)"
+              class="inp-cbx"
+            />
+            <label [for]="day.id" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
                   <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                 </svg>
               </span>
-              <span>{{ "language.generic.monday" | translate }}</span>
-            </label>
-          </div>
-          <div class="checkbox-wrapper-46">
-            <input id="tuesday" type="checkbox" [checked]="selectedDays.includes('Tuesday')"
-              (change)="onDayChange('Tuesday', $event)" class="inp-cbx" />
-            <label for="tuesday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.tuesday" | translate }}</span>
-            </label>
-          </div>
-
-          <div class="checkbox-wrapper-46">
-            <input id="wednesday" type="checkbox" [checked]="selectedDays.includes('Wednesday')"
-              (change)="onDayChange('Wednesday', $event)" class="inp-cbx" />
-            <label for="wednesday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.wednesday" | translate }}</span>
-            </label>
-          </div>
-
-          <div class="checkbox-wrapper-46">
-            <input id="thursday" type="checkbox" [checked]="selectedDays.includes('Thursday')"
-              (change)="onDayChange('Thursday', $event)" class="inp-cbx" />
-            <label for="thursday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.thursday" | translate }}</span>
-            </label>
-          </div>
-
-          <div class="checkbox-wrapper-46">
-            <input id="friday" type="checkbox" [checked]="selectedDays.includes('Friday')"
-              (change)="onDayChange('Friday', $event)" class="inp-cbx" />
-            <label for="friday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.friday" | translate }}</span>
-            </label>
-          </div>
-
-          <div class="checkbox-wrapper-46">
-            <input id="saturday" type="checkbox" [checked]="selectedDays.includes('Saturday')"
-              (change)="onDayChange('Saturday', $event)" class="inp-cbx" />
-            <label for="saturday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.saturday" | translate }}</span>
-            </label>
-          </div>
-
-          <div class="checkbox-wrapper-46">
-            <input id="sunday" type="checkbox" [checked]="selectedDays.includes('Sunday')"
-              (change)="onDayChange('Sunday', $event)" class="inp-cbx" />
-            <label for="sunday" class="cbx">
-              <span>
-                <svg viewBox="0 0 12 10" height="10px" width="12px">
-                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-              </span>
-              <span>{{ "language.generic.sunday" | translate }}</span>
+              <span>{{ day.translationKey | translate }}</span>
             </label>
           </div>
         </div>

@@ -33,6 +33,17 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     },
   ]
 
+  days = [
+    { id: 'monday', name: 'Monday', translationKey: 'language.generic.monday' },
+    { id: 'tuesday', name: 'Tuesday', translationKey: 'language.generic.tuesday' },
+    { id: 'wednesday', name: 'Wednesday', translationKey: 'language.generic.wednesday' },
+    { id: 'thursday', name: 'Thursday', translationKey: 'language.generic.thursday' },
+    { id: 'friday', name: 'Friday', translationKey: 'language.generic.friday' },
+    { id: 'saturday', name: 'Saturday', translationKey: 'language.generic.saturday' },
+    { id: 'sunday', name: 'Sunday', translationKey: 'language.generic.sunday' },
+  ];
+
+
 
   attendanceFlag: { value: number; name: string; }[] = [
     {
@@ -257,40 +268,40 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   submitForm(): void {
     console.log(this.addEditForm.value);
 
-    // this.isSubmitted = true;
-    // if (this.addEditForm.invalid) {
-    //   return;
-    // }
-    // const formValue = this.addEditForm.value;
-    // const values = {
-    //   ...formValue,
-    //   workingDays: this.selectedDays.join(','),
-    //   startTime: this.formatDateForSubmission(formValue.startTime),
-    //   endTime: this.formatDateForSubmission(formValue.endTime)
-    // };
+    this.isSubmitted = true;
+    if (this.addEditForm.invalid) {
+      return;
+    }
+    const formValue = this.addEditForm.value;
+    const values = {
+      ...formValue,
+      workingDays: this.selectedDays.join(','),
+      startTime: this.formatDateForSubmission(formValue.startTime),
+      endTime: this.formatDateForSubmission(formValue.endTime)
+    };
 
 
 
-    // const body = { ...values };
+    const body = { ...values };
 
-    // const apiCall = this.isEditMode
-    //   ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
-    //   : this.apiCalling.postData("Shift", "addShift", body, true);
+    const apiCall = this.isEditMode
+      ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("Shift", "addShift", body, true);
 
-    // apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-    //   next: (response) => {
-    //     if (response?.success) {
-    //       this.toaster.success(response.message, 'Success!');
-    //       this.goBack();
-    //     } else {
-    //       this.toaster.error(response?.message || 'An error occurred', 'Error!');
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('API error:', error);
+    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.toaster.success(response.message, 'Success!');
+          this.goBack();
+        } else {
+          this.toaster.error(response?.message || 'An error occurred', 'Error!');
+        }
+      },
+      error: (error) => {
+        console.error('API error:', error);
 
-    //   }
-    // });
+      }
+    });
   }
 
   // table
