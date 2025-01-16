@@ -266,7 +266,6 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
 
   submitForm(): void {
-    console.log(this.addEditForm.value);
 
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
@@ -311,7 +310,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
       toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
       hours: [`${this.convertToHourLocalFormat(environment.defaultDate)}`],
-      isBetWeenShift: [this.patchData?.isBetWeenShift || ''],
+      isBetWeenShift: [this.patchData?.isBetWeenShift || false],
       startsNextDay: [this.patchData?.startsNextDay || false],
       endsNextDay: [this.patchData?.endsNextDay || false],
     });
