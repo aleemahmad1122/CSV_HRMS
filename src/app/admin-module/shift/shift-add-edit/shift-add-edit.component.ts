@@ -22,6 +22,17 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   week: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   selectedDays: string[] = [];
 
+  shiftStartsFromPreviousDayOpt: { value: boolean; label: string; }[] = [
+    {
+      value: false,
+      label: "No"
+    },
+    {
+      value: true,
+      label: "Yes"
+    },
+  ]
+
 
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
@@ -76,28 +87,31 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      shiftCode: ['01', [Validators.required]],
+      shiftName: ['', [Validators.required, Validators.maxLength(100)]],
       workingDays: ['', [Validators.required]],
       startTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
       endTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      graceMinutes: [5],
-      earlyMinutes: [5],
       description: [''],
-      offSet: [new Date().getTimezoneOffset().toString()]
+      offSet: [new Date().getTimezoneOffset().toString()],
+      shiftStartsFromPreviousDay: [false, Validators.required],
+      shiftEndsFromPreviousDay: [false, Validators.required],
+      policies: []
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedAddEditValue) {
       this.addEditForm.patchValue({
-        name: this.selectedAddEditValue.name,
+        shiftName: this.selectedAddEditValue.shiftName,
         workingDays: this.selectedAddEditValue.workingDays,
         startTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.startTime),
         endTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.endTime),
-        graceMinutes: this.selectedAddEditValue.graceMinutes,
-        earlyMinutes: this.selectedAddEditValue.earlyMinutes,
         description: this.selectedAddEditValue.description,
         offSet: this.selectedAddEditValue.offSet,
+        shiftStartsFromPreviousDay: this.selectedAddEditValue.shiftStartsFromPreviousDay,
+        shiftEndsFromPreviousDay: this.selectedAddEditValue.shiftEndsFromPreviousDay,
+        policies: this.selectedAddEditValue.policies,
       });
       if (this.selectedAddEditValue.workingDays) {
         this.selectedDays = this.selectedAddEditValue.workingDays.split(',').map(day => day.trim());
@@ -182,41 +196,42 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
 
 
   submitForm(): void {
+    console.log(this.addEditForm.value);
 
-    this.isSubmitted = true;
-    if (this.addEditForm.invalid) {
-      return;
-    }
-    const formValue = this.addEditForm.value;
-    const values = {
-      ...formValue,
-      workingDays:this.selectedDays.join(','),
-      startTime: this.formatDateForSubmission(formValue.startTime),
-      endTime: this.formatDateForSubmission(formValue.endTime)
-    };
+    // this.isSubmitted = true;
+    // if (this.addEditForm.invalid) {
+    //   return;
+    // }
+    // const formValue = this.addEditForm.value;
+    // const values = {
+    //   ...formValue,
+    //   workingDays: this.selectedDays.join(','),
+    //   startTime: this.formatDateForSubmission(formValue.startTime),
+    //   endTime: this.formatDateForSubmission(formValue.endTime)
+    // };
 
 
 
-    const body = { ...values };
+    // const body = { ...values };
 
-    const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Shift", "addShift", body, true);
+    // const apiCall = this.isEditMode
+    //   ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
+    //   : this.apiCalling.postData("Shift", "addShift", body, true);
 
-    apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-      next: (response) => {
-        if (response?.success) {
-          this.toaster.success(response.message, 'Success!');
-          this.goBack();
-        } else {
-          this.toaster.error(response?.message || 'An error occurred', 'Error!');
-        }
-      },
-      error: (error) => {
-        console.error('API error:', error);
+    // apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    //   next: (response) => {
+    //     if (response?.success) {
+    //       this.toaster.success(response.message, 'Success!');
+    //       this.goBack();
+    //     } else {
+    //       this.toaster.error(response?.message || 'An error occurred', 'Error!');
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error('API error:', error);
 
-      }
-    });
+    //   }
+    // });
   }
 
   goBack(): void {

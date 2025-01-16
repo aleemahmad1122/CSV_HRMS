@@ -53,6 +53,8 @@
       "attendanceImport": "Attendance Import"
     },
     "form": {
+      "shiftName":"Shift Name",
+      "shiftCode":"Shift Code",
       "issuedDate":"Issued Date",
       "assetTypeId":"Asset Type",
       "selectassetTypeId":"Asset Type",
@@ -176,6 +178,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "shiftNameRequired":"Shift Name is Required",
+      "shiftCodeRequired":"Shift Code is Required",
       "workingDaysRequired":"Working Days is Required",
       "checkOutDateGreaterThenToCheckInDate":"Check Out Date Should be greater then to Check In Date",
       "reasonRequired":"Reason is Required",
@@ -255,6 +259,11 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "shiftEndsFromPreviousDay":"Shift Ends From PreviousDay",
+      "shiftStartsFromPreviousDay":"Shift Starts From PreviousDay",
+      "mins":"mins",
+      "forCheckOut":"Check Out",
+      "forCheckIn":"Check In",
       "passwordReq":"Password Request",
       "monday":"Monday",
       "tuesday":"Tuesday",
@@ -417,8 +426,12 @@
       "endDate": "End Date",
       "startTime": "Start Time",
       "endTime": "End Time",
+      "start": "Start ",
+      "end": "End ",
       "edit": "Edit",
-      "noOfDays": "No Of Days"
+      "noOfDays": "No Of Days",
+      "from":"From",
+      "to":"To"
     },
     "company": {
       "companyManagement": "Company Management",

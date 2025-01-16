@@ -20,15 +20,20 @@
             addEditForm.get('shiftId')?.invalid &&
             (addEditForm.get('shiftId')?.touched || isSubmitted)
         }" placeholder="{{ 'language.form.selectShift' | translate }}">
+
+
+
           <ng-template ng-label-tmp let-item="item">
             {{ item.name }}
-            ({{ 'language.generic.startTime' | translate }}: {{ item.startTime | convertTime: 'time' }} & {{
-            'language.generic.endTime' | translate }}: {{ item.endTime | convertTime: 'time' }})
+            ({{ 'language.generic.from' | translate }}: {{ item.startTime | convertTime: 'time' }} - {{
+            'language.generic.to' | translate }}: {{ item.endTime | convertTime: 'time' }})
           </ng-template>
+
+
           <ng-template ng-option-tmp let-item="item">
             {{ item.name }}
-            ({{ 'language.generic.startTime' | translate }}: {{ item.startTime | convertTime: 'time'}} & {{
-            'language.generic.endTime' | translate }}: {{ item.endTime | convertTime: 'time' }})
+            ({{ 'language.generic.from' | translate }}: {{ item.startTime | convertTime: 'time'}} - {{
+            'language.generic.to' | translate }}: {{ item.endTime | convertTime: 'time' }})
           </ng-template>
         </ng-select>
 

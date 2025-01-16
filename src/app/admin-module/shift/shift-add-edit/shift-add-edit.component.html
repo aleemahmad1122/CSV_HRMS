@@ -2,20 +2,36 @@
   <div class="card card-custom w-100 px-3">
     <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
-        <div class="col-md-12 mb-3">
-          <label class="form-label">{{ "language.form.title" | translate }}
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.form.shiftName" | translate }}
             <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="name"
-            [placeholder]="'language.placeholders.title' | translate" [ngClass]="{
+          <input type="text" class="form-control" formControlName="shiftName"
+            [placeholder]="'language.form.shiftName' | translate" [ngClass]="{
               'is-invalid':
-                addEditForm.get('name')?.invalid &&
-                (addEditForm.get('name')?.touched || isSubmitted)
+                addEditForm.get('shiftName')?.invalid &&
+                (addEditForm.get('shiftName')?.touched || isSubmitted)
             }" />
           <div *ngIf="
-              addEditForm.get('name')?.invalid &&
-              (addEditForm.get('name')?.touched || isSubmitted)
+              addEditForm.get('shiftName')?.invalid &&
+              (addEditForm.get('shiftName')?.touched || isSubmitted)
             " class="invalid-feedback">
-            {{ "language.errors.titleRequired" | translate }}
+            {{ "language.errors.shiftNameRequired" | translate }}
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.form.shiftCode" | translate }}
+            <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="shiftCode"
+            [placeholder]="'language.form.shiftCode' | translate" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('shiftCode')?.invalid &&
+                (addEditForm.get('shiftCode')?.touched || isSubmitted)
+            }" />
+          <div *ngIf="
+              addEditForm.get('shiftCode')?.invalid &&
+              (addEditForm.get('shiftCode')?.touched || isSubmitted)
+            " class="invalid-feedback">
+            {{ "language.errors.shiftCodeRequired" | translate }}
           </div>
         </div>
       </div>
@@ -57,43 +73,44 @@
         </div>
       </div>
 
+
       <div class="row">
 
         <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.generic.earlyMinutes" | translate }}
+          <label class="form-label">{{ "language.generic.shiftStartsFromPreviousDay" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [items]="timeList" [clearable]="false" [bindLabel]="null" [bindValue]="null" [searchable]="true"
-            placeholder="Select an option" formControlName="earlyMinutes" [ngClass]="{
+          <ng-select [items]="shiftStartsFromPreviousDayOpt" [clearable]="false" [bindLabel]="'label'" [bindValue]="'value'" [searchable]="true"
+            placeholder="Select an option" formControlName="shiftStartsFromPreviousDay" [ngClass]="{
     'is-invalid':
-            addEditForm.get('earlyMinutes')?.invalid &&
-            (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
+            addEditForm.get('shiftStartsFromPreviousDay')?.invalid &&
+            (addEditForm.get('shiftStartsFromPreviousDay')?.touched || isSubmitted)
     }">
           </ng-select>
           <div *ngIf="
-              addEditForm.get('earlyMinutes')?.invalid &&
-              (addEditForm.get('earlyMinutes')?.touched || isSubmitted)
+              addEditForm.get('shiftStartsFromPreviousDay')?.invalid &&
+              (addEditForm.get('shiftStartsFromPreviousDay')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.earlyMinutesRequired" | translate }}
           </div>
         </div>
 
         <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.generic.graceMinutes" | translate }}
+          <label class="form-label">{{ "language.generic.shiftEndsFromPreviousDay" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [clearable]="false" [items]="timeList" [bindLabel]="null" [bindValue]="null" [searchable]="true"
-            placeholder="Select an option" formControlName="graceMinutes" [ngClass]="{
+          <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'" [bindValue]="'value'" [searchable]="true"
+            placeholder="Select an option" formControlName="shiftEndsFromPreviousDay" [ngClass]="{
     'is-invalid':
-            addEditForm.get('graceMinutes')?.invalid &&
-            (addEditForm.get('graceMinutes')?.touched || isSubmitted)
+            addEditForm.get('shiftEndsFromPreviousDay')?.invalid &&
+            (addEditForm.get('shiftEndsFromPreviousDay')?.touched || isSubmitted)
     }">
           </ng-select>
           <div *ngIf="
-              addEditForm.get('graceMinutes')?.invalid &&
-              (addEditForm.get('graceMinutes')?.touched || isSubmitted)
+              addEditForm.get('shiftEndsFromPreviousDay')?.invalid &&
+              (addEditForm.get('shiftEndsFromPreviousDay')?.touched || isSubmitted)
             " class="invalid-feedback">
-            {{ "language.errors.graceMinutesRequired" | translate }}
+            {{ "language.errors.shiftEndsFromPreviousDayRequired" | translate }}
           </div>
         </div>
       </div>
@@ -108,16 +125,11 @@
         <div class="d-flex align-item-center py-4" style="gap: 30px;flex-wrap: wrap;">
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="monday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Monday')"
-              (change)="onDayChange('Monday', $event)"
-              class="inp-cbx"
-            />
+            <input id="monday" type="checkbox" [checked]="selectedDays.includes('Monday')"
+              (change)="onDayChange('Monday', $event)" class="inp-cbx" />
             <label for="monday" class="cbx">
               <span>
-                <svg  viewBox="0 0 12 10" height="10px" width="12px">
+                <svg viewBox="0 0 12 10" height="10px" width="12px">
                   <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                 </svg>
               </span>
@@ -125,13 +137,8 @@
             </label>
           </div>
           <div class="checkbox-wrapper-46">
-            <input
-              id="tuesday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Tuesday')"
-              (change)="onDayChange('Tuesday', $event)"
-              class="inp-cbx"
-            />
+            <input id="tuesday" type="checkbox" [checked]="selectedDays.includes('Tuesday')"
+              (change)="onDayChange('Tuesday', $event)" class="inp-cbx" />
             <label for="tuesday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -143,13 +150,8 @@
           </div>
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="wednesday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Wednesday')"
-              (change)="onDayChange('Wednesday', $event)"
-              class="inp-cbx"
-            />
+            <input id="wednesday" type="checkbox" [checked]="selectedDays.includes('Wednesday')"
+              (change)="onDayChange('Wednesday', $event)" class="inp-cbx" />
             <label for="wednesday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -161,13 +163,8 @@
           </div>
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="thursday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Thursday')"
-              (change)="onDayChange('Thursday', $event)"
-              class="inp-cbx"
-            />
+            <input id="thursday" type="checkbox" [checked]="selectedDays.includes('Thursday')"
+              (change)="onDayChange('Thursday', $event)" class="inp-cbx" />
             <label for="thursday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -179,13 +176,8 @@
           </div>
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="friday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Friday')"
-              (change)="onDayChange('Friday', $event)"
-              class="inp-cbx"
-            />
+            <input id="friday" type="checkbox" [checked]="selectedDays.includes('Friday')"
+              (change)="onDayChange('Friday', $event)" class="inp-cbx" />
             <label for="friday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -197,13 +189,8 @@
           </div>
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="saturday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Saturday')"
-              (change)="onDayChange('Saturday', $event)"
-              class="inp-cbx"
-            />
+            <input id="saturday" type="checkbox" [checked]="selectedDays.includes('Saturday')"
+              (change)="onDayChange('Saturday', $event)" class="inp-cbx" />
             <label for="saturday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -215,13 +202,8 @@
           </div>
 
           <div class="checkbox-wrapper-46">
-            <input
-              id="sunday"
-              type="checkbox"
-              [checked]="selectedDays.includes('Sunday')"
-              (change)="onDayChange('Sunday', $event)"
-              class="inp-cbx"
-            />
+            <input id="sunday" type="checkbox" [checked]="selectedDays.includes('Sunday')"
+              (change)="onDayChange('Sunday', $event)" class="inp-cbx" />
             <label for="sunday" class="cbx">
               <span>
                 <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -234,13 +216,10 @@
         </div>
 
         <!-- Validation Message -->
-        <div
-          *ngIf="
+        <div *ngIf="
             addEditForm.get('workingDays')?.invalid &&
             (addEditForm.get('workingDays')?.touched || isSubmitted)
-          "
-          class="invalid-feedback"
-        >
+          " class="invalid-feedback">
           {{ "language.errors.workingDaysRequired" | translate }}
         </div>
       </div>
