@@ -3,22 +3,6 @@
     <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.shiftName" | translate }}
-            <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" formControlName="shiftName"
-            [placeholder]="'language.form.shiftName' | translate" [ngClass]="{
-              'is-invalid':
-                addEditForm.get('shiftName')?.invalid &&
-                (addEditForm.get('shiftName')?.touched || isSubmitted)
-            }" />
-          <div *ngIf="
-              addEditForm.get('shiftName')?.invalid &&
-              (addEditForm.get('shiftName')?.touched || isSubmitted)
-            " class="invalid-feedback">
-            {{ "language.errors.shiftNameRequired" | translate }}
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.form.shiftCode" | translate }}
             <span class="text-danger">*</span></label>
           <input type="text" class="form-control" formControlName="shiftCode"
@@ -34,6 +18,23 @@
             {{ "language.errors.shiftCodeRequired" | translate }}
           </div>
         </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">{{ "language.form.shiftName" | translate }}
+            <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="shiftName"
+            [placeholder]="'language.form.shiftName' | translate" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('shiftName')?.invalid &&
+                (addEditForm.get('shiftName')?.touched || isSubmitted)
+            }" />
+          <div *ngIf="
+              addEditForm.get('shiftName')?.invalid &&
+              (addEditForm.get('shiftName')?.touched || isSubmitted)
+            " class="invalid-feedback">
+            {{ "language.errors.shiftNameRequired" | translate }}
+          </div>
+        </div>
+
       </div>
 
       <div class="row">
@@ -80,8 +81,9 @@
           <label class="form-label">{{ "language.generic.shiftStartsFromPreviousDay" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [items]="shiftStartsFromPreviousDayOpt" [clearable]="false" [bindLabel]="'label'" [bindValue]="'value'" [searchable]="true"
-            placeholder="Select an option" formControlName="shiftStartsFromPreviousDay" [ngClass]="{
+          <ng-select [items]="shiftStartsFromPreviousDayOpt" [clearable]="false" [bindLabel]="'label'"
+            [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+            formControlName="shiftStartsFromPreviousDay" [ngClass]="{
     'is-invalid':
             addEditForm.get('shiftStartsFromPreviousDay')?.invalid &&
             (addEditForm.get('shiftStartsFromPreviousDay')?.touched || isSubmitted)
@@ -99,8 +101,9 @@
           <label class="form-label">{{ "language.generic.shiftEndsFromPreviousDay" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'" [bindValue]="'value'" [searchable]="true"
-            placeholder="Select an option" formControlName="shiftEndsFromPreviousDay" [ngClass]="{
+          <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
+            [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+            formControlName="shiftEndsFromPreviousDay" [ngClass]="{
     'is-invalid':
             addEditForm.get('shiftEndsFromPreviousDay')?.invalid &&
             (addEditForm.get('shiftEndsFromPreviousDay')?.touched || isSubmitted)
@@ -215,7 +218,6 @@
           </div>
         </div>
 
-        <!-- Validation Message -->
         <div *ngIf="
             addEditForm.get('workingDays')?.invalid &&
             (addEditForm.get('workingDays')?.touched || isSubmitted)
@@ -244,6 +246,141 @@
         </div>
       </div>
 
+      <div class="table-responsive text-nowrap">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{"language.generic.attendanceFlag" | translate}}</th>
+              <th>{{"language.generic.fromTime" | translate}}</th>
+              <th>{{"language.generic.flagStartsOnNextDay" | translate}}</th>
+              <th>{{"language.generic.toTime" | translate}}</th>
+              <th>{{"language.generic.flagEndsOnNextDay" | translate}}</th>
+              <th>{{"language.generic.hours" | translate}}</th>
+              <th>{{"language.generic.isBtwShiftTime" | translate}}</th>
+              <th>{{"language.generic.actions" | translate}}</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <ng-container formArrayName="shiftPolicies">
+              @for(item of shiftPolicies?.controls; track $index) {
+              <tr [formGroupName]="$index">
+                <td>
+                  {{ 1 + $index }}
+                </td>
+
+                <td>
+
+
+                  <ng-select [items]="attendanceFlag" bindLabel="name" [clearable]="false" bindValue="value"
+                    formControlName="attendanceFlag" [searchable]="true" placeholder="Select an option">
+                  </ng-select>
+                </td>
+
+
+                <td>
+                  <dp-date-picker class="form-control" [mode]="'time'" formControlName="fromTime" placeholder="00:00"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'fromTime')"
+                    [ngClass]="{
+    'is-invalid':
+    addEditForm.get('fromTime')?.invalid &&
+    (addEditForm.get('fromTime')?.touched || isSubmitted)
+  }"></dp-date-picker>
+                </td>
+
+                <td>
+
+                  <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
+                    [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+                    formControlName="startsNextDay" [ngClass]="{
+  'is-invalid':
+          addEditForm.get('startsNextDay')?.invalid &&
+          (addEditForm.get('startsNextDay')?.touched || isSubmitted)
+  }">
+                  </ng-select>
+                </td>
+
+                <td>
+                  <dp-date-picker class="form-control" [mode]="'time'" formControlName="toTime" placeholder="00:00"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'toTime')"
+                    [ngClass]="{
+    'is-invalid':
+    addEditForm.get('toTime')?.invalid &&
+    (addEditForm.get('toTime')?.touched || isSubmitted)
+  }"></dp-date-picker>
+                </td>
+
+
+                <td>
+
+                  <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
+                    [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+                    formControlName="startsNextDay" [ngClass]="{
+  'is-invalid':
+          addEditForm.get('startsNextDay')?.invalid &&
+          (addEditForm.get('startsNextDay')?.touched || isSubmitted)
+  }">
+                  </ng-select>
+                </td>
+                <td>
+                  <dp-date-picker class="form-control" [mode]="'time'" formControlName="hours" placeholder="00:00"
+                    [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'hours')"
+                    [ngClass]="{
+    'is-invalid':
+    addEditForm.get('hours')?.invalid &&
+    (addEditForm.get('hours')?.touched || isSubmitted)
+  }"></dp-date-picker>
+                </td>
+
+                <td>
+
+                  <ng-select [clearable]="false" [items]="shiftStartsFromPreviousDayOpt" [bindLabel]="'label'"
+                    [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+                    formControlName="isBetWeenShift" [ngClass]="{
+  'is-invalid':
+          addEditForm.get('isBetWeenShift')?.invalid &&
+          (addEditForm.get('isBetWeenShift')?.touched || isSubmitted)
+  }">
+                  </ng-select>
+                </td>
+
+
+                <td>
+                  @if($index !== 0) {
+                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
+                    <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
+                        version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <rect x="0" y="0" width="24" height="24"></rect>
+                          <path style="fill: rgb(255, 255, 255)"
+                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                            fill="#000000" fill-rule="nonzero"></path>
+                          <path style="fill: rgb(255, 255, 255)"
+                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                            fill="#000000" opacity="0.3"></path>
+                        </g>
+                      </svg></span>
+                  </button>
+                  }
+                </td>
+              </tr>
+              }
+            </ng-container>
+
+            <tr>
+              <td colspan="12">
+                <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
+                  Add more
+                </button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
       <div class="row mt-3">
         <div class="col-12 text-right">
           <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
@@ -255,5 +392,7 @@
         </div>
       </div>
     </form>
+
+
   </div>
 </div>

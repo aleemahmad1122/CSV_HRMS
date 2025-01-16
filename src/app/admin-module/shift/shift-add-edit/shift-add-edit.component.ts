@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -34,6 +34,15 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   ]
 
 
+  // table
+  attendanceFlag: { value: number; name: string; }[] = [
+    {
+      value: 1,
+      name: "late"
+    },
+  ]
+  patchData: any
+
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
@@ -53,6 +62,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
+    this.addRow();
   }
 
   ngOnInit(): void {
@@ -96,7 +106,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       offSet: [new Date().getTimezoneOffset().toString()],
       shiftStartsFromPreviousDay: [false, Validators.required],
       shiftEndsFromPreviousDay: [false, Validators.required],
-      policies: []
+      shiftPolicies: this.fb.array([])
     });
   }
 
@@ -111,7 +121,7 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         offSet: this.selectedAddEditValue.offSet,
         shiftStartsFromPreviousDay: this.selectedAddEditValue.shiftStartsFromPreviousDay,
         shiftEndsFromPreviousDay: this.selectedAddEditValue.shiftEndsFromPreviousDay,
-        policies: this.selectedAddEditValue.policies,
+        shiftPolicies: this.selectedAddEditValue.shiftPolicies,
       });
       if (this.selectedAddEditValue.workingDays) {
         this.selectedDays = this.selectedAddEditValue.workingDays.split(',').map(day => day.trim());
@@ -233,6 +243,37 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     //   }
     // });
   }
+
+  // table
+  addRow() {
+    const formData = this.fb.group({
+      attendanceFlag: [this.patchData?.attendanceFlag || 1, [Validators.required]],
+      fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      hours: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
+      isBetWeenShift: [this.patchData?.isBetWeenShift || '', [Validators.required]],
+      startsNextDay: [this.patchData?.startsNextDay || false, [Validators.required]],
+      endsNextDay: [this.patchData?.endsNextDay || false, [Validators.required]],
+    });
+    this.shiftPolicies.push(formData);
+  }
+
+  get shiftPolicies(): FormArray {
+    return this.addEditForm.controls["shiftPolicies"] as FormArray;
+  }
+
+
+  deleteRow(index: number): void {
+
+    if (index >= 0 && index < this.shiftPolicies.length) {
+      const updatedControls = this.shiftPolicies.controls.filter((_, i) => i !== index);
+      this.addEditForm.setControl('shiftPolicies', this.fb.array(updatedControls));
+    } else {
+    }
+
+  }
+
+
 
   goBack(): void {
     this.router.navigate(['/admin/shift']);
