@@ -33,6 +33,10 @@ import { DataShareService } from './shared/Services/data-share.service';
 export class AppComponent implements OnInit {
   title = 'CSV_HRMS-Client';
   isLogin: boolean;
+  isOnline: boolean = true;
+
+
+
   constructor(
     private _authService: UserAuthenticationService,
     private _dataShare: DataShareService
@@ -49,8 +53,6 @@ export class AppComponent implements OnInit {
 
   }
 
-
-  isOnline: boolean = false;
 
   ngOnInit() {
     // Initialize connection status

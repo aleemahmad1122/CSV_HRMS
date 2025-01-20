@@ -116,10 +116,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return dayStats.presents + dayStats.absents + dayStats.leaves + dayStats.late + dayStats.early + dayStats.halfDays + dayStats.offDays + dayStats.missingAttendance;
     });
 
-    // Create series data with combined values per day
     const seriesData = [{
       name: 'Total Attendance',
-      data: combinedData,  // Use the combined data for each day
+      data: combinedData,
       color: 'blue',
     }];
 
@@ -134,7 +133,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         text: 'Attendance Summary - January',
       },
       xAxis: {
-        categories: Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`), // Days 1 to 31
+        categories: Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`),
       },
       yAxis: {
         title: {
