@@ -100,7 +100,7 @@ const routes: Routes = [
   {
     path: 'shift/:action',
     loadComponent: () => import(`./shift/shift-add-edit/shift-add-edit.component`).then(c => c.ShiftAddEditComponent),
-    data: { breadcrumb: 'Shift', permission: "Create_Shift,Edit_Shift" },
+    data: { breadcrumb: 'Shift', permission: "Create_Shift,Edit_Shift,View_Shift" },
     title: 'Shift',
     resolve: { permission: PermissionService }
   },

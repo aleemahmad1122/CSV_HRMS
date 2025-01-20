@@ -31,12 +31,17 @@ export interface IReportTo {
 
 export interface IShift extends ICommon {
   shiftId: string;
-  name: string;
+  shiftCode: string;
+  shiftName: string;
   startTime: string;
   endTime: string;
-  workingDays:string;
-  graceMinutes: number;
-  earlyMinutes: number;
+  offSet: string;
+  description: string;
+  workingDays: string;
+  shiftStartsPreviousDay: boolean;
+  shiftEndsNextDay: boolean;
+  isActive: boolean;
+  shiftPolicies: any[];
 }
 
 

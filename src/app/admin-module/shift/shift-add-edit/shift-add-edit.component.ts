@@ -67,17 +67,23 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       name: "Absent"
     },
   ]
+
+  filteredAttendanceFlag: { value: number; name: string }[] = [...this.attendanceFlag]
+
   patchData: any
 
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
+  isViewMode = false;
   isSubmitted = false;
   selectedAddEditValue: any;
-
+  id:string;
   selectedStartTime: Date | null = null;
 
-  timeList: number[] = [5, 10, 15, 20, 25, 30,]
+  timeList: number[] = [5, 10, 15, 20, 25, 30,];
+
+  setRowValue: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -88,13 +94,17 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
-    this.addRow();
+    this.getFilteredAttendanceFlag('remove')
+
   }
 
   ngOnInit(): void {
 
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      console.warn(params['viewMode'] );
+      this.isViewMode = params['viewMode'] === 'true';
       const id = params['id'];
+      this.id = id
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
@@ -112,6 +122,9 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
               this.selectedAddEditValue = [];
             }
           });
+
+      }else{
+        this.addRow();
       }
     });
   }
@@ -132,14 +145,29 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
       offSet: [new Date().getTimezoneOffset().toString()],
       shiftStartsPreviousDay: [false, Validators.required],
       shiftEndsNextDay: [false, Validators.required],
-      shiftPolicies: this.fb.array([])
+      shiftPolicies: this.fb.array([]),
     });
   }
+
+
+  private createPolicyFormGroup(policy): FormGroup {
+    return this.fb.group({
+      isBetWeenShift: [policy.isBetWeenShift || false],
+      attendanceFlag: [policy.attendanceFlag],
+      fromTime: [this.convertToTimeLocalFormat(policy.fromTime) || null],
+      toTime: [this.convertToTimeLocalFormat(policy.toTime) || null],
+      hours: [policy.hours || null],
+      startsNextDay: [policy.startsNextDay || false],
+      endsNextDay: [policy.endsNextDay || false],
+    });
+  }
+
 
   private patchFormValues(): void {
     if (this.selectedAddEditValue) {
       this.addEditForm.patchValue({
         shiftName: this.selectedAddEditValue.shiftName,
+        shiftCode: this.selectedAddEditValue.shiftCode,
         workingDays: this.selectedAddEditValue.workingDays,
         startTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.startTime),
         endTime: this.convertToTimeLocalFormat(this.selectedAddEditValue.endTime),
@@ -147,14 +175,26 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
         offSet: this.selectedAddEditValue.offSet,
         shiftStartsPreviousDay: this.selectedAddEditValue.shiftStartsPreviousDay,
         shiftEndsNextDay: this.selectedAddEditValue.shiftEndsNextDay,
-        shiftPolicies: this.selectedAddEditValue.shiftPolicies,
       });
-      if (this.selectedAddEditValue.workingDays) {
-        this.selectedDays = this.selectedAddEditValue.workingDays.split(',').map(day => day.trim());
+
+      // Update shiftPolicies FormArray
+      const shiftPoliciesFormArray = this.addEditForm.get('shiftPolicies') as FormArray;
+      shiftPoliciesFormArray.clear(); // Clear existing items
+
+      if (this.selectedAddEditValue.shiftPolicies?.length) {
+        this.selectedAddEditValue.shiftPolicies.forEach(policy => {
+          shiftPoliciesFormArray.push(this.createPolicyFormGroup(policy));
+        });
       }
 
+      if (this.selectedAddEditValue.workingDays) {
+        this.selectedDays = this.selectedAddEditValue.workingDays
+          .split(',')
+          .map(day => day.trim());
+      }
     }
   }
+
 
 
   private convertToTimeLocalFormat(dateString: string): string {
@@ -201,7 +241,8 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   };
 
   hourConfig = {
-    hour12: true,
+    hour12: false,
+    showTwentyFourHours: true,
     timePicker: true,
     showSeconds: false,
     format: 'hh:mm',
@@ -268,23 +309,36 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   submitForm(): void {
 
     this.isSubmitted = true;
+
+    // Check if the form is invalid
     if (this.addEditForm.invalid) {
       return;
     }
+
     const formValue = this.addEditForm.value;
+
+    // Transform shiftPolicies array
+    const updatedShiftPolicies = formValue.shiftPolicies.map(policy => ({
+      ...policy,
+      fromTime: policy.toTime ?  this.formatDateForSubmission(policy.fromTime)  : null,
+      toTime: policy.toTime ? this.formatDateForSubmission(policy.toTime) : null,
+    }));
+
+    // Prepare the final values for submission
     const values = {
       ...formValue,
-      workingDays: this.selectedDays.join(','),
+      workingDays: this.selectedDays.join(','), // Convert workingDays to a string
       startTime: this.formatDateForSubmission(formValue.startTime),
-      endTime: this.formatDateForSubmission(formValue.endTime)
+      endTime: this.formatDateForSubmission(formValue.endTime),
+      shiftPolicies: updatedShiftPolicies, // Include transformed shiftPolicies
     };
 
-
+    // Submit the final values
 
     const body = { ...values };
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Shift", `updateShift/${this.isEditMode}`, body, true)
+      ? this.apiCalling.putData("Shift", `updateShift/${this.id}`, body, true)
       : this.apiCalling.postData("Shift", "addShift", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
@@ -306,13 +360,13 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
   // table
   addRow() {
     const formData = this.fb.group({
-      attendanceFlag: [this.patchData?.attendanceFlag || 0, [Validators.required]],
-      fromTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
-      toTime: [`${this.convertToTimeLocalFormat(environment.defaultDate)}`],
-      hours: [`${this.convertToHourLocalFormat(environment.defaultDate)}`],
-      isBetWeenShift: [this.patchData?.isBetWeenShift || false],
-      startsNextDay: [this.patchData?.startsNextDay || false],
-      endsNextDay: [this.patchData?.endsNextDay || false],
+      attendanceFlag: [this.patchData?.attendanceFlag],
+      fromTime: [ `${this.convertToTimeLocalFormat(environment.defaultDate)}` ],
+      toTime: [ `${this.convertToTimeLocalFormat(environment.defaultDate)}` ],
+      hours: [`${this.convertToHourLocalFormat(environment.defaultDate)}` ],
+      isBetWeenShift: [  false],
+      startsNextDay: [ false],
+      endsNextDay: [false],
     });
     this.shiftPolicies.push(formData);
   }
@@ -331,6 +385,32 @@ export class ShiftAddEditComponent implements OnInit, OnDestroy {
     }
 
   }
+
+
+  getFilteredAttendanceFlag(action: 'add' | 'remove', setRowValue: boolean = false): void {
+    this.setRowValue = setRowValue;
+
+    const shiftPolicies = this.addEditForm.value['shiftPolicies'];
+
+    if (shiftPolicies == null) {
+      this.filteredAttendanceFlag = [...this.attendanceFlag];
+    } else {
+      const attendanceFlagValues = shiftPolicies.map(v => v?.attendanceFlag);
+
+      if (action === 'remove') {
+        // Exclude attendance flags present in shiftPolicies
+        this.filteredAttendanceFlag = this.attendanceFlag.filter(f => !attendanceFlagValues.includes(f.value));
+      } else if (action === 'add') {
+        // Make sure to add only the missing flags
+        const missingFlags = this.attendanceFlag.filter(f => !attendanceFlagValues.includes(f.value));
+
+        // Add the missing flags only if they are not already in filteredAttendanceFlag
+        const newFlags = missingFlags.filter(flag => !this.filteredAttendanceFlag.some(f => f.value === flag.value));
+        this.filteredAttendanceFlag = [...this.filteredAttendanceFlag, ...newFlags];
+      }
+    }
+  }
+
 
 
 

@@ -106,7 +106,7 @@ export class ShiftHistoryComponent implements OnInit, OnDestroy {
 
   getShiftName(shiftId: string): string {
     const shift = this.shiftList.find((shift) => shift.shiftId === shiftId);
-    return shift ? shift.name : '';
+    return shift ? shift.shiftName : '';
   }
 
   private loadEmployeeShift(id: string | null): void {

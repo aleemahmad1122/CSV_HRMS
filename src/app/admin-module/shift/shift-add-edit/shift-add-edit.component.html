@@ -1,6 +1,8 @@
 <div class="d-flex flex-column-fluid px-3">
   <div class="card card-custom w-100 px-3">
-    <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()">
+    <form [formGroup]="addEditForm" class="form w-100 py-5" id="kt_form_1" (ngSubmit)="submitForm()" style="position: relative;">
+
+      @if(this.isViewMode){ <span style="position: absolute; inset: 0;  z-index: 9999;" ></span>}
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.form.shiftCode" | translate }}
@@ -127,7 +129,7 @@
 
         <div class="d-flex align-item-center py-4" style="gap: 30px;flex-wrap: wrap;">
 
-          <div *ngFor="let day of days" class="checkbox-wrapper-46">
+          @for(day of days; track $index){<div  class="checkbox-wrapper-46">
             <input
               [id]="day.id"
               type="checkbox"
@@ -143,15 +145,13 @@
               </span>
               <span>{{ day.translationKey | translate }}</span>
             </label>
-          </div>
+          </div>}
         </div>
 
-        <div *ngIf="
-            addEditForm.get('workingDays')?.invalid &&
-            (addEditForm.get('workingDays')?.touched || isSubmitted)
-          " class="invalid-feedback">
+        @if(addEditForm.get('workingDays')?.invalid &&
+          (addEditForm.get('workingDays')?.touched || isSubmitted)){<div class="invalid-feedback">
           {{ "language.errors.workingDaysRequired" | translate }}
-        </div>
+        </div>}
       </div>
 
 
@@ -186,7 +186,7 @@
               <th>{{"language.generic.flagEndsOnNextDay" | translate}}</th>
               <th>{{"language.generic.hours" | translate}}</th>
               <th>{{"language.generic.isBtwShiftTime" | translate}}</th>
-              <th>{{"language.generic.actions" | translate}}</th>
+              @if(!this.isViewMode){ <th>{{"language.generic.actions" | translate}}</th>}
             </tr>
           </thead>
           <tbody class="table-border-bottom-0">
@@ -200,7 +200,7 @@
                 <td>
 
 
-                  <ng-select [items]="attendanceFlag" bindLabel="name" [clearable]="false" bindValue="value"
+                  <ng-select (change)="getFilteredAttendanceFlag('remove',(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2))"   [items]="filteredAttendanceFlag" bindLabel="name" [clearable]="false" bindValue="value"
                     formControlName="attendanceFlag" [searchable]="true" placeholder="Select an option">
                   </ng-select>
                 </td>
@@ -256,13 +256,14 @@
                 'is-invalid':
                         addEditForm.get('startsNextDay')?.invalid &&
                         (addEditForm.get('startsNextDay')?.touched || isSubmitted)
-          }">
+                          }">
                   </ng-select>
                   @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
                     <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
                   }
                 </td>
                 <td style="position: relative;" >
+
                   <dp-date-picker class="form-control" [mode]="'time'" formControlName="hours" placeholder="00"
                     [config]="hourConfig" theme="dp-material" (change)="onDateTimeChange($event,'hours')"
                     [ngClass]="{
@@ -291,8 +292,8 @@
                 </td>
 
 
-                <td style="position: relative;" >
-                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
+                @if(!this.isViewMode){ <td style="position: relative;" >
+                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index);getFilteredAttendanceFlag('add')">
                     <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
                         version="1.1">
@@ -308,25 +309,25 @@
                       </svg></span>
                   </button>
                   @if($index == 0){<span style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;" ></span>}
-                </td>
+                </td>}
               </tr>
               }
             </ng-container>
 
-            <tr>
+            @if(!this.isViewMode){ @if(!(filteredAttendanceFlag.length < 1)){<tr>
               <td colspan="12">
                 <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
                   {{"language.generic.addMore" | translate}}
                 </button>
               </td>
 
-            </tr>
+            </tr>}}
           </tbody>
         </table>
       </div>
 
 
-      <div class="row mt-3">
+      @if(!this.isViewMode){<div class="row mt-3">
         <div class="col-12 text-right">
           <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
             {{ "language.generic.back" | translate }}
@@ -335,7 +336,7 @@
             {{ "language.generic.submit" | translate }}
           </button>
         </div>
-      </div>
+      </div>}
     </form>
 
 

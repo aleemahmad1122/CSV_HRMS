@@ -35,6 +35,7 @@ export class ShiftListComponent {
   permissions: { isAssign: boolean; permission: string }[] = [];
     isEdit: boolean = false;
   isCreate: boolean = false;
+  isView: boolean = false;
   isDelete: boolean = false;
 
 
@@ -87,6 +88,7 @@ export class ShiftListComponent {
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Shift" && p.isAssign);
+        this.isView = this.permissions.some(p => p.permission === "View_Shift" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Create_Shift" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Shift" && p.isAssign);
       } else {
