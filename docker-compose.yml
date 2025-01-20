@@ -1,0 +1,13 @@
+version: '3'
+services:
+  devapp:
+    build: .
+    ports:
+      - "9000:4200"
+    volumes:
+      - "/app/node_modules"
+      - ".:/app"
+
+
+
+      

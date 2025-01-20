@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "baseHref": "/",
+            
             "outputPath": "dist/CSV_HRMS",
             "index": "src/index.html",
             "browser": "src/main.ts",
