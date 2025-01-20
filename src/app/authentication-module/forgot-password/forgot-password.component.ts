@@ -50,7 +50,7 @@ export class ForgotPasswordComponent {
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           if (response?.success) {
-            this._toaster.success('Email is sent. Please follow the instruction mentioned on email!', 'Success!');
+            this._toaster.success(response?.message || 'Email is sent. Please follow the instruction mentioned in email!', 'Success!');
           } else {
             this._toaster.error(response?.message, 'Error!');
           }

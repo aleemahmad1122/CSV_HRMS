@@ -6,6 +6,11 @@
   width: 450px;
 }
 
+
+.forgot-btn:hover{
+  text-decoration: underline !important;
+}
+
 .login.login-4 .login-container .login-content .wizard-nav {
   padding: 0;
 }

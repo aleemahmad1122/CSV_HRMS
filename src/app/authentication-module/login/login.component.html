@@ -3,14 +3,14 @@
     <div
       class="login-container order-2 order-lg-1 d-flex flex-center flex-row-fluid px-7 pt-lg-0 pb-lg-0 pt-4 pb-6 bg-white">
       <div class="login-content d-flex flex-column pt-lg-0 pt-12">
-        <a href="#" class="login-logo pb-lg-4 pb-10 d-flex align-items-center justify-content-center gap-2">
+        <a href="https://cybersoftvantage.com/" class="login-logo pb-lg-4 pb-10 d-flex align-items-center justify-content-center gap-2">
           <img
             onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyKLQ_NDd81udMvX8pB7D97hkZxbjehU6WzA&s'"
             src="https://cybersoftvantage.com/logo.png" class="max-h-70px" alt="" />
           <h1 class="fw-bold">Cybersoft Vantage</h1>
         </a>
-        <div class="login-form">
-          <form class="form" id="kt_login_singin_form" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
+        <div class="login-form card" >
+          <form class="card-body"id="kt_login_singin_form" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()">
             <div class="pb-5 pb-lg-15">
               <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Sign In</h3>
               <div class="font-weight-bold font-size-h4">New Here?
@@ -59,6 +59,10 @@
                     one uppercase letter, one lowercase letter, and one number.</ng-container>
                 </div>
               </div>
+
+<div class="col-md-6 mb-3"></div>
+<div class="col-md-6 mb-3  d-flex  align-items-center justify-content-end ">  <a  class="forgot-btn" routerLink="/forgot-password">Forget password</a></div>
+
             </div>
 
 
