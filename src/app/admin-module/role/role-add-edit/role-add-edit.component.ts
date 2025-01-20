@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy, NgZone, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,6 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { IGetSystemPermissions, IResGetSystemPermissions } from "../../../types/index";
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-role-add-edit',
@@ -15,7 +16,7 @@ import { IGetSystemPermissions, IResGetSystemPermissions } from "../../../types/
   templateUrl: './role-add-edit.component.html',
   styleUrl: './role-add-edit.component.css'
 })
-export class RoleAddEditComponent implements OnInit, OnDestroy {
+export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
@@ -31,10 +32,13 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
   }
+
+
 
   ngOnInit(): void {
 
@@ -66,6 +70,10 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  ngAfterViewInit(): void {
+    this.initializeTooltips();
+  }
 
   private getSystemPermissions(): void {
     this.apiCalling.getData("Role", `getSystemPermissions`, true)
@@ -153,5 +161,29 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate([window.history.back()]);
+  }
+
+
+  private initializeTooltips(): void {
+    this.ngZone.runOutsideAngular(() => {
+      // Dispose existing tooltips
+      const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltips.forEach((element) => {
+        const tooltip = bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+          tooltip.dispose();
+        }
+      });
+
+      // Initialize new tooltips with configuration
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltipTriggerList.forEach((tooltipTriggerEl) => {
+        new bootstrap.Tooltip(tooltipTriggerEl, {
+          trigger: 'hover',
+          placement: 'top',
+          container: 'body'
+        });
+      });
+    });
   }
 }
