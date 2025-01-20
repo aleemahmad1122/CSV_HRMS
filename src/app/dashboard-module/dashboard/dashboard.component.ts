@@ -96,56 +96,32 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const daysInMonth = 31; // Number of days in January
     const dailyStats = [
       { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
-      { presents: 15, absents: 5, leaves: 4, late: 1, early: 3, halfDays: 0, offDays: 6, missingAttendance: 1 },
-      { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
-      { presents: 15, absents: 5, leaves: 4, late: 1, early: 3, halfDays: 0, offDays: 6, missingAttendance: 1 },
-      { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
+      { presents: 14, absents: 7, leaves: 6, late: 4, early: 3, halfDays: 2, offDays: 4, missingAttendance: 3 },
+      { presents: 13, absents: 5, leaves: 4, late: 2, early: 1, halfDays: 0, offDays: 5, missingAttendance: 1 },
       // Add data for all 31 days...
+      ...Array.from({ length: daysInMonth - 3 }, (_, i) => ({
+        presents: Math.floor(Math.random() * 15),
+        absents: Math.floor(Math.random() * 10),
+        leaves: Math.floor(Math.random() * 8),
+        late: Math.floor(Math.random() * 5),
+        early: Math.floor(Math.random() * 4),
+        halfDays: Math.floor(Math.random() * 3),
+        offDays: Math.floor(Math.random() * 6),
+        missingAttendance: Math.floor(Math.random() * 3),
+      })),
     ];
 
-    // Ensure there is only one entry for each day
-    const seriesData = [
-      {
-        name: 'Presents',
-        data: dailyStats.map((dayStats) => dayStats.presents), // Mapping presents for each day
-        color: 'blue',
-      },
-      {
-        name: 'Absents',
-        data: dailyStats.map((dayStats) => dayStats.absents), // Mapping absents for each day
-        color: 'red',
-      },
-      {
-        name: 'Leaves',
-        data: dailyStats.map((dayStats) => dayStats.leaves), // Mapping leaves for each day
-        color: 'green',
-      },
-      {
-        name: 'Late',
-        data: dailyStats.map((dayStats) => dayStats.late), // Mapping late for each day
-        color: 'orange',
-      },
-      {
-        name: 'Early',
-        data: dailyStats.map((dayStats) => dayStats.early), // Mapping early for each day
-        color: 'purple',
-      },
-      {
-        name: 'Half Days',
-        data: dailyStats.map((dayStats) => dayStats.halfDays), // Mapping halfDays for each day
-        color: 'cyan',
-      },
-      {
-        name: 'Off Days',
-        data: dailyStats.map((dayStats) => dayStats.offDays), // Mapping offDays for each day
-        color: 'pink',
-      },
-      {
-        name: 'Missing Attendance',
-        data: dailyStats.map((dayStats) => dayStats.missingAttendance), // Mapping missingAttendance for each day
-        color: 'yellow',
-      },
-    ];
+    // Combine all the data into a single value per day (e.g., summing up all activities for each day)
+    const combinedData = dailyStats.map((dayStats) => {
+      return dayStats.presents + dayStats.absents + dayStats.leaves + dayStats.late + dayStats.early + dayStats.halfDays + dayStats.offDays + dayStats.missingAttendance;
+    });
+
+    // Create series data with combined values per day
+    const seriesData = [{
+      name: 'Total Attendance',
+      data: combinedData,  // Use the combined data for each day
+      color: 'blue',
+    }];
 
     this.chartOptions = {
       credits: {
@@ -158,11 +134,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         text: 'Attendance Summary - January',
       },
       xAxis: {
-        categories: Array.from({ length: daysInMonth }, (_, i) => `Week ${i + 1}`),
+        categories: Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`), // Days 1 to 31
       },
       yAxis: {
         title: {
-          text: 'Count',
+          text: 'Total Count',
         },
       },
       series: seriesData.map((series) => ({
@@ -172,6 +148,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       })),
     };
   }
+
 
 
 
