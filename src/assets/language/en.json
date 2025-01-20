@@ -259,6 +259,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "profile":"Profile",
       "addMore":"Add More",
       "isBtwShiftTime":"Is Btw Shift Time",
       "hours":"hours",

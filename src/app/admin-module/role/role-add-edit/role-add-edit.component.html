@@ -61,7 +61,7 @@
 
                       <div [id]="'collapse'+$index" class="collapse show" [attr.aria-labelledby]="'headingOne'+$index">
                         <div class="row">
-                          @for(mp of rp.modulePermissions; track $index){
+                          @for(mp of rp.modulePermissions; track mp.systemPermissionId){
                           <div class="col-md-6">
                             <div class="form-group p-3 m-0">
                               <div class="input-group">
@@ -120,3 +120,4 @@
     </form>
   </div>
 </div>
+

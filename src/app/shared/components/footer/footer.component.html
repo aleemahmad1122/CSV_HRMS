@@ -10,9 +10,9 @@
     <!--end::Copyright-->
 
     <div class="nav nav-dark">
-      <a href="javascript:void(0);" class="nav-link pl-0 pr-5">About</a>
-      <a href="javascript:void(0);" class="nav-link pl-0 pr-5">Team</a>
-      <a href="javascript:void(0);" class="nav-link pl-0 pr-0">Contact</a>
+     @for(item of footerLink; track $index){
+      <a [routerLink]="[item.path]" [queryParams]="{id:this.emp.employeeId}" routerLinkActive="router-link-active"  class="nav-link pl-0 pr-5">{{item.name| translate }}</a>
+     }
     </div>
 
   </div>

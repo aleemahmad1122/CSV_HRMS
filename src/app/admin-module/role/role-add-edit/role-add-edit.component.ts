@@ -162,8 +162,6 @@ export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
   goBack(): void {
     this.router.navigate([window.history.back()]);
   }
-
-
   private initializeTooltips(): void {
     this.ngZone.runOutsideAngular(() => {
       // Dispose existing tooltips
@@ -184,6 +182,6 @@ export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
           container: 'body'
         });
       });
-    });
-  }
+    });}
+
 }
