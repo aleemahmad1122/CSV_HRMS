@@ -157,10 +157,10 @@
                       </a>
                     </li>
                     }
-                         @if(data.isActive){
+                            @if(data.isActive){
                     @if(this.isDelete){
                       <li class="w-100 ">
-                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                            <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                           class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
                           title="Delete">
                           {{ "language.generic.inActive" | translate }}
@@ -171,7 +171,7 @@
                   @if(!data.isActive){
                     @if(this.isDelete){
                       <li class="w-100 ">
-                           <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
+                            <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                           class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center"
                           title="Delete">
                           {{'language.generic.active' | translate}}
@@ -196,7 +196,7 @@
                             aria-label="Close">x</button>
                         </div>
                         <div class="modal-body">
-                                   {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
+                                    {{( data?.isActive ?  'language.msg.actionCannotBeUndone' : 'language.msg.actionWantToActive' )| translate}}
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

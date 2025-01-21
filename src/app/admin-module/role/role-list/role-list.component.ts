@@ -209,7 +209,7 @@ export class RoleListComponent implements OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success){ this.dataList = this.dataList.filter((d) => d.roleId !== id)}else{
+          if (res?.success){ this.getActiveStatusData('', this.selectedStatus)}else{
             this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
           };
         },

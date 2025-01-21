@@ -206,7 +206,7 @@ export class EducationComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeEducationId !== id);
+          if (res?.success){ this.getActiveStatusData('', this.selectedStatus)}
         },
         error: (err) => console.error('Error deleting Employee Education:', err),
       });

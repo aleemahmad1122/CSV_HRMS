@@ -203,7 +203,7 @@ export class JobListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success){ this.getData()}else{
+          if (res?.success){ this.getActiveStatusData('', this.selectedStatus)}else{
             this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
           };
         },

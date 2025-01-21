@@ -207,7 +207,7 @@ export class WorkHistoryComponent{
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.employeeWorkHistoryId !== id);
+          if (res?.success){ this.getActiveStatusData('', this.selectedStatus)}
         },
         error: (err) => console.error('Error deleting Employee Work Histories:', err),
       });
