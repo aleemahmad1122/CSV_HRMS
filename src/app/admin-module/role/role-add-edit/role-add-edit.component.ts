@@ -16,7 +16,7 @@ import * as bootstrap from 'bootstrap';
   templateUrl: './role-add-edit.component.html',
   styleUrl: './role-add-edit.component.css'
 })
-export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
+export class RoleAddEditComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   addEditForm: FormGroup;
   isEditMode = false;
@@ -41,6 +41,10 @@ export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
 
 
   ngOnInit(): void {
+
+    setTimeout(() => {
+      this.initializeTooltips();
+    }, 1000);
 
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
@@ -71,9 +75,6 @@ export class RoleAddEditComponent implements OnInit, OnDestroy ,AfterViewInit{
   }
 
 
-  ngAfterViewInit(): void {
-    this.initializeTooltips();
-  }
 
   private getSystemPermissions(): void {
     this.apiCalling.getData("Role", `getSystemPermissions`, true)
