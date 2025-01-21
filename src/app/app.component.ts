@@ -6,7 +6,6 @@ import { UserAuthenticationService } from './shared/Services/user-authentication
 import { jwtDecode } from "jwt-decode";
 import { DataShareService } from './shared/Services/data-share.service';
 import { ApiCallingService } from "./shared/Services/api-calling.service";
-import { takeUntil } from "rxjs";
 import { LocalStorageManagerService } from "./shared/Services/local-storage-manager.service";
 import { EmployeeDetail } from "./types";
 
@@ -64,7 +63,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.emp = this._localStorageService.getEmployeeDetail()[0];
     this.checkConnectionStatus();
-  setTimeout(() => {
+    setTimeout(() => {
     this.decodeToken(this._authService.getToken())
   }, 500);
 

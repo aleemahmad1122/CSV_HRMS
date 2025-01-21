@@ -33,7 +33,7 @@ class ProtectedGuardService {
       return true;
     }
     else {
-      this._router.navigateByUrl('');
+      this._router.navigateByUrl('/login');
       return false;
     }
   }
