@@ -43,6 +43,14 @@ export class UserAuthenticationService {
     return this._localStorageManagerService.getTokenFromStorage();
   }
 
+  setRefreshToken(refreshToken: string): void {
+    this._localStorageManagerService.setRefreshTokenToStorage(refreshToken);
+  }
+
+  getRefreshToken(): string {
+    return this._localStorageManagerService.getRefreshTokenToStorage();
+  }
+
   isLogin(): boolean {
     return this._localStorageManagerService.isLoginValidationFromStorage();
   }

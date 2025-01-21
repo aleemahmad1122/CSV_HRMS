@@ -70,6 +70,15 @@ export class LocalStorageManagerService {
 
   }
 
+  getRefreshTokenToStorage(): string {
+    let token = '';
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('refreshToken') || '{}';
+    }
+    return token;
+
+  }
+
   setCompanyDetail(companyDetail: CompanyDetail): void {
     this.removeCompanyDetail();
     if (isPlatformBrowser(this.platformId)) {
@@ -130,6 +139,15 @@ export class LocalStorageManagerService {
     this.removeToken();
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('token', token);
+    }
+  }
+
+
+
+  setRefreshTokenToStorage(refreshToken: string): void {
+    this.removeRefreshToken();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('refreshToken', refreshToken);
     }
   }
 
@@ -211,6 +229,12 @@ export class LocalStorageManagerService {
   removeToken(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
+    }
+  }
+
+  removeRefreshToken(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('refreshToken');
     }
   }
 

@@ -93,6 +93,7 @@ export class LoginComponent implements OnDestroy {
           // Store employee details before company selection
           this._localStorageService.setEmployeeDetail(response.data?.employeeDetail || []);
           this._authService.setToken(response.data?.employeeDetail[0]?.token);
+          this._authService.setRefreshToken(response.data?.employeeDetail[0]?.refreshToken);
 
           if (this.companyList.length > 1) {
             this.selectCompanyModal.show(); // Using ViewChild reference instead of jQuery
