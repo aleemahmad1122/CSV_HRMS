@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy, NgZone, AfterViewInit } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -32,6 +32,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -42,9 +43,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    setTimeout(() => {
-      this.initializeTooltips();
-    }, 1000);
+
 
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
@@ -54,13 +53,16 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
+
         this.apiCalling.getData("Role", `getRoleById/${id}`, true)
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
                 this.selectedAddEditValue = response?.data;
                 this.systemModules = response?.data?.systemModulePermissions.systemModules
-                this.patchFormValues(); // Call patchFormValues here after setting selectedAddEditValue
+                this.patchFormValues();
+                this.changeDetectorRef.detectChanges();
+                this.initializeTooltips();
               } else {
                 this.selectedAddEditValue = [];
               }
@@ -84,7 +86,8 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
 
 
             this.systemModules = response.data.systemModules
-
+            this.changeDetectorRef.detectChanges();
+            this.initializeTooltips();
           } else {
             this.systemModules = []
           }
