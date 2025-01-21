@@ -93,34 +93,39 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private initChart(): void {
-    const daysInMonth = 31; // Number of days in January
+    const colorMapping = {
+      present: '#388E3C',
+      late: '#FF5722',
+      missing: '#D32F2F',
+      early: '#1976D2',
+      halfDay: '#8E24AA',
+      shortLeave: '#FBC02D',
+    };
+
+    const daysInMonth = 31;
+
     const dailyStats = [
-      { presents: 12, absents: 6, leaves: 5, late: 3, early: 2, halfDays: 1, offDays: 5, missingAttendance: 2 },
-      { presents: 14, absents: 7, leaves: 6, late: 4, early: 3, halfDays: 2, offDays: 4, missingAttendance: 3 },
-      { presents: 13, absents: 5, leaves: 4, late: 2, early: 1, halfDays: 0, offDays: 5, missingAttendance: 1 },
-      // Add data for all 31 days...
-      ...Array.from({ length: daysInMonth - 3 }, (_, i) => ({
-        presents: Math.floor(Math.random() * 15),
-        absents: Math.floor(Math.random() * 10),
-        leaves: Math.floor(Math.random() * 8),
-        late: Math.floor(Math.random() * 5),
-        early: Math.floor(Math.random() * 4),
-        halfDays: Math.floor(Math.random() * 3),
-        offDays: Math.floor(Math.random() * 6),
-        missingAttendance: Math.floor(Math.random() * 3),
+      { day: 1, status: 'present', hours: 8 },
+      { day: 2, status: 'late', hours: 6 },
+      { day: 3, status: 'missing', hours: 0 },
+      { day: 4, status: 'present', hours: 8 },
+      { day: 5, status: 'early', hours: 7 },
+      { day: 6, status: 'halfDay', hours: 4 },
+      { day: 7, status: 'shortLeave', hours: 5 },
+      ...Array.from({ length: daysInMonth - 7 }, (_, i) => ({
+        day: i + 8,
+        status: ['present', 'late', 'missing', 'early', 'halfDay', 'shortLeave'][
+          Math.floor(Math.random() * 6)
+        ],
+        hours: Math.floor(Math.random() * 9), // Random hours between 0 and 8
       })),
     ];
 
-    // Combine all the data into a single value per day (e.g., summing up all activities for each day)
-    const combinedData = dailyStats.map((dayStats) => {
-      return dayStats.presents + dayStats.absents + dayStats.leaves + dayStats.late + dayStats.early + dayStats.halfDays + dayStats.offDays + dayStats.missingAttendance;
-    });
-
-    const seriesData = [{
-      name: 'Total Attendance',
-      data: combinedData,
-      color: 'blue',
-    }];
+    // Combine the data with color based on the status
+    const combinedData = dailyStats.map((dayStats) => ({
+      y: dayStats.hours,
+      color: colorMapping[dayStats.status], // Set color based on status
+    }));
 
     this.chartOptions = {
       credits: {
@@ -133,18 +138,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         text: 'Attendance Summary - January',
       },
       xAxis: {
-        categories: Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`),
+        title: { text: 'Days of the Month' },
+        categories: dailyStats.map((item) => `Day ${item.day}`),
       },
       yAxis: {
         title: {
-          text: 'Total Count',
+          text: 'Attendance Hours',
         },
+        max: 8,
       },
-      series: seriesData.map((series) => ({
-        name: series.name,
-        type: 'column',
-        data: series.data,
-      })),
+      legend: {
+        enabled: false, // Hide legend as we don't need multiple series
+      },
+      series: [
+        {
+          name: 'Attendance',
+          type: 'column',
+          data: combinedData, // Single series with dynamic colors
+        },
+      ],
     };
   }
 
