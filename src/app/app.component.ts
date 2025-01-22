@@ -107,7 +107,6 @@ export class AppComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
               this._authService.logout();
-              this._router.navigate(['']);
             }
           });
       }
