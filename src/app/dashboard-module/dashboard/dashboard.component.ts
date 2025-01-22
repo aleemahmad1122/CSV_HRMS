@@ -14,6 +14,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ConvertTimePipe } from '../../shared/pipes/convert-time.pipe';
 import { RouterModule } from '@angular/router';
+import { ChartOptions, SeriesOptionsType,Options } from 'highcharts';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -104,27 +106,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     const daysInMonth = 31;
 
-    const dailyStats = [
-      { day: 1, status: 'present', hours: 8 },
-      { day: 2, status: 'late', hours: 6 },
-      { day: 3, status: 'missing', hours: 0 },
-      { day: 4, status: 'present', hours: 8 },
-      { day: 5, status: 'early', hours: 7 },
-      { day: 6, status: 'halfDay', hours: 4 },
-      { day: 7, status: 'shortLeave', hours: 5 },
-      ...Array.from({ length: daysInMonth - 7 }, (_, i) => ({
-        day: i + 8,
-        status: ['present', 'late', 'missing', 'early', 'halfDay', 'shortLeave'][
-          Math.floor(Math.random() * 6)
-        ],
-        hours: Math.floor(Math.random() * 9), // Random hours between 0 and 8
-      })),
-    ];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    // Combine the data with color based on the status
-    const combinedData = dailyStats.map((dayStats) => ({
-      y: dayStats.hours,
-      color: colorMapping[dayStats.status], // Set color based on status
+    const dailyStats = Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      const status = ['present', 'late', 'missing', 'early', 'halfDay', 'shortLeave'][
+        Math.floor(Math.random() * 6)
+      ];
+      const hours = status === 'missing' ? 0 : Math.floor(Math.random() * 4) + 4; // Random hours between 4 and 8
+      return { day, status, hours, dayName: dayNames[new Date(2024, 0, day).getDay()] };
+    });
+
+    // Group data by attendance status
+    const seriesData: any[] = Object.keys(colorMapping).map((status) => ({
+      type: 'column', // Explicitly specify the series type as 'column'
+      name: status.charAt(0).toUpperCase() + status.slice(1), // Capitalize status
+      color: colorMapping[status],
+      data: dailyStats
+        .filter((stat) => stat.status === status)
+        .map((stat) => ({
+          x: stat.day - 1, // Day index
+          y: stat.hours,
+          status: stat.status,
+          dayName: stat.dayName,
+        })),
+      pointPadding: 0.1, // Add pointPadding for each series
+      groupPadding: 0.2, // Add groupPadding for each series
+      pointWidth: 20, // Adjust the width of the columns (optional)
     }));
 
     this.chartOptions = {
@@ -135,11 +143,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         type: 'column',
       },
       title: {
-        text: 'Attendance Summary - January',
+        text: 'Attendance Summary - '+this.getCurrentMonth(),
       },
       xAxis: {
-        title: { text: 'Days of the Month' },
-        categories: dailyStats.map((item) => `Day ${item.day}`),
+        categories: dailyStats.map((stat) => stat.dayName),
+        title: { text: 'Days of the Week' },
       },
       yAxis: {
         title: {
@@ -148,19 +156,39 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         max: 8,
       },
       legend: {
-        enabled: false, // Hide legend as we don't need multiple series
+        enabled: true,
+        align: 'center',
+        verticalAlign: 'bottom',
+        layout: 'horizontal',
       },
-      series: [
-        {
-          name: 'Attendance',
-          type: 'column',
-          data: combinedData, // Single series with dynamic colors
+      tooltip: {
+        formatter: function (this: Highcharts.Point & {
+          dayName?: string;
+          status?: string;
+          checkIn?: string | null;
+          checkOut?: string | null;
+          hours?: number;
+        }) {
+          return `
+            <b>Day: ${this.dayName || 'N/A'}</b><br>
+            Status: ${this.status || 'N/A'}<br>
+            Check-In: ${this.checkIn || 'N/A'}<br>
+            Check-Out: ${this.checkOut || 'N/A'}<br>
+            Hours: ${this.hours || 0}`;
         },
-      ],
+      },
+      series: seriesData,
     };
   }
 
-
+  getCurrentMonth(): string {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const currentMonthIndex = new Date().getMonth();
+    return months[currentMonthIndex];
+  }
 
 
   private updateSummaryItems(): void {

@@ -260,7 +260,7 @@
                             'label-success': data.attendanceStatus === 1,
                             'label-danger': data.attendanceStatus === 2
                           }" class="label label-lg  label-inline mr-2">
-                          {{getAttendanceStatusText(data.attendanceStatus)}}</span>
+                          {{getAttendanceStatusText(data.attendanceStatus)+ ' ' + (data.attendanceType == 2 ? (', ' + ('language.generic.remoteWork' | translate)) : '')}}  </span>
 
                       </div>
 
