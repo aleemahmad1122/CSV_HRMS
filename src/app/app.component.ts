@@ -101,6 +101,7 @@ console.log(currentTime,expirationTime);
               this._authService.setRefreshToken(response.data?.refreshToken);
             },
             error: (error) => {
+            this._authService.logout()
               console.error('Login error:', error);
             }
           });
