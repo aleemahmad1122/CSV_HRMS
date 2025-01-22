@@ -226,13 +226,14 @@ export class EmployeeListComponent {
 
 
   setPass(emp:any): void {
+
     this.apiService.postData("auth", "setPasswordEmail",
       {
         "role": emp?.role || "N/A",
         "email": emp?.email || "N/A",
         "link": document.getElementsByTagName('base')[0].href || "N/A",
         "employeeName": emp?.firstName || "N/A"
-      }, true,)
+      }, true,emp.employeeId)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           if (response?.success) {

@@ -1,6 +1,6 @@
 import * as Components from "./shared/components/index";
 import { Component, HostListener, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {  Router, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { UserAuthenticationService } from './shared/Services/user-authentication.service';
 import { jwtDecode } from "jwt-decode";
@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
   constructor(
     private _authService: UserAuthenticationService,
     private _dataShare: DataShareService,
+    private _router : Router,
     private _localStorageService: LocalStorageManagerService,
     private _apiCalling: ApiCallingService
   ) {
@@ -101,6 +102,7 @@ export class AppComponent implements OnInit {
             },
             error: (error) => {
             this._authService.logout()
+            this._router.navigate(['']);
             }
           });
       }
