@@ -18,7 +18,6 @@ export class LocalStorageManagerService {
     return true;
   }
 
-
   savePermissionsToStorage(data: any): boolean {
     this.removePermissions();
     if (isPlatformBrowser(this.platformId)) {
@@ -95,17 +94,11 @@ export class LocalStorageManagerService {
 
   }
 
-
   removeCompanyDetail(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('companyDetail');
     }
   }
-
-
-
-
-
 
   setEmployeeDetail(employeeDetail: EmployeeDetail[]): void {
     this.removeEmployeeDetail();
@@ -123,17 +116,11 @@ export class LocalStorageManagerService {
 
   }
 
-
   removeEmployeeDetail(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('employeeDetail');
     }
   }
-
-
-
-
-
 
   setTokenToStorage(token: string): void {
     this.removeToken();
@@ -141,8 +128,6 @@ export class LocalStorageManagerService {
       localStorage.setItem('token', token);
     }
   }
-
-
 
   setRefreshTokenToStorage(refreshToken: string): void {
     this.removeRefreshToken();

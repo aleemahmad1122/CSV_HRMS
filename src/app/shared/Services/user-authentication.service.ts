@@ -68,18 +68,20 @@ export class UserAuthenticationService {
   }
 
   logout(): void {
-    this.api.postData("Auth", "logout", {}, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
-    .subscribe({
-      next: (response) => {
-        if (response?.status === 200) {
-          this._localStorageManagerService.clearLocalStorage();
-          this._router.navigateByUrl('/login');
-          this._toaster.success(response.message)
+    const refreshToken = this._localStorageManagerService.getRefreshTokenToStorage();
+    const payload = { refreshToken };
+    this.api.postData("Auth", "logout", payload, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+      .subscribe({
+        next: (response) => {
+          if (response?.status === 200) {
+            this._localStorageManagerService.clearLocalStorage();
+            this._router.navigateByUrl('/login');
+            this._toaster.success(response.message)
+          }
+        },
+        error: (error) => {
+          this._toaster.error(error.message || error || 'Something Went Wrong !')
         }
-      },
-      error: (error) => {
-        this._toaster.error(error.message || error || 'Something Went Wrong !')
-      }
-    });
+      });
   }
 }
