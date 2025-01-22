@@ -76,7 +76,8 @@ export class UserAuthenticationService {
           if (response?.status === 200) {
             this._localStorageManagerService.clearLocalStorage();
             this._router.navigateByUrl('/login');
-            this._toaster.success(response.message)
+            // this._toaster.success(response.message)
+            window.location.reload()
           }
         },
         error: (error) => {
