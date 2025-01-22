@@ -214,7 +214,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       joiningDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       cnic: ['', Validators.required],
-      companyId: [null],
+      companyId: [null, Validators.required],
       link: [document.getElementsByTagName('base')[0].href]
     });
   }

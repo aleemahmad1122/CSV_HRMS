@@ -249,7 +249,12 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      <div>
+                      <div style="position: relative;" >
+                        @if(data.attendanceType == 2){
+                          <i data-bs-toggle="tooltip" [title]="'language.generic.remoteWork' | translate"
+                            class="fa-duotone fa-light fa-house-laptop"
+                          style="position: absolute; top: 50%; left: -18%; color: red; transform: translate(-50%,-50%);">           </i>
+                        }
                         <span [ngClass]="{
                             'label-warning': data.attendanceStatus === 0,
                             'label-success': data.attendanceStatus === 1,

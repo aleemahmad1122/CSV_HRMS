@@ -178,6 +178,7 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "companyReq":"Company is Required",
       "shiftNameRequired": "Shift Name is Required",
       "shiftCodeRequired": "Shift Code is Required",
       "workingDaysRequired": "Working Days is Required",
@@ -259,6 +260,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "remoteWork":"Remote Work",
       "selectCompany":"Select Company",
       "profile":"Profile",
       "addMore":"Add More",

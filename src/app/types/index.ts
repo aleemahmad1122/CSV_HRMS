@@ -426,6 +426,7 @@ export interface IAttendanceList extends ICommon {
   approvedDate: string;
   approvedComment: string;
   attendanceId: string;
+  attendanceType: number;
   employeeId: string;
   date: null | string;
   firstName: string;

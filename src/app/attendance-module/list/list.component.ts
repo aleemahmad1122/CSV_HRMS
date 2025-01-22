@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { IAttendanceList, IAttendanceListRes } from '../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -98,6 +98,8 @@ export class ListComponent implements AfterViewInit {
     private _localStorage: LocalStorageManagerService,
     private sortingService: SortingService,
     private fb: FormBuilder,
+    private ngZone: NgZone,
+    private changeDetectorRef: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute
   ) {
 
@@ -113,7 +115,6 @@ export class ListComponent implements AfterViewInit {
 
     this.initializeSearch();
     this.getData();
-
 
     this.submitForm = this.fb.group({
       attendanceStatus: [0],
@@ -202,6 +203,8 @@ export class ListComponent implements AfterViewInit {
         next: (response: any) => {
           if (response?.success) {
             this.userReporting = response.data;
+
+
           } else {
             this.userReporting = []; // Handle case when response is not successful
           }
@@ -307,7 +310,11 @@ export class ListComponent implements AfterViewInit {
         .getData('Attendance', 'getAttendanceByDateRange', true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: IAttendanceListRes) => this.handleResponse(res),
+          next: (res: IAttendanceListRes) => {this.handleResponse(res);
+
+            this.changeDetectorRef.detectChanges();
+            this.initializeTooltips();
+          },
           error: () => (this.dataList = []),
         });
     } else {
@@ -450,6 +457,26 @@ export class ListComponent implements AfterViewInit {
     this.exportService.exportData(format, this.dataList);
   }
 
+  private initializeTooltips(): void {
+    this.ngZone.runOutsideAngular(() => {
+      // Dispose existing tooltips
+      const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltips.forEach((element) => {
+        const tooltip = bootstrap.Tooltip.getInstance(element);
+        if (tooltip) {
+          tooltip.dispose();
+        }
+      });
 
+      // Initialize new tooltips with configuration
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltipTriggerList.forEach((tooltipTriggerEl) => {
+        new bootstrap.Tooltip(tooltipTriggerEl, {
+          trigger: 'hover',
+          placement: 'top',
+          container: 'body'
+        });
+      });
+    });}
 
 }

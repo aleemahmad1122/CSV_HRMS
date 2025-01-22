@@ -268,9 +268,21 @@
         bindLabel="name"
         bindValue="companyId"
         [searchable]="true"
+        [ngClass]="{
+          'is-invalid':
+            addEditForm.get('companyId')?.invalid &&
+            (addEditForm.get('companyId')?.touched || isSubmitted)
+        }"
         placeholder="Select an option" >
       </ng-select>
+      <div *ngIf="
+          addEditForm.get('companyId')?.invalid &&
+          (addEditForm.get('companyId')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.companyReq" | translate }}
+      </div>
     </div>
+
   </div>
 
   <div class="row">
