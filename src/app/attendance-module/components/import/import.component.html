@@ -12,6 +12,25 @@
 
     <div class="px-4 responsive-table mx-auto pt-5"
       style="width: 82dvw !important; overflow: hidden; overflow-x: auto;">
+      @if(!preview){<div class="mb-1 w-75 mx-auto">
+        <ngx-file-drop dropZoneLabel="Drop Excel files here" class="px-5" (onFileDrop)="droppedFiles($event)"
+          [useDragEnter]="true" accept=".xlsx" [multiple]="false">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
+              <i class="bx bxs-cloud-upload fs-xlarge"></i>
+              <div class="d-flex flex-column">
+                <span class="fs-14 text-gray-300 fw-500">{{ "language.generic.dragandDrop" | translate }}</span>
+                <span class="fs-20 text-dark fw-500">{{ "language.generic.upload" | translate }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-file-drop>
+      </div>}
+      <div class="card-footer d-flex align-items-center justify-content-end">
+        <button class="btn btn-light-danger mr-2" (click)="back()">Back</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      </div>
+
       @if(preview) {
       @if(data.length > 0){
       <table class="table table-striped  px-5" style="margin-bottom: 1rem; ">
@@ -36,25 +55,8 @@
       }
     </div>
 
-    @if(!preview){<div class="mb-1 w-75 mx-auto">
-      <ngx-file-drop dropZoneLabel="Drop Excel files here" class="px-5" (onFileDrop)="droppedFiles($event)"
-        [useDragEnter]="true" accept=".xlsx" [multiple]="false">
-        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-          <div class="text-center dragfiles" role="button" (click)="openFileSelector()">
-            <i class="bx bxs-cloud-upload fs-xlarge"></i>
-            <div class="d-flex flex-column">
-              <span class="fs-14 text-gray-300 fw-500">{{ "language.generic.dragandDrop" | translate }}</span>
-              <span class="fs-20 text-dark fw-500">{{ "language.generic.upload" | translate }}</span>
-            </div>
-          </div>
-        </ng-template>
-      </ngx-file-drop>
-    </div>}
 
 
-    <div class="card-footer d-flex align-items-center justify-content-end">
-      <button class="btn btn-light-danger mr-2" (click)="back()">Back</button>
-      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-    </div>
+
   </div>
 </div>
