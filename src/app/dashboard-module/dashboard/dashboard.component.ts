@@ -96,23 +96,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private initChart(): void {
     const colorMapping = {
-      0: '#388E3C', // Present
-      1: '#FF5722', // Late
-      2: '#D32F2F', // Missing
-      3: '#1976D2', // Early
-      4: '#8E24AA', // Half Day
-      5: '#FBC02D', // Short Leave
+      0: '#FFEB3B', // Pending (Yellow)
+      1: '#388E3C', // Approved (Green)
+      2: '#D32F2F', // Rejected (Red)
     };
 
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
-      const status = data.attendanceStatus;
-      const hours = status === 2 ? 0 : Math.floor(Math.random() * 4) + 4; // Assign hours or 0 for missing
       return {
         dayName: data.dayName,
-        status: status,
-        hours: hours,
-        attendanceDate: data.attendanceDate
+        status: data.attendanceStatus,
+        hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0, // Use attendanceTime for bar height
+        attendanceDate: data.attendanceDate,
+        attendanceType: data.attendanceType,
+        isWorkingDay: data.isWorkingDay,
+        onLeave: data.onLeave,
+        checkInTime: data.checkInTime, // Ensure checkInTime is included
+        checkOutTime: data.checkOutTime, // Ensure checkOutTime is included
       };
     });
 
@@ -127,9 +127,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           .filter((stat) => stat.status === status)
           .map((stat) => ({
             x: new Date(stat.attendanceDate).getDate() - 1,  // Use day of the month for X axis
-            y: stat.hours,
+            y: stat.hours > 0 ? stat.hours : 0.1, // Set a minimum height for the bar
             status: stat.status,
             dayName: stat.dayName,
+            attendanceType: stat.attendanceType,
+            isWorkingDay: stat.isWorkingDay,
+            onLeave: stat.onLeave,
+            attendanceDate: stat.attendanceDate, // Pass attendanceDate
+            checkInTime: stat.checkInTime, // Pass checkInTime
+            checkOutTime: stat.checkOutTime, // Pass checkOutTime
           })),
         pointPadding: 0.1,
         groupPadding: 0.2,
@@ -165,11 +171,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         layout: 'horizontal',
       },
       tooltip: {
-        formatter: function (this: Highcharts.Point & { dayName?: string; status?: string; hours?: number }) {
+        formatter: function (this: Highcharts.Point & {
+          dayName?: string;
+          status?: number;
+          hours?: number;
+          attendanceType?: number;
+          isWorkingDay?: boolean;
+          onLeave?: boolean;
+          attendanceDate?: string;
+          checkInTime?: string | null;
+          checkOutTime?: string | null;
+        }) {
           return `
-            <b>Day: ${this.dayName || 'N/A'}</b><br>
-            Status: ${this.status || 'N/A'}<br>
-            Hours: ${this.hours || 0}`;
+                <b>Attendance Date: ${this.attendanceDate || 'N/A'}</b><br>
+                Day: ${this.category || 'N/A'}<br>
+                Status: ${this.status == 0 ? 'Pending' : this.status == 1 ? 'Approved' : 'Rejected'}<br>
+                Hours: ${this.y || 0}<br>
+                Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
+                Check In: ${this.checkInTime || 'N/A'}<br>
+                Check Out: ${this.checkOutTime || 'N/A'}<br>
+                Working Day: ${this.isWorkingDay ? 'Yes' : 'No'}<br>
+                On Leave: ${this.onLeave ? 'Yes' : 'No'}`;
         },
       },
       series: seriesData,
@@ -177,7 +199,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Present', 'Late', 'Missing', 'Early', 'Half Day', 'Short Leave'];
+    const statusNames = ['Pending', 'Approved', 'Rejected'];
     return statusNames[status] || 'Unknown';
   }
 
