@@ -141,6 +141,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       chart: {
         type: 'column',
+        spacingTop: 26,
       },
       title: {
         text: 'Attendance Summary - '+this.getCurrentMonth(),
