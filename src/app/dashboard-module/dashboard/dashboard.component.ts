@@ -113,26 +113,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const status = ['present', 'late', 'missing', 'early', 'halfDay', 'shortLeave'][
         Math.floor(Math.random() * 6)
       ];
-      const hours = status === 'missing' ? 0 : Math.floor(Math.random() * 4) + 4; // Random hours between 4 and 8
+      const hours = status === 'missing' ? 0 : Math.floor(Math.random() * 4) + 4;
       return { day, status, hours, dayName: dayNames[new Date(2024, 0, day).getDay()] };
     });
 
-    // Group data by attendance status
+
     const seriesData: any[] = Object.keys(colorMapping).map((status) => ({
-      type: 'column', // Explicitly specify the series type as 'column'
-      name: status.charAt(0).toUpperCase() + status.slice(1), // Capitalize status
+      type: 'column',
+      name: status.charAt(0).toUpperCase() + status.slice(1),
       color: colorMapping[status],
       data: dailyStats
         .filter((stat) => stat.status === status)
         .map((stat) => ({
-          x: stat.day - 1, // Day index
+          x: stat.day - 1,
           y: stat.hours,
           status: stat.status,
           dayName: stat.dayName,
         })),
-      pointPadding: 0.1, // Add pointPadding for each series
-      groupPadding: 0.2, // Add groupPadding for each series
-      pointWidth: 20, // Adjust the width of the columns (optional)
+      pointPadding: 0.1,
+      groupPadding: 0.2,
+      pointWidth: 20,
     }));
 
     this.chartOptions = {
