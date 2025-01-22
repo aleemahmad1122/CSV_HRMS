@@ -85,7 +85,6 @@ export class AppComponent implements OnInit {
       const decoded: any = jwtDecode(token);
       const expirationTime = decoded.exp;
       const currentTime = Math.floor(Date.now() / 1000);
-console.log(currentTime,expirationTime);
 
       if (expirationTime > currentTime) {
         this._apiCalling.postData("Auth", "refreshToken", {
@@ -102,7 +101,6 @@ console.log(currentTime,expirationTime);
             },
             error: (error) => {
             this._authService.logout()
-              console.error('Login error:', error);
             }
           });
       }
