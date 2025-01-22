@@ -21,6 +21,17 @@ interface ICommonRes {
   message: string;
 }
 
+export interface IGraphData {
+  attendanceDate: string;
+  dayName: string;
+  isWorkingDay: boolean;
+  attendanceStatus: number;
+  attendanceTime: string;
+  checkInTime: null | string;
+  checkOutTime: null | string;
+  attendanceType: number;
+  onLeave: boolean;
+}
 
 export interface IReportTo {
   employeeId: string;

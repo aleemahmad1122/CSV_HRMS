@@ -44,7 +44,7 @@
 </div>
 
 
- <!-- <div class="d-flex flex-column-fluid px-3 my-5">
+<!-- <div class="d-flex flex-column-fluid px-3 my-5">
   <div class="card card-custom w-100 p-5">
     <div class="card-body">
       <div class="d-flex mb-9">
@@ -165,17 +165,18 @@
 </div> -->
 
 
-<div class="d-flex flex-column-fluid px-3 my-5 position-relative">
+@if(graphData.length > 0){<div class="d-flex flex-column-fluid px-3 my-5 position-relative">
 
-  <ng-select style="position: absolute; z-index: 9; right: 2%; top: 8%;" [disabled]="true" [clearable]="false" [items]="fileOptions" bindLabel="name"  [(ngModel)]="selectedOption"
-  bindValue="value" [searchable]="true" placeholder="Select an option"  >
-</ng-select>
+  <ng-select style="position: absolute; z-index: 9; right: 2%; top: 8%;" [disabled]="true" [clearable]="false"
+    [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption" bindValue="value" [searchable]="true"
+    placeholder="Select an option">
+  </ng-select>
 
-  <highcharts-chart [Highcharts]="Highcharts"   [options]="chartOptions"
+  <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"
     style="width: 100%; height: 400px; display: block; padding: 20px 0;">
   </highcharts-chart>
 </div>
-
+}
 
 <div class="d-flex flex-column-fluid px-3">
   @if(summaryItems.length > 0){<div class="card card-custom w-100 p-5">
@@ -189,7 +190,8 @@
 
 
         <div class="d-flex flex-wrap " style="gap: 8px;">
-          @for(item of summaryItems; track $index){ <div data-bs-toggle="modal"   [ngStyle]="{'cursor': item.id ? 'pointer' : 'default'}"  [attr.data-bs-target]="'#'+item.id"
+          @for(item of summaryItems; track $index){ <div data-bs-toggle="modal"
+            [ngStyle]="{'cursor': item.id ? 'pointer' : 'default'}" [attr.data-bs-target]="'#'+item.id"
             class="card px-5 py-4  bg-gradient text-secondary  dash-card">
 
             <div class="d-flex justify-content-between flex-wrap  align-items-center ">
@@ -336,194 +338,199 @@
 
   <div class="modal fade" id="absendModal" tabindex="-1" aria-labelledby="absendModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teamModalLabel">{{'language.generic.absentSummary' | translate }}</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{{'language.generic.date' | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(absentData.length > 0){
-                        @for (item of absentData; track $index) {
-                        <tr>
-                            <td>{{item.date || 'N/A'}}</td>
-                        </tr>
-                        }}@else{
-                        <tr>
-                            <td class="text-center">{{'language.generic.noRecords' | translate}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.absentSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{'language.generic.date' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(absentData.length > 0){
+              @for (item of absentData; track $index) {
+              <tr>
+                <td>{{item.date || 'N/A'}}</td>
+              </tr>
+              }}@else{
+              <tr>
+                <td class="text-center">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
   <div class="modal fade" id="lateDataModal" tabindex="-1" aria-labelledby="lateDataModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teamModalLabel">{{'language.generic.lateSummary' | translate }}</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{{'language.generic.date' | translate}}</th>
-                            <th>{{'language.generic.checkIn' | translate}}</th>
-                            <th>{{'language.generic.checkOut' | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(lateData.length > 0){
-                        @for (item of lateData; track $index) {
-                        <tr>
-                            <td>{{item.attendanceDate || 'N/A'}}</td>
-                            <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
-                            <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
-                        </tr>
-                        }}@else{
-                        <tr>
-                            <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.lateSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{'language.generic.date' | translate}}</th>
+                <th>{{'language.generic.checkIn' | translate}}</th>
+                <th>{{'language.generic.checkOut' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(lateData.length > 0){
+              @for (item of lateData; track $index) {
+              <tr>
+                <td>{{item.attendanceDate || 'N/A'}}</td>
+                <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
+                <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
+              </tr>
+              }}@else{
+              <tr>
+                <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-  <div class="modal fade" id="missingDataModal" tabindex="-1" aria-labelledby="missingDataModalLabel" aria-hidden="true">
+  <div class="modal fade" id="missingDataModal" tabindex="-1" aria-labelledby="missingDataModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teamModalLabel">{{'language.generic.missingDataSummary' | translate }}</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{{'language.generic.date' | translate}}</th>
-                            <th>{{'language.generic.checkIn' | translate}}</th>
-                            <th>{{'language.generic.checkOut' | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(missingData.length > 0){
-                        @for (item of missingData; track $index) {
-                        <tr>
-                            <td>{{item.attendanceDate || 'N/A'}}</td>
-                            <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
-                            <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
-                        </tr>
-                        }}@else{
-                        <tr>
-                            <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.missingDataSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{'language.generic.date' | translate}}</th>
+                <th>{{'language.generic.checkIn' | translate}}</th>
+                <th>{{'language.generic.checkOut' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(missingData.length > 0){
+              @for (item of missingData; track $index) {
+              <tr>
+                <td>{{item.attendanceDate || 'N/A'}}</td>
+                <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
+                <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
+              </tr>
+              }}@else{
+              <tr>
+                <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
   <div class="modal fade" id="earlyDataModal" tabindex="-1" aria-labelledby="earlyDataModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teamModalLabel">{{'language.generic.earlyDataSummary' | translate }}</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{{'language.generic.date' | translate}}</th>
-                            <th>{{'language.generic.checkIn' | translate}}</th>
-                            <th>{{'language.generic.checkOut' | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(earlyData.length > 0){
-                        @for (item of earlyData; track $index) {
-                        <tr>
-                            <td>{{item.attendanceDate || 'N/A'}}</td>
-                            <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
-                            <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
-                        </tr>
-                        }}@else{
-                        <tr>
-                            <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.earlyDataSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{'language.generic.date' | translate}}</th>
+                <th>{{'language.generic.checkIn' | translate}}</th>
+                <th>{{'language.generic.checkOut' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(earlyData.length > 0){
+              @for (item of earlyData; track $index) {
+              <tr>
+                <td>{{item.attendanceDate || 'N/A'}}</td>
+                <td>{{(item.checkIn | convertTime: 'time') || 'N/A'}}</td>
+                <td>{{(item.checkOut | convertTime: 'time') || 'N/A'}}</td>
+              </tr>
+              }}@else{
+              <tr>
+                <td colspan="3" class="text-center">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 
-  <div class="modal fade" id="employeeLeaveSummaryModal" tabindex="-1" aria-labelledby="employeeLeaveSummaryModalLabel" aria-hidden="true">
+  <div class="modal fade" id="employeeLeaveSummaryModal" tabindex="-1" aria-labelledby="employeeLeaveSummaryModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveSummary' | translate }}</h5>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body">
-                <button routerLink="/admin/company-structure" data-bs-dismiss="modal" aria-label="Close" class="btn btn-primary font-weight-bolder w-100 mb-5">
-                    <span class="svg-icon svg-icon-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="0" y="0" width="24" height="24"></rect>
-                                <circle fill="#000000" cx="9" cy="15" r="6"></circle>
-                                <path d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z" fill="#000000" opacity="0.3"></path>
-                            </g>
-                        </svg>
-                    </span>
-                    {{'language.sidebar.manageLeave' | translate}}
-                </button>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>{{'language.generic.leaveTypeName' | translate}}</th>
-                            <th>{{'language.generic.totalLeaves' | translate}}</th>
-                            <th>{{'language.generic.leavesTaken' | translate}}</th>
-                            <th>{{'language.generic.remainingLeaves' | translate}}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(employeeLeaveSummary.length > 0){
-                        @for (item of employeeLeaveSummary; track $index) {
-                        <tr>
-                            <td>{{item.leaveTypeName || 'N/A'}}</td>
-                            <td>{{item.totalLeaves || 'N/A'}}</td>
-                            <td>{{item.leavesTaken || 'N/A'}}</td>
-                            <td>{{item.remainingLeaves || 'N/A'}}</td>
-                        </tr>
-                        }}@else{
-                        <tr>
-                            <td colspan="4" class="text-center">{{'language.generic.noRecords' | translate}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveSummary' | translate }}</h5>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">x</button>
         </div>
+        <div class="modal-body">
+          <button routerLink="/admin/company-structure" data-bs-dismiss="modal" aria-label="Close"
+            class="btn btn-primary font-weight-bolder w-100 mb-5">
+            <span class="svg-icon svg-icon-md">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <rect x="0" y="0" width="24" height="24"></rect>
+                  <circle fill="#000000" cx="9" cy="15" r="6"></circle>
+                  <path
+                    d="M8.8012943,7.00241953 C9.83837775,5.20768121 11.7781543,4 14,4 C17.3137085,4 20,6.6862915 20,10 C20,12.2218457 18.7923188,14.1616223 16.9975805,15.1987057 C16.9991904,15.1326658 17,15.0664274 17,15 C17,10.581722 13.418278,7 9,7 C8.93357256,7 8.86733422,7.00080962 8.8012943,7.00241953 Z"
+                    fill="#000000" opacity="0.3"></path>
+                </g>
+              </svg>
+            </span>
+            {{'language.sidebar.manageLeave' | translate}}
+          </button>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{'language.generic.leaveTypeName' | translate}}</th>
+                <th>{{'language.generic.totalLeaves' | translate}}</th>
+                <th>{{'language.generic.leavesTaken' | translate}}</th>
+                <th>{{'language.generic.remainingLeaves' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if(employeeLeaveSummary.length > 0){
+              @for (item of employeeLeaveSummary; track $index) {
+              <tr>
+                <td>{{item.leaveTypeName || 'N/A'}}</td>
+                <td>{{item.totalLeaves || 'N/A'}}</td>
+                <td>{{item.leavesTaken || 'N/A'}}</td>
+                <td>{{item.remainingLeaves || 'N/A'}}</td>
+              </tr>
+              }}@else{
+              <tr>
+                <td colspan="4" class="text-center">{{'language.generic.noRecords' | translate}}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
-
+  </div>

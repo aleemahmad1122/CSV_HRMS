@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiCallingService } from "../../shared/Services/api-calling.service";
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
-import { AttendanceSummary, EmployeeDetail, EmployeeLeaveSummary, ICheckInSummary, ResDasSummary, TeamSummary } from "../../types/index";
+import { AttendanceSummary, EmployeeDetail, EmployeeLeaveSummary, ICheckInSummary, ResDasSummary, TeamSummary, IGraphData } from "../../types/index";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,13 +14,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ConvertTimePipe } from '../../shared/pipes/convert-time.pipe';
 import { RouterModule } from '@angular/router';
-import { ChartOptions, SeriesOptionsType,Options } from 'highcharts';
+import { ChartOptions, SeriesOptionsType, Options } from 'highcharts';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule, DpDatePickerModule, ReactiveFormsModule, NgSelectModule, RouterModule,HighchartsChartModule,ConvertTimePipe],
+  imports: [CommonModule, TranslateModule, FormsModule, DpDatePickerModule, ReactiveFormsModule, NgSelectModule, RouterModule, HighchartsChartModule, ConvertTimePipe],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   missingData: { attendanceDate: string; checkIn: string; checkOut: string; }[] = []
   earlyData: { attendanceDate: string; checkIn: string; checkOut: string; }[] = []
 
+  graphData: IGraphData[] = [];
 
   employeeLeaveSummary: EmployeeLeaveSummary[] = [];
   teamSummary: TeamSummary[] = [];
@@ -73,7 +74,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.emp = this._localStorage.getEmployeeDetail()[0];
-
+    this.getGraphStats()
   }
 
   ngAfterViewInit(): void {
@@ -81,7 +82,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.initChart();
     this.fetchAttendanceData({
       startDate: this.startDate,
       endDate: this.endDate,
@@ -96,44 +96,46 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private initChart(): void {
     const colorMapping = {
-      present: '#388E3C',
-      late: '#FF5722',
-      missing: '#D32F2F',
-      early: '#1976D2',
-      halfDay: '#8E24AA',
-      shortLeave: '#FBC02D',
+      0: '#388E3C', // Present
+      1: '#FF5722', // Late
+      2: '#D32F2F', // Missing
+      3: '#1976D2', // Early
+      4: '#8E24AA', // Half Day
+      5: '#FBC02D', // Short Leave
     };
 
-    const daysInMonth = 31;
-
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    const dailyStats = Array.from({ length: daysInMonth }, (_, i) => {
-      const day = i + 1;
-      const status = ['present', 'late', 'missing', 'early', 'halfDay', 'shortLeave'][
-        Math.floor(Math.random() * 6)
-      ];
-      const hours = status === 'missing' ? 0 : Math.floor(Math.random() * 4) + 4;
-      return { day, status, hours, dayName: dayNames[new Date(2024, 0, day).getDay()] };
+    // Create an array of statuses based on the dynamic data
+    const dailyStats = this.graphData.map((data) => {
+      const status = data.attendanceStatus;
+      const hours = status === 2 ? 0 : Math.floor(Math.random() * 4) + 4; // Assign hours or 0 for missing
+      return {
+        dayName: data.dayName,
+        status: status,
+        hours: hours,
+        attendanceDate: data.attendanceDate
+      };
     });
 
-
-    const seriesData: any[] = Object.keys(colorMapping).map((status) => ({
-      type: 'column',
-      name: status.charAt(0).toUpperCase() + status.slice(1),
-      color: colorMapping[status],
-      data: dailyStats
-        .filter((stat) => stat.status === status)
-        .map((stat) => ({
-          x: stat.day - 1,
-          y: stat.hours,
-          status: stat.status,
-          dayName: stat.dayName,
-        })),
-      pointPadding: 0.1,
-      groupPadding: 0.2,
-      pointWidth: 20,
-    }));
+    // Generate series data for Highcharts
+    const seriesData: any[] = Object.keys(colorMapping).map((statusKey) => {
+      const status = parseInt(statusKey);  // Convert string key to number (status)
+      return {
+        type: 'column',
+        name: this.getStatusName(status),
+        color: colorMapping[status],
+        data: dailyStats
+          .filter((stat) => stat.status === status)
+          .map((stat) => ({
+            x: new Date(stat.attendanceDate).getDate() - 1,  // Use day of the month for X axis
+            y: stat.hours,
+            status: stat.status,
+            dayName: stat.dayName,
+          })),
+        pointPadding: 0.1,
+        groupPadding: 0.2,
+        pointWidth: 20,
+      };
+    });
 
     this.chartOptions = {
       credits: {
@@ -144,7 +146,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         spacingTop: 26,
       },
       title: {
-        text: 'Attendance Summary - '+this.getCurrentMonth(),
+        text: 'Attendance Summary - ' + this.getCurrentMonth(),
       },
       xAxis: {
         categories: dailyStats.map((stat) => stat.dayName),
@@ -163,24 +165,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         layout: 'horizontal',
       },
       tooltip: {
-        formatter: function (this: Highcharts.Point & {
-          dayName?: string;
-          status?: string;
-          checkIn?: string | null;
-          checkOut?: string | null;
-          hours?: number;
-        }) {
+        formatter: function (this: Highcharts.Point & { dayName?: string; status?: string; hours?: number }) {
           return `
             <b>Day: ${this.dayName || 'N/A'}</b><br>
             Status: ${this.status || 'N/A'}<br>
-            Check-In: ${this.checkIn || 'N/A'}<br>
-            Check-Out: ${this.checkOut || 'N/A'}<br>
             Hours: ${this.hours || 0}`;
         },
       },
       series: seriesData,
     };
   }
+
+  private getStatusName(status: number): string {
+    const statusNames = ['Present', 'Late', 'Missing', 'Early', 'Half Day', 'Short Leave'];
+    return statusNames[status] || 'Unknown';
+  }
+
 
   getCurrentMonth(): string {
     const months = [
@@ -473,6 +473,47 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         });
       });
     });
+  }
+
+
+  private getGraphStats(): void {
+
+    const today = new Date();
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const formatDate = (date: Date): string => {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    };
+
+    try {
+
+      this.api
+        .getData('Dashboard', 'getChartData', true, { startDate: formatDate(new Date(today.getFullYear(), today.getMonth(), 1)), endDate: formatDate(endOfDay), employeeId: this.emp.employeeId })
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.graphData = response.data;
+              this.initChart()
+            } else {
+              this._toaster.error(response?.message || 'An error occurred');
+            }
+          },
+          error: (error) => {
+            this._toaster.error(error.message ||
+              'An error occurred while processing your request. Please try again later.',
+              'Error'
+            );
+            this.teamSummary = [];
+          },
+        });
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
 }
