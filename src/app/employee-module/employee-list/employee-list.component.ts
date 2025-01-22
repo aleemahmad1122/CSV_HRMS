@@ -43,7 +43,7 @@ export class EmployeeListComponent {
   isHr: boolean = false;
   isCreate: boolean = false;
   isDelete: boolean = false;
-  emp:EmployeeDetail;
+  emp: EmployeeDetail;
 
 
   pages: (number | string)[] = [];
@@ -89,7 +89,7 @@ export class EmployeeListComponent {
         this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee" && p.isAssign);
         this.isCreate = this.permissions.some(p => p.permission === "Create_Employee" && p.isAssign);
         this.isDelete = this.permissions.some(p => p.permission === "Delete_Employee" && p.isAssign);
-        this.isHr = this.permissions.some(p => p.permission === "HR_Approval"  && p.isAssign);
+        this.isHr = this.permissions.some(p => p.permission === "HR_Approval" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
@@ -111,7 +111,7 @@ export class EmployeeListComponent {
     this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeRes) => {this.handleResponse(res); this.generatePages()},
+        next: (res: IEmployeeRes) => { this.handleResponse(res); this.generatePages() },
         error: () => (this.dataList = []),
       });
   }
@@ -121,7 +121,7 @@ export class EmployeeListComponent {
     this.apiService.getData('Employee', 'getEmployees', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IEmployeeRes) => {this.handleResponse(res); this.generatePages()},
+        next: (res: IEmployeeRes) => { this.handleResponse(res); this.generatePages() },
         error: () => (this.dataList = []),
       });
   }
@@ -211,7 +211,7 @@ export class EmployeeListComponent {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success){ this.getActiveStatusData('', this.selectedStatus)}else{
+          if (res?.success) { this.getActiveStatusData('', this.selectedStatus) } else {
             this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
           };
         },
@@ -225,7 +225,7 @@ export class EmployeeListComponent {
 
 
 
-  setPass(emp:any): void {
+  setPass(emp: any): void {
 
     this.apiService.postData("auth", "setPasswordEmail",
       {
@@ -233,7 +233,7 @@ export class EmployeeListComponent {
         "email": emp?.email || "N/A",
         "link": document.getElementsByTagName('base')[0].href || "N/A",
         "employeeName": emp?.firstName || "N/A"
-      }, true,emp.employeeId)
+      }, true, emp.employeeId)
       .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
         next: (response) => {
           if (response?.success) {
