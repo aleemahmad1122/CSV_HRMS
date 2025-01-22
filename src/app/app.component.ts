@@ -1,6 +1,6 @@
 import * as Components from "./shared/components/index";
-import { Component, HostListener, OnInit } from '@angular/core';
-import {  Router, RouterOutlet } from '@angular/router';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { UserAuthenticationService } from './shared/Services/user-authentication.service';
 import { jwtDecode } from "jwt-decode";
@@ -8,8 +8,8 @@ import { DataShareService } from './shared/Services/data-share.service';
 import { ApiCallingService } from "./shared/Services/api-calling.service";
 import { LocalStorageManagerService } from "./shared/Services/local-storage-manager.service";
 import { EmployeeDetail } from "./types";
-
-
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -33,41 +33,47 @@ import { EmployeeDetail } from "./types";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'CSV_HRMS-Client';
   isLogin: boolean;
   isOnline: boolean = true;
   emp: EmployeeDetail;
-
+  private routeChangeSubscription: Subscription;
 
   constructor(
     private _authService: UserAuthenticationService,
     private _dataShare: DataShareService,
-    private _router : Router,
+    private _router: Router,
     private _localStorageService: LocalStorageManagerService,
     private _apiCalling: ApiCallingService
   ) {
     this.isLogin = _authService.isLogin();
     this._dataShare.$updateLoginStatus.subscribe(isLogin => {
-
-      if (isLogin) {
-        this.isLogin = true;
-
-      } else {
-        this.isLogin = false;
-      }
+      this.isLogin = isLogin;
     });
-
   }
-
 
   ngOnInit() {
     this.emp = this._localStorageService.getEmployeeDetail()[0];
     this.checkConnectionStatus();
     setTimeout(() => {
-    this.decodeToken(this._authService.getToken())
-  }, 500);
+      this.decodeToken(this._authService.getToken());
+    }, 500);
 
+    // Subscribe to route changes
+    this.routeChangeSubscription = this._router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        console.log('Route changed to:', event.urlAfterRedirects);
+        this.onRouteChange(event.urlAfterRedirects);
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from observables to avoid memory leaks
+    if (this.routeChangeSubscription) {
+      this.routeChangeSubscription.unsubscribe();
+    }
   }
 
   @HostListener('window:online', ['$event'])
@@ -77,11 +83,10 @@ export class AppComponent implements OnInit {
   }
 
   retry(): void {
-    window.location.reload()
+    window.location.reload();
   }
 
   decodeToken(token: string): void {
-
     try {
       const decoded: any = jwtDecode(token);
       const expirationTime = decoded.exp;
@@ -91,7 +96,7 @@ export class AppComponent implements OnInit {
         this._apiCalling.postData("Auth", "refreshToken", {
           token: this._localStorageService.getTokenFromStorage(),
           refreshToken: this._localStorageService.getRefreshTokenToStorage()
-        }, true,this.emp?.employeeId)
+        }, true, this.emp?.employeeId)
           .subscribe({
             next: (response) => {
               this.emp.rolePermission = response.data.rolePermission;
@@ -101,8 +106,8 @@ export class AppComponent implements OnInit {
               this._authService.setRefreshToken(response.data?.refreshToken);
             },
             error: (error) => {
-            this._authService.logout()
-            this._router.navigate(['']);
+              this._authService.logout();
+              this._router.navigate(['']);
             }
           });
       }
@@ -111,5 +116,9 @@ export class AppComponent implements OnInit {
     }
   }
 
+  private onRouteChange(url: string): void {
+    console.log('Current route:', url);
+    this.isLogin = this._authService.isLogin();
 
+  }
 }

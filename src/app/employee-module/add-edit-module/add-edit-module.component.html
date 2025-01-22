@@ -1,5 +1,6 @@
-<form [formGroup]="addEditForm" class="form w-100  " id="kt_form_1" (ngSubmit)="submitForm()">
+<form [formGroup]="addEditForm" class="form w-100  " id="kt_form_1" (ngSubmit)="submitForm()" style="position: relative;">
 
+  @if(isView){<div style="position: absolute; inset: 0; z-index: 9999999;" ></div>}
 
   <div class="row">
     <div class="col-md-6 mb-3">
@@ -252,6 +253,27 @@
 
   </div>
 
+
+
+  <div class="row">
+    <div class="col-md-12 mb-3 position-relative" style="overflow: hidden;">
+
+      <label class="form-label">{{ "language.generic.selectCompany" | translate }}
+        <span class="text-danger">*</span></label>
+      <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
+        [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('dateOfBirth')?.invalid &&
+            (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        }"></dp-date-picker>
+      <div *ngIf="
+          addEditForm.get('dateOfBirth')?.invalid &&
+          (addEditForm.get('dateOfBirth')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.dobRequired" | translate }}
+      </div>
+    </div>
+  </div>
 
   <div class="row">
 
