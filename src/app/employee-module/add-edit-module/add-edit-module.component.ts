@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,14 +8,17 @@ import { ApiCallingService } from '../../shared/Services/api-calling.service';
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from '../../../environments/environment.prod';
-import {NgxIntlTelInputModule,CountryISO,SearchCountryField,PhoneNumberFormat} from "ngx-intl-tel-input"
+import { NgxIntlTelInputModule, CountryISO, SearchCountryField, PhoneNumberFormat } from "ngx-intl-tel-input"
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ICompany, EmployeeDetail } from '../../types';
+import { LocalStorageManagerService } from '../../shared/Services/local-storage-manager.service';
 
 @Component({
   selector: 'app-add-edit-module',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
@@ -28,10 +31,14 @@ import { NgSelectModule } from '@ng-select/ng-select';
 })
 export class AddEditModuleComponent implements OnInit, OnDestroy {
 
-
+  emp: EmployeeDetail;
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
   };
+
+  companyList: ICompany[];
+
+  companyId: string;
 
   searchCountryField: SearchCountryField[] = [SearchCountryField.Iso2];
 
@@ -40,11 +47,11 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     id: value
   }));
 
-	separateDialCode = false;
-	SearchCountryField = SearchCountryField;
-	CountryISO = CountryISO;
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
-	preferredCountries: CountryISO[] = [CountryISO.Pakistan, CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+  preferredCountries: CountryISO[] = [CountryISO.Pakistan, CountryISO.UnitedStates, CountryISO.UnitedKingdom];
 
 
   private ngUnsubscribe = new Subject<void>();
@@ -81,14 +88,15 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
+    private _local: LocalStorageManagerService,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
     private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
 
-
-
+    this.companyId = this._local.getCompanyDetail().companyId;
+    this.emp = _local.getEmployeeDetail()[0];
     this.loadPermissions();
     this.router.events.subscribe(() => {
       this.activRoute = this.router.url;
@@ -111,6 +119,27 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.rolesList = [];
+        },
+      });
+  }
+
+  private getCompanies(): void {
+    this.apiCalling
+      .getData('Employee', `getCompanies`, true, { employeeId: this.emp.employeeId })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response) => {
+          console.log(response.data.companies);
+
+          if (response) {
+            this.companyList = response?.data?.companies;
+            this.patchFormValues();
+          } else {
+            this.companyList = [];
+          }
+        },
+        error: () => {
+          this.companyList = [];
         },
       });
   }
@@ -139,7 +168,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
       const view = params['view'];
       this.isView = view === 'true';
-
+      this.getCompanies()
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
 
         this.apiCalling
@@ -159,7 +188,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             },
           });
-      }else{
+      } else {
         this.getRoles()
       }
     });
@@ -185,6 +214,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       dateOfBirth: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       joiningDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       cnic: ['', Validators.required],
+      companyId: [null],
       link: [document.getElementsByTagName('base')[0].href]
     });
   }
@@ -201,6 +231,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         address: this.selectedValue.address,
         phoneNumber: this.selectedValue.phoneNumber,
         cnic: this.selectedValue.cnic,
+        companyId:this.selectedValue.companyId,
         joiningStatus: this.selectedValue.joiningStatus,
         dateOfBirth: this.convertToDatetimeLocalFormat(this.selectedValue.dateOfBirth),
         joiningDate: this.convertToDatetimeLocalFormat(this.selectedValue.joiningDate),
@@ -287,10 +318,10 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         // Append the formatted date for 'dob' and 'joiningDate'
         formData.append(key, this.formatDateForSubmission(value));
       }
-      else if(key === 'phoneNumber'){
+      else if (key === 'phoneNumber') {
         formData.append(key, internationalNumber);
       }
-      else if(key === 'country'){
+      else if (key === 'country') {
         formData.append(key, countryCode);
       }
       else if (key === 'image' && this.selectedFile) {
