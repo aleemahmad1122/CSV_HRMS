@@ -264,6 +264,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "addSalaryComponent":"Add Salary Component",
+      "addFrequency":"Add Frequency",
       "punchCode":"Punch Code",
       "remoteWork":"Remote Work",
       "selectCompany":"Select Company",
