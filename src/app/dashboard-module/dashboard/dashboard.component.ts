@@ -14,8 +14,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ConvertTimePipe } from '../../shared/pipes/convert-time.pipe';
 import { RouterModule } from '@angular/router';
-import { ChartOptions, SeriesOptionsType, Options } from 'highcharts';
-import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -40,9 +38,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   userReporting: {
     employeeId: string;
     fullName: string;
+    punchCode: null | string;
   }[] = []
 
-  attendanceSummary: AttendanceSummary = {} as AttendanceSummary; // Avoid null value
+  attendanceSummary: AttendanceSummary = {} as AttendanceSummary;
 
   absentData: { date: string; }[] = [];
   lateData: { attendanceDate: string; checkIn: string; checkOut: string; }[] = []
