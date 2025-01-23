@@ -173,6 +173,18 @@
 
     @if(userReporting.length > 1){<ng-select style="position: absolute; z-index: 9; left: 2%; top: 8%;"  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="this.emp.employeeId" bindValue="employeeId"
     [searchable]="true" placeholder="Select an option" (change)="getGraphStats()">
+
+
+
+    <ng-template ng-label-tmp let-item="item">
+      {{ item.fullName }}  - ({{'language.generic.punchCode' | translate }}: {{ item.punchCode}})
+    </ng-template>
+
+
+    <ng-template ng-option-tmp let-item="item">
+      {{ item.fullName }} - {{ item.punchCode}}
+    </ng-template>
+
   </ng-select>}
 
   <ng-select style="position: absolute; z-index: 9; right: 2%; top: 8%;" [disabled]="false" [clearable]="false"

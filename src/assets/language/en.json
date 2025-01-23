@@ -260,6 +260,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "punchCode":"Punch Code",
       "remoteWork":"Remote Work",
       "selectCompany":"Select Company",
       "profile":"Profile",
