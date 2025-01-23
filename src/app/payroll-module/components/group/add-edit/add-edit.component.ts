@@ -8,6 +8,7 @@ import { ApiCallingService } from '../../../../shared/Services/api-calling.servi
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { SalaryFrequencies } from '../../../../types';
 
 @Component({
   selector: 'app-add-edit',
@@ -24,15 +25,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   selectedValue: any;
   frameworks = ['fixed','hourly',];
 
-  typeList:{
-    value:string;
-    label:string;
-  }[]  = [
-    {
-      value:"test",
-      label:"test"
-    }
-  ]
+  salaryFrequenciesList:SalaryFrequencies []
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +36,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
+    this.getFrequency()
   }
 
   ngOnInit(): void {
@@ -93,6 +87,29 @@ export class AddEditComponent implements OnInit, OnDestroy {
         frequency: this.selectedValue.frequency,
       });
     }
+  }
+
+  private getFrequency():void{
+
+try {
+  this.apiCalling.getData("SalaryFrequency", `getSalaryFrequencies/`,  true)
+  .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+    next: (response) => {
+      if (response?.success) {
+          this.salaryFrequenciesList = response?.data?.salaryFrequencies;
+      } else {
+        this.salaryFrequenciesList = [];
+      }
+    },
+    error: (error) => {
+      this.salaryFrequenciesList = [];
+    }
+  });
+} catch (error) {
+  console.log(error);
+
+}
+
   }
 
   submitForm(): void {
