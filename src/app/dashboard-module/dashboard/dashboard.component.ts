@@ -96,15 +96,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   private initChart(): void {
     const colorMapping = {
-      0: '#FFEB3B', // Pending (Yellow)
-      1: '#388E3C', // Approved (Green)
-      2: '#D32F2F', // Rejected (Red)
+      0: '#f64e60', // Absent (Yellow)
+      1: '#1bc5bd', // Approved (Green)
+      2: '#181c32', // Rejected (Red)
+      3: '#8950fc', // Leave (Blue)
     };
 
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
       return {
-        dayName: data.dayName,
+        dayName: data.dayName.slice(0, 3),
         status: data.attendanceStatus,
         hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0, // Use attendanceTime for bar height
         attendanceDate: data.attendanceDate,
@@ -124,18 +125,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         name: this.getStatusName(status),
         color: colorMapping[status],
         data: dailyStats
-          .filter((stat) => stat.status === status)
+          .filter((stat) => {
+            // Include leave status in the filter
+            return (stat.status === status || (stat.onLeave && status === 3));
+          })
           .map((stat) => ({
             x: new Date(stat.attendanceDate).getDate() - 1,  // Use day of the month for X axis
-            y: stat.hours > 0 ? stat.hours : 0.1, // Set a minimum height for the bar
+            y: stat.hours > 0 ? stat.hours : -1, // Set a minimum height for the bar
             status: stat.status,
             dayName: stat.dayName,
             attendanceType: stat.attendanceType,
             isWorkingDay: stat.isWorkingDay,
             onLeave: stat.onLeave,
             attendanceDate: stat.attendanceDate, // Pass attendanceDate
-            checkInTime: stat.checkInTime, // Pass checkInTime
-            checkOutTime: stat.checkOutTime, // Pass checkOutTime
+            checkInTime: this.convertToTimeLocalFormat(stat.checkInTime), // Pass checkInTime
+            checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime), // Pass checkOutTime
           })),
         pointPadding: 0.1,
         groupPadding: 0.2,
@@ -152,7 +156,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         spacingTop: 26,
       },
       title: {
-        text: 'Attendance Summary - ' + this.getCurrentMonth(),
+        text: ('Attendance Summary - ' + this.getCurrentMonth() + ' ' + (new Date().getFullYear())),
       },
       xAxis: {
         categories: dailyStats.map((stat) => stat.dayName),
@@ -185,7 +189,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           return `
                 <b>Attendance Date: ${this.attendanceDate || 'N/A'}</b><br>
                 Day: ${this.category || 'N/A'}<br>
-                Status: ${this.status == 0 ? 'Pending' : this.status == 1 ? 'Approved' : 'Rejected'}<br>
+                Status: ${this.status == 0 ? 'Absent' : this.status == 1 ? 'Approved' : 'Rejected'}<br>
                 Hours: ${this.y || 0}<br>
                 Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
                 Check In: ${this.checkInTime || 'N/A'}<br>
@@ -199,8 +203,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Pending', 'Approved', 'Rejected'];
-    return statusNames[status] || 'Unknown';
+    const statusNames = ['Absent', 'Approved', 'Rejected'];
+    return statusNames[status] || 'Leave';
   }
 
 
@@ -213,6 +217,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return months[currentMonthIndex];
   }
 
+  private convertToTimeLocalFormat(dateString: string): string {
+    if (dateString) {
+      const date = new Date(dateString);
+
+      // Convert to 12-hour format
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      // Convert 24-hour to 12-hour format
+      hours = hours % 12;
+      hours = hours ? hours : 12; // If hours is 0, set to 12
+
+      // Format with leading zeros for hours and minutes
+      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${date.getHours() >= 12 ? 'PM' : 'AM'}`;
+      return formattedTime;
+    }
+    return ''
+  }
 
   private updateSummaryItems(): void {
 
