@@ -165,10 +165,18 @@
 </div> -->
 
 
-@if(graphData.length > 0){<div class="d-flex flex-column-fluid px-3 my-5 position-relative">
+@if(graphData.length > 0){
 
-  <ng-select style="position: absolute; z-index: 9; right: 2%; top: 8%;" [disabled]="true" [clearable]="false"
-    [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption" bindValue="value" [searchable]="true"
+
+
+  <div class="d-flex flex-column-fluid px-3 my-5 position-relative">
+
+    @if(userReporting.length > 1){<ng-select style="position: absolute; z-index: 9; left: 2%; top: 8%;"  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="this.emp.employeeId" bindValue="employeeId"
+    [searchable]="true" placeholder="Select an option" (change)="getGraphStats()">
+  </ng-select>}
+
+  <ng-select style="position: absolute; z-index: 9; right: 2%; top: 8%;" [disabled]="false" [clearable]="false"
+    [items]="fileOptionsGraph" bindLabel="name"  (change)="setFilter($event?.value);getGraphStats()"  [(ngModel)]="selectedOptionGraph" bindValue="value" [searchable]="true"
     placeholder="Select an option">
   </ng-select>
 

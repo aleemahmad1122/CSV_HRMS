@@ -15,6 +15,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ConvertTimePipe } from '../../shared/pipes/convert-time.pipe';
 import { RouterModule } from '@angular/router';
 import { ChartOptions, SeriesOptionsType, Options } from 'highcharts';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -35,6 +36,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   emp: EmployeeDetail;
 
+
+  userReporting: {
+    employeeId: string;
+    fullName: string;
+  }[] = []
+
   attendanceSummary: AttendanceSummary = {} as AttendanceSummary; // Avoid null value
 
   absentData: { date: string; }[] = [];
@@ -54,6 +61,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   checkInSummary: ICheckInSummary;
 
   selectedOption: string = 'MTD';
+  selectedOptionGraph: string = 'MTD';
 
   fileOptions: { value: string; name: string }[] = [
     { value: "MTD", name: "Month to Date" },
@@ -62,6 +70,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: "PreviousMonth", name: "Previous Month" },
     { value: "Last7Days", name: "Last 7 Days" }
   ];
+
+  fileOptionsGraph = [...this.fileOptions].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth')
 
 
   constructor(
@@ -86,6 +96,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       startDate: this.startDate,
       endDate: this.endDate,
     });
+    this.getUserReporting()
   }
 
   ngOnChanges(): void {
@@ -94,6 +105,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getUserReporting(): void {
+    this.api
+      .getData('Attendance', 'getUserReportings', true, {
+        employeeId: this.empId
+      })
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            this.userReporting = response.data;
+          } else {
+            this.userReporting = []; // Handle case when response is not successful
+          }
+        },
+        error: () => {
+          this.userReporting = []; // Handle error scenario
+        },
+      });
+  }
   private initChart(): void {
     const colorMapping = {
       0: '#f64e60', // Absent (Yellow)
@@ -520,7 +549,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
 
-  private getGraphStats(): void {
+    getGraphStats(): void {
 
     const today = new Date();
     const endOfDay = new Date(today);
@@ -536,7 +565,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
 
       this.api
-        .getData('Dashboard', 'getChartData', true, { startDate: formatDate(new Date(today.getFullYear(), today.getMonth(), 1)), endDate: formatDate(endOfDay), employeeId: this.emp.employeeId })
+        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: this.endDate, employeeId: this.emp.employeeId })
         .subscribe({
           next: (response) => {
             if (response.success) {
