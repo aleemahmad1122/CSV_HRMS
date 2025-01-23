@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
       return {
-        dayName: data.dayName.slice(0, 3),
+        dayName: data.dayName,
         status: data.attendanceStatus,
         hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0, // Use attendanceTime for bar height
         attendanceDate: data.attendanceDate,
@@ -127,7 +127,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         data: dailyStats
           .filter((stat) => {
             // Include leave status in the filter
-            return (stat.status === status || (stat.onLeave && status === 3));
+            return (stat.status === status && !stat.onLeave) || (stat.onLeave && status === 3);
           })
           .map((stat) => ({
             x: new Date(stat.attendanceDate).getDate() - 1,  // Use day of the month for X axis
