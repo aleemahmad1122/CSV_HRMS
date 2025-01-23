@@ -50,6 +50,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'payroll',
+    loadChildren: () => import('./payroll-module/payroll-module.module').then(m => m.PayrollModuleModule),
+    data: { breadcrumb: 'Payroll' },
+    canActivate: [ProtectedGuard]
+  },
+
+  {
     path: '**',
     redirectTo: "",
     title: 'Page Not Found'

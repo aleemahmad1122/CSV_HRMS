@@ -166,23 +166,23 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       show: false,
     },
   ];
-  payroll: Sidebar[] = [
+  payrollItems: Sidebar[] = [
 
     {
       name: 'language.sidebar.salaryComponent',
-      route: '/admin/assets',
+      route: '/payroll/salary-component',
       permissions: 'View_Asset',
       show: false,
     },
     {
       name: 'language.sidebar.salaryFrenquence',
-      route: '/admin/assets',
+      route: '/payroll/assets',
       permissions: 'View_Asset',
       show: false,
     },
     {
       name: 'language.sidebar.payGroup',
-      route: '/admin/assets',
+      route: '/payroll/assets',
       permissions: 'View_Asset',
       show: false,
     },
