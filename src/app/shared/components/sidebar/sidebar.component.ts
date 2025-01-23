@@ -166,6 +166,27 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       show: false,
     },
   ];
+  payroll: Sidebar[] = [
+
+    {
+      name: 'language.sidebar.salaryComponent',
+      route: '/admin/assets',
+      permissions: 'View_Asset',
+      show: false,
+    },
+    {
+      name: 'language.sidebar.salaryFrenquence',
+      route: '/admin/assets',
+      permissions: 'View_Asset',
+      show: false,
+    },
+    {
+      name: 'language.sidebar.payGroup',
+      route: '/admin/assets',
+      permissions: 'View_Asset',
+      show: false,
+    },
+  ];
 
   constructor(
     @Inject(DOCUMENT) private _document: Document,
