@@ -171,13 +171,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.salaryComponent',
       route: '/payroll/salary-component',
-      permissions: 'View_Asset',
+      permissions: 'View_Salary_Component',
       show: false,
     },
     {
       name: 'language.sidebar.salaryFrequency',
       route: '/payroll/salary-frequency',
-      permissions: 'View_Asset',
+      permissions: 'View_Salary_Frequency',
       show: false,
     },
     {

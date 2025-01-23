@@ -9,28 +9,28 @@ const routes: Routes = [
       loadComponent: () => import(`./components/salary-component/salary-component.component`).then(c => c.SalaryComponentComponent),
       title: 'Salary Component',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Salary Component',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Salary Component',permission:"View_Salary_Component,Delete_Salary_Component,Edit_Salary_Component,Create_Salary_Component" }
   },
   {
       path: 'salary-component/:action',
       loadComponent: () => import(`./components/salary-component/add-edit/add-edit.component`).then(c => c.AddEditComponent),
       title: 'Salary Component',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Salary Component',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Salary Component',permission:"Edit_Salary_Component,Create_Salary_Component,View_Salary_Component" }
   },
   {
       path: 'salary-frequency',
       loadComponent: () => import(`./components/salary-frequency/salary-frequency.component`).then(c => c.SalaryFrequencyComponent),
       title: 'Salary Frequency',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Salary Frequency',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Salary Frequency',permission:"View_Salary_Frequency,Edit_Salary_Frequency,Delete_Salary_Frequency,Create_Salary_Frequency" }
   },
   {
       path: 'salary-frequency/:action',
       loadComponent: () => import(`./components/salary-frequency/add-edit/add-edit.component`).then(c => c.AddEditComponent),
       title: 'Salary Frequency',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Salary Frequency',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Salary Frequency',permission:"View_Salary_Frequency,Edit_Salary_Frequency,Delete_Salary_Frequency,Create_Salary_Frequency" }
   },
   {
       path: 'group',

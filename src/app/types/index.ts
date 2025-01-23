@@ -541,6 +541,47 @@ export interface IJobRes extends ICommonRes {
 }
 
 
+
+export interface Salary extends ICommon {
+  salaryId: string;
+  companyId: string;
+  salaryTitle: string;
+  type: string;
+  description: string;
+  isActive: boolean;
+}
+
+
+export interface ISalaryRes extends ICommonRes {
+
+  data: {
+    salaries: Salary[]
+    pagination: IPagination
+  };
+
+}
+
+
+
+export interface SalaryFrequencies extends ICommon {
+  salaryFrequencyId: string;
+  companyId: string;
+  title: string;
+  description: null | string;
+  isActive: boolean;
+}
+
+
+export interface ISalaryFrequenciesRes extends ICommonRes {
+
+  data: {
+    salaryFrequencies: SalaryFrequencies[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IAssetType extends ICommon {
   assetTypeId: string;
   companyId: string;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Job,IJobRes } from '../../../types/index';
+import { SalaryFrequencies,ISalaryFrequenciesRes } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -22,7 +22,7 @@ export class SalaryFrequencyComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: Job[] = [];
+  dataList: SalaryFrequencies[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -36,7 +36,7 @@ export class SalaryFrequencyComponent {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
-  sortField: string = 'jobTitle';
+  sortField: string = 'salaryTitle';
   sortDirection: boolean = true;
 
 
@@ -82,9 +82,9 @@ export class SalaryFrequencyComponent {
       const permissionsData = data['permission'];
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
-        this.isEdit = this.permissions.some(p => p.permission === "Edit_Asset" && p.isAssign);
-        this.isCreate = this.permissions.some(p => p.permission === "Create_Asset" && p.isAssign);
-        this.isDelete = this.permissions.some(p => p.permission === "Delete_Asset" && p.isAssign);
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Salary_Frequency" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Salary_Frequency" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Salary_Frequency" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
@@ -102,10 +102,10 @@ export class SalaryFrequencyComponent {
   private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
     // Call the API with the active status filter
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm, activeStatus: isActive })
+    this.apiService.getData('SalaryFrequency', 'getSalaryFrequencies', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => this.handleResponse(res),
+        next: (res: ISalaryFrequenciesRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
@@ -113,19 +113,19 @@ export class SalaryFrequencyComponent {
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm })
+    this.apiService.getData('SalaryFrequency', 'getSalaryFrequencies', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => {this.handleResponse(res);    this.generatePages()},
+        next: (res: ISalaryFrequenciesRes) => {this.handleResponse(res);    this.generatePages()},
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IJobRes): void {
+  private handleResponse(response: ISalaryFrequenciesRes): void {
     if (response?.success) {
-      const { jobs, pagination } = response.data;
+      const { salaryFrequencies, pagination } = response.data;
       Object.assign(this, {
-        dataList: jobs,
+        dataList: salaryFrequencies,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -190,7 +190,7 @@ export class SalaryFrequencyComponent {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Job', 'getJobs', true, params)
+    this.apiService.getData('SalaryFrequency', 'getSalaryFrequencies', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -199,7 +199,7 @@ export class SalaryFrequencyComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('Job', `deleteJob/${id}`, id, true)
+    this.apiService.deleteData('SalaryFrequency', `deleteSalaryFrequency/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
@@ -207,7 +207,7 @@ export class SalaryFrequencyComponent {
             this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
           };
         },
-        error: (err) => console.error('Error deleting Job:', err),
+        error: (err) => console.error('Error deleting SalaryFrequency:', err),
       });
   }
 

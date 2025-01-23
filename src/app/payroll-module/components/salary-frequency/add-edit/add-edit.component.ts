@@ -38,7 +38,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Job", `getJobById/${id}`,  true)
+        this.apiCalling.getData("SalaryFrequency", `getSalaryFrequencyById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -64,16 +64,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      jobTitle: ['', Validators.required],
-      jobDescription: [''],
+      title: ['', Validators.required],
+      description: [''],
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        jobTitle: this.selectedValue.jobTitle,
-        jobDescription: this.selectedValue.jobDescription,
+        title: this.selectedValue.title,
+        description: this.selectedValue.description,
       });
     }
   }
@@ -86,8 +86,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Job", `updateJob/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Job", "addJob", body, true);
+      ? this.apiCalling.putData("SalaryFrequency", `updateSalaryFrequency/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("SalaryFrequency", "addSalaryFrequency", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
@@ -106,6 +106,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/job-detail']);
+    this.router.navigate([window.history.back()]);
   }
 }

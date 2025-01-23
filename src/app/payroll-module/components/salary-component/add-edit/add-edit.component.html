@@ -8,10 +8,10 @@
 
           <div class="col-md-6 mb-3">
               <label class="form-label">{{'language.form.title' | translate}} <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" formControlName="title"
+              <input type="text" class="form-control" formControlName="salaryTitle"
                   [placeholder]="'language.placeholders.title' | translate"
-                  [ngClass]="{'is-invalid': (addEditForm.get('title')?.invalid && (addEditForm.get('title')?.touched || isSubmitted))}" />
-              <div *ngIf="addEditForm.get('title')?.invalid && (addEditForm.get('title')?.touched || isSubmitted)"
+                  [ngClass]="{'is-invalid': (addEditForm.get('salaryTitle')?.invalid && (addEditForm.get('salaryTitle')?.touched || isSubmitted))}" />
+              <div *ngIf="addEditForm.get('salaryTitle')?.invalid && (addEditForm.get('salaryTitle')?.touched || isSubmitted)"
                   class="invalid-feedback">
                   {{'language.errors.titleRequired' | translate}}
               </div>

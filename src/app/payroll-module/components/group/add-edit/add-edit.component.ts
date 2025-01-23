@@ -123,6 +123,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/job-detail']);
+    this.router.navigate([window.history.back()]);
   }
 }

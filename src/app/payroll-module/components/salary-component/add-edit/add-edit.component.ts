@@ -25,15 +25,18 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
   typeList:{
-    value:string;
+    value:number;
     label:string;
   }[]  = [
     {
-      value:"test",
-      label:"test"
-    }
+      value:0,
+      label:"Deduction"
+    },
+    {
+      value:1,
+      label:"Benefit"
+    },
   ]
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -51,7 +54,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Job", `getJobById/${id}`,  true)
+        this.apiCalling.getData("Salary", `getSalaryById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -77,7 +80,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      title: ['', Validators.required],
+      salaryTitle: ['', Validators.required],
       type: ['', Validators.required],
       description: [''],
     });
@@ -86,7 +89,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        title: this.selectedValue.title,
+        salaryTitle: this.selectedValue.salaryTitle,
         description: this.selectedValue.description,
         type: this.selectedValue.type,
       });
@@ -101,8 +104,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Job", `updateJob/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Job", "addJob", body, true);
+      ? this.apiCalling.putData("Salary", `updateSalary/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("Salary", "addSalary", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
@@ -121,6 +124,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin/job-detail']);
+    this.router.navigate([window.history.back()]);
   }
 }

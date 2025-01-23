@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Job,IJobRes } from '../../../types/index';
+import { Salary,ISalaryRes } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -24,7 +24,7 @@ export class SalaryComponentComponent {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: Job[] = [];
+  dataList: Salary[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -38,7 +38,7 @@ export class SalaryComponentComponent {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
-  sortField: string = 'jobTitle';
+  sortField: string = 'salaryTitle';
   sortDirection: boolean = true;
 
 
@@ -84,9 +84,9 @@ export class SalaryComponentComponent {
       const permissionsData = data['permission'];
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
-        this.isEdit = this.permissions.some(p => p.permission === "Edit_Asset" && p.isAssign);
-        this.isCreate = this.permissions.some(p => p.permission === "Create_Asset" && p.isAssign);
-        this.isDelete = this.permissions.some(p => p.permission === "Delete_Asset" && p.isAssign);
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Salary_Component" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Salary_Component" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Salary_Component" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }
@@ -104,10 +104,10 @@ export class SalaryComponentComponent {
   private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
     // Call the API with the active status filter
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm, activeStatus: isActive })
+    this.apiService.getData('Salary', 'getSalaries', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => this.handleResponse(res),
+        next: (res: ISalaryRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
@@ -115,19 +115,19 @@ export class SalaryComponentComponent {
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm })
+    this.apiService.getData('Salary', 'getSalaries', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => {this.handleResponse(res);    this.generatePages()},
+        next: (res: ISalaryRes) => {this.handleResponse(res);    this.generatePages()},
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IJobRes): void {
+  private handleResponse(response: ISalaryRes): void {
     if (response?.success) {
-      const { jobs, pagination } = response.data;
+      const { salaries, pagination } = response.data;
       Object.assign(this, {
-        dataList: jobs,
+        dataList: salaries,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -192,7 +192,7 @@ export class SalaryComponentComponent {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Job', 'getJobs', true, params)
+    this.apiService.getData('Salary', 'getSalaries', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -201,7 +201,7 @@ export class SalaryComponentComponent {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('Job', `deleteJob/${id}`, id, true)
+    this.apiService.deleteData('Salary', `deleteSalary/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
@@ -209,7 +209,7 @@ export class SalaryComponentComponent {
             this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
           };
         },
-        error: (err) => console.error('Error deleting Job:', err),
+        error: (err) => console.error('Error deleting Salary:', err),
       });
   }
 
