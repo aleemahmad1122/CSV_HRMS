@@ -175,14 +175,14 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       show: false,
     },
     {
-      name: 'language.sidebar.salaryFrenquence',
-      route: '/payroll/assets',
+      name: 'language.sidebar.salaryFrequency',
+      route: '/payroll/salary-frequency',
       permissions: 'View_Asset',
       show: false,
     },
     {
       name: 'language.sidebar.payGroup',
-      route: '/payroll/assets',
+      route: '/payroll/group',
       permissions: 'View_Asset',
       show: false,
     },
@@ -262,7 +262,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
     const permissions = employeeDetails[0]?.rolePermission?.systemModulePermissions?.systemModules || [];
 
-    [this.adminItems, this.employeeItems, this.attendanceItems, this.leaveItems].forEach(itemList => {
+    [this.adminItems, this.employeeItems, this.attendanceItems, this.leaveItems, this.payrollItems].forEach(itemList => {
       itemList.forEach(item => {
         const requiredPermissions = item.permissions?.split(',') || [];
         const hasPermission = requiredPermissions.some(routePermission =>

@@ -12,7 +12,7 @@
     "sidebar": {
       "payroll":"Payroll",
       "salaryComponent":"Salary Component",
-      "salaryFrenquence":"Salary Frenquence",
+      "salaryFrequency":"Salary Frequency",
       "payGroup":"Pay Group",
       "remoteWorkRequest": "Remote Work Request",
       "attendanceRequest": "Attendance Request",
