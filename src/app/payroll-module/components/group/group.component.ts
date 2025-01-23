@@ -83,9 +83,9 @@ export class GroupComponent  {
       const permissionsData = data['permission'];
       if (Array.isArray(permissionsData)) {
         this.permissions = permissionsData;
-        this.isEdit = this.permissions.some(p => p.permission === "Edit_Asset" && p.isAssign);
-        this.isCreate = this.permissions.some(p => p.permission === "Create_Asset" && p.isAssign);
-        this.isDelete = this.permissions.some(p => p.permission === "Delete_Asset" && p.isAssign);
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Paygroup" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Paygroup" && p.isAssign);
+        this.isDelete = this.permissions.some(p => p.permission === "Delete_Paygroup" && p.isAssign);
       } else {
         console.error("Invalid permissions format:", permissionsData);
       }

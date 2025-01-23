@@ -80,6 +80,22 @@ const routes: Routes = [
         canActivate: [ProtectedGuard]
       },
       {
+        path: 'payroll',
+        loadComponent: () => import(`./components/payroll/payroll.component`).then(c => c.PayrollComponent),
+
+        data: { breadcrumb: 'Payroll', permission: "Create_Employee_Payroll,Edit_Employee_Payroll,View_Employee_Payroll,Delete_Employee_Payroll" },
+        resolve: { permission: PermissionService },
+        canActivate: [ProtectedGuard]
+      },
+      {
+        path: 'payroll/:action',
+        loadComponent: () => import(`./components/payroll/add-edit/add-edit.component`).then(c => c.AddEditComponent),
+
+        data: { breadcrumb: 'Payroll', permission: "Create_Employee_Payroll,Edit_Employee_Payroll,View_Employee_Payroll,Delete_Employee_Payroll" },
+        resolve: { permission: PermissionService },
+        canActivate: [ProtectedGuard]
+      },
+      {
         path: 'department-team/:action',
         loadComponent: () => import(`./components/department-team/add-edit/add-edit.component`).then(c => c.AddEditComponent),
         title: 'Add Department & Team',

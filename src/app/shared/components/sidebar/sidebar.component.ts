@@ -183,7 +183,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.payGroup',
       route: '/payroll/group',
-      permissions: 'View_Asset',
+      permissions: 'View_Paygroup',
       show: false,
     },
   ];

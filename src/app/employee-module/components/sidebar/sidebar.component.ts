@@ -76,6 +76,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       show: false
     },
     {
+      name: 'language.generic.payroll',
+      route: "/employee/profile/payroll",
+      class: "fa-solid fa-money-bill",
+      permissions: "View_Personal_Info",
+      show: false
+    },
+    {
       name: 'language.generic.assets',
       route: "/employee/profile/assets",
       class: "fa-regular fa-typewriter",

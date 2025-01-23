@@ -265,6 +265,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "payroll":"Payroll",
       "frequency":"Frequency",
       "addGroup":"Add Group",
       "addSalaryComponent":"Add Salary Component",

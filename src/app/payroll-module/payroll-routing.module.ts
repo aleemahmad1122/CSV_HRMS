@@ -37,14 +37,14 @@ const routes: Routes = [
       loadComponent: () => import(`./components/group/group.component`).then(c => c.GroupComponent),
       title: 'Group',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Group',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Group',permission:"View_Paygroup,Create_Paygroup,Edit_Paygroup,Delete_Paygroup" }
   },
   {
       path: 'group/:action',
       loadComponent: () => import(`./components/group/add-edit/add-edit.component`).then(c => c.AddEditComponent),
       title: 'Group',
       resolve: { permission: PermissionService },
-      data: { breadcrumb: 'Group',permission:"View_Asset,Create_Asset,Edit_Asset,HR_Approval" }
+      data: { breadcrumb: 'Group',permission:"View_Paygroup,Create_Paygroup,Edit_Paygroup,Delete_Paygroup" }
   },
 ];
 
