@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Job,IJobRes } from '../../../types/index';
+import { PayGroup,IPayGroupRes } from '../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../shared/Services/api-calling.service';
@@ -23,7 +23,7 @@ export class GroupComponent  {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: Job[] = [];
+  dataList: PayGroup[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -37,7 +37,7 @@ export class GroupComponent  {
   isCreate: boolean = false;
   isDelete: boolean = false;
 
-  sortField: string = 'jobTitle';
+  sortField: string = 'title';
   sortDirection: boolean = true;
 
 
@@ -103,10 +103,10 @@ export class GroupComponent  {
   private getActiveStatusData(searchTerm = '', isActive: number | string = 0): void {
 
     // Call the API with the active status filter
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm, activeStatus: isActive })
+    this.apiService.getData('Paygroup', 'getPaygroups', true, { searchQuery: searchTerm, activeStatus: isActive })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => this.handleResponse(res),
+        next: (res: IPayGroupRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
@@ -114,19 +114,19 @@ export class GroupComponent  {
 
 
   private getData(searchTerm = ''): void {
-    this.apiService.getData('Job', 'getJobs', true, { searchQuery: searchTerm })
+    this.apiService.getData('Paygroup', 'getPaygroups', true, { searchQuery: searchTerm })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: IJobRes) => {this.handleResponse(res);    this.generatePages()},
+        next: (res: IPayGroupRes) => {this.handleResponse(res);    this.generatePages()},
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: IJobRes): void {
+  private handleResponse(response: IPayGroupRes): void {
     if (response?.success) {
-      const { jobs, pagination } = response.data;
+      const { paygroups, pagination } = response.data;
       Object.assign(this, {
-        dataList: jobs,
+        dataList: paygroups,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -191,7 +191,7 @@ export class GroupComponent  {
 
   private getPaginatedData(): void {
     const params = { searchQuery: this.searchTerm, pageNo: this.pageNo, pageSize: this.pageSize };
-    this.apiService.getData('Job', 'getJobs', true, params)
+    this.apiService.getData('Paygroup', 'getPaygroups', true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => this.handleResponse(res),
@@ -200,7 +200,7 @@ export class GroupComponent  {
   }
 
   onDelete(id: string): void {
-    this.apiService.deleteData('Job', `deleteJob/${id}`, id, true)
+    this.apiService.deleteData('Paygroup', `deletePaygroup/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
@@ -208,7 +208,7 @@ export class GroupComponent  {
             this.toaster.error((res?.message + '. ' + res?.data) || 'An error occurred', 'Error!');
           };
         },
-        error: (err) => console.error('Error deleting Job:', err),
+        error: (err) => console.error('Error deleting Paygroup:', err),
       });
   }
 

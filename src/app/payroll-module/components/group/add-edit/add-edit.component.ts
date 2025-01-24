@@ -23,7 +23,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
-  frameworks = ['fixed','hourly',];
+  frameworks:{value:number;name:string}[] = [{value:0,name: 'fixed'},{value:1,name:'hourly'}];
 
   salaryFrequenciesList:SalaryFrequencies []
 
@@ -45,7 +45,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = id;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Job", `getJobById/${id}`,  true)
+        this.apiCalling.getData("Paygroup", `getPaygroupById/${id}`,  true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
@@ -72,9 +72,17 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private createForm(): FormGroup {
     return this.fb.group({
       title: ['', Validators.required],
-      frequency: [null, Validators.required],
-      type: [this.frameworks[0], Validators.required],
+      salaryFrequencyId: [null, Validators.required],
+      paygroupType: [this.frameworks[0], Validators.required],
       description: [''],
+      paygroupComponents:this.fb.array([
+        {
+          "salaryId": "44Ae55-e3ed9f89a473f-40BeBff7E9bEd48",
+          "salaryType": 0,
+          "calculationType": 0,
+          "amount": "string"
+        }
+      ])
     });
   }
 
@@ -82,9 +90,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
         title: this.selectedValue.title,
-        type: this.selectedValue.type,
+        paygroupType: this.selectedValue.paygroupType,
         description: this.selectedValue.description,
-        frequency: this.selectedValue.frequency,
+        salaryFrequencyId: this.selectedValue.salaryFrequencyId,
       });
     }
   }
@@ -120,14 +128,13 @@ try {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Job", `updateJob/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("Job", "addJob", body, true);
+      ? this.apiCalling.putData("Paygroup", `updatePaygroup/${this.isEditMode}`, body, true)
+      : this.apiCalling.postData("Paygroup", "addPaygroup", body, true);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }

@@ -542,6 +542,37 @@ export interface IJobRes extends ICommonRes {
 
 
 
+
+export interface PayGroup extends ICommon {
+  paygroupId: string;
+  companyId: string;
+  title: string;
+  salaryFrequencyId: string;
+  paygroupType: number;
+  description: string;
+  isActive: boolean;
+  paygroupComponents: {
+    paygroupComponentId: string;
+    paygroupId: string;
+    salaryId: string;
+    salaryType: number;
+    calculationType: number;
+    amount: string;
+  }[]
+}
+
+
+export interface IPayGroupRes extends ICommonRes {
+
+  data: {
+    paygroups: PayGroup[]
+    pagination: IPagination
+  };
+
+}
+
+
+
 export interface Salary extends ICommon {
   salaryId: string;
   companyId: string;

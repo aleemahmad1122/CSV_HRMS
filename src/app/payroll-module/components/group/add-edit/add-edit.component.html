@@ -28,15 +28,15 @@
             <span class="text-danger">*</span></label>
 
           <ng-select [items]="salaryFrequenciesList" [clearable]="false" [bindLabel]="'title'" [bindValue]="'salaryFrequencyId'"
-            [searchable]="true" placeholder="Select an option" formControlName="frequency" [ngClass]="{
+            [searchable]="true" placeholder="Select an option" formControlName="salaryFrequencyId" [ngClass]="{
       'is-invalid':
-              addEditForm.get('frequency')?.invalid &&
-              (addEditForm.get('frequency')?.touched || isSubmitted)
+              addEditForm.get('salaryFrequencyId')?.invalid &&
+              (addEditForm.get('salaryFrequencyId')?.touched || isSubmitted)
       }">
           </ng-select>
           <div *ngIf="
-              addEditForm.get('frequency')?.invalid &&
-              (addEditForm.get('frequency')?.touched || isSubmitted)
+              addEditForm.get('salaryFrequencyId')?.invalid &&
+              (addEditForm.get('salaryFrequencyId')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.frequencyRequired" | translate }}
           </div>
@@ -52,21 +52,21 @@
                   type="radio"
                   class="radio-button__input"
                   [id]="'framework-' + $index"
-                  formControlName="type"
-                  [value]="item">
+                  formControlName="paygroupType"
+                  [value]="item.value">
                 <label
                   class="radio-button__label"
                   [for]="'framework-' + $index">
                   <span class="radio-button__custom"></span>
-                  {{ item }}
+                  {{ item.name }}
                 </label>
                 </div>
               }
             </div>
 
           <div *ngIf="
-              addEditForm.get('type')?.invalid &&
-              (addEditForm.get('type')?.touched || isSubmitted)
+              addEditForm.get('paygroupType')?.invalid &&
+              (addEditForm.get('paygroupType')?.touched || isSubmitted)
             " class="invalid-feedback">
             {{ "language.errors.typeRequired" | translate }}
           </div>

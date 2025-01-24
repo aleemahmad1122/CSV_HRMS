@@ -104,10 +104,10 @@
               <th >
                 <span># </span>
               </th>
-              <th  (click)="sort('jobTitle')" class="cursor-pointer">
+              <th  (click)="sort('title')" class="cursor-pointer">
                 <span>{{'language.generic.title' | translate}}</span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
-              <th (click)="sort('jobDescription')" class="cursor-pointer"  >
+              <th (click)="sort('description')" class="cursor-pointer"  >
                 <span>{{'language.form.details' | translate}}</span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
               @if(isEdit || isDelete){ <th style="width: 20%">
@@ -126,14 +126,14 @@
               <td>
                 <span>
                   <div>
-                    <div [innerHTML]="data.jobTitle || 'N/A' | highlight: searchTerm">
+                    <div [innerHTML]="data.title || 'N/A' | highlight: searchTerm">
                     </div>
                   </div>
                 </span>
               </td>
 
               <td><span>
-                  <div>{{data.jobDescription || "N/A"}} </div>
+                  <div>{{data.description || "N/A"}} </div>
                 </span></td>
 
 
@@ -150,7 +150,7 @@
 
                     @if(data.isActive && this.isEdit){
                       <li class="w-100 mb-2">
-                        <a [routerLink]="['/payroll/group/edit']" [queryParams]="{id: data.jobId}"
+                        <a [routerLink]="['/payroll/group/edit']" [queryParams]="{id: data.paygroupId}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
@@ -201,7 +201,7 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             {{'language.generic.cancel' | translate}}</button>
-                          <button type="button" (click)="onDelete(data.jobId)" data-bs-dismiss="modal"
+                          <button type="button" (click)="onDelete(data.paygroupId)" data-bs-dismiss="modal"
                             class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
                         </div>
                       </div>
