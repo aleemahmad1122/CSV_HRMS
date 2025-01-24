@@ -182,6 +182,8 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "paygroupRequired":"Basic Group is Required",
+      "basicPayRequired":"Basic Pay is Required",
       "frequencyRequired":"Frequency is Required",
       "companyReq":"Company is Required",
       "shiftNameRequired": "Shift Name is Required",
@@ -265,6 +267,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "paygroup":"Pay group",
+      "basicPay":"Basic Pay",
       "payroll":"Payroll",
       "frequency":"Frequency",
       "addGroup":"Add Group",

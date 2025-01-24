@@ -3,6 +3,7 @@ import { LocalStorageManagerService } from './local-storage-manager.service';
 import { Router } from '@angular/router';
 import { ApiCallingService } from './api-calling.service';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,11 @@ export class UserAuthenticationService {
     return this._localStorageManagerService.getUserIdFromStorage();
   }
 
+  refreshToken(refreshToken: string): Observable<any> {
+    return this.api.postData('Auth', 'refreshToken', { refreshToken }, true);
+  }
+
+
   logout(): void {
     const refreshToken = this._localStorageManagerService.getRefreshTokenToStorage();
 
@@ -76,7 +82,7 @@ export class UserAuthenticationService {
           if (response?.status === 200) {
             this._localStorageManagerService.clearLocalStorage();
             this._router.navigateByUrl('/login');
-            this._toaster.success(response.message)
+            // this._toaster.success(response.message)
             // window.location.reload()
           }
         },
