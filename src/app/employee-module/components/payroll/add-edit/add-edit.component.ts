@@ -22,12 +22,19 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isSubmitted = false;
   selectedValue: any;
-  editId:string;
-  id:string;
+  editId: string;
+  id: string;
 
-  typeList:{
-    paygroupId:string;
-    title:string;
+  isViewMode: boolean = false;
+  isAddMode: boolean = false;
+  isCreate: boolean = false;
+  isDelete: boolean = false;
+  isEdit: boolean = false;
+  permissions: { isAssign: boolean; permission: string }[] = [];
+
+  typeList: {
+    paygroupId: string;
+    title: string;
   }[]
   constructor(
     private fb: FormBuilder,
@@ -35,50 +42,66 @@ export class AddEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiCalling: ApiCallingService,
     private toaster: ToastrService,
+    private activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id']
+    });
     this.addEditForm = this.createForm();
+    this.loadPermissions()
   }
 
-  ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      const id = params['id'];
-      this.id = params['id'];
-      this.editId = params['editId']
-      this.isEditMode = params['editId'];
 
-      if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("EmployeePayroll", `getEmployeePayrollById/${id}`,  true)
-        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
-          next: (response) => {
-            if (response?.success) {
-                this.selectedValue = response?.data;
-                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
-            } else {
-              this.selectedValue = [];
-            }
-          },
-          error: (error) => {
-            this.selectedValue = [];
-          }
-        });
-        // this.patchFormValues(); // Removed this line
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
+      const action = params.get('action');
+      const id = this.route.snapshot.queryParams['id'];
+
+      // Determine the mode based on the :action parameter
+      this.isEditMode = action === 'edit';
+      this.isViewMode = action === 'view';
+      this.isAddMode = action === 'add';
+
+      if (this.isEditMode || this.isViewMode) {
+        this.loadEmployeeDesignation(id);
       }
-      this.getGroupList()
+
+      // Disable the form in view mode
+      if (this.isViewMode) {
+        this.addEditForm.disable();
+      }
+    });
+
+    this.getGroupList()
+  }
+
+
+  private loadPermissions(): void {
+    this.activatedRoute.data.subscribe(data => {
+      const permissionsData = data['permission'];
+
+      if (Array.isArray(permissionsData)) {
+
+        this.permissions = permissionsData;
+        this.isEdit = this.permissions.some(p => p.permission === "Edit_Employee_Payroll" && p.isAssign);
+        this.isCreate = this.permissions.some(p => p.permission === "Create_Employee_Payroll" && p.isAssign);
+      } else {
+        console.error("Invalid permissions format:", permissionsData);
+      }
     });
   }
 
 
-private getGroupList():void{
-  try {
-    this.apiCalling.getData("Paygroup", `getPaygroups`,  true)
+  private getGroupList(): void {
+    try {
+      this.apiCalling.getData("Paygroup", `getPaygroups`, true)
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
-              console.warn(response);
 
-                this.typeList = response?.data?.paygroups;
-                this.patchFormValues();
+              this.typeList = response?.data?.paygroups;
+              this.patchFormValues();
             } else {
               this.typeList = [];
             }
@@ -87,11 +110,38 @@ private getGroupList():void{
             this.typeList = [];
           }
         });
-  } catch (error) {
-    console.log(error);
+    } catch (error) {
+      console.log(error);
 
+    }
   }
-}
+
+
+  private loadEmployeeDesignation(id: string | null): void {
+    if (id && isPlatformBrowser(this.platformId)) {
+      this.apiCalling.getData("EmployeePayroll", `getEmployeePayroll`, true, { employeeId: this.id })
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+              console.log(response.data.employeePayrollId);
+
+              this.isEditMode = response.data.employeePayrollId != null;
+              this.isAddMode = !this.isEditMode;
+              this.selectedValue = response.data;
+              this.patchFormValues();
+            } else {
+              this.isEditMode = false;
+              this.isAddMode = true;
+              this.selectedValue = null;
+            }
+          },
+          error: () => {
+            this.toaster.error('Error loading data', 'Error');
+          }
+        });
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -124,14 +174,14 @@ private getGroupList():void{
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("EmployeePayroll", `updateEmployeePayroll/${this.isEditMode}`, body, true,this.id)
-      : this.apiCalling.postData("EmployeePayroll", "addEmployeePayroll", body, true,this.id);
+      ? this.apiCalling.putData("EmployeePayroll", `updateEmployeePayroll/${this.selectedValue.employeePayrollId}`, body, true, this.id)
+      : this.apiCalling.postData("EmployeePayroll", "addEmployeePayroll", body, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
+
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }

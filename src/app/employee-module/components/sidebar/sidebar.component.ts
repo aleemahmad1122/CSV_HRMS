@@ -79,7 +79,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       name: 'language.generic.payroll',
       route: "/employee/profile/payroll/edit",
       class: "fa-solid fa-money-bill",
-      permissions: "View_Personal_Info",
+      permissions: "View_Employee_Payroll",
       show: false
     },
     {
