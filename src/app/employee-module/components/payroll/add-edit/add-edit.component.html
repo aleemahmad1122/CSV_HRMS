@@ -23,8 +23,8 @@
             <label class="form-label">{{ "language.generic.paygroup" | translate }}
               <span class="text-danger">*</span></label>
 
-            <ng-select [items]="typeList" [clearable]="false" [bindLabel]="'label'"
-              [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
+            <ng-select [items]="typeList" [clearable]="false" [bindLabel]="'title'"
+              [bindValue]="'paygroupId'" [searchable]="true" placeholder="Select an option"
               formControlName="paygroupId" [ngClass]="{
       'is-invalid':
               addEditForm.get('paygroupId')?.invalid &&

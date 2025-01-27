@@ -23,20 +23,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
   editId:string;
+  id:string;
 
   typeList:{
-    value:string;
-    label:string;
-  }[]  = [
-    {
-      value:'4c6Cc7D02eDdC4abf62bEd1eeCddb-eE05d0',
-      label:"Deduction"
-    },
-    {
-      value:'4c6Cc7D02eDdC4abf62bEd1eeCddb-eE05d1',
-      label:"Benefit"
-    },
-  ]
+    paygroupId:string;
+    title:string;
+  }[]
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -51,6 +43,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
       const id = params['id'];
+      this.id = params['id'];
       this.editId = params['editId']
       this.isEditMode = params['editId'];
 
@@ -71,8 +64,34 @@ export class AddEditComponent implements OnInit, OnDestroy {
         });
         // this.patchFormValues(); // Removed this line
       }
+      this.getGroupList()
     });
   }
+
+
+private getGroupList():void{
+  try {
+    this.apiCalling.getData("Paygroup", `getPaygroups`,  true)
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+              console.warn(response);
+
+                this.typeList = response?.data?.paygroups;
+                this.patchFormValues();
+            } else {
+              this.typeList = [];
+            }
+          },
+          error: (error) => {
+            this.typeList = [];
+          }
+        });
+  } catch (error) {
+    console.log(error);
+
+  }
+}
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -105,8 +124,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const body = this.addEditForm.value;
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("EmployeePayroll", `updateEmployeePayroll/${this.isEditMode}`, body, true)
-      : this.apiCalling.postData("EmployeePayroll", "addEmployeePayroll", body, true);
+      ? this.apiCalling.putData("EmployeePayroll", `updateEmployeePayroll/${this.isEditMode}`, body, true,this.id)
+      : this.apiCalling.postData("EmployeePayroll", "addEmployeePayroll", body, true,this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
