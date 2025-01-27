@@ -267,6 +267,10 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "salaryComponent":"Salary Component",
+      "salaryId":"Salary",
+      "salaryType":"Salary Type",
+      "calculationType":"Calculation Type",
       "paygroup":"Pay group",
       "basicPay":"Basic Pay",
       "payroll":"Payroll",
