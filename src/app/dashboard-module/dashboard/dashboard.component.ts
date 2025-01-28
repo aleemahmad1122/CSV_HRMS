@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
       return {
-        dayName: data.dayName,
+        dayName: data.dayName.slice(0,3),
         status: data.attendanceStatus,
         hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0, // Use attendanceTime for bar height
         attendanceDate: data.attendanceDate,
