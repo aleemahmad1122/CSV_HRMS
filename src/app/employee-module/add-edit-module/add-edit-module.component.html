@@ -287,21 +287,39 @@
 
   <div class="row">
 
-    <div class="col-md-12 mb-3 position-relative">
+    <div class="col-md-6 mb-3 position-relative">
 
-      <label class="form-label">{{ "language.form.address" | translate }}
+      <label class="form-label">{{ "language.generic.presentAddress" | translate }}
         <span class="text-danger">*</span></label>
-      <textarea class="form-control" formControlName="address"
+      <textarea class="form-control" formControlName="presentAddress"
         [placeholder]="'language.placeholders.address' | translate" rows="3" [ngClass]="{
           'is-invalid':
-            addEditForm.get('address')?.invalid &&
-            (addEditForm.get('address')?.touched || isSubmitted)
+            addEditForm.get('presentAddress')?.invalid &&
+            (addEditForm.get('presentAddress')?.touched || isSubmitted)
         }"></textarea>
       <div *ngIf="
-          addEditForm.get('address')?.invalid &&
-          (addEditForm.get('address')?.touched || isSubmitted)
+          addEditForm.get('presentAddress')?.invalid &&
+          (addEditForm.get('presentAddress')?.touched || isSubmitted)
         " class="invalid-feedback">
-        {{ "language.errors.addressRequired" | translate }}
+        {{ "language.errors.presentAddressRequired" | translate }}
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3 position-relative">
+
+      <label class="form-label">{{ "language.generic.permanentAddress" | translate }}
+        <span class="text-danger">*</span></label>
+      <textarea class="form-control" formControlName="permanentAddress"
+        [placeholder]="'language.placeholders.address' | translate" rows="3" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('permanentAddress')?.invalid &&
+            (addEditForm.get('permanentAddress')?.touched || isSubmitted)
+        }"></textarea>
+      <div *ngIf="
+          addEditForm.get('permanentAddress')?.invalid &&
+          (addEditForm.get('permanentAddress')?.touched || isSubmitted)
+        " class="invalid-feedback">
+        {{ "language.errors.permanentAddressRequired" | translate }}
       </div>
     </div>
 

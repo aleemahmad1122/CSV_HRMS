@@ -251,6 +251,8 @@
       "locationRequired": "Location is required",
       "detailsRequired": "Details are required",
       "addressRequired": "Address is required",
+      "permanentAddressRequired": "Permanent Address is required",
+      "presentAddressRequired": "Present Address is required",
       "quantityRequired": "Quantity is required",
       "titleRequired": "Title is required",
       "categoryRequired": "Category is required",
@@ -267,6 +269,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "permanentAddress":"Permanent Address",
+      "presentAddress":"Present Address",
       "salaryComponent":"Salary Component",
       "salaryId":"Salary",
       "salaryType":"Salary Type",
