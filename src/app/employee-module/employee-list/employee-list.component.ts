@@ -206,8 +206,20 @@ export class EmployeeListComponent {
   }
 
   onDelete(id: string): void {
-    console.log(id);
 
+    this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res) => {
+          if (res?.success) { this.getActiveStatusData('', this.selectedStatus) } else {
+            this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
+          };
+        },
+        error: (err) => console.error('Error deleting Employee:', err),
+      });
+  }
+
+  onBlackList(id: string): void {
     this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({

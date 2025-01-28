@@ -269,6 +269,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "blackList":"Black List",
       "permanentAddress":"Permanent Address",
       "presentAddress":"Present Address",
       "salaryComponent":"Salary Component",
@@ -575,7 +576,8 @@
       "actionWantToActive": "Are you sure, you want to activate it?",
       "updateStatus": "Update Stauts",
       "areYouAbsolutely": "Are you sure?",
-      "actionCannotBeUndone": "Are you sure, you want to deactivate or delete it?"
+      "actionCannotBeUndone": "Are you sure, you want to deactivate or delete it?",
+      "actionBlack":"Are you sure, you want to black list it?"
     }
   }
 }
