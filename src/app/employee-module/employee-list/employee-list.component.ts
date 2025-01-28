@@ -10,11 +10,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
 import { ToastrService } from 'ngx-toastr';
 import { SortingService } from "../../shared/Services/sorting.service";
+import { ConvertTimePipe } from '../../shared/pipes/convert-time.pipe';
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, HighlightPipe,ConvertTimePipe],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })

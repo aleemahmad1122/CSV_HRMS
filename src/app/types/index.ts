@@ -350,6 +350,8 @@ export interface IEmployee extends ICommon {
   imagePath: string;
   firstName: string;
   lastName: string;
+  punchCode: string;
+  joiningDate: string;
   email: string;
   country: string;
   city: string;
