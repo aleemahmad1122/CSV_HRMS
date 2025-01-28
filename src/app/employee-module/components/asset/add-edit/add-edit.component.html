@@ -1,120 +1,283 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5">
+  <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
+
+    <!-- <div class="row">
+      <div class="col-md-12 mb-3">
+        <label class="form-label">{{ "language.form.assetTypeId" | translate }}
+          <span class="text-danger">*</span></label>
 
 
-    <form [formGroup]="addEditForm" class="form w-100" id="kt_form_1" (ngSubmit)="submitForm()">
-
-      <div class="row">
-        <div class="col-md-12 mb-3">
-          <label class="form-label">{{ "language.form.assetTypeId" | translate }}
-            <span class="text-danger">*</span></label>
-
-
-            <ng-select
-            [items]="typesList"
-            bindLabel="name"
-            bindValue="assetTypeId"
-            formControlName="assetTypeId"
-            (change)="getEmpAssTypes()"
-            [searchable]="true"
-            [ngClass]="{
-              'is-invalid':
-                addEditForm.get('role')?.invalid &&
-                (addEditForm.get('role')?.touched || isSubmitted)
-            }"
-            placeholder="Select an option" >
-          </ng-select>
-          <div *ngIf="
-        addEditForm.get('assetTypeId')?.invalid &&
-        (addEditForm.get('assetTypeId')?.touched || isSubmitted)
-      " class="invalid-feedback">
-            {{ "language.errors.assetTypeIdRequired" | translate }}
-          </div>
+          <ng-select
+          [items]="typesList"
+          bindLabel="name"
+          bindValue="assetTypeId"
+          formControlName="assetTypeId"
+          (change)="getEmpAssTypes()"
+          [searchable]="true"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('role')?.invalid &&
+              (addEditForm.get('role')?.touched || isSubmitted)
+          }"
+          placeholder="Select an option" >
+        </ng-select>
+        <div *ngIf="
+      addEditForm.get('assetTypeId')?.invalid &&
+      (addEditForm.get('assetTypeId')?.touched || isSubmitted)
+    " class="invalid-feedback">
+          {{ "language.errors.assetTypeIdRequired" | translate }}
         </div>
       </div>
+    </div>
 
-      <div class="row">
+    <div class="row">
 
 
 
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.form.issuedDate" | translate }}
-            <span class="text-danger">*</span></label>
-          <dp-date-picker class="form-control" formControlName="issuedDate" placeholder="00/00/00"
-            [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'issuedDate')" [ngClass]="{
-                'is-invalid':
-                  addEditForm.get('issuedDate')?.invalid &&
-                  (addEditForm.get('issuedDate')?.touched || isSubmitted)
-              }"></dp-date-picker>
-          <div *ngIf="
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.form.issuedDate" | translate }}
+          <span class="text-danger">*</span></label>
+        <dp-date-picker class="form-control" formControlName="issuedDate" placeholder="00/00/00"
+          [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'issuedDate')" [ngClass]="{
+              'is-invalid':
                 addEditForm.get('issuedDate')?.invalid &&
                 (addEditForm.get('issuedDate')?.touched || isSubmitted)
-              " class="invalid-feedback">
-            {{ "language.errors.issuedDateRequired" | translate }}
-          </div>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label">{{ "language.generic.asset" | translate }}
-            <span class="text-danger">*</span></label>
-          @if(empAssTypesList?.length > 0){
-
-            <ng-select
-            [items]="empAssTypesList"
-            bindLabel="assetName"
-            bindValue="assetId"
-            formControlName="assetId"
-            [searchable]="true"
-            [ngClass]="{
-              'is-invalid':
-                addEditForm.get('role')?.invalid &&
-                (addEditForm.get('role')?.touched || isSubmitted)
-            }"
-            placeholder="Select an option" >
-          </ng-select> }
-
-
-          @if(empAssTypesList?.length < 1){ <div>
-            <input type="text" class="form-control" readonly disabled>
-        </div>
-        }
-
+            }"></dp-date-picker>
         <div *ngIf="
-                addEditForm.get('assetId')?.invalid &&
-                (addEditForm.get('assetId')?.touched || isSubmitted)
-              " class="invalid-feedback">
-          {{ "language.errors.assetRequired" | translate }}
+              addEditForm.get('issuedDate')?.invalid &&
+              (addEditForm.get('issuedDate')?.touched || isSubmitted)
+            " class="invalid-feedback">
+          {{ "language.errors.issuedDateRequired" | translate }}
         </div>
       </div>
 
+      <div class="col-md-6 mb-3">
+        <label class="form-label">{{ "language.generic.asset" | translate }}
+          <span class="text-danger">*</span></label>
+        @if(empAssTypesList?.length > 0){
+
+          <ng-select
+          [items]="empAssTypesList"
+          bindLabel="assetName"
+          bindValue="assetId"
+          formControlName="assetId"
+          [searchable]="true"
+          [ngClass]="{
+            'is-invalid':
+              addEditForm.get('role')?.invalid &&
+              (addEditForm.get('role')?.touched || isSubmitted)
+          }"
+          placeholder="Select an option" >
+        </ng-select> }
 
 
-  </div>
+        @if(empAssTypesList?.length < 1){ <div>
+          <input type="text" class="form-control" readonly disabled>
+      </div>
+      }
 
-  <div class="row">
-
-    <div class="col-md-12 mb-3">
-      <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
-      <textarea class="form-control" formControlName="description"
-        [placeholder]="'language.placeholders.description' | translate"
-        [ngClass]="{'is-invalid': (addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted))}"></textarea>
-      <div *ngIf="addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted)"
-        class="invalid-feedback">
-        {{'language.errors.descriptionRequired' | translate}}
+      <div *ngIf="
+              addEditForm.get('assetId')?.invalid &&
+              (addEditForm.get('assetId')?.touched || isSubmitted)
+            " class="invalid-feedback">
+        {{ "language.errors.assetRequired" | translate }}
       </div>
     </div>
-  </div>
 
-  <div class="row mt-3">
-    <div class="col-12 text-right">
-      <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
-        {{ 'language.generic.back'| translate }}
-      </button>
-      <button type="submit" class="btn btn-primary font-weight-bold me-3" [disabled]="!this.addEditForm.valid">
-        {{ 'language.generic.submit'| translate }}
-      </button>
+
+
+</div>
+
+<div class="row">
+
+  <div class="col-md-12 mb-3">
+    <label class="form-label">{{'language.form.description' | translate}} <span class="text-danger">*</span></label>
+    <textarea class="form-control" formControlName="description"
+      [placeholder]="'language.placeholders.description' | translate"
+      [ngClass]="{'is-invalid': (addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted))}"></textarea>
+    <div *ngIf="addEditForm.get('description')?.invalid && (addEditForm.get('description')?.touched || isSubmitted)"
+      class="invalid-feedback">
+      {{'language.errors.descriptionRequired' | translate}}
     </div>
   </div>
+</div> -->
+
+
+
+    @if(false){ <span style="position: absolute; inset: 0;  z-index: 9999;"></span>}
+
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Sr.no</th>
+          <th>{{"language.generic.issueDate" | translate}}</th>
+          <th>{{"language.generic.assetType" | translate}}</th>
+          <th>{{"language.generic.asset" | translate}}</th>
+          <th>{{"language.generic.specification" | translate}}</th>
+          <th>{{"language.generic.companyCode" | translate}}</th>
+          <th>{{"language.generic.quantity" | translate}}</th>
+          <th>{{"language.generic.returnStatus" | translate}}</th>
+          <th>{{"language.generic.returnDate" | translate}}</th>
+          @if(!false){ <th>{{"language.generic.actions" | translate}}</th>}
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        <ng-container formArrayName="shiftPolicies">
+          @for(tableItem of shiftPolicies?.controls; track $index) {
+          <tr [formGroupName]="$index">
+            <td>
+              {{ 1 + $index }}
+            </td>
+
+
+            <td style="position: relative;">
+
+              <dp-date-picker class="form-control" formControlName="issuedDate" placeholder="00/00/00"
+                style="width: 100px; overflow: hidden;" [config]="datePickerConfig" theme="dp-material"
+                (change)="onDateTimeChange($event,'issuedDate')" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('issuedDate')?.invalid &&
+                (addEditForm.get('issuedDate')?.touched || isSubmitted)
+            }"></dp-date-picker>
+              <!-- @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+            <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+          } -->
+            </td>
+
+
+
+            <td style="position: relative;">
+
+              <ng-select [clearable]="false" [items]="typesList" bindLabel="name" bindValue="assetTypeId" formControlName="assetTypeId"
+                (change)="getEmpAssTypes($event)" [searchable]="true" [ngClass]="{
+            'is-invalid':
+              addEditForm.get('assetTypeId')?.invalid &&
+              (addEditForm.get('assetTypeId')?.touched || isSubmitted)
+          }" placeholder="Select an option">
+              </ng-select>
+            </td>
+
+
+            <td style="position: relative;">
+              <ng-select [clearable]="false"  [items]="empAssTypesList" bindLabel="assetName" bindValue="assetId" formControlName="assetId"
+                [searchable]="true" [ngClass]="{
+            'is-invalid':
+              addEditForm.get('assetName')?.invalid &&
+              (addEditForm.get('assetName')?.touched || isSubmitted)
+          }" placeholder="Select an option">
+              </ng-select>
+              @if(empAssTypesList.length < 1){ <span
+                style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;">
+                </span>
+                }
+            </td>
+
+
+            <td style="position: relative;">
+
+              <input type="text" class="form-control" formControlName="specification" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('specification')?.invalid &&
+            (addEditForm.get('specification')?.touched || isSubmitted)
+        }" />
+            </td>
+
+
+            <td style="position: relative;">
+
+              <input type="text" class="form-control"  style="width: 80px;" formControlName="companyCode" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('companyCode')?.invalid &&
+            (addEditForm.get('companyCode')?.touched || isSubmitted)
+        }" />
+            </td>
+
+
+            <td style="position: relative;">
+
+              <input style="width: 80px;" (input)="onAmountInput($event,$index,'quantity')" type="number" class="form-control"
+                formControlName="quantity" [ngClass]="{
+          'is-invalid':
+            addEditForm.get('quantity')?.invalid &&
+            (addEditForm.get('quantity')?.touched || isSubmitted)
+        }" />
+            </td>
+
+
+            <td style="position: relative;">
+              <ng-select [clearable]="false"  [items]="rStatusList" bindLabel="label" bindValue="value" formControlName="returnStatus"
+                [searchable]="true" [ngClass]="{
+            'is-invalid':
+              addEditForm.get('returnStatus')?.invalid &&
+              (addEditForm.get('returnStatus')?.touched || isSubmitted)
+          }" placeholder="Select an option">
+              </ng-select>
+
+            </td>
+
+            <td style="position: relative;">
+
+              <dp-date-picker style="width: 100px; overflow: hidden;" class="form-control" formControlName="returnDate"
+                placeholder="00/00/00" [config]="datePickerConfig" theme="dp-material"
+                (change)="onDateTimeChange($event,'returnDate')" [ngClass]="{
+              'is-invalid':
+                addEditForm.get('returnDate')?.invalid &&
+                (addEditForm.get('returnDate')?.touched || isSubmitted)
+            }"></dp-date-picker>
+              @if(!tableItem.value.returnStatus){
+              <span
+                style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;"></span>
+              }
+            </td>
+
+
+            @if(!false){ <td style="position: relative;">
+              <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
+                <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
+                    version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <rect x="0" y="0" width="24" height="24"></rect>
+                      <path style="fill: rgb(255, 255, 255)"
+                        d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                        fill="#000000" fill-rule="nonzero"></path>
+                      <path style="fill: rgb(255, 255, 255)"
+                        d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                        fill="#000000" opacity="0.3"></path>
+                    </g>
+                  </svg></span>
+              </button>
+              @if($index == 0){<span
+                style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;"></span>}
+            </td>}
+          </tr>
+          }
+        </ng-container>
+
+        <tr>
+          <td colspan="12">
+            <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
+              {{"language.generic.addMore" | translate}}
+            </button>
+          </td>
+
+        </tr>
+        <!-- }} -->
+      </tbody>
+    </table>
+
+
+
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+        <button type="button" class="btn btn-light-danger font-weight-bold button-spacing mr-3" (click)="goBack()">
+          {{ 'language.generic.back'| translate }}
+        </button>
+        <button type="submit" class="btn btn-primary font-weight-bold me-3" [disabled]="!this.addEditForm.valid">
+          {{ 'language.generic.submit'| translate }}
+        </button>
+      </div>
+    </div>
   </form>
-</div>
 </div>

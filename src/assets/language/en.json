@@ -269,6 +269,12 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "returnDate":"Return Date",
+      "returnStatus":"Return Status",
+      "quantity":"Quantity",
+      "companyCode":"Company Code",
+      "assetType":"Asset Type",
+      "issueDate":"Issue Date",
       "blackList":"Black List",
       "permanentAddress":"Permanent Address",
       "presentAddress":"Present Address",

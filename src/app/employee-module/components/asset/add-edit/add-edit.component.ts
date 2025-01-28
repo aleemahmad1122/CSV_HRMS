@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
@@ -14,7 +14,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-add-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule,NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DpDatePickerModule, NgSelectModule],
   templateUrl: './add-edit.component.html',
   styleUrl: './add-edit.component.css'
 })
@@ -25,6 +25,18 @@ export class AddEditComponent implements OnInit, OnDestroy {
   };
 
   private ngUnsubscribe = new Subject<void>();
+
+
+  rStatusList:{label:string;value:boolean}[] = [
+    {
+      label:"Yes",
+      value:true
+    },
+    {
+      label:"No",
+      value:false
+    },
+  ]
 
   id: string = ''
   addEditForm: FormGroup;
@@ -44,6 +56,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
+    this.addRow()
   }
 
   ngOnInit(): void {
@@ -87,7 +100,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
             this.addEditForm.patchValue({ assetTypeId: this.typesList?.[0]?.assetTypeId });
             this.patchFormValues();
             if (!this.isEditMode) {
-              this.getEmpAssTypes()
+              this.getEmpAssTypes({ assetTypeId: this.typesList?.[0]?.assetTypeId })
             }
           } else {
             this.typesList = [];
@@ -99,9 +112,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  getEmpAssTypes(): void {
+  getEmpAssTypes(event?): void {
+
     this.apiCalling
-      .getData('EmployeeAsset', `getAssetByAssetTypeId/${this.addEditForm.value['assetTypeId']}`, true, { employeeId: this.id })
+      .getData('EmployeeAsset', `getAssetByAssetTypeId/${event?.assetTypeId}`, true, { employeeId: this.id })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
@@ -116,6 +130,24 @@ export class AddEditComponent implements OnInit, OnDestroy {
           this.empAssTypesList = [];
         },
       });
+  }
+
+
+
+  onAmountInput(event: Event, index: number,name:string): void {
+    const input = event.target as HTMLInputElement;
+    // Allow only digits in the input
+    input.value = input.value.replace(/[^0-9]/g, '');
+
+    // Check if the index is valid
+    if (index >= 0 && index < this.shiftPolicies.length) {
+      // Update the specific 'amount' field in the paygroupComponents array
+      const arr = this.addEditForm.get('shiftPolicies') as FormArray;
+      const component = arr.at(index) as FormGroup;
+
+      // Set the new value for the 'amount' field
+      component.get(name)?.setValue(input.value);
+    }
   }
 
 
@@ -142,22 +174,23 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
-      assetId: ['', Validators.required],
-      assetTypeId: [this.isEditMode ? '' : this.typesList?.[0]?.assetTypeId || '', Validators.required],
-      description: ['', Validators.required],
-      offSet: [new Date().getTimezoneOffset().toString()]
+      shiftPolicies: this.fb.array([]),
+      // issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
+      // assetId: ['', Validators.required],
+      // assetTypeId: [this.isEditMode ? '' : this.typesList?.[0]?.assetTypeId || '', Validators.required],
+      // description: ['', Validators.required],
+      // offSet: [new Date().getTimezoneOffset().toString()]
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
       this.addEditForm.patchValue({
-        issuedDate: this.convertToDatetimeLocalFormat(this.selectedValue.issuedDate),
-        assetId: this.selectedValue.assetId,
-        assetTypeId: this.selectedValue.assetTypeId,
-        description: this.selectedValue.description,
-        offSet: Number(this.selectedValue.offSet),
+        // issuedDate: this.convertToDatetimeLocalFormat(this.selectedValue.issuedDate),
+        // assetId: this.selectedValue.assetId,
+        // assetTypeId: this.selectedValue.assetTypeId,
+        // description: this.selectedValue.description,
+        // offSet: Number(this.selectedValue.offSet),
       });
       this.empAssTypesList.push({ assetId: this.selectedValue.assetId, assetName: this.selectedValue.assetName })
     }
@@ -193,6 +226,37 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
       }
     });
+  }
+
+
+
+  addRow() {
+    const formData = this.fb.group({
+      issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
+      assetTypeId: [null, Validators.required],
+      assetId: [null, Validators.required],
+      specification: [null, Validators.required],
+      companyCode: [null, Validators.required],
+      quantity: [null, Validators.required],
+      returnStatus: [true, Validators.required],
+      returnDate: [null, Validators.required],
+      offSet: [new Date().getTimezoneOffset().toString()]
+    });
+    this.shiftPolicies.push(formData);
+  }
+
+  get shiftPolicies(): FormArray {
+    return this.addEditForm.controls["shiftPolicies"] as FormArray;
+  }
+
+  deleteRow(index: number): void {
+
+    if (index >= 0 && index < this.shiftPolicies.length) {
+      const updatedControls = this.shiftPolicies.controls.filter((_, i) => i !== index);
+      this.addEditForm.setControl('shiftPolicies', this.fb.array(updatedControls));
+    } else {
+    }
+
   }
 
   goBack(): void {
