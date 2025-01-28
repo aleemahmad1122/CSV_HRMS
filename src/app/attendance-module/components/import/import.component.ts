@@ -26,6 +26,8 @@ export class ImportComponent {
   ngUnsubscribe = new Subject<void>();
   data: any[] = []; // To hold the parsed data
   tableHeaders: string[] = []; // Initialize as an empty array
+  currentPage: number = 1; // Current page number
+  itemsPerPage: number = 10; // Number of items per page
 
   constructor(
     private _router: Router,
@@ -154,5 +156,35 @@ export class ImportComponent {
   back(): void {
     this._router.navigate([window.history.back()]);
   }
+
+  get paginatedData(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.data.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  nextPage(): void {
+    const totalPages = this.calculateTotalPages(this.data.length, this.itemsPerPage);
+    if (this.currentPage < totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  changePage(page: number): void {
+    const totalPages = this.calculateTotalPages(this.data.length, this.itemsPerPage);
+    if (page >= 1 && page <= totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  calculateTotalPages(dataLength: number, itemsPerPage: number): number {
+    return itemsPerPage > 0 ? Math.ceil(dataLength / itemsPerPage) : 0; // Ensure itemsPerPage is greater than 0
+  }
 }
+
 
