@@ -171,7 +171,7 @@
 
   <div class="d-flex flex-column-fluid px-3 my-5 position-relative">
 
-    @if(userReporting.length > 1){<ng-select style="position: absolute; z-index: 9; left: 2%; top: 8%;"  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="this.emp.employeeId" bindValue="employeeId"
+    @if(userReporting.length > 1){<ng-select style="position: absolute; z-index: 9; right: 10%; top: 8%;"  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="this.emp.employeeId" bindValue="employeeId"
     [searchable]="true" placeholder="Select an option" (change)="getGraphStats()">
 
 
