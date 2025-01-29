@@ -1,4 +1,3 @@
-
 interface ICommon {
   isActive: boolean;
   createdBy: string;
@@ -587,6 +586,9 @@ export interface Salary extends ICommon {
   type: string;
   description: string;
   isActive: boolean;
+  salaryType: number;
+  calculationType: number;
+  amount: number;
 }
 
 

@@ -162,7 +162,7 @@
                 </figure>
                 <div>
                   <div style="color: gray">
-                    {{ data.punchCode }}         {{data.joiningDate ? (', '+ (data.joiningDate   | convertTime: 'date')) : ''}}
+                    {{ data.punchCode }} {{data.joiningDate ? (', '+ (data.joiningDate | convertTime: 'date')) : ''}}
                   </div>
                   <div class="text-dark-75 font-size-lg mb-0" [innerHTML]="
                     data.firstName + ' ' + data.lastName || 'N/A'
@@ -202,7 +202,7 @@
                             color: data.roleTextColor,
                             background: data.roleBackgroundColor
                           }" class="label label-lg label-inline mr-2">
-                          {{data.isBlacklisted ? (('language.generic.blackListed' | translate) + ' -')  : ''}} {{ data.role || "N/A" }}
+                          {{ data.role || "N/A" }}
                         </span>
                       </div>
                     </div>
@@ -210,7 +210,7 @@
                 </span>
               </td>
 
-              <td>
+              @if(!data.isBlacklisted){<td>
                 <div class="btn-group">
                   <button class="btn btn-light-primary font-weight-bold btn-sm dropdown-toggle" type="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -240,15 +240,15 @@
                     </li>
                     }
 
-                    @if(this.isHr && (data.isBlacklisted || data.isActive)){
-                      <li class="w-100 mb-2">
-                        <button data-bs-toggle="modal" [attr.data-bs-target]="'#blackmodal-' + $index"
+                    @if(this.isHr && data.isActive){
+                    <li class="w-100 mb-2">
+                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#blackmodal-' + $index"
                         class="btn btn-sm btn-default btn-text-secondary btn-hover-secondary btn-icon w-100 text-center"
                         title="blackList">
-                        {{(data.isBlacklisted  ? "language.generic.whiteList" : "language.generic.blackList") | translate }}
+                        {{"language.generic.blackList" | translate }}
                       </button>
-                      </li>
-                      }
+                    </li>
+                    }
                     @if(data.isActive){
                     @if(this.isDelete){
                     <li class="w-100 ">
@@ -312,7 +312,7 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        {{(data.isBlacklisted ? 'language.msg.actionWhite' : 'language.msg.actionBlack') | translate}}
+                        {{'language.msg.actionBlack' | translate}}
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -326,7 +326,23 @@
                     </div>
                   </div>
                 </div>
+              </td>}@else{
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75 font-size-lg mb-0">
+                      <div>
+                        <span style="
+                              color: white;
+                              background: gray " class="label label-lg label-inline mr-2">
+                          {{data.isBlacklisted ? ('language.generic.blackListed' | translate) : ''}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </span>
               </td>
+              }
             </tr>
             } @if(this.dataList.length < 1){ <tr>
               <td colspan="10" class="text-center py-4">

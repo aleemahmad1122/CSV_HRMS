@@ -27,8 +27,9 @@
           <label class="form-label">{{ "language.generic.frequency" | translate }}
             <span class="text-danger">*</span></label>
 
-          <ng-select [items]="salaryFrequenciesList" [clearable]="false" [bindLabel]="'title'" [bindValue]="'salaryFrequencyId'"
-            [searchable]="true" placeholder="Select an option" formControlName="salaryFrequencyId" [ngClass]="{
+          <ng-select [items]="salaryFrequenciesList" [clearable]="false" [bindLabel]="'title'"
+            [bindValue]="'salaryFrequencyId'" [searchable]="true" placeholder="Select an option"
+            formControlName="salaryFrequencyId" [ngClass]="{
       'is-invalid':
               addEditForm.get('salaryFrequencyId')?.invalid &&
               (addEditForm.get('salaryFrequencyId')?.touched || isSubmitted)
@@ -45,24 +46,18 @@
           <label class="form-label">{{ "language.generic.type" | translate }}
             <span class="text-danger">*</span></label>
 
-            <div class="radio-button-container pt-2">
-              @for (item of frameworks; track $index) {
-                <div class="radio-button">
-                  <input
-                  type="radio"
-                  class="radio-button__input"
-                  [id]="'framework-' + $index"
-                  formControlName="paygroupType"
-                  [value]="item.value">
-                <label
-                  class="radio-button__label"
-                  [for]="'framework-' + $index">
-                  <span class="radio-button__custom"></span>
-                  {{ item.name }}
-                </label>
-                </div>
-              }
+          <div class="radio-button-container pt-2">
+            @for (item of frameworks; track $index) {
+            <div class="radio-button">
+              <input type="radio" class="radio-button__input" [id]="'framework-' + $index"
+                formControlName="paygroupType" [value]="item.value">
+              <label class="radio-button__label" [for]="'framework-' + $index">
+                <span class="radio-button__custom"></span>
+                {{ item.name }}
+              </label>
             </div>
+            }
+          </div>
 
           <div *ngIf="
               addEditForm.get('paygroupType')?.invalid &&
@@ -90,22 +85,22 @@
       </div>
 
 
-
-      <div >
+<!-- b -->
+      <div>
+        <h1 class="pt-5" > {{"language.generic.benefits" | translate}}</h1>
         <table class="table table-striped">
           <thead>
             <tr>
               <th>#</th>
               <th>{{"language.generic.salaryComponent" | translate}}</th>
-              <th>{{"language.generic.salaryType" | translate}}</th>
               <th>{{"language.generic.calculationType" | translate}}</th>
               <th>{{"language.generic.amount" | translate}}</th>
               @if(true){ <th>{{"language.generic.actions" | translate}}</th>}
             </tr>
           </thead>
           <tbody class="table-border-bottom-0">
-            <ng-container formArrayName="paygroupComponents">
-              @for(tableItem of paygroupComponents?.controls; track $index) {
+            <ng-container formArrayName="paygroupComponentsBenefit">
+              @for(tableItem of paygroupComponentsBenefit?.controls; track $index) {
               <tr [formGroupName]="$index">
                 <td>
                   {{ 1 + $index }}
@@ -114,7 +109,7 @@
 
                 <td style="position: relative;">
 
-                  <ng-select [clearable]="false" [items]="salaryComponent" [bindLabel]="'salaryTitle'"
+                  <ng-select [clearable]="false" [items]="salaryComponentBenefit" [bindLabel]="'salaryTitle'"
                     [bindValue]="'salaryId'" [searchable]="true" placeholder="Select an option"
                     formControlName="salaryId" [ngClass]="{
                     'is-invalid':
@@ -130,24 +125,8 @@
 
                 <td style="position: relative;">
 
-                  <ng-select [clearable]="false" [items]="salaryType" [bindLabel]="'label'"
-                    [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
-                    formControlName="salaryType" [ngClass]="{
-                    'is-invalid':
-                            addEditForm.get('salaryType')?.invalid &&
-                            (addEditForm.get('salaryType')?.touched || isSubmitted)
-                      }">
-                  </ng-select>
-                  <!-- @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
-                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
-                  } -->
-                </td>
-
-                <td style="position: relative;">
-
-                  <ng-select [clearable]="false" [items]="calType" [bindLabel]="'label'"
-                    [bindValue]="'value'" [searchable]="true" placeholder="Select an option"
-                    formControlName="calculationType" [ngClass]="{
+                  <ng-select [clearable]="false" [items]="calType" [bindLabel]="'label'" [bindValue]="'value'"
+                    [searchable]="true" placeholder="Select an option" formControlName="calculationType" [ngClass]="{
                     'is-invalid':
                             addEditForm.get('calculationType')?.invalid &&
                             (addEditForm.get('calculationType')?.touched || isSubmitted)
@@ -159,9 +138,8 @@
                 </td>
 
                 <td style="position: relative;">
-                    <input type="number" class="form-control" formControlName="amount"
-                    (input)="onAmountInput($event,$index)"
-                      [placeholder]="'language.form.amount' | translate" [ngClass]="{
+                  <input type="number" class="form-control" formControlName="amount"
+                    (input)="onAmountInput($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
                         'is-invalid':
                           addEditForm.get('amount')?.invalid &&
                           (addEditForm.get('amount')?.touched || isSubmitted)
@@ -173,8 +151,8 @@
 
 
 
-                @if(true){ <td style="position: relative;" >
-                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRow($index)">
+                @if(true){ <td style="position: relative;">
+                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRowBenefit($index)">
                     <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
                         version="1.1">
@@ -189,7 +167,9 @@
                         </g>
                       </svg></span>
                   </button>
-                  <!-- @if($index == 0){<span style="background-color: rgba(161, 161, 161, 0.165); position: absolute; inset: 0;cursor: not-allowed;" ></span>} -->
+                @if($index == 0){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  }
                 </td>}
               </tr>
               }
@@ -197,7 +177,7 @@
 
             @if(true){ <tr>
               <td colspan="12">
-                <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
+                <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRowBenefit()">
                   {{"language.generic.addMore" | translate}}
                 </button>
               </td>
@@ -206,6 +186,112 @@
           </tbody>
         </table>
       </div>
+
+
+<!-- d -->
+      <div>
+        <h1 class="pt-5" > {{"language.generic.benefits" | translate}}</h1>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{"language.generic.salaryComponent" | translate}}</th>
+              <th>{{"language.generic.calculationType" | translate}}</th>
+              <th>{{"language.generic.amount" | translate}}</th>
+              @if(true){ <th>{{"language.generic.actions" | translate}}</th>}
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <ng-container formArrayName="paygroupComponentsDeduction">
+              @for(tableItem of paygroupComponentsDeduction?.controls; track $index) {
+              <tr [formGroupName]="$index">
+                <td>
+                  {{ 1 + $index }}
+                </td>
+
+
+                <td style="position: relative;">
+
+                  <ng-select [clearable]="false" [items]="salaryComponentDeduction" [bindLabel]="'salaryTitle'"
+                    [bindValue]="'salaryId'" [searchable]="true" placeholder="Select an option"
+                    formControlName="salaryId" [ngClass]="{
+                    'is-invalid':
+                            addEditForm.get('salaryId')?.invalid &&
+                            (addEditForm.get('salaryId')?.touched || isSubmitted)
+                      }">
+                  </ng-select>
+                  <!-- @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  } -->
+                </td>
+
+
+                <td style="position: relative;">
+
+                  <ng-select [clearable]="false" [items]="calType" [bindLabel]="'label'" [bindValue]="'value'"
+                    [searchable]="true" placeholder="Select an option" formControlName="calculationType" [ngClass]="{
+                    'is-invalid':
+                            addEditForm.get('calculationType')?.invalid &&
+                            (addEditForm.get('calculationType')?.touched || isSubmitted)
+                      }">
+                  </ng-select>
+                  <!-- @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  } -->
+                </td>
+
+                <td style="position: relative;">
+                  <input type="number" class="form-control" formControlName="amount"
+                    (input)="onAmountInput($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
+                        'is-invalid':
+                          addEditForm.get('amount')?.invalid &&
+                          (addEditForm.get('amount')?.touched || isSubmitted)
+                      }" />
+                  <!-- @if(!(tableItem.value.attendanceFlag == 0 || tableItem.value.attendanceFlag == 1 || tableItem.value.attendanceFlag == 2)){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  } -->
+                </td>
+
+
+
+                @if(true){ <td style="position: relative;">
+                  <button type="button" class="btn btn-icon btn-danger me-2 btn-sm" (click)="deleteRowDeduction($index)">
+                    <span class="bx bx-trash"><svg xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24"
+                        version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <rect x="0" y="0" width="24" height="24"></rect>
+                          <path style="fill: rgb(255, 255, 255)"
+                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                            fill="#000000" fill-rule="nonzero"></path>
+                          <path style="fill: rgb(255, 255, 255)"
+                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                            fill="#000000" opacity="0.3"></path>
+                        </g>
+                      </svg></span>
+                  </button>
+                @if($index == 0){
+                    <span style="position: absolute; inset: 0; background-color: rgba(128, 128, 128, 0.193); ; cursor: not-allowed;" ></span>
+                  }
+                </td>}
+              </tr>
+              }
+            </ng-container>
+
+            @if(true){ <tr>
+              <td colspan="12">
+                <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRowDeduction()">
+                  {{"language.generic.addMore" | translate}}
+                </button>
+              </td>
+
+            </tr>}
+          </tbody>
+        </table>
+      </div>
+
+
+
 
       <div class="row mt-3">
         <div class="col-12 text-right">

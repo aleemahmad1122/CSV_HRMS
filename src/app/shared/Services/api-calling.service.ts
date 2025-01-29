@@ -32,6 +32,7 @@ export class ApiCallingService {
     methodName: string,
     showLoader: boolean,
     paginationParams?: {
+      salaryType?:number;
       employeeId?: string;
       date?:string;
       attachmentType?:string | number;

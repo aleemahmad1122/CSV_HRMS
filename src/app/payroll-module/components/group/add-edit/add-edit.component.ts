@@ -26,14 +26,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
   frameworks: { value: number; name: string }[] = [{ value: 0, name: 'fixed' }, { value: 1, name: 'hourly' }];
 
   salaryFrequenciesList: SalaryFrequencies[];
-  salaryComponent:Salary[]
+  salaryComponentDeduction:Salary[]
+  salaryComponentBenefit:Salary[]
 
   salaryType: {
     value: number;
     label: string;
   }[] = [
       {
-        value: 0,
+        value: 2,
         label: "Deduction"
       },
       {
@@ -68,7 +69,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   ) {
     this.addEditForm = this.createForm();
     this.getFrequency()
-    this.getComponent()
+    this.getComponentForDeduction()
+    this.getComponentForBenefit()
   }
 
   ngOnInit(): void {
@@ -93,7 +95,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
           });
         // this.patchFormValues(); // Removed this line
       } else {
-        this.addRow();
+        this.addRowBenefit();
+        this.addRowDeduction();
       }
     });
   }
@@ -104,7 +107,18 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
 
-  private createPaygroupComponentsFormGroup(item): FormGroup {
+  private createpaygroupComponentsBenefitFormGroup(item): FormGroup {
+    return this.fb.group({
+      salaryId: [item.salaryId],
+      salaryType: [item.salaryType],
+      calculationType: [item.calculationType],
+      amount: [item.amount]
+    });
+  }
+
+
+
+  private createpaygroupComponentsDeductionFormGroup(item): FormGroup {
     return this.fb.group({
       salaryId: [item.salaryId],
       salaryType: [item.salaryType],
@@ -120,7 +134,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
       salaryFrequencyId: [null, Validators.required],
       paygroupType: [this.frameworks[0], Validators.required],
       description: [''],
-      paygroupComponents: this.fb.array([])
+      paygroupComponentsBenefit: this.fb.array([]),
+      paygroupComponentsDeduction: this.fb.array([])
     });
   }
 
@@ -131,16 +146,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
         paygroupType: this.selectedValue.paygroupType,
         description: this.selectedValue.description,
         salaryFrequencyId: this.selectedValue.salaryFrequencyId,
-        paygroupComponents: this.selectedValue.paygroupComponents,
+        paygroupComponentsBenefit: this.selectedValue.paygroupComponentsBenefit,
       });
 
       // Update shiftPolicies FormArray
-      const paygroupFormArray = this.addEditForm.get('paygroupComponents') as FormArray;
+      const paygroupFormArray = this.addEditForm.get('paygroupComponentsBenefit') as FormArray;
       paygroupFormArray.clear(); // Clear existing items
 
-      if (this.selectedValue.paygroupComponents?.length) {
-        this.selectedValue.paygroupComponents.forEach(_ => {
-          paygroupFormArray.push(this.createPaygroupComponentsFormGroup(_));
+      if (this.selectedValue.paygroupComponentsBenefit?.length) {
+        this.selectedValue.paygroupComponentsBenefit.forEach(_ => {
+          paygroupFormArray.push(this.createpaygroupComponentsBenefitFormGroup(_));
         });
       }
 
@@ -171,20 +186,47 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   }
 
-  private getComponent(): void {
+  private getComponentForDeduction(): void {
 
     try {
-      this.apiCalling.getData("Salary", `getSalaries/`, true)
+      this.apiCalling.getData("Salary", `getSalaries/`, true,{
+        salaryType:2
+      })
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
             if (response?.success) {
-              this.salaryComponent = response?.data?.salaries;
+              this.salaryComponentDeduction = response?.data?.salaries;
             } else {
-              this.salaryComponent = [];
+              this.salaryComponentDeduction = [];
             }
           },
           error: (error) => {
-            this.salaryComponent = [];
+            this.salaryComponentDeduction = [];
+          }
+        });
+    } catch (error) {
+      console.log(error);
+
+    }
+
+  }
+
+  private getComponentForBenefit(): void {
+
+    try {
+      this.apiCalling.getData("Salary", `getSalaries/`, true,{
+        salaryType:1
+      })
+        .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
+          next: (response) => {
+            if (response?.success) {
+              this.salaryComponentBenefit = response?.data?.salaries;
+            } else {
+              this.salaryComponentBenefit = [];
+            }
+          },
+          error: (error) => {
+            this.salaryComponentBenefit = [];
           }
         });
     } catch (error) {
@@ -227,9 +269,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     input.value = input.value.replace(/[^0-9]/g, '');
 
     // Check if the index is valid
-    if (index >= 0 && index < this.paygroupComponents.length) {
-      // Update the specific 'amount' field in the paygroupComponents array
-      const paygroupArray = this.addEditForm.get('paygroupComponents') as FormArray;
+    if (index >= 0 && index < this.paygroupComponentsBenefit.length) {
+      // Update the specific 'amount' field in the paygroupComponentsBenefit array
+      const paygroupArray = this.addEditForm.get('paygroupComponentsBenefit') as FormArray;
       const component = paygroupArray.at(index) as FormGroup;
 
       // Set the new value for the 'amount' field
@@ -240,26 +282,54 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
   // table
-  addRow() {
+  addRowBenefit() {
     const formData = this.fb.group({
       salaryId: ['', Validators.required],
-      salaryType: [0, Validators.required],
+      salaryType: [1, Validators.required],
       calculationType: [0, Validators.required],
       amount: ['', Validators.required],
     });
-    this.paygroupComponents.push(formData);
+    this.paygroupComponentsBenefit.push(formData);
   }
 
-  get paygroupComponents(): FormArray {
-    return this.addEditForm.controls["paygroupComponents"] as FormArray;
+  get paygroupComponentsBenefit(): FormArray {
+    return this.addEditForm.controls["paygroupComponentsBenefit"] as FormArray;
   }
 
 
-  deleteRow(index: number): void {
+  deleteRowBenefit(index: number): void {
 
-    if (index >= 0 && index < this.paygroupComponents.length) {
-      const updatedControls = this.paygroupComponents.controls.filter((_, i) => i !== index);
-      this.addEditForm.setControl('paygroupComponents', this.fb.array(updatedControls));
+    if (index >= 0 && index < this.paygroupComponentsBenefit.length) {
+      const updatedControls = this.paygroupComponentsBenefit.controls.filter((_, i) => i !== index);
+      this.addEditForm.setControl('paygroupComponentsBenefit', this.fb.array(updatedControls));
+    } else {
+    }
+
+  }
+
+
+
+  // table
+  addRowDeduction() {
+    const formData = this.fb.group({
+      salaryId: ['', Validators.required],
+      salaryType: [2, Validators.required],
+      calculationType: [0, Validators.required],
+      amount: ['', Validators.required],
+    });
+    this.paygroupComponentsDeduction.push(formData);
+  }
+
+  get paygroupComponentsDeduction(): FormArray {
+    return this.addEditForm.controls["paygroupComponentsDeduction"] as FormArray;
+  }
+
+
+  deleteRowDeduction(index: number): void {
+
+    if (index >= 0 && index < this.paygroupComponentsDeduction.length) {
+      const updatedControls = this.paygroupComponentsDeduction.controls.filter((_, i) => i !== index);
+      this.addEditForm.setControl('paygroupComponentsDeduction', this.fb.array(updatedControls));
     } else {
     }
 
