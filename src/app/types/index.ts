@@ -101,8 +101,12 @@ export interface IEmployeeAsset extends ICommon {
   assetId: string;
   assetName: string;
   issuedDate: string;
+  specification: string;
+  companyCode: string;
+  quantity: number;
+  returnStatus: boolean;
+  returnDate: string;
   offSet: string;
-  description: string;
   isActive: boolean;
   assetStatus: number;
 }
@@ -370,7 +374,7 @@ export interface IEmployee extends ICommon {
   department: string;
   dateOfHire: string;
   salary: number;
-  isBlacklisted:boolean;
+  isBlacklisted: boolean;
   employmentType: 'Full-time' | 'Part-time' | 'Contract';
 }
 

@@ -108,8 +108,8 @@
             style="font-size: 12px;"></i>
         </th>
 
-        <th (click)="sort('description')" class="cursor-pointer">
-          <span> {{'language.generic.description' | translate}} </span> <i class="fa-solid fa-sort mx-2"
+        <th (click)="sort('specification')" class="cursor-pointer">
+          <span> {{'language.generic.specification' | translate}} </span> <i class="fa-solid fa-sort mx-2"
             style="font-size: 12px;"></i>
         </th>
 
@@ -130,9 +130,18 @@
 
         <td aria-label="64616-103" class="datatable-cell">
           <span>
-            <div class="d-flex align-items-center">
+            <div class="d-flex flex-column ">
+              <div style="color: gray">
+                {{ data.companyCode }}
+              </div>
               <div class="text-dark-75   font-size-lg mb-0"
                 [innerHTML]="data.assetName || 'N/A' | highlight: searchTerm">
+              </div>
+              <div>
+                <b>Qty:</b>
+                <span style="color: gray">
+                  {{ data.quantity }}
+                </span>
               </div>
             </div>
           </span>
@@ -162,7 +171,7 @@
           <span>
             <div class="d-flex align-items-center">
               <div class="text-dark-75   font-size-lg mb-0">
-                {{data.description || "N/A"}}
+                {{data.specification || "N/A"}}
               </div>
             </div>
           </span>
