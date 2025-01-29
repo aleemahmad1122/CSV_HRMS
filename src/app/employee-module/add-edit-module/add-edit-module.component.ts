@@ -258,7 +258,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
 
   private formatDateForSubmission(dateString: string): string {
     const date = new Date(dateString);
-    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
+    return date.toISOString();
   }
 
 
@@ -347,6 +347,10 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
+          if (!this.isEditMode) {
+            // Navigate to the edit route after successful creation
+            this.router.navigate([`/employee/profile/employee/edit`], { queryParams: { id: response.data.employeeId } });
+          }
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
