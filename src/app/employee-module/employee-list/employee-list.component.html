@@ -240,7 +240,7 @@
                     </li>
                     }
 
-                    @if(data.isActive && this.isHr){
+                    @if(this.isHr && (data.isBlacklisted || data.isActive)){
                       <li class="w-100 mb-2">
                         <button data-bs-toggle="modal" [attr.data-bs-target]="'#blackmodal-' + $index"
                         class="btn btn-sm btn-default btn-text-secondary btn-hover-secondary btn-icon w-100 text-center"
