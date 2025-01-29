@@ -26,9 +26,9 @@
             <option value="2">
               {{ "language.generic.Inactive" | translate }}
             </option>
-            <option value="3">
+            @if(isHr){<option value="3">
               {{ "language.generic.blackList" | translate }}
-            </option>
+            </option>}
           </select>
         </div>
 
@@ -202,7 +202,7 @@
                             color: data.roleTextColor,
                             background: data.roleBackgroundColor
                           }" class="label label-lg label-inline mr-2">
-                          {{ data.role || "N/A" }} {{' , Black list'}}
+                          {{data.isBlacklisted ? (('language.generic.blackListed' | translate) + ' -')  : ''}} {{ data.role || "N/A" }}
                         </span>
                       </div>
                     </div>
@@ -219,7 +219,7 @@
                   <ul class="dropdown-menu px-2">
 
 
-                    @if(this.isHr){
+                    @if(data.isActive && this.isHr && !data.isBlacklisted){
                     <li class="w-100 mb-2">
                       <a (click)="setPass(data)"
                         class="btn btn-sm btn-default btn-text-success btn-hover-success btn-icon w-100 text-center"
@@ -228,17 +228,9 @@
                     </li>
                     }
 
-                    @if(this.isHr){
-                    <li class="w-100 mb-2">
-                      <button data-bs-toggle="modal" [attr.data-bs-target]="'#blackmodal-' + $index"
-                      class="btn btn-sm btn-default btn-text-secondary btn-hover-secondary btn-icon w-100 text-center"
-                      title="blackList">
-                      {{ "language.generic.blackList" | translate }}
-                    </button>
-                    </li>
-                    }
 
-                    @if(data.isActive && this.isEdit){
+
+                    @if(data.isActive && this.isEdit && !data.isBlacklisted){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{ id: data.employeeId }"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
@@ -248,7 +240,15 @@
                     </li>
                     }
 
-
+                    @if(data.isActive && this.isHr){
+                      <li class="w-100 mb-2">
+                        <button data-bs-toggle="modal" [attr.data-bs-target]="'#blackmodal-' + $index"
+                        class="btn btn-sm btn-default btn-text-secondary btn-hover-secondary btn-icon w-100 text-center"
+                        title="blackList">
+                        {{(data.isBlacklisted  ? "language.generic.whiteList" : "language.generic.blackList") | translate }}
+                      </button>
+                      </li>
+                      }
                     @if(data.isActive){
                     @if(this.isDelete){
                     <li class="w-100 ">
@@ -260,15 +260,13 @@
                     </li>
                     }
                     }
-                    @if(!data.isActive){
-                    @if(this.isDelete){
+                    @if(!data.isActive && !data.isBlacklisted && this.isDelete){
                     <li class="w-100 ">
                       <button data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                         class="btn btn-sm btn-default   btn-success  btn-icon w-100 text-center" title="Delete">
                         {{'language.generic.active' | translate}}
                       </button>
                     </li>
-                    }
                     }
                   </ul>
                 </div>
@@ -314,7 +312,7 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        {{'language.msg.actionBlack' | translate}}
+                        {{(data.isBlacklisted ? 'language.msg.actionWhite' : 'language.msg.actionBlack') | translate}}
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

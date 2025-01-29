@@ -370,6 +370,7 @@ export interface IEmployee extends ICommon {
   department: string;
   dateOfHire: string;
   salary: number;
+  isBlacklisted:boolean;
   employmentType: 'Full-time' | 'Part-time' | 'Contract';
 }
 

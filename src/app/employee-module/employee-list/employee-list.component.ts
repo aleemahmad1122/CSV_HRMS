@@ -220,7 +220,7 @@ export class EmployeeListComponent {
   }
 
   onBlackList(id: string): void {
-    this.apiService.deleteData('Employee', `deleteEmployee/${id}`, id, true)
+    this.apiService.deleteData('Employee', `blacklistEmployee/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
@@ -228,7 +228,7 @@ export class EmployeeListComponent {
             this.toaster.error(res?.message + '. ' + res?.data || 'An error occurred', 'Error!');
           };
         },
-        error: (err) => console.error('Error deleting Employee:', err),
+        error: (err) => console.error('Error blacklist Employee:', err),
       });
   }
 

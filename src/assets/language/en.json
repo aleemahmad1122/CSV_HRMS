@@ -276,6 +276,8 @@
       "assetType":"Asset Type",
       "issueDate":"Issue Date",
       "blackList":"Black List",
+      "whiteList":"White List",
+      "blackListed":"Black Listed",
       "permanentAddress":"Permanent Address",
       "presentAddress":"Present Address",
       "salaryComponent":"Salary Component",
@@ -583,7 +585,8 @@
       "updateStatus": "Update Stauts",
       "areYouAbsolutely": "Are you sure?",
       "actionCannotBeUndone": "Are you sure, you want to deactivate or delete it?",
-      "actionBlack":"Are you sure, you want to black list it?"
+      "actionBlack":"Are you sure, you want to black list it?",
+      "actionWhite":"Are you sure, you want to white list it?"
     }
   }
 }
