@@ -84,7 +84,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
             next: (response) => {
               if (response?.success) {
                 this.selectedValue = response?.data;
-                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
+                this.selectedValue.paygroupComponentsBenefit = [];
+                this.selectedValue.paygroupComponentsDeduction = [];
+                response?.data.paygroupComponents.forEach(_ => {
+                  if (_.salaryType == 1) {
+                    this.selectedValue.paygroupComponentsBenefit?.push(_);
+                  } else {
+                    this.selectedValue.paygroupComponentsDeduction?.push(_);
+                  }
+                });
+                this.patchFormValues();
               } else {
                 this.selectedValue = [];
               }
@@ -141,6 +150,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   private patchFormValues(): void {
+    console.warn(this.selectedValue);
+
     if (this.selectedValue) {
       this.addEditForm.patchValue({
         title: this.selectedValue.title,
@@ -148,6 +159,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
         description: this.selectedValue.description,
         salaryFrequencyId: this.selectedValue.salaryFrequencyId,
         paygroupComponentsBenefit: this.selectedValue.paygroupComponentsBenefit,
+        paygroupComponentsDeduction: this.selectedValue.paygroupComponentsDeduction,
       });
 
       // Update shiftPolicies FormArray
@@ -157,6 +169,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
       if (this.selectedValue.paygroupComponentsBenefit?.length) {
         this.selectedValue.paygroupComponentsBenefit.forEach(_ => {
           paygroupFormArray.push(this.createpaygroupComponentsBenefitFormGroup(_));
+        });
+      }
+
+      // Update shiftPolicies FormArray
+      const paygroupFormArrayDeduction = this.addEditForm.get('paygroupComponentsDeduction') as FormArray;
+      paygroupFormArrayDeduction.clear(); // Clear existing items
+
+      if (this.selectedValue.paygroupComponentsDeduction?.length) {
+        this.selectedValue.paygroupComponentsDeduction.forEach(_ => {
+          paygroupFormArrayDeduction.push(this.createpaygroupComponentsDeductionFormGroup(_));
         });
       }
 
