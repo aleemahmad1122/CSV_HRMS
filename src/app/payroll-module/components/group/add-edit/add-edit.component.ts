@@ -8,7 +8,7 @@ import { ApiCallingService } from '../../../../shared/Services/api-calling.servi
 import { ToastrService } from 'ngx-toastr';
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { SalaryFrequencies,Salary } from '../../../../types';
+import { SalaryFrequencies, Salary } from '../../../../types';
 
 @Component({
   selector: 'app-add-edit',
@@ -26,8 +26,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   frameworks: { value: number; name: string }[] = [{ value: 0, name: 'fixed' }, { value: 1, name: 'hourly' }];
 
   salaryFrequenciesList: SalaryFrequencies[];
-  salaryComponentDeduction:Salary[]
-  salaryComponentBenefit:Salary[]
+  salaryComponentDeduction: Salary[]
+  salaryComponentBenefit: Salary[]
 
   salaryType: {
     value: number;
@@ -45,17 +45,17 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
 
-    calType:{
-      label:string;
-      value:number;
-    }[] = [
+  calType: {
+    label: string;
+    value: number;
+  }[] = [
       {
-        label:"Fixed",
-        value:0
+        label: "Fixed",
+        value: 0
       },
       {
-        label:"Percentage",
-        value:1
+        label: "Percentage",
+        value: 1
       },
     ]
 
@@ -134,6 +134,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
       salaryFrequencyId: [null, Validators.required],
       paygroupType: [this.frameworks[0], Validators.required],
       description: [''],
+      paygroupComponents: this.fb.array([]),
       paygroupComponentsBenefit: this.fb.array([]),
       paygroupComponentsDeduction: this.fb.array([])
     });
@@ -189,8 +190,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private getComponentForDeduction(): void {
 
     try {
-      this.apiCalling.getData("Salary", `getSalaries/`, true,{
-        salaryType:2
+      this.apiCalling.getData("Salary", `getSalaries/`, true, {
+        salaryType: 2
       })
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
@@ -214,8 +215,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private getComponentForBenefit(): void {
 
     try {
-      this.apiCalling.getData("Salary", `getSalaries/`, true,{
-        salaryType:1
+      this.apiCalling.getData("Salary", `getSalaries/`, true, {
+        salaryType: 1
       })
         .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
           next: (response) => {
@@ -243,7 +244,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const body = this.addEditForm.value;
+
+
+    const { paygroupComponentsBenefit, paygroupComponentsDeduction, ...body } = this.addEditForm.value
+
+    body.paygroupComponents = [...paygroupComponentsBenefit, ...paygroupComponentsDeduction]
+
+
     const apiCall = this.isEditMode
       ? this.apiCalling.putData("Paygroup", `updatePaygroup/${this.isEditMode}`, body, true)
       : this.apiCalling.postData("Paygroup", "addPaygroup", body, true);
@@ -263,7 +270,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAmountInput(event: Event, index: number): void {
+  onAmountInputBenefit(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
     // Allow only digits in the input
     input.value = input.value.replace(/[^0-9]/g, '');
@@ -272,6 +279,22 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (index >= 0 && index < this.paygroupComponentsBenefit.length) {
       // Update the specific 'amount' field in the paygroupComponentsBenefit array
       const paygroupArray = this.addEditForm.get('paygroupComponentsBenefit') as FormArray;
+      const component = paygroupArray.at(index) as FormGroup;
+
+      // Set the new value for the 'amount' field
+      component.get('amount')?.setValue(input.value);
+    }
+  }
+
+  onAmountInputDeduction(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    // Allow only digits in the input
+    input.value = input.value.replace(/[^0-9]/g, '');
+
+    // Check if the index is valid
+    if (index >= 0 && index < this.paygroupComponentsDeduction.length) {
+      // Update the specific 'amount' field in the paygroupComponentsDeduction array
+      const paygroupArray = this.addEditForm.get('paygroupComponentsDeduction') as FormArray;
       const component = paygroupArray.at(index) as FormGroup;
 
       // Set the new value for the 'amount' field

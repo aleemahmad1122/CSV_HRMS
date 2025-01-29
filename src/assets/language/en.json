@@ -269,6 +269,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "deductions":"Deductions",
       "deduction":"Deduction",
       "benefits":"Benefits",
       "returnDate":"Return Date",

@@ -139,7 +139,7 @@
 
                 <td style="position: relative;">
                   <input type="number" class="form-control" formControlName="amount"
-                    (input)="onAmountInput($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
+                    (input)="onAmountInputBenefit($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
                         'is-invalid':
                           addEditForm.get('amount')?.invalid &&
                           (addEditForm.get('amount')?.touched || isSubmitted)
@@ -190,7 +190,7 @@
 
 <!-- d -->
       <div>
-        <h1 class="pt-5" > {{"language.generic.benefits" | translate}}</h1>
+        <h1 class="pt-5" > {{"language.generic.deductions" | translate}}</h1>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -242,7 +242,7 @@
 
                 <td style="position: relative;">
                   <input type="number" class="form-control" formControlName="amount"
-                    (input)="onAmountInput($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
+                    (input)="onAmountInputDeduction($event,$index)" [placeholder]="'language.form.amount' | translate" [ngClass]="{
                         'is-invalid':
                           addEditForm.get('amount')?.invalid &&
                           (addEditForm.get('amount')?.touched || isSubmitted)
