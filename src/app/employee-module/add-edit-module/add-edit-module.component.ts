@@ -348,7 +348,7 @@ export class AddEditModuleComponent implements OnInit, OnDestroy {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
           if (!this.isEditMode) {
-            // Navigate to the edit route after successful creation
+
             this.router.navigate([`/employee/profile/employee/edit`], { queryParams: { id: response.data.employeeId } });
           }
         } else {
