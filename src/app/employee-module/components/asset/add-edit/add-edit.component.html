@@ -123,8 +123,8 @@
         </tr>
       </thead>
       <tbody class="table-border-bottom-0">
-        <ng-container formArrayName="shiftPolicies">
-          @for(tableItem of shiftPolicies?.controls; track $index) {
+        <ng-container formArrayName="assetListData">
+          @for(tableItem of assetListData?.controls; track $index) {
           <tr [formGroupName]="$index">
             <td>
               {{ 1 + $index }}
@@ -255,14 +255,14 @@
           }
         </ng-container>
 
-        <tr>
+        @if(!this.isEditMode){<tr>
           <td colspan="12">
             <button class="btn btn-primary mt-1 mb-1" type="button" (click)="addRow()">
               {{"language.generic.addMore" | translate}}
             </button>
           </td>
 
-        </tr>
+        </tr>}
         <!-- }} -->
       </tbody>
     </table>

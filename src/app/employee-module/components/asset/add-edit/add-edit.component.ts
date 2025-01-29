@@ -56,7 +56,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.addEditForm = this.createForm();
-    this.addRow()
+
   }
 
   ngOnInit(): void {
@@ -82,7 +82,8 @@ export class AddEditComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             }
           });
-        // this.patchFormValues(); // Removed this line
+      }else{
+        this.addRow()
       }
       this.getTypes()
     });
@@ -140,9 +141,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
     input.value = input.value.replace(/[^0-9]/g, '');
 
     // Check if the index is valid
-    if (index >= 0 && index < this.shiftPolicies.length) {
+    if (index >= 0 && index < this.assetListData.length) {
       // Update the specific 'amount' field in the paygroupComponents array
-      const arr = this.addEditForm.get('shiftPolicies') as FormArray;
+      const arr = this.addEditForm.get('assetListData') as FormArray;
       const component = arr.at(index) as FormGroup;
 
       // Set the new value for the 'amount' field
@@ -152,8 +153,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
   private convertToDatetimeLocalFormat(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0]
+    if(dateString){const date = new Date(dateString);
+    return date.toISOString().split("T")[0]}else{
+      return ''
+    }
   }
   onDateTimeChange(event: Event, valueName: string): void {
     const input = event.target as HTMLInputElement;
@@ -163,8 +166,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
     }
   }
   private formatDateForSubmission(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString();
+    if(dateString){
+      const date = new Date(dateString);
+      return date.toISOString();
+    }else{
+      return ''
+    }
+
   }
 
   ngOnDestroy(): void {
@@ -174,44 +182,61 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      shiftPolicies: this.fb.array([]),
-      // issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
-      // assetId: ['', Validators.required],
-      // assetTypeId: [this.isEditMode ? '' : this.typesList?.[0]?.assetTypeId || '', Validators.required],
-      // description: ['', Validators.required],
-      // offSet: [new Date().getTimezoneOffset().toString()]
+      assetListData: this.fb.array([]),
     });
   }
 
   private patchFormValues(): void {
     if (this.selectedValue) {
-      this.addEditForm.patchValue({
-        // issuedDate: this.convertToDatetimeLocalFormat(this.selectedValue.issuedDate),
-        // assetId: this.selectedValue.assetId,
-        // assetTypeId: this.selectedValue.assetTypeId,
-        // description: this.selectedValue.description,
-        // offSet: Number(this.selectedValue.offSet),
-      });
-      this.empAssTypesList.push({ assetId: this.selectedValue.assetId, assetName: this.selectedValue.assetName })
+        this.addEditForm.patchValue({
+            assetTypeId: this.selectedValue.assetTypeId,
+            // Ensure all necessary fields are included
+        });
+        this.empAssTypesList.push({ assetId: this.selectedValue.assetId, assetName: this.selectedValue.assetName });
+
+
+        const formData = this.fb.group({
+            issuedDate: [this.convertToDatetimeLocalFormat(this.selectedValue.issuedDate) || '', Validators.required],
+            assetTypeId: [this.selectedValue.assetTypeId || null, Validators.required],
+            assetId: [this.selectedValue.assetId || null, Validators.required],
+            specification: [this.selectedValue.specification || null, Validators.required],
+            companyCode: [this.selectedValue.companyCode || null, Validators.required],
+            quantity: [this.selectedValue.quantity || null, Validators.required],
+            returnStatus: [this.selectedValue.returnStatus || false],
+            returnDate: [this.convertToDatetimeLocalFormat(this.selectedValue.returnDate) || null],
+            offSet: [this.selectedValue.offSet || null]
+        });
+
+        this.assetListData.push(formData);
+
+
+        if (this.assetListData.length === 0) {
+          this.addRow();
+        }
     }
   }
 
   submitForm(): void {
+
+
+
     this.isSubmitted = true;
     if (this.addEditForm.invalid) {
       return;
     }
 
-    const { assetTypeId, issuedDate, ...rest } = this.addEditForm.value;
-    const payload = {
-      issuedDate: this.formatDateForSubmission(issuedDate),
-      ...rest,
-      offSet: this.addEditForm.value.offSet.toString()
-    }
+    const { assetListData, ...rest } = this.addEditForm.value;
+
+    // Format issuedDate for each item in assetListData
+    const formattedAssetListData = assetListData.map(({ assetTypeId, ...item }) => ({
+      ...item,
+      issuedDate: this.formatDateForSubmission(item['issuedDate']),
+      returnDate: this.formatDateForSubmission(item['returnDate'])
+    }))
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData('EmployeeAsset', `updateEmployeeAsset/${this.isEditMode}`, payload, true, this.id)
-      : this.apiCalling.postData('EmployeeAsset', "addEmployeeAsset", payload, true, this.id);
+      ? this.apiCalling.putData('EmployeeAsset', `updateEmployeeAsset/${this.isEditMode}`, formattedAssetListData[0], true, this.id)
+      : this.apiCalling.postData('EmployeeAsset', "addEmployeeAsset", formattedAssetListData, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
@@ -231,6 +256,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
 
   addRow() {
+    console.log('Adding a new row...');
     const formData = this.fb.group({
       issuedDate: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, Validators.required],
       assetTypeId: [null, Validators.required],
@@ -238,25 +264,24 @@ export class AddEditComponent implements OnInit, OnDestroy {
       specification: [null, Validators.required],
       companyCode: [null, Validators.required],
       quantity: [null, Validators.required],
-      returnStatus: [true, Validators.required],
-      returnDate: [null, Validators.required],
+      returnStatus: [false],
+      returnDate: [null],
       offSet: [new Date().getTimezoneOffset().toString()]
     });
-    this.shiftPolicies.push(formData);
+    this.assetListData.push(formData);
   }
 
-  get shiftPolicies(): FormArray {
-    return this.addEditForm.controls["shiftPolicies"] as FormArray;
+  get assetListData(): FormArray {
+    return this.addEditForm.controls["assetListData"] as FormArray;
   }
 
   deleteRow(index: number): void {
-
-    if (index >= 0 && index < this.shiftPolicies.length) {
-      const updatedControls = this.shiftPolicies.controls.filter((_, i) => i !== index);
-      this.addEditForm.setControl('shiftPolicies', this.fb.array(updatedControls));
+    if (index >= 0 && index < this.assetListData.length) {
+        const updatedControls = this.assetListData.controls.filter((_, i) => i !== index);
+        this.addEditForm.setControl('assetListData', this.fb.array(updatedControls));
     } else {
+        // Handle invalid index case if necessary
     }
-
   }
 
   goBack(): void {
