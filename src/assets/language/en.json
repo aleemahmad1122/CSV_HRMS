@@ -269,6 +269,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "selAllPer":"Select All Permission",
       "deductions":"Deductions",
       "deduction":"Deduction",
       "benefits":"Benefits",

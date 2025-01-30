@@ -22,7 +22,7 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
   isEditMode = false;
   isSubmitted = false;
   selectedAddEditValue: any;
-
+  allAssigned:boolean = false;
   systemModules: IGetSystemPermissions[] = []
 
 
@@ -121,6 +121,11 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
         backgroundColor: this.selectedAddEditValue.backgroundColor,
         rolePermissions: this.selectedAddEditValue.rolePermissions,
       });
+
+      this.allAssigned = this.selectedAddEditValue.systemModulePermissions.systemModules.every(module =>
+        module.modulePermissions.every(permission => permission.isAssigned)
+      );
+
     }
   }
 
@@ -187,5 +192,14 @@ export class RoleAddEditComponent implements OnInit, OnDestroy {
         });
       });
     });}
+
+  toggleAllPermissions(event: any): void {
+    const isChecked = event.target.checked;
+    this.systemModules.forEach(module => {
+      module.modulePermissions.forEach(permission => {
+        permission.isAssigned = isChecked;
+      });
+    });
+  }
 
 }

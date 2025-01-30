@@ -36,7 +36,8 @@
       </div>
 
 
-      <div class="row mt-3 py-5">
+
+      @if(systemModules.length > 0){<div class="row mt-3 py-5">
 
 
         <div class="col-md-12">
@@ -46,7 +47,27 @@
             </div>
 
 
+
             <div class="card-body">
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <label class="checkbox checkbox-inline checkbox-primary">
+                      <input type="checkbox" [checked]="allAssigned" (change)="toggleAllPermissions($event)">
+                      <span></span>
+                    </label>
+                  </span>
+                </div>
+                <input type="text" class="form-control disabled" [disabled]="true" [value]="'language.generic.selAllPer' | translate">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <div class="symbol symbol-30 symbol-circle" data-bs-toggle="tooltip" [title]="'language.generic.selAllPer' | translate">
+
+                      <i class="fa-sharp fa-thin fa-circle-info"></i>
+                    </div>
+                  </span>
+                </div>
+              </div>
               <div class="accordion accordion-toggle-arrow" id="accordionPanelsStayOpenExample">
                 <div class="row">
 
@@ -104,7 +125,7 @@
         </div>
 
 
-      </div>
+      </div>}
 
       <div class="row mt-3">
         <div class="col-12 text-right">
