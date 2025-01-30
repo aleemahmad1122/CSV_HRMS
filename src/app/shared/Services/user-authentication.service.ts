@@ -90,6 +90,7 @@ export class UserAuthenticationService {
           this._toaster.error(error.message || error || 'Something Went Wrong !');
           this._localStorageManagerService.clearLocalStorage();
           this._router.navigateByUrl('/login');
+          window.location.reload()
         }
       });
   }
