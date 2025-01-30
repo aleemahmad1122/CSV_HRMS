@@ -187,6 +187,22 @@ export class SidebarComponent implements OnInit, AfterViewInit {
       show: false,
     },
   ];
+  loanItems: Sidebar[] = [
+
+    {
+      name: 'language.sidebar.manageLoan',
+      route: '/loan/list',
+      permissions: 'View_Salary_Component',
+      show: false,
+    },
+
+    {
+      name: 'language.sidebar.requestLoan',
+      route: '/loan/request',
+      permissions: 'View_Salary_Component',
+      show: false,
+    },
+  ];
 
   constructor(
     @Inject(DOCUMENT) private _document: Document,
@@ -262,7 +278,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
     const permissions = employeeDetails[0]?.rolePermission?.systemModulePermissions?.systemModules || [];
 
-    [this.adminItems, this.employeeItems, this.attendanceItems, this.leaveItems, this.payrollItems].forEach(itemList => {
+    [this.adminItems, this.employeeItems, this.attendanceItems, this.leaveItems, this.payrollItems, this.loanItems].forEach(itemList => {
       itemList.forEach(item => {
         const requiredPermissions = item.permissions?.split(',') || [];
         const hasPermission = requiredPermissions.some(routePermission =>

@@ -10,6 +10,9 @@
       "admin": "Admin"
     },
     "sidebar": {
+      "requestLoan":"Request Loan",
+      "manageLoan":"Manage Loan",
+      "loan":"Loan",
       "payroll":"Payroll",
       "salaryComponent":"Salary Component",
       "salaryFrequency":"Salary Frequency",
@@ -269,6 +272,8 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "loanReason":"Loan Reason",
+      "applyLoan":"Apply Loan",
       "selAllPer":"Select All Permission",
       "deductions":"Deductions",
       "deduction":"Deduction",

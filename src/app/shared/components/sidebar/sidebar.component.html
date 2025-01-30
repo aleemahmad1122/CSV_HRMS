@@ -244,6 +244,50 @@
         </div>
       </li>}
 
+      @if(this.loanItems.length > 0){ <li routerLinkActive="menu-item-active menu-item-open"
+      class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
+      <a href="javascript:;" class="menu-link menu-toggle">
+        <i class="fa-regular fa-credit-card-front mr-2 mt-1"></i>
+        <span class="menu-text">{{'language.sidebar.loan' | translate}}</span> <span class="menu-label">
+          @if(totalLeavesReq){     <span class="menu-label">
+            <span class="label label-rounded label-primary">{{totalLeavesReq > 9 ? (totalLeavesReq + '+ ') : totalLeavesReq}} </span>
+          </span>}
+        </span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="menu-submenu">
+        <i class="menu-arrow"></i>
+        <ul class="menu-subnav">
+          <li class="menu-item menu-item-parent" aria-haspopup="true">
+            <span class="menu-link">
+              <span class="menu-text">Bootstrap</span>
+            </span>
+          </li>
+
+
+          @for (item of loanItems; track $index) {
+          <li class="menu-item" aria-haspopup="true">
+            @if(item.show){
+            <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+              class="menu-link">
+              <i class="menu-bullet menu-bullet-dot">
+                <span></span>
+              </i>
+              <span class="menu-text">{{ item.name | translate }}</span>
+              @if($index == 1 && totalLeavesReq){
+                <span class="menu-label">
+                  <span class="label label-rounded label-primary">{{totalLeavesReq}}</span>
+
+                </span>
+            }
+            </a>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+    </li>}
+
 
       </ul>
       <!--end::Menu Nav-->

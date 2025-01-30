@@ -57,6 +57,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'loan',
+    loadChildren: () => import('./loan-module/loan-module.module').then(m => m.LoanModuleModule),
+    data: { breadcrumb: 'Loan' },
+    canActivate: [ProtectedGuard]
+  },
+
+  {
     path: '**',
     redirectTo: "",
     title: 'Page Not Found'
