@@ -213,7 +213,7 @@ export class RequestComponent  implements AfterViewInit {
 
   onDelete(id: string): void {
 
-    this.apiService.deleteData('Leave', `deleteLeave/${id}`, id, true)
+    this.apiService.deleteData("Loan", `deleteLeave/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
@@ -311,7 +311,7 @@ export class RequestComponent  implements AfterViewInit {
         endDate: this.endDate,
       };
       this.apiService
-        .getData('Leave', 'getLeaveRequests', true, params)
+        .getData("Loan", "getLoanRequests", true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: (res: ILeaveRes) => this.handleResponse(res),
@@ -337,7 +337,7 @@ export class RequestComponent  implements AfterViewInit {
     };
 
     this.apiService
-      .getData('Leave', 'getLeaveRequests', true, params)
+      .getData("Loan", "getLoanRequests", true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: ILeaveRes) => this.handleResponse(res),
@@ -367,7 +367,7 @@ export class RequestComponent  implements AfterViewInit {
     }
 
     this.apiService
-      .patchData('Leave', `processLeave/${id}`, this.submitForm.value, true,this.empId)
+      .patchData("Loan", `processLeave/${id}`, this.submitForm.value, true,this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {
@@ -444,7 +444,7 @@ export class RequestComponent  implements AfterViewInit {
     };
 
     this.apiService
-      .getData('Leave', 'getLeaveRequests', true, params)
+      .getData("Loan", "getLoanRequests", true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) =>{ this.handleResponse(res);    this.generatePages();},

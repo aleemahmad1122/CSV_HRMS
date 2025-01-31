@@ -88,7 +88,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getRemainingLeaves()
+    // this.getRemainingLeaves()
   }
 
 
@@ -117,22 +117,22 @@ export class AddEditComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getRemainingLeaves(): void {
-    this.apiCalling.getData('Leave', 'getRemainingLeaves', true, { employeeId: this.id })
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: any) => {
-          if (res.success) {
-            this.leaveType = res.data;
-          } else {
-            this.leaveType = []
-          }
-        },
-        error: () => {
-          this.leaveType = []
-        },
-      });
-  }
+  // private getRemainingLeaves(): void {
+  //   this.apiCalling.getData('Leave', 'getRemainingLeaves', true, { employeeId: this.id })
+  //     .pipe(takeUntil(this.ngUnsubscribe))
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         if (res.success) {
+  //           this.leaveType = res.data;
+  //         } else {
+  //           this.leaveType = []
+  //         }
+  //       },
+  //       error: () => {
+  //         this.leaveType = []
+  //       },
+  //     });
+  // }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -141,11 +141,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      leaveTypeId: ['', [Validators.required]],
-      leaveFrom: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      leaveTo: [`${this.convertToDatetimeLocalFormat(environment.defaultDate)}`, [Validators.required]],
-      leaveReason: [''],
-      offSet: [new Date().getTimezoneOffset().toString()]
+      loanReason: ['',Validators.required],
+      amount: [null,[Validators.required,Validators.min(1)]],
+      noOfInstallments: [null,Validators.required]
     });
   }
 
@@ -153,30 +151,28 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (this.selectedValue) {
 
       this.addEditForm.patchValue({
-        leaveTypeId: this.selectedValue.leaveTypeId,
-        leaveFrom: this.convertToDatetimeLocalFormat(this.selectedValue.leaveFrom),
-        leaveTo: this.convertToDatetimeLocalFormat(this.selectedValue.leaveTo),
-        leaveReason: this.selectedValue.leaveReason,
-        offSet: this.selectedValue.offSet,
+        loanReason: this.selectedValue.loanReason,
+        amount: this.selectedValue.amount,
+        noOfInstallments: this.selectedValue.noOfInstallments,
       });
     }
   }
 
-  private convertToDatetimeLocalFormat(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0]
-  }
-  onDateTimeChange(event: Event, valueName: string): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value) {
-      const formattedValue = this.convertToDatetimeLocalFormat(input.value);
-      this.addEditForm.patchValue({ valueName: formattedValue });
-    }
-  }
-  private formatDateForSubmission(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString(); // This will return the date in 'YYYY-MM-DDTHH:mm:ss.sssZ' format
-  }
+  // private convertToDatetimeLocalFormat(dateString: string): string {
+  //   const date = new Date(dateString);
+  //   return date.toISOString().split("T")[0]
+  // }
+  // onDateTimeChange(event: Event, valueName: string): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.value) {
+  //     const formattedValue = this.convertToDatetimeLocalFormat(input.value);
+  //     this.addEditForm.patchValue({ valueName: formattedValue });
+  //   }
+  // }
+  // private formatDateForSubmission(dateString: string): string {
+  //   const date = new Date(dateString);
+  //   return date.toISOString();
+  // }
 
   submitForm(): void {
     this.isSubmitted = true;
@@ -187,41 +183,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
     const formValue = this.addEditForm.value;
 
-    // Parse dates and calculate duration of leave
-    const leaveFrom = new Date(formValue.leaveFrom);
-    const leaveTo = new Date(formValue.leaveTo);
-    const leaveDuration = (leaveTo.getTime() - leaveFrom.getTime()) / (1000 * 60 * 60 * 24) + 1; // Including the start day
 
-    // Check if leaveFrom is earlier than leaveTo
-    if (leaveFrom > leaveTo) {
-      this.toaster.error('The "Leave From" date must be earlier than or equal to the "Leave To" date.', 'Invalid Date Range');
-      return;
-    }
-
-    // Check if the selected leave type has sufficient remaining leaves
-    const selectedLeaveType = this.leaveType.find(type => type.leaveTypeId === formValue.leaveTypeId);
-    if (selectedLeaveType && leaveDuration > selectedLeaveType.remainingLeaves) {
-      this.toaster.error(`You only have ${selectedLeaveType.remainingLeaves} remaining leaves for this leave type.`, 'Insufficient Leaves');
-      return;
-    }
-
-    const values = {
-      ...formValue,
-      leaveFrom: this.formatDateForSubmission(formValue.leaveFrom),
-      leaveTo: this.formatDateForSubmission(formValue.leaveTo),
-    };
-
-    const payload = { ...values };
 
     const apiCall = this.isEditMode
-      ? this.apiCalling.putData("Leave", `updateLeave/${this.isEditMode}`, payload, true, this.id)
-      : this.apiCalling.postData("Leave", "addLeave", payload, true, this.id);
+      ? this.apiCalling.putData("Loan", `updateLoan/${this.isEditMode}`, formValue, true, this.id)
+      : this.apiCalling.postData("Loan", "addLoan", formValue, true, this.id);
 
     apiCall.pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: (response) => {
         if (response?.success) {
           this.toaster.success(response.message, 'Success!');
-          this.goBack();
         } else {
           this.toaster.error(response?.message || 'An error occurred', 'Error!');
         }
@@ -231,6 +202,16 @@ export class AddEditComponent implements OnInit, OnDestroy {
 
       },
     });
+  }
+
+  onNumberInput(event: Event,name:string): void {
+    const input = event.target as HTMLInputElement;
+
+    input.value = input.value.replace(/[^0-9]/g, '');
+
+
+      // Set the new value for the 'amount' field
+      this.addEditForm.get(name)?.setValue(Number(input.value));
   }
 
 

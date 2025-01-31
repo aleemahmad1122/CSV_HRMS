@@ -438,6 +438,34 @@ export interface ILeaveRes extends ICommonRes {
 }
 
 
+
+export interface ILoan extends ICommon {
+  loanId: string,
+  employeeId: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  amount: number,
+  noOfInstallments: number,
+  loanReason: string,
+  loanStatus: number,
+  approvedBy: string,
+  approvedDate: string,
+  approvedComment: string,
+  isActive: boolean
+}
+
+
+export interface ILoanRes extends ICommonRes {
+
+  data: {
+    loans: ILoan[]
+    pagination: IPagination
+  };
+
+}
+
+
 export interface IAttendanceList extends ICommon {
   approvedBy: string;
   approvedDate: string;

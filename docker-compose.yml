@@ -1,13 +1,17 @@
 version: '3'
 services:
   devapp:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - "9000:4200"
+      - "4200:4200"
     volumes:
-      - "/app/node_modules"
-      - ".:/app"
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm start
 
 
 
-      

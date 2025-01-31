@@ -185,6 +185,9 @@
       "noOfDays": "No Of Days"
     },
     "errors": {
+      "noOfInstallmentsRequired":"Number of Installments is Required",
+      "amountRequired":"Amount is Required",
+      "loanReasonRequired":"Loan Reason is Required",
       "paygroupRequired":"Basic Group is Required",
       "basicPayRequired":"Basic Pay is Required",
       "frequencyRequired":"Frequency is Required",
@@ -272,6 +275,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "noOfInstallments":"Number of Installments",
       "loanReason":"Loan Reason",
       "applyLoan":"Apply Loan",
       "selAllPer":"Select All Permission",
@@ -345,6 +349,7 @@
       "checkInDate": "Check In Date",
       "attendanceDate": "Attendance Date",
       "attendanceInfo": "Attendance Info",
+      "loanInfo": "Loan Info",
       "leaveInfo": "Leave Info",
       "asset": "Asset",
       "positionTitle": "Position Title",

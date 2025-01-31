@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { ILeave, ILeaveRes } from '../../types/index';
+import { ILoan, ILoanRes } from '../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../shared/Services/api-calling.service';
@@ -31,7 +31,7 @@ export class LoanComponent implements AfterViewInit {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: ILeave[] = [];
+  dataList: ILoan[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -164,7 +164,7 @@ export class LoanComponent implements AfterViewInit {
     });
   }
 
-  getLeaveStatusText(status: number): string {
+  getLoanStatusText(status: number): string {
     switch (status) {
       case 0:
         return 'Pending';
@@ -211,11 +211,11 @@ export class LoanComponent implements AfterViewInit {
 
   onDelete(id: string): void {
 
-    this.apiService.deleteData('Leave', `deleteLeave/${id}`, id, true)
+    this.apiService.deleteData("Loan", `deleteLeave/${id}`, id, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.leaveId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.loanId !== id);
         },
         error: (err) => console.error('Error deleting Company:', err),
       });
@@ -309,10 +309,10 @@ export class LoanComponent implements AfterViewInit {
         endDate: this.endDate,
       };
       this.apiService
-        .getData('Leave', 'getAllLeaves', true, params)
+        .getData("Loan", "getAllLoans", true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: ILeaveRes) => this.handleResponse(res),
+          next: (res: ILoanRes) => this.handleResponse(res),
           error: () => (this.dataList = []),
         });
     } else {
@@ -335,19 +335,19 @@ export class LoanComponent implements AfterViewInit {
     };
 
     this.apiService
-      .getData('Leave', 'getAllLeaves', true, params)
+      .getData("Loan", "getAllLoans", true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: ILeaveRes) => this.handleResponse(res),
+        next: (res: ILoanRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: ILeaveRes): void {
+  private handleResponse(response: ILoanRes): void {
     if (response?.success) {
-      const { leaves, pagination } = response.data;
+      const { loans, pagination } = response.data;
       Object.assign(this, {
-        dataList: leaves,
+        dataList: loans,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,
@@ -365,7 +365,7 @@ export class LoanComponent implements AfterViewInit {
     }
 
     this.apiService
-      .patchData('Leave', `processLeave/${id}`, this.submitForm.value, true,this.empId)
+      .patchData("Loan", `processLoan/${id}`, this.submitForm.value, true,this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {
@@ -442,7 +442,7 @@ export class LoanComponent implements AfterViewInit {
     };
 
     this.apiService
-      .getData('Leave', 'getAllLeaves', true, params)
+      .getData("Loan", "getAllLoans", true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) =>{ this.handleResponse(res);    this.generatePages();},

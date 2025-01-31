@@ -135,7 +135,7 @@
 
 
 
-              <th (click)="sort('leaveReason')" class="cursor-pointer">
+              <th (click)="sort('loanReason')" class="cursor-pointer">
                 <span>
                   {{ "language.generic.loanReason" | translate }}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
@@ -143,7 +143,7 @@
 
 
 
-              <th (click)="sort('leaveStatus')" class="cursor-pointer">
+              <th (click)="sort('loanStatus')" class="cursor-pointer">
                 <span>
                   {{ "language.form.status" | translate }}
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
@@ -183,7 +183,7 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
-                      {{data.leaveReason || 'N/A'}}
+                      {{data.loanReason || 'N/A'}}
                     </div>
                   </div>
                 </span>
@@ -196,11 +196,12 @@
                     <div class="text-dark-75   font-size-lg mb-0">
                       <div>
                         <span [ngClass]="{
-                                              'label-warning': data.leaveStatus === 0,
-                                              'label-success': data.leaveStatus === 1,
-                                              'label-danger': data.leaveStatus === 2
+                                              'label-warning': data.loanStatus === 0,
+                                              'label-success': data.loanStatus === 1,
+                                              'label-danger': data.loanStatus === 2,
+                                              'label-info': data.loanStatus === 4
                                             }" class="label label-lg  label-inline mr-2"> {{
-                          getLeaveStatusText(data.leaveStatus) }}</span>
+                          getLoanStatusText(data.loanStatus) }}</span>
 
                       </div>
 
@@ -219,9 +220,9 @@
                   </button>
                   <ul class="dropdown-menu px-2 ">
 
-                    @if(data.isActive && this.isEdit && data.leaveStatus == 0 ){
+                    @if(data.isActive && this.isEdit && data.loanStatus == 0 ){
                     <li class="w-100 mb-2">
-                      <a [routerLink]="['/leave/leave/edit']" [queryParams]="{ id:this.empId,editId: data.leaveId,}"
+                      <a [routerLink]="['/loan/loan/edit']" [queryParams]="{ id:this.empId,editId: data.loanId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.edit' | translate}}
@@ -229,7 +230,7 @@
                     </li>
                     }
 
-                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    @if((data.employeeId != this.empId && (isHr || data.loanStatus == 0)) || (data.loanStatus == 0 &&
                     data.employeeId != this.empId)){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(1)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
@@ -242,7 +243,7 @@
 
 
 
-                    @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                    @if((data.employeeId != this.empId && (isHr || data.loanStatus == 0)) || (data.loanStatus == 0 &&
                     data.employeeId != this.empId)){
                     <li class="w-100 mb-2">
                       <a (click)="setStatus(2)" data-bs-toggle="modal" [attr.data-bs-target]="'#statusModal-' + $index"
@@ -252,15 +253,15 @@
                       </a>
                     </li> }
 
-                    @if (data.leaveStatus != 0) {<li class="w-100 mb-2">
-                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#leaveModal-' + $index"
+                    @if (data.loanStatus != 0) {<li class="w-100 mb-2">
+                      <a data-bs-toggle="modal" [attr.data-bs-target]="'#loanModal-' + $index"
                         class="btn btn-sm btn-default btn-text-warning btn-hover-warning btn-icon w-100 text-center"
                         title="Edit details">
                         {{'language.generic.view' | translate}}
                       </a>
                     </li>}
 
-                    @if(isDelete && data.leaveStatus != 0){
+                    @if(isDelete && data.loanStatus != 0){
                     <li class="w-100 mb-2">
                       <a data-bs-toggle="modal" [attr.data-bs-target]="'#modal-' + $index"
                         class="btn btn-sm btn-default btn-text-danger btn-hover-danger btn-icon w-100 text-center"
@@ -294,7 +295,7 @@
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                           {{'language.generic.cancel' | translate}}</button>
-                        <button type="button" (click)="onDelete(data.leaveId)" data-bs-dismiss="modal"
+                        <button type="button" (click)="onDelete(data.loanId)" data-bs-dismiss="modal"
                           class="btn btn-danger">{{'language.generic.continue' | translate}}</button>
                       </div>
                     </div>
@@ -304,7 +305,7 @@
 
 
 
-                @if((data.employeeId != this.empId && (isHr || data.leaveStatus == 0)) || (data.leaveStatus == 0 &&
+                @if((data.employeeId != this.empId && (isHr || data.loanStatus == 0)) || (data.loanStatus == 0 &&
                 data.employeeId != this.empId)){
                 <!-- Modal -->
                 <div class="modal fade" [id]="'statusModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -313,7 +314,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          {{"language.sidebar.manageLeave" | translate}}    {{'language.msg.updateStatus' | translate}}
+                          {{"language.sidebar.manageLoan" | translate}}    {{'language.msg.updateStatus' | translate}}
                         </h1>
                         <button type="button" class="btn-close border-0" data-bs-dismiss="modal"
                           aria-label="Close">x</button>
@@ -344,7 +345,7 @@
                           {{'language.generic.cancel' | translate}}</button>
 
 
-                        <button type="button" (click)="onSubmit(data.leaveId)" data-bs-dismiss="modal"
+                        <button type="button" (click)="onSubmit(data.loanId)" data-bs-dismiss="modal"
                           class="btn btn-primary">{{'language.generic.continue' | translate}}</button>
                       </div>
                     </div>
@@ -355,14 +356,14 @@
 
 
 
-                @if( data.leaveStatus != 0 ){
+                @if( data.loanStatus != 0 ){
                 <!-- Modal -->
-                <div class="modal fade" [id]="'leaveModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" [id]="'loanModal-' + $index" tabindex="-1" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="teamModalLabel">{{'language.generic.leaveInfo' | translate }}</h5>
+                        <h5 class="modal-title" id="teamModalLabel">{{'language.generic.loanInfo' | translate }}</h5>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                           aria-label="Close">x</button>
                       </div>
@@ -376,7 +377,7 @@
                           </div>
 
                           <div class="d-flex w-100 mb-2" style="gap: 4px;">
-                            <b>{{ (data.leaveStatus == 1 ? 'language.generic.approvedBy' :
+                            <b>{{ (data.loanStatus == 1 ? 'language.generic.approvedBy' :
                               'language.generic.rejectedBy') | translate}}:</b> {{data.approvedBy}}
                           </div>
 
