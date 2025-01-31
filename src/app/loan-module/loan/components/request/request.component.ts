@@ -1,5 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { ILeave, ILeaveRes } from '../../../../types/index';
+import { ILoan, ILoanRes } from '../../../../types/index';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ApiCallingService } from '../../../../shared/Services/api-calling.service';
@@ -33,7 +33,7 @@ export class RequestComponent  implements AfterViewInit {
   private ngUnsubscribe = new Subject<void>();
   private searchSubject = new Subject<string>();
 
-  dataList: ILeave[] = [];
+  dataList: ILoan[] = [];
   dropDownList = [10, 50, 75, 100];
   searchTerm = '';
   selectedStatus: number | string = 1;
@@ -166,7 +166,7 @@ export class RequestComponent  implements AfterViewInit {
     });
   }
 
-  getLeaveStatusText(status: number): string {
+  getloanStatusText(status: number): string {
     switch (status) {
       case 0:
         return 'Pending';
@@ -217,7 +217,7 @@ export class RequestComponent  implements AfterViewInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res) => {
-          if (res?.success) this.dataList = this.dataList.filter((d) => d.leaveId !== id);
+          if (res?.success) this.dataList = this.dataList.filter((d) => d.loanId !== id);
         },
         error: (err) => console.error('Error deleting Company:', err),
       });
@@ -314,7 +314,7 @@ export class RequestComponent  implements AfterViewInit {
         .getData("Loan", "getLoanRequests", true, params)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (res: ILeaveRes) => this.handleResponse(res),
+          next: (res: ILoanRes) => this.handleResponse(res),
           error: () => (this.dataList = []),
         });
     } else {
@@ -340,16 +340,16 @@ export class RequestComponent  implements AfterViewInit {
       .getData("Loan", "getLoanRequests", true, params)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (res: ILeaveRes) => this.handleResponse(res),
+        next: (res: ILoanRes) => this.handleResponse(res),
         error: () => (this.dataList = []),
       });
   }
 
-  private handleResponse(response: ILeaveRes): void {
+  private handleResponse(response: ILoanRes): void {
     if (response?.success) {
-      const { leaves, pagination } = response.data;
+      const { loans, pagination } = response.data;
       Object.assign(this, {
-        dataList: leaves,
+        dataList: loans,
         pageNo: pagination.pageNo,
         pageSize: pagination.pageSize,
         totalCount: pagination.totalCount,

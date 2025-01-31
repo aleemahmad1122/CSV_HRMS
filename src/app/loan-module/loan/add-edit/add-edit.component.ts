@@ -65,12 +65,12 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.isEditMode = editId;
 
       if (this.isEditMode && isPlatformBrowser(this.platformId)) {
-        this.apiCalling.getData("Leave", `getLeaveById/${editId}`, true, { employeeId: this.id })
+        this.apiCalling.getData("Loan", `getLoanById/${editId}`, true, { employeeId: this.id })
           .pipe(takeUntil(this.ngUnsubscribe)).subscribe({
             next: (response) => {
               if (response?.success) {
                 this.selectedValue = response?.data;
-                this.patchFormValues(); // Call patchFormValues here after setting selectedValue
+                this.patchFormValues();
               } else {
                 this.selectedValue = [];
               }
@@ -79,7 +79,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
               this.selectedValue = [];
             }
           });
-        // this.patchFormValues(); // Removed this line
       }
     });
     this.addEditForm = this.createForm();
@@ -88,7 +87,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.getRemainingLeaves()
   }
 
 
@@ -108,31 +106,15 @@ export class AddEditComponent implements OnInit, OnDestroy {
           if (response?.success) {
             this.userReporting = response.data;
           } else {
-            this.userReporting = []; // Handle case when response is not successful
+            this.userReporting = [];
           }
         },
         error: () => {
-          this.userReporting = []; // Handle error scenario
+          this.userReporting = [];
         },
       });
   }
 
-  // private getRemainingLeaves(): void {
-  //   this.apiCalling.getData('Leave', 'getRemainingLeaves', true, { employeeId: this.id })
-  //     .pipe(takeUntil(this.ngUnsubscribe))
-  //     .subscribe({
-  //       next: (res: any) => {
-  //         if (res.success) {
-  //           this.leaveType = res.data;
-  //         } else {
-  //           this.leaveType = []
-  //         }
-  //       },
-  //       error: () => {
-  //         this.leaveType = []
-  //       },
-  //     });
-  // }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -157,22 +139,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  // private convertToDatetimeLocalFormat(dateString: string): string {
-  //   const date = new Date(dateString);
-  //   return date.toISOString().split("T")[0]
-  // }
-  // onDateTimeChange(event: Event, valueName: string): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.value) {
-  //     const formattedValue = this.convertToDatetimeLocalFormat(input.value);
-  //     this.addEditForm.patchValue({ valueName: formattedValue });
-  //   }
-  // }
-  // private formatDateForSubmission(dateString: string): string {
-  //   const date = new Date(dateString);
-  //   return date.toISOString();
-  // }
 
   submitForm(): void {
     this.isSubmitted = true;
@@ -210,7 +176,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
     input.value = input.value.replace(/[^0-9]/g, '');
 
 
-      // Set the new value for the 'amount' field
       this.addEditForm.get(name)?.setValue(Number(input.value));
   }
 
