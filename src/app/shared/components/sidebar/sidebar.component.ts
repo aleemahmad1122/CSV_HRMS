@@ -19,6 +19,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   remoteAttendanceReq: number = 0;
   totalAttendanceReq: number = 0;
   totalLeavesReq: number = 0;
+  totalLoansReq: number = 0;
 
   isCollapsed = false;
   activRoute: string = '';
@@ -240,6 +241,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
             remoteAttendanceReq: number;
             totalAttendanceReq: number;
             totalLeavesReq: number;
+            totalLoansReq: number;
           }
         }) => {
 
@@ -247,6 +249,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
           this.remoteAttendanceReq = res.data.remoteAttendanceReq;
           this.totalAttendanceReq = res.data.totalAttendanceReq;
           this.totalLeavesReq = res.data.totalLeavesReq;
+          this.totalLoansReq = res.data.totalLoansReq;
         },
         error: () => '',
       });

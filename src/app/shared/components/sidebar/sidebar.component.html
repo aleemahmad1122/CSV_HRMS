@@ -249,8 +249,8 @@
       <a href="javascript:;" class="menu-link menu-toggle">
         <i class="fa-regular fa-credit-card-front mr-2 mt-1"></i>
         <span class="menu-text">{{'language.sidebar.loan' | translate}}</span> <span class="menu-label">
-          @if(totalLeavesReq){     <span class="menu-label">
-            <span class="label label-rounded label-primary">{{totalLeavesReq > 9 ? (totalLeavesReq + '+ ') : totalLeavesReq}} </span>
+          @if(totalLoansReq){     <span class="menu-label">
+            <span class="label label-rounded label-primary">{{totalLoansReq > 9 ? (totalLoansReq + '+ ') : totalLoansReq}} </span>
           </span>}
         </span>
         <i class="menu-arrow"></i>
@@ -274,9 +274,9 @@
                 <span></span>
               </i>
               <span class="menu-text">{{ item.name | translate }}</span>
-              @if($index == 1 && totalLeavesReq){
+              @if($index == 1 && totalLoansReq){
                 <span class="menu-label">
-                  <span class="label label-rounded label-primary">{{totalLeavesReq}}</span>
+                  <span class="label label-rounded label-primary">{{totalLoansReq}}</span>
 
                 </span>
             }
