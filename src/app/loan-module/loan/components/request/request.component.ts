@@ -367,7 +367,7 @@ export class RequestComponent  implements AfterViewInit {
     }
 
     this.apiService
-      .patchData("Loan", `processLeave/${id}`, this.submitForm.value, true,this.empId)
+      .patchData("Loan", `processLoan/${id}`, this.submitForm.value, true,this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {
