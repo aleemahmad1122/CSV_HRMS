@@ -49,7 +49,7 @@ export class ApiCallingService {
     }
 
 
-    const staticQueryParams = {
+    const staticQueryParams = { loggedInUserId:this._localStorage.getEmployeeDetail()[0]?.employeeId || '',
       companyId: this._localStorage.getCompanyDetail().companyId,
       activeStatus: paginationParams?.activeStatus ?? 1,
       ...paginationParams
@@ -61,7 +61,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId   };
+    const staticQueryParams = { loggedInUserId:this._localStorage.getEmployeeDetail()[0]?.employeeId || '', companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId   };
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
@@ -69,7 +69,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
+    const staticQueryParams = { loggedInUserId:this._localStorage.getEmployeeDetail()[0]?.employeeId || '', companyId: this._localStorage.getCompanyDetail().companyId, employeeId: this.employeeId };
     return this._httpClient.post<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { reportProgress: true, observe: 'events', params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
@@ -77,7 +77,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
+    const staticQueryParams = { loggedInUserId:this._localStorage.getEmployeeDetail()[0]?.employeeId || '', companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
     return this._httpClient.put<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 
@@ -85,7 +85,7 @@ export class ApiCallingService {
     if (showLoader) {
       this._loader.show();
     }
-    const staticQueryParams = { companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
+    const staticQueryParams = { loggedInUserId:this._localStorage.getEmployeeDetail()[0]?.employeeId || '', companyId: this._localStorage.getCompanyDetail().companyId, employeeId: employeeId };
     return this._httpClient.patch<any>(`${environment.baseUrl}${controllerName}/${methodName}`, body, { params: staticQueryParams }).pipe(this.catchApiErrors());
   }
 

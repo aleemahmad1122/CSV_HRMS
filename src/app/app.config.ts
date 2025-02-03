@@ -17,18 +17,40 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideRouter(routes), 
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
     provideClientHydration(),
     provideAnimations(),
     provideToastr({
+      // Notification display duration
       timeOut: 5000,
-      positionClass: 'toast-top-center',
+
+      // Visual positioning
+      positionClass: 'toast-top-right',
+
+      // Prevent multiple identical notifications
       preventDuplicates: true,
+
+      // Visual enhancements
       closeButton: true,
-      progressBar: false,
-      progressAnimation:'increasing',
-      tapToDismiss:false,
+      progressBar: true,
+      progressAnimation: 'increasing',
+
+      // Allow dismissing by clicking
+      tapToDismiss: true,
+
+      // Additional aesthetic improvements
+      toastClass: 'ngx-toastr',
+      titleClass: 'toast-title',
+      messageClass: 'toast-message',
+
+      // Easing and animation
+      easing: 'ease-in',
+      easeTime: 300,
+
+      // Maximum number of toasts
+      maxOpened: 3,
+      autoDismiss: true
     }),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(
