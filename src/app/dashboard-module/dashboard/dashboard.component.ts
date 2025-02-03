@@ -162,6 +162,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         attendanceType: data.attendanceType,
         isWorkingDay: data.isWorkingDay,
         onLeave: data.onLeave,
+        totalShiftHours: data.totalShiftHours,
         checkInTime: data.checkInTime,
         checkOutTime: data.checkOutTime,
       };
@@ -187,12 +188,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           })
           .map((stat) => ({
             x: new Date(stat.attendanceDate).getDate() - 1,
-            y: stat.hours > 0 ? stat.hours : 8,
+            y: stat.hours > 0 ? stat.hours : dailyStats[0].totalShiftHours,
             status: status,
             dayName: stat.dayName,
             attendanceType: stat.attendanceType,
             isWorkingDay: stat.isWorkingDay,
             onLeave: stat.onLeave,
+            totalShiftHours: stat.totalShiftHours,
             attendanceDate: stat.attendanceDate,
             checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
             checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
@@ -231,7 +233,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         title: {
           text: 'Attendance Hours',
         },
-        max: 8,
+        max: dailyStats[0].totalShiftHours,
       },
       legend: {
         enabled: true,
@@ -250,6 +252,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           attendanceDate?: string;
           checkInTime?: string | null;
           checkOutTime?: string | null;
+          totalShiftHours?:string;
         }) {
           return `
                 <b>Attendance Date: ${this.attendanceDate || 'N/A'}</b><br>

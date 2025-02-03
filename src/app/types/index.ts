@@ -30,6 +30,7 @@ export interface IGraphData {
   checkOutTime: null | string;
   attendanceType: number;
   onLeave: boolean;
+  totalShiftHours?:string;
 }
 
 export interface IReportTo {
