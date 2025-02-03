@@ -128,6 +128,12 @@
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
+              <th (click)="sort('amount')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.amount" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
 
 
               <th (click)="sort('loanReason')" class="cursor-pointer">
@@ -173,6 +179,17 @@
               </td>
 
 
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{data.amount || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
                 <span>

@@ -133,6 +133,12 @@
                 </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
+              <th (click)="sort('amount')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.amount" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
 
 
               <th (click)="sort('loanReason')" class="cursor-pointer">
@@ -183,6 +189,18 @@
                 <span>
                   <div class="d-flex align-items-center">
                     <div class="text-dark-75   font-size-lg mb-0">
+                      {{data.amount || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
                       {{data.loanReason || 'N/A'}}
                     </div>
                   </div>
@@ -220,7 +238,7 @@
                   </button>
                   <ul class="dropdown-menu px-2 ">
 
-                    @if(data.isActive && this.isEdit && data.loanStatus == 0 ){
+                    <!-- @if(data.isActive && this.isEdit && data.loanStatus == 0 ){
                     <li class="w-100 mb-2">
                       <a [routerLink]="['/loan/loan/edit']" [queryParams]="{ id:this.empId,editId: data.loanId,}"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
@@ -228,7 +246,7 @@
                         {{'language.generic.edit' | translate}}
                       </a>
                     </li>
-                    }
+                    } -->
 
                     @if((data.employeeId != this.empId && (isHr || data.loanStatus == 0)) || (data.loanStatus == 0 &&
                     data.employeeId != this.empId)){

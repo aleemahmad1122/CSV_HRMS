@@ -130,9 +130,9 @@ export class ListComponent   {
 
   getAttachmentTypeName(type: any): string {
     switch (type) {
-      case AttachmentType.Personal: return 'Personal';
-      case AttachmentType.Education: return 'Education';
-      case AttachmentType.WorkHistory: return 'Work History';
+      case 0: return 'Personal';
+      case 1: return 'Education';
+      case 2: return 'Work History';
       default: return 'N/A';
     }
   }

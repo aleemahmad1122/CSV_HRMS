@@ -23,7 +23,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   attType = AttType;
 
 
-  attTypeList:{value:number;name:string;}[] = [{value:0,name:"language.generic.personal"},{value:2,name:"language.generic.education"},{value:3,name:"language.generic.workHistory"}]
+  attTypeList:{value:number;name:string;}[] = [{value:0,name:"language.generic.personal"},{value:1,name:"language.generic.education"},{value:2,name:"language.generic.workHistory"}]
 
   private ngUnsubscribe = new Subject<void>();
   qualificationForm: FormGroup;
@@ -31,10 +31,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
   isSubmitted = false;
   selectedValue: any;
 
+
   attachmentTypes = [
-    { value: 'personal', label: 'Personal' },
-    { value: 'education', label: 'Education' },
-    { value: 'workHistory', label: 'Work History' },
+    { value: 0, label: 'Personal' },
+    { value: 1, label: 'Education' },
+    { value: 2, label: 'Work History' },
   ];
 
 
