@@ -188,7 +188,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           })
           .map((stat) => ({
             x: new Date(stat.attendanceDate).getDate() - 1,
-            y: stat.hours > 0 ? stat.hours : dailyStats[0].totalShiftHours,
+            y: stat.hours > 0 ? stat.hours : this.convertTimeStringToNumber(stat.totalShiftHours),
             status: status,
             dayName: stat.dayName,
             attendanceType: stat.attendanceType,
@@ -650,6 +650,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       console.log(error);
 
     }
+  }
+
+  private convertTimeStringToNumber(timeString: string): number {
+    if (!timeString) return 0;
+
+    // Split the time string
+    const [hours, minutes] = timeString.split(':').map(Number);
+
+    // Convert to number (e.g., '09:00' becomes 9)
+    return hours;
   }
 
 }
