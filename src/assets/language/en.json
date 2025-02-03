@@ -275,6 +275,10 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "yes":"Yes",
+      "no":"No",
+      "inUse":"In Use",
+      "qty":"Qty",
       "noOfInstallments":"Number of Installments",
       "loanReason":"Loan Reason",
       "applyLoan":"Apply Loan",

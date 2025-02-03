@@ -98,6 +98,12 @@
         </th>
 
 
+        <th (click)="sort('returnStatus')" class="cursor-pointer">
+          <span> {{'language.generic.inUse' | translate}} </span> <i class="fa-solid fa-sort mx-2"
+            style="font-size: 12px;"></i>
+        </th>
+
+
         <th (click)="sort('assetTypeName')" class="cursor-pointer">
           <span> {{'language.form.category' | translate}} </span> <i class="fa-solid fa-sort mx-2"
             style="font-size: 12px;"></i>
@@ -131,17 +137,31 @@
         <td aria-label="64616-103" class="datatable-cell">
           <span>
             <div class="d-flex flex-column ">
-              <div style="color: gray">
-                {{ data.companyCode }}
-              </div>
               <div class="text-dark-75   font-size-lg mb-0"
                 [innerHTML]="data.assetName || 'N/A' | highlight: searchTerm">
               </div>
+
               <div>
-                <b>Qty:</b>
+                <b>{{ "language.generic.qty" | translate }}:</b>
                 <span style="color: gray">
                   {{ data.quantity }}
                 </span>
+              </div>
+              <div class="d-flex" >
+                <b>{{ "language.generic.companyCode" | translate }}:  </b>
+                <div style="color: gray">
+                  {{' ' +' '+ data.companyCode }}
+                </div>
+              </div>
+            </div>
+          </span>
+        </td>
+
+        <td aria-label="64616-103" class="datatable-cell">
+          <span>
+            <div class="d-flex align-items-center">
+              <div class="text-dark-75   font-size-lg mb-0">
+                {{ (data.returnStatus  ? 'language.generic.no' : 'language.generic.yes') | translate}}
               </div>
             </div>
           </span>
