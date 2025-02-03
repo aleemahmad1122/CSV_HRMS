@@ -63,6 +63,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedOptionGraph: string = 'CM';
 
   fileOptions: { value: string; name: string }[] = [
+    { value: "CM", name: "Current Month" },
     { value: "MTD", name: "Month to Date" },
     { value: "YTD", name: "Year to Date" },
     { value: "PreviousYear", name: "Previous Year" },
@@ -70,7 +71,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: "Last7Days", name: "Last 7 Days" }
   ];
 
-  fileOptionsGraph = [...this.fileOptions,{ value: "CM", name: "Current Month" }].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
+  fileOptionsGraph = [...this.fileOptions].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
 
 
   constructor(
@@ -435,16 +436,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     switch (option) {
 
-      case 'CM': {
-        const currentYear = today.getFullYear();
-        const currentMonth = today.getMonth();
-        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
-
-        this.startDate = formatDate(new Date(currentYear, currentMonth, 1));
-        this.endDate = formatDate(lastDayOfMonth);
-        break;
-      }
-
       case 'MTD':
         this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
         this.endDate = formatDate(endOfDay);
@@ -593,12 +584,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
     getGraphStats(): void {
-      const today = new Date();
 
-      const currentYear = today.getFullYear();
-      const currentMonth = today.getMonth();
-      const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
-
+    const today = new Date();
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
 
@@ -612,7 +599,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
 
       this.api
-        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: formatDate(lastDayOfMonth), employeeId: this.emp.employeeId })
+        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: this.endDate, employeeId: this.emp.employeeId })
         .subscribe({
           next: (response) => {
             if (response.success) {
