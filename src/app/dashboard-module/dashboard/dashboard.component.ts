@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   checkInSummary: ICheckInSummary;
 
   selectedOption: string = 'MTD';
-  selectedOptionGraph: string = 'MTD';
+  selectedOptionGraph: string = 'CM';
 
   fileOptions: { value: string; name: string }[] = [
     { value: "MTD", name: "Month to Date" },
@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: "Last7Days", name: "Last 7 Days" }
   ];
 
-  fileOptionsGraph = [...this.fileOptions].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth')
+  fileOptionsGraph = [...this.fileOptions,{ value: "CM", name: "Current Month" }].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
 
 
   constructor(
@@ -125,9 +125,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private initChart(): void {
     const colorMapping = {
       0: '#f64e60', // Absent (Yellow)
-      1: '#1bc5bd', // Approved (Green)
+      1: '#1bc5bd', // Present (Green)
       2: '#181c32', // Rejected (Red)
       3: '#8950fc', // Leave (Blue)
+      4: '#6c757d'  // Off Day (Gray)
     };
 
     // Create an array of statuses based on the dynamic data
@@ -135,13 +136,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return {
         dayName: data.dayName.slice(0,3),
         status: data.attendanceStatus,
-        hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0, // Use attendanceTime for bar height
+        hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0,
         attendanceDate: data.attendanceDate,
         attendanceType: data.attendanceType,
         isWorkingDay: data.isWorkingDay,
         onLeave: data.onLeave,
-        checkInTime: data.checkInTime, // Ensure checkInTime is included
-        checkOutTime: data.checkOutTime, // Ensure checkOutTime is included
+        checkInTime: data.checkInTime,
+        checkOutTime: data.checkOutTime,
       };
     });
 
@@ -154,20 +155,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         color: colorMapping[status],
         data: dailyStats
           .filter((stat) => {
-            // Include leave status in the filter
-            return (stat.status === status && !stat.onLeave) || (stat.onLeave && status === 3);
+            // Unique filtering logic to prevent duplicates
+            if (status === 4) {
+              return !stat.isWorkingDay;
+            }
+            if (status === 3) {
+              return stat.onLeave;
+            }
+            return stat.status === status && !stat.onLeave && stat.isWorkingDay;
           })
           .map((stat) => ({
-            x: new Date(stat.attendanceDate).getDate() - 1,  // Use day of the month for X axis
-            y: stat.hours > 0 ? stat.hours : -1, // Set a minimum height for the bar
-            status: stat.status,
+            x: new Date(stat.attendanceDate).getDate() - 1,
+            y: stat.hours > 0 ? stat.hours : 8,
+            status: status,
             dayName: stat.dayName,
             attendanceType: stat.attendanceType,
             isWorkingDay: stat.isWorkingDay,
             onLeave: stat.onLeave,
-            attendanceDate: stat.attendanceDate, // Pass attendanceDate
-            checkInTime: this.convertToTimeLocalFormat(stat.checkInTime), // Pass checkInTime
-            checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime), // Pass checkOutTime
+            attendanceDate: stat.attendanceDate,
+            checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
+            checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
           })),
         pointPadding: 0.1,
         groupPadding: 0.2,
@@ -194,15 +201,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         title: { text: 'Days of the Week' },
         labels: {
           align: 'center',
-          x: 0,
-          y: 20  // Add some vertical spacing
+          reserveSpace: true,
+          enabled: true,
         },
-        tickmarkPlacement: 'between',
-        tickWidth: 1,
-        tickPosition: 'inside',
-        startOnTick: true,
-        endOnTick: true,
-        gridLineWidth: 0
+
       },
       yAxis: {
         title: {
@@ -231,7 +233,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           return `
                 <b>Attendance Date: ${this.attendanceDate || 'N/A'}</b><br>
                 Day: ${this.category || 'N/A'}<br>
-                Status: ${this.status == 0 ? 'Absent' : this.status == 1 ? 'Approved' : 'Rejected'}<br>
+                Status: ${
+                  this.status === 0 ? 'Absent' :
+                  this.status === 1 ? 'Present' :
+                  this.status === 2 ? 'Rejected' :
+                  this.status === 3 ? 'Leave' :
+                  this.status === 4 ? 'Off Day' :
+                  'Unknown Status'
+                }<br>
                 Hours: ${this.y || 0}<br>
                 Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
                 Check In: ${this.checkInTime || 'N/A'}<br>
@@ -245,9 +254,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           pointPadding: 0.1,
           groupPadding: 0.2,
           pointWidth: 20,  // Fixed width for columns
+          stacking:'normal',
           dataLabels: {
             enabled: false
-          }
+          },
         }
       },
       series: seriesData,
@@ -255,8 +265,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Absent', 'Approved', 'Rejected'];
-    return statusNames[status] || 'Leave';
+    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave'];
+    return statusNames[status] || 'Off Day';
   }
 
 
@@ -425,6 +435,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     switch (option) {
 
+      case 'CM': {
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+
+        this.startDate = formatDate(new Date(currentYear, currentMonth, 1));
+        this.endDate = formatDate(lastDayOfMonth);
+        break;
+      }
+
       case 'MTD':
         this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
         this.endDate = formatDate(endOfDay);
@@ -573,8 +593,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
     getGraphStats(): void {
+      const today = new Date();
 
-    const today = new Date();
+      const currentYear = today.getFullYear();
+      const currentMonth = today.getMonth();
+      const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
 
@@ -588,7 +612,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
 
       this.api
-        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: this.endDate, employeeId: this.emp.employeeId })
+        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: formatDate(lastDayOfMonth), employeeId: this.emp.employeeId })
         .subscribe({
           next: (response) => {
             if (response.success) {

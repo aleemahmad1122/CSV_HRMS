@@ -99,7 +99,7 @@ export class RequestComponent  implements AfterViewInit {
     private activatedRoute: ActivatedRoute
 
   ) {
-    this.setFilter('MTD')
+    this.setFilter('')
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.userId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.selectedEmpId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -283,8 +283,8 @@ export class RequestComponent  implements AfterViewInit {
 
       default:
         console.error(`Invalid filter option: ${option}`);
-        this.startDate = '';
-        this.endDate = '';
+        this.startDate = '1900-01-01';
+        this.endDate = formatDate(endOfDay);
         return;
     }
 

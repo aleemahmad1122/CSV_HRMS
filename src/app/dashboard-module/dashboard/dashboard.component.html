@@ -1,46 +1,5 @@
 <div class="d-flex flex-column-fluid px-3">
-  <div class="card card-custom w-100 p-5">
 
-
-    <div class="d-flex justify-content-between flex-wrap  align-items-center p-3" style="gap: 4px;">
-
-      <div class="" style="flex: 1; min-width: 200px;">
-        <label class="form-label">
-          {{ "language.generic.selectFilter" | translate }}
-          <span class="text-danger"></span>
-        </label>
-        <ng-select [clearable]="false" [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption"
-          bindValue="value" [searchable]="true" placeholder="Select an option" (change)="setFilter($event?.value)">
-        </ng-select>
-      </div>
-
-
-
-      <div class="" style="flex: 1;">
-        <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
-        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
-          theme="dp-material" (change)="onStartDateChange($event)"></dp-date-picker>
-      </div>
-
-
-      <div class="" style="flex: 1;">
-        <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
-        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
-          [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
-      </div>
-      <div class="flex-column d-flex">
-        <label class="form-label" style="opacity: 0;">{{ 'language.generic.endDate' | translate }}</label>
-        <button class="btn btn-secondary " (click)="applyDateFilter()">
-          {{ 'language.generic.applyFilter' | translate }} <i class="fa fa-search ml-2" style="color: gray;"
-            aria-hidden="true"></i>
-        </button>
-
-      </div>
-
-
-    </div>
-
-  </div>
 </div>
 
 
@@ -169,7 +128,7 @@
 
 
 
-  <div class="d-flex flex-column-fluid px-3 my-5 position-relative">
+  <div class="d-flex flex-column-fluid px-3 mb-5 position-relative">
 
     @if(userReporting.length > 1){<ng-select style="position: absolute; z-index: 9; right: 10%; top: 8%;"  [clearable]="false" [items]="userReporting" bindLabel="fullName" [(ngModel)]="this.emp.employeeId" bindValue="employeeId"
     [searchable]="true" placeholder="Select an option" (change)="getGraphStats()">
@@ -208,7 +167,43 @@
 
       <div class="col-12 mb-5">
 
+        <div class="d-flex justify-content-between flex-wrap  align-items-center mb-5" style="gap: 4px;">
 
+          <div class="" style="flex: 1; min-width: 200px;">
+            <label class="form-label">
+              {{ "language.generic.selectFilter" | translate }}
+              <span class="text-danger"></span>
+            </label>
+            <ng-select [clearable]="false" [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption"
+              bindValue="value" [searchable]="true" placeholder="Select an option" (change)="setFilter($event?.value)">
+            </ng-select>
+          </div>
+
+
+
+          <div class="" style="flex: 1;">
+            <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
+            <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
+              theme="dp-material" (change)="onStartDateChange($event)"></dp-date-picker>
+          </div>
+
+
+          <div class="" style="flex: 1;">
+            <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
+            <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
+              [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
+          </div>
+          <div class="flex-column d-flex">
+            <label class="form-label" style="opacity: 0;">{{ 'language.generic.endDate' | translate }}</label>
+            <button class="btn btn-secondary " (click)="applyDateFilter()">
+              {{ 'language.generic.applyFilter' | translate }} <i class="fa fa-search ml-2" style="color: gray;"
+                aria-hidden="true"></i>
+            </button>
+
+          </div>
+
+
+        </div>
         <div class="d-flex flex-wrap " style="gap: 8px;">
           @for(item of summaryItems; track $index){ <div data-bs-toggle="modal"
             [ngStyle]="{'cursor': item.id ? 'pointer' : 'default'}" [attr.data-bs-target]="'#'+item.id"
