@@ -161,15 +161,16 @@
                     [src]="data.imagePath || this.defaultImagePath" />
                 </figure>
                 <div>
-                  <div style="color: gray">
-                    {{ data.punchCode }} {{data.joiningDate ? (', '+ (data.joiningDate | convertTime: 'date')) : ''}}
-                  </div>
+
                   <div class="text-dark-75 font-size-lg mb-0" [innerHTML]="
                     data.firstName + ' ' + data.lastName || 'N/A'
                       | highlight : searchTerm
                   "></div>
                   <div style="color: gray">
                     {{ data.email }}
+                  </div>
+                  <div style="color: gray">
+                    {{ data.punchCode ?  (("language.generic.punchCode" | translate)+ ' ' + data.punchCode) : ''}} {{data.joiningDate ? (', '+ (("language.form.joiningDate" | translate) + ' ' + (data.joiningDate | convertTime: 'date'))) : ''}}
                   </div>
                 </div>
               </td>

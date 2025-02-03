@@ -182,6 +182,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       chart: {
         type: 'column',
         spacingTop: 26,
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false
       },
       title: {
         text: ('Attendance Summary - ' + this.getCurrentMonth() + ' ' + (new Date().getFullYear())),
@@ -189,6 +192,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       xAxis: {
         categories: dailyStats.map((stat) => stat.dayName),
         title: { text: 'Days of the Week' },
+        labels: {
+          align: 'center',
+          x: 0,
+          y: 20  // Add some vertical spacing
+        },
+        tickmarkPlacement: 'between',
+        tickWidth: 1,
+        tickPosition: 'inside',
+        startOnTick: true,
+        endOnTick: true,
+        gridLineWidth: 0
       },
       yAxis: {
         title: {
@@ -225,6 +239,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 Working Day: ${this.isWorkingDay ? 'Yes' : 'No'}<br>
                 On Leave: ${this.onLeave ? 'Yes' : 'No'}`;
         },
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.1,
+          groupPadding: 0.2,
+          pointWidth: 20,  // Fixed width for columns
+          dataLabels: {
+            enabled: false
+          }
+        }
       },
       series: seriesData,
     };
