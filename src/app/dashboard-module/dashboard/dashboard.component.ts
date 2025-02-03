@@ -56,6 +56,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   summaryItems: { title: string; count: any; icon: string; color: string; percentage: string | number; id: string; }[] = [];
   startDate = '';
   endDate = new Date().toISOString();
+
+
+  startDateCh = '';
+  endDateCh = '';
   totalAttendance: number = 0;
   checkInSummary: ICheckInSummary;
 
@@ -80,6 +84,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private _toaster: ToastrService,
     private ngZone: NgZone
   ) {
+    this.setFilter('CM','Chart')
     this.setFilter('MTD')
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -134,10 +139,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
+      // Convert time string to decimal hours
+      const convertTimeToDecimalHours = (timeString: string): number => {
+        if (!timeString) return 0;
+
+        // Split the time string and remove any fractional seconds
+        const [hours, minutes, seconds] = timeString.split(':').map(part => part.split('.')[0]);
+
+        // Convert to decimal hours
+        const decimalHours = parseFloat(hours) +
+                              (parseFloat(minutes) / 60) +
+                              (parseFloat(seconds) / 3600);
+
+        return Number(decimalHours.toFixed(2)); // Round to 2 decimal places
+      };
+
       return {
         dayName: data.dayName.slice(0,3),
         status: data.attendanceStatus,
-        hours: data.attendanceTime ? parseFloat(data.attendanceTime) : 0,
+        hours: data.attendanceTime ? convertTimeToDecimalHours(data.attendanceTime) : 0,
         attendanceDate: data.attendanceDate,
         attendanceType: data.attendanceType,
         isWorkingDay: data.isWorkingDay,
@@ -421,8 +441,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
 
-  setFilter(option: string): void {
-
+  setFilter(option: string, filter: 'Chart' | 'Card' = 'Card'): void {
     const today = new Date();
     const endOfDay = new Date(today);
     endOfDay.setHours(23, 59, 59, 999);
@@ -434,38 +453,44 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return `${yyyy}-${mm}-${dd}`;
     };
 
+    let startDate: string;
+    let endDate: string;
+
     switch (option) {
+      case 'CM':
+      startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
+      endDate = formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999));
+      break;
 
       case 'MTD':
-        this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
-        this.endDate = formatDate(endOfDay);
+        startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
+        endDate = formatDate(endOfDay);
         break;
 
       case 'YTD':
-        this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
-        this.endDate = formatDate(endOfDay);
+        startDate = formatDate(new Date(today.getFullYear(), 0, 1));
+        endDate = formatDate(endOfDay);
         break;
-
 
       case 'QTD': {
         const quarterStartMonth = Math.floor(today.getMonth() / 3) * 3;
-        this.startDate = formatDate(new Date(today.getFullYear(), quarterStartMonth, 1));
-        this.endDate = formatDate(endOfDay);
+        startDate = formatDate(new Date(today.getFullYear(), quarterStartMonth, 1));
+        endDate = formatDate(endOfDay);
         break;
       }
 
       case 'PreviousYear': {
         const lastYear = today.getFullYear() - 1;
-        this.startDate = formatDate(new Date(lastYear, 0, 1));
-        this.endDate = formatDate(new Date(lastYear, 11, 31, 23, 59, 59, 999));
+        startDate = formatDate(new Date(lastYear, 0, 1));
+        endDate = formatDate(new Date(lastYear, 11, 31, 23, 59, 59, 999));
         break;
       }
 
       case 'PreviousMonth': {
         const previousMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
         const previousMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
-        this.startDate = formatDate(previousMonthStart);
-        this.endDate = formatDate(previousMonthEnd);
+        startDate = formatDate(previousMonthStart);
+        endDate = formatDate(previousMonthEnd);
         break;
       }
 
@@ -473,20 +498,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const lastWeek = new Date(today);
         lastWeek.setDate(today.getDate() - 6);
         lastWeek.setHours(0, 0, 0, 0);
-        this.startDate = formatDate(lastWeek);
-        this.endDate = formatDate(endOfDay);
+        startDate = formatDate(lastWeek);
+        endDate = formatDate(endOfDay);
         break;
       }
 
       default:
         console.error(`Invalid filter option: ${option}`);
-        this.startDate = '';
-        this.endDate = '';
+        startDate = '';
+        endDate = '';
         return;
     }
 
-    // this.applyDateFilter();
+    // Assign values based on the filter type
+    if (filter === 'Chart') {
+      this.startDateCh = startDate;
+      this.endDateCh = endDate;
+    } else {
+      this.startDate = startDate;
+      this.endDate = endDate;
+    }
   }
+
 
 
 
@@ -585,21 +618,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     getGraphStats(): void {
 
-    const today = new Date();
-    const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
 
-    const formatDate = (date: Date): string => {
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, '0');
-      const dd = String(date.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
-    };
+
+
 
     try {
 
       this.api
-        .getData('Dashboard', 'getChartData', true, { startDate: this.startDate, endDate: this.endDate, employeeId: this.emp.employeeId })
+        .getData('Dashboard', 'getChartData', true, { startDate: this.startDateCh, endDate: this.endDateCh, employeeId: this.emp.employeeId })
         .subscribe({
           next: (response) => {
             if (response.success) {
