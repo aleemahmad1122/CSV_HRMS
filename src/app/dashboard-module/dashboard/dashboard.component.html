@@ -174,7 +174,7 @@
               {{ "language.generic.selectFilter" | translate }}
               <span class="text-danger"></span>
             </label>
-            <ng-select [clearable]="false" [items]="fileOptions.slice(1,6)" bindLabel="name" [(ngModel)]="selectedOption"
+            <ng-select [clearable]="false" [items]="fileOptions" bindLabel="name" [(ngModel)]="selectedOption"
               bindValue="value" [searchable]="true" placeholder="Select an option" (change)="setFilter($event?.value)">
             </ng-select>
           </div>

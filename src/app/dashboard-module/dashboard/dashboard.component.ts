@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedOptionGraph: string = 'CM';
 
   fileOptions: { value: string; name: string }[] = [
-    { value: "CM", name: "Current Month" },
+
     { value: "MTD", name: "Month to Date" },
     { value: "YTD", name: "Year to Date" },
     { value: "PreviousYear", name: "Previous Year" },
@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: "Last7Days", name: "Last 7 Days" }
   ];
 
-  fileOptionsGraph = [...this.fileOptions].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
+  fileOptionsGraph = [...this.fileOptions,   { value: "CM", name: "Current Month" }].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
 
 
   constructor(
