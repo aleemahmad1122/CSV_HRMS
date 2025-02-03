@@ -130,6 +130,23 @@
 
 
 
+              <th (click)="sort('leaveFrom')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.from" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
+
+
+
+              <th (click)="sort('leaveTo')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.to" | translate }}
+                </span><i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
+
+
               <th (click)="sort('leaveReason')" class="cursor-pointer">
                 <span>
                   {{ "language.form.leaveReason" | translate }}
@@ -172,6 +189,28 @@
                 </span>
               </td>
 
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{(data.leaveFrom  | convertTime: 'date' ) || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+
+              <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{(data.leaveTo  | convertTime: 'date' ) || 'N/A'}}
+                    </div>
+                  </div>
+                </span>
+              </td>
 
 
               <td data-field="OrderID" aria-label="64616-103" class="datatable-cell">

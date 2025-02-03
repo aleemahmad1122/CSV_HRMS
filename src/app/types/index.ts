@@ -424,6 +424,8 @@ export interface ILeave extends ICommon {
   leaveDate: string;
   offSet: string;
   leaveReason: string;
+  leaveFrom: string;
+  leaveTo: string;
   leaveStatus: number;
   isActive: boolean;
 }

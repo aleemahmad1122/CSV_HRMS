@@ -103,7 +103,7 @@ export class RequestComponent implements AfterViewInit {
   ) {
 
 
-    this.setFilter('MTD')
+    this.setFilter('')
     this.loadPermissions();
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
     this.userId = this._localStorage.getEmployeeDetail()[0].employeeId;
