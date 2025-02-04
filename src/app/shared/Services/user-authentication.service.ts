@@ -76,7 +76,13 @@ export class UserAuthenticationService {
   logout(): void {
     const refreshToken = this._localStorageManagerService.getRefreshTokenToStorage();
 
-    this.api.postData("Auth", "logout", {refreshToken}, true, this._localStorageManagerService.getEmployeeDetail()[0]?.employeeId)
+    // Get employeeId with fallback mechanism
+    const employeeDetails = this._localStorageManagerService.getEmployeeDetail();
+    const employeeId = employeeDetails && employeeDetails[0]?.employeeId
+      ? employeeDetails[0].employeeId
+      : this._localStorageManagerService.getCookie('employeeId');
+
+    this.api.postData("Auth", "logout", {refreshToken}, true, employeeId)
       .subscribe({
         next: (response) => {
           if (response?.status === 200) {
