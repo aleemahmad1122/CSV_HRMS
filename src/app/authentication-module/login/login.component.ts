@@ -44,11 +44,11 @@ export class LoginComponent implements OnDestroy {
     });
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  handlePageRefresh(event: Event): void {
-    // Clear session and logout the user
-    this.logoutUser();
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // handlePageRefresh(event: Event): void {
+  //   // Clear session and logout the user
+  //   this.logoutUser();
+  // }
 
   selectCompany(company: CompanyDetail | null): void {
     if (!company) {
