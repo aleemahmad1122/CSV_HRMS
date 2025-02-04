@@ -110,13 +110,15 @@
 
       <div class="" style="flex: 1;">
         <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
-        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
+        <dp-date-picker         [disabled]="disableDate"
+        [ngStyle]="{'background-color': disableDate ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}"  class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
           theme="dp-material"></dp-date-picker>
       </div>
 
       <div class="" style="flex: 1;">
         <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
-        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate"
+        <dp-date-picker         [disabled]="disableDate"
+        [ngStyle]="{'background-color': disableDate ? 'light-dark(rgba(239, 239, 239, 1.3), rgba(59, 59, 59, 0.3))' : 'transparent'}"  class="form-control" placeholder="00/00/00" [(ngModel)]="endDate"
           [config]="datePickerConfig" theme="dp-material" ></dp-date-picker>
       </div>
       <div class="flex-column d-flex">

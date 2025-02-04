@@ -193,14 +193,14 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     {
       name: 'language.sidebar.manageLoan',
       route: '/loan/list',
-      permissions: 'View_Salary_Component',
+      permissions: 'View_Loan',
       show: false,
     },
 
     {
       name: 'language.sidebar.requestLoan',
       route: '/loan/request',
-      permissions: 'View_Salary_Component',
+      permissions: 'View_Loan_Requests',
       show: false,
     },
   ];
