@@ -217,7 +217,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         plotShadow: false
       },
       title: {
-        text: ('Attendance Summary - ' + this.getCurrentMonth() + ' ' + (new Date().getFullYear())),
+        text: this.getChartTitle(this.selectedOptionGraph)
       },
       xAxis: {
         categories: dailyStats.map((stat) => stat.dayName),
@@ -517,6 +517,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (filter === 'Chart') {
       this.startDateCh = startDate;
       this.endDateCh = endDate;
+      this.selectedOptionGraph = option;
+      this.getGraphStats();
     } else {
       this.startDate = startDate;
       this.endDate = endDate;
@@ -660,6 +662,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // Convert to number (e.g., '09:00' becomes 9)
     return hours;
+  }
+
+  private getChartTitle(option: string): string {
+    const currentYear = new Date().getFullYear();
+
+    switch(option) {
+      case 'MTD':
+        return `Attendance Summary - ${this.getCurrentMonth()} ${currentYear}`;
+      case 'YTD':
+        return `Attendance Summary - Year ${currentYear}`;
+      case 'PreviousYear':
+        return `Attendance Summary - Year ${currentYear - 1}`;
+      case 'PreviousMonth': {
+        const previousMonth = new Date();
+        previousMonth.setMonth(previousMonth.getMonth() - 1);
+        const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(previousMonth);
+        return `Attendance Summary - ${monthName} ${previousMonth.getFullYear()}`;
+      }
+      case 'Last7Days':
+        return `Attendance Summary - Last 7 Days`;
+      case 'CM':
+        return `Attendance Summary - Current Month ${currentYear}`;
+      default:
+        return `Attendance Summary`;
+    }
   }
 
 }
