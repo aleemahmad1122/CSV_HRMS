@@ -76,7 +76,7 @@ export class UserAuthenticationService {
   logout(): void {
     const refreshToken = this._localStorageManagerService.getRefreshTokenToStorage();
 
-    this.api.postData("Auth", "logout", {refreshToken}, true, this._localStorageManagerService.getEmployeeDetail()[0].employeeId)
+    this.api.postData("Auth", "logout", {refreshToken}, true, this._localStorageManagerService.getEmployeeDetail()[0]?.employeeId)
       .subscribe({
         next: (response) => {
           if (response?.status === 200) {

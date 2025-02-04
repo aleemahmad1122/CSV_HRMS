@@ -53,12 +53,14 @@ export class TopbarComponent {
 
   startTimer(): void {
     this.timerInterval = setInterval(() => {
+      this.checkInTime = this._localStorage.getCheckInTime() || null;
       this.calculateCheckInDuration();
-    }, 60000);
+    }, 5000);
   }
 
   calculateCheckInDuration(): void {
     if (this.checkInTime?.checkInTime) {
+      
       const checkIn = new Date(this.checkInTime.checkInTime);
       const now = new Date();
       const diffMs = now.getTime() - checkIn.getTime();
