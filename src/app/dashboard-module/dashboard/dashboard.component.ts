@@ -130,12 +130,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   private initChart(): void {
     const colorMapping = {
-      0: '#f64e60', // Absent (Yellow)
+      0: '#f64e60', // Absent (Red)
       1: '#1bc5bd', // Present (Green)
       2: '#181c32', // Rejected (Red)
       3: '#8950fc', // Leave (Blue)
       4: '#6c757d',  // Off Day (Gray)
-      5: '#ffa800'  // Up coming Day ()
+      5: '#ffa800'  // Up coming Day (Yellow)
     };
 
     // Create an array of statuses based on the dynamic data
@@ -178,7 +178,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         color: colorMapping[status],
         data: dailyStats
           .filter((stat) => {
-            // Unique filtering logic to prevent duplicates
             if (status === 4) {
               return !stat.isWorkingDay;
             }
@@ -187,25 +186,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             }
             return stat.status === status && !stat.onLeave && stat.isWorkingDay;
           })
-          .map((stat) => ({
-            x: new Date(stat.attendanceDate).getDate() - 1,
-            y: stat.hours > 0 ? stat.hours : this.convertTimeStringToNumber(stat.totalShiftHours),
-            status: status,
-            dayName: stat.dayName,
-            attendanceType: stat.attendanceType,
-            isWorkingDay: stat.isWorkingDay,
-            onLeave: stat.onLeave,
-            totalShiftHours: stat.totalShiftHours,
-            attendanceDate: stat.attendanceDate,
-            checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
-            checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
-            activeHours: this.calculateWorkingTime(stat.checkInTime,stat.checkOutTime),
-          })),
+          .map((stat) => {
+            const attendanceDate = new Date(stat.attendanceDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize to start of the day
+
+            return {
+              x: attendanceDate.getDate() - 1,
+              y: stat.hours > 0 ? stat.hours : this.convertTimeStringToNumber(stat.totalShiftHours),
+              status: status,
+              dayName: stat.dayName,
+              attendanceType: stat.attendanceType,
+              isWorkingDay: stat.isWorkingDay,
+              onLeave: stat.onLeave,
+              totalShiftHours: stat.totalShiftHours,
+              attendanceDate: stat.attendanceDate,
+              checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
+              checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
+              activeHours: this.calculateWorkingTime(stat.checkInTime, stat.checkOutTime),
+              color: attendanceDate > today ? '#ffa800' : colorMapping[status], // Change color if future date
+            };
+          }),
         pointPadding: 0.1,
         groupPadding: 0.2,
         pointWidth: 20,
       };
     });
+
 
     this.chartOptions = {
       credits: {
@@ -279,7 +286,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   this.status === 2 ? 'Rejected' :
                   this.status === 3 ? 'Leave' :
                   this.status === 4 ? 'Off Day' :
-                  'Upcoming Day'
+                  this.status === 5 ? 'Upcoming Day' : 'N/A'
                 }<br>
                 Active Hours: ${this.activeHours || 0}<br>
                 Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
