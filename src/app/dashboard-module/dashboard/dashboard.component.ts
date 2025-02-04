@@ -622,11 +622,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
     getGraphStats(): void {
-
-
-
-
-
     try {
 
       this.api
@@ -683,7 +678,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       case 'Last7Days':
         return `Attendance Summary - Last 7 Days`;
       case 'CM':
-        return `Attendance Summary - Current Month ${currentYear}`;
+        return `Attendance Summary - ${this.getCurrentMonth()} ${currentYear}`;
       default:
         return `Attendance Summary`;
     }
