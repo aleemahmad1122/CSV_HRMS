@@ -43,13 +43,14 @@ export class RequestComponent implements AfterViewInit {
   totalPages = 0;
 
   submitForm!: FormGroup;
+  disableDate:boolean;
 
-
-  selectedOption: string = 'MTD';
+  selectedOption: string = 'All';
 
 
 
   fileOptions: { value: string; name: string }[] = [
+    { value: "All", name: "All" },
     { value: "MTD", name: "Month to Date" },
     { value: "YTD", name: "Year to Date" },
     { value: "PreviousYear", name: "Previous Year" },
@@ -242,11 +243,13 @@ export class RequestComponent implements AfterViewInit {
       case 'MTD':
         this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
 
         case 'YTD':
           this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
           this.endDate = formatDate(endOfDay);
+            this.disableDate = false
           break;
 
 
@@ -254,6 +257,7 @@ export class RequestComponent implements AfterViewInit {
         const quarterStartMonth = Math.floor(today.getMonth() / 3) * 3;
         this.startDate = formatDate(new Date(today.getFullYear(), quarterStartMonth, 1));
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
       }
 
@@ -261,6 +265,7 @@ export class RequestComponent implements AfterViewInit {
         const lastYear = today.getFullYear() - 1;
         this.startDate = formatDate(new Date(lastYear, 0, 1));
         this.endDate = formatDate(new Date(lastYear, 11, 31, 23, 59, 59, 999));
+          this.disableDate = false
         break;
       }
 
@@ -269,6 +274,7 @@ export class RequestComponent implements AfterViewInit {
         const previousMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
         this.startDate = formatDate(previousMonthStart);
         this.endDate = formatDate(previousMonthEnd);
+          this.disableDate = false
         break;
       }
 
@@ -278,14 +284,21 @@ export class RequestComponent implements AfterViewInit {
         lastWeek.setHours(0, 0, 0, 0);
         this.startDate = formatDate(lastWeek);
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
       }
 
+      case 'All': {
+        this.startDate = '';
+        this.endDate = '';
+        this.disableDate = true
+        break;
+      }
 
       default:
-        console.error(`Invalid filter option: ${option}`);
-        this.startDate = '1900-01-01';
-        this.endDate = formatDate(endOfDay);
+        this.startDate = '';
+        this.endDate = '';
+        this.disableDate = true
         return;
     }
 

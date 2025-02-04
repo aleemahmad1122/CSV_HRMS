@@ -111,13 +111,13 @@
       <div class="" style="flex: 1;">
         <label class="form-label">{{ 'language.generic.startDate' | translate }}</label>
         <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="startDate" [config]="datePickerConfig"
-          theme="dp-material" (change)="onStartDateChange($event)"></dp-date-picker>
+          theme="dp-material"></dp-date-picker>
       </div>
 
       <div class="" style="flex: 1;">
         <label class="form-label">{{ 'language.generic.endDate' | translate }}</label>
-        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate.split('T')[0]"
-          [config]="datePickerConfig" theme="dp-material" (change)="onEndDateChange($event)"></dp-date-picker>
+        <dp-date-picker class="form-control" placeholder="00/00/00" [(ngModel)]="endDate"
+          [config]="datePickerConfig" theme="dp-material" ></dp-date-picker>
       </div>
       <div class="flex-column d-flex">
         <label class="form-label" style="opacity: 0;">{{ 'language.generic.endDate' | translate }}</label>

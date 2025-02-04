@@ -19,11 +19,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-remote',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe,NgSelectModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe, NgSelectModule],
   templateUrl: './remote.component.html',
   styleUrl: './remote.component.css'
 })
-export class RemoteComponent  implements AfterViewInit {
+export class RemoteComponent implements AfterViewInit {
 
   datePickerConfig = {
     format: environment.dateTimePatterns.date,
@@ -41,10 +41,11 @@ export class RemoteComponent  implements AfterViewInit {
   pageNo = 1;
   totalPages = 0;
 
-
-  selectedOption: string = 'MTD';
+  disableDate:boolean;
+  selectedOption: string = 'All';
 
   fileOptions: { value: string; name: string }[] = [
+    { value: "All", name: "All" },
     { value: "MTD", name: "Month to Date" },
     { value: "YTD", name: "Year to Date" },
     { value: "PreviousYear", name: "Previous Year" },
@@ -64,7 +65,7 @@ export class RemoteComponent  implements AfterViewInit {
 
   msg: string = '';
 
-  userId:string
+  userId: string
 
   startDate = '';
   endDate = new Date().toISOString();
@@ -78,7 +79,7 @@ export class RemoteComponent  implements AfterViewInit {
 
 
   permissions: { isAssign: boolean; permission: string }[] = [];
-  isHr:boolean;
+  isHr: boolean;
   isEdit: boolean = false;
   isCreate: boolean = false;
   isDelete: boolean = false;
@@ -214,6 +215,7 @@ export class RemoteComponent  implements AfterViewInit {
 
 
 
+
   setFilter(option: string): void {
     const today = new Date();
     const endOfDay = new Date(today);
@@ -231,11 +233,13 @@ export class RemoteComponent  implements AfterViewInit {
       case 'MTD':
         this.startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
 
         case 'YTD':
           this.startDate = formatDate(new Date(today.getFullYear(), 0, 1));
           this.endDate = formatDate(endOfDay);
+            this.disableDate = false
           break;
 
 
@@ -243,6 +247,7 @@ export class RemoteComponent  implements AfterViewInit {
         const quarterStartMonth = Math.floor(today.getMonth() / 3) * 3;
         this.startDate = formatDate(new Date(today.getFullYear(), quarterStartMonth, 1));
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
       }
 
@@ -250,6 +255,7 @@ export class RemoteComponent  implements AfterViewInit {
         const lastYear = today.getFullYear() - 1;
         this.startDate = formatDate(new Date(lastYear, 0, 1));
         this.endDate = formatDate(new Date(lastYear, 11, 31, 23, 59, 59, 999));
+          this.disableDate = false
         break;
       }
 
@@ -258,6 +264,7 @@ export class RemoteComponent  implements AfterViewInit {
         const previousMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
         this.startDate = formatDate(previousMonthStart);
         this.endDate = formatDate(previousMonthEnd);
+          this.disableDate = false
         break;
       }
 
@@ -267,20 +274,26 @@ export class RemoteComponent  implements AfterViewInit {
         lastWeek.setHours(0, 0, 0, 0);
         this.startDate = formatDate(lastWeek);
         this.endDate = formatDate(endOfDay);
+          this.disableDate = false
         break;
       }
 
+      case 'All': {
+        this.startDate = '';
+        this.endDate = '';
+        this.disableDate = true
+        break;
+      }
 
       default:
-        console.error(`Invalid filter option: ${option}`);
-        this.startDate = '1900-01-01';
-        this.endDate = formatDate(endOfDay);
+        this.startDate = '';
+        this.endDate = '';
+        this.disableDate = true
         return;
     }
 
     // this.applyDateFilter();
   }
-
 
 
 
@@ -362,7 +375,7 @@ export class RemoteComponent  implements AfterViewInit {
     }
 
     this.apiService
-      .patchData('Attendance', `processAttendance/${id}`, this.submitForm.value, true,this.empId)
+      .patchData('Attendance', `processAttendance/${id}`, this.submitForm.value, true, this.empId)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: any) => {
