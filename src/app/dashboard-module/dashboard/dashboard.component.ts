@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       2: '#181c32', // Rejected (Red)
       3: '#8950fc', // Leave (Blue)
       4: '#6c757d',  // Off Day (Gray)
-      5: '#ffa800'  // Up coming Day (Yellow)
+      // 5: '#ffa800'  // Up coming Day (Yellow)
     };
 
     // Create an array of statuses based on the dynamic data
@@ -314,7 +314,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave', 'Off Day', 'Upcoming Day'];
+    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave', 'Off Day'];
     return statusNames[status];
   }
 
