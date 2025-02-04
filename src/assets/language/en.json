@@ -275,6 +275,7 @@
       "noOfDaysRequired": "No Of Days Required"
     },
     "generic": {
+      "activeTime":"Active Time",
       "yes":"Yes",
       "no":"No",
       "inUse":"In Use",

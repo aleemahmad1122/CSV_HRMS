@@ -167,6 +167,12 @@
                 </span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
               </th>
 
+              <th (click)="sort('checkOut')" class="cursor-pointer">
+                <span>
+                  {{ "language.generic.activeTime" | translate }}
+                </span> <i class="fa-solid fa-sort mx-2" style="font-size: 12px;"></i>
+              </th>
+
 
               <th (click)="sort('attendanceStatus')" class="cursor-pointer">
                 <span>
@@ -237,6 +243,16 @@
                     <div class="text-dark-75   font-size-lg mb-0">
                       {{(data.checkOut | convertTime: 'time')}} @if(!data.checkOut){ <span
                         class="text-danger ">{{'language.generic.missing' | translate}}</span> }
+                    </div>
+                  </div>
+                </span>
+              </td>
+
+              <td>
+                <span>
+                  <div class="d-flex align-items-center">
+                    <div class="text-dark-75   font-size-lg mb-0">
+                      {{(data.checkIn | calculateTime: data.checkOut)}}
                     </div>
                   </div>
                 </span>

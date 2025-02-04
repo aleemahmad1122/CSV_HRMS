@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { TranslateModule } from '@ngx-translate/core';
 import * as bootstrap from 'bootstrap';
 import { ConvertTimePipe } from "../../shared/pipes/convert-time.pipe";
+import { CalculateTimePipe } from "../../shared/pipes/calculate-time.pipe";
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { environment } from "../../../environments/environment.prod"
 import { HighlightPipe } from '../../shared/pipes/highlight.pipe';
@@ -19,7 +20,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe,NgSelectModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule, TranslateModule, DpDatePickerModule, ConvertTimePipe, HighlightPipe,NgSelectModule,CalculateTimePipe],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
 })

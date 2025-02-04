@@ -134,7 +134,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       1: '#1bc5bd', // Present (Green)
       2: '#181c32', // Rejected (Red)
       3: '#8950fc', // Leave (Blue)
-      4: '#6c757d'  // Off Day (Gray)
+      4: '#6c757d',  // Off Day (Gray)
+      5: '#ffa800'  // Up coming Day ()
     };
 
     // Create an array of statuses based on the dynamic data
@@ -198,6 +199,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             attendanceDate: stat.attendanceDate,
             checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
             checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
+            activeHours: this.calculateWorkingTime(stat.checkInTime,stat.checkOutTime),
           })),
         pointPadding: 0.1,
         groupPadding: 0.2,
@@ -242,6 +244,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         layout: 'horizontal',
       },
       tooltip: {
+
         formatter: function (this: Highcharts.Point & {
           dayName?: string;
           status?: number;
@@ -253,9 +256,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           checkInTime?: string | null;
           checkOutTime?: string | null;
           totalShiftHours?:string;
+          activeHours?:string | number
         }) {
-          return `
-                <b>Attendance Date: ${this.attendanceDate || 'N/A'}</b><br>
+          // Check if it's an upcoming day
+          const isUpcomingDay = this.status === 5 ||
+            (this.attendanceDate && new Date(this.attendanceDate) > new Date());
+
+          if (isUpcomingDay) {
+            return `
+              <b>Date: ${this.attendanceDate || 'N/A'}</b><br>
+              Day: ${this.category || 'N/A'}<br>
+              Status: Upcoming Day
+            `;
+          }
+          else{
+            return (this.isWorkingDay && (this.checkInTime || this.checkOutTime) && new Date(this.attendanceDate) < new Date()) ?  `
+                <b>Date: ${this.attendanceDate || 'N/A'}</b><br>
                 Day: ${this.category || 'N/A'}<br>
                 Status: ${
                   this.status === 0 ? 'Absent' :
@@ -263,21 +279,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   this.status === 2 ? 'Rejected' :
                   this.status === 3 ? 'Leave' :
                   this.status === 4 ? 'Off Day' :
-                  'Unknown Status'
+                  'Upcoming Day'
                 }<br>
-                Hours: ${this.y || 0}<br>
+                Active Hours: ${this.activeHours || 0}<br>
                 Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
                 Check In: ${this.checkInTime || 'N/A'}<br>
                 Check Out: ${this.checkOutTime || 'N/A'}<br>
                 Working Day: ${this.isWorkingDay ? 'Yes' : 'No'}<br>
-                On Leave: ${this.onLeave ? 'Yes' : 'No'}`;
+                On Leave: ${this.onLeave ? 'Yes' : 'No'}` : ( this.status == 0 ? `<b>Absent</b>` : `<b>Off Day</b>`);
+          }
+
         },
       },
       plotOptions: {
         column: {
           pointPadding: 0.1,
           groupPadding: 0.2,
-          pointWidth: 20,  // Fixed width for columns
+          pointWidth: 20,
           stacking:'normal',
           dataLabels: {
             enabled: false
@@ -289,8 +307,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave'];
-    return statusNames[status] || 'Off Day';
+    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave', 'Off Day', 'Upcoming Day'];
+    return statusNames[status];
   }
 
 
@@ -320,6 +338,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return formattedTime;
     }
     return ''
+  }
+
+  private calculateWorkingTime(startTime: string, endTime: string): string {
+
+    if (!startTime || !endTime) {
+      return 'N/A';
+    }
+
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+
+
+    const diffMs = end.getTime() - start.getTime();
+
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+
+    if (hours > 0 && minutes > 0) {
+      return `${hours} hours ${minutes} mins`;
+    } else if (hours > 0) {
+      return `${hours} hours`;
+    } else if (minutes > 0) {
+      return `${minutes} mins`;
+    } else {
+      return '0 mins';
+    }
   }
 
   private updateSummaryItems(): void {
