@@ -289,15 +289,15 @@ export class RequestComponent implements AfterViewInit {
       }
 
       case 'All': {
-        this.startDate = '';
-        this.endDate = '';
+        this.startDate = null;
+        this.endDate = null;
         this.disableDate = true
         break;
       }
 
       default:
-        this.startDate = '';
-        this.endDate = '';
+        this.startDate = null;
+        this.endDate = null;
         this.disableDate = true
         return;
     }
