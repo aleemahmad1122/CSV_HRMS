@@ -172,7 +172,7 @@
       </div>}
       <label class="form-label">{{ "language.form.joiningDate" | translate }}
         <span class="text-danger">*</span></label>
-      <dp-date-picker class="form-control" formControlName="joiningDate" placeholder="00/00/00" [disabled]="isView || !this.isEdit"
+      <dp-date-picker class="form-control" formControlName="joiningDate"    [disabled]="isView || !this.isEdit"
         [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'joiningDate')" [ngClass]="{
           'is-invalid':
             addEditForm.get('joiningDate')?.invalid &&
@@ -238,7 +238,7 @@
       </div>}
       <label class="form-label">{{ "language.form.dob" | translate }}
         <span class="text-danger">*</span></label>
-      <dp-date-picker class="form-control" formControlName="dateOfBirth" placeholder="00/00/00"
+      <dp-date-picker class="form-control" formControlName="dateOfBirth"
         [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'dateOfBirth')" [ngClass]="{
           'is-invalid':
             addEditForm.get('dateOfBirth')?.invalid &&

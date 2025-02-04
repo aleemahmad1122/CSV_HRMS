@@ -191,7 +191,7 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.form.foundedDate" | translate }}
             <span class="text-danger">*</span></label>
-          <dp-date-picker class="form-control" formControlName="foundedDate" placeholder="00/00/00"
+          <dp-date-picker class="form-control" formControlName="foundedDate"
             [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'foundedDate')" [ngClass]="{
             'is-invalid':
               companyForm.get('foundedDate')?.invalid &&

@@ -45,7 +45,7 @@
         <div class="col-md-6 mb-3">
           <label class="form-label">{{ "language.form.startDate" | translate }}
             <span class="text-danger">*</span></label>
-          <dp-date-picker class="form-control" formControlName="startDate" placeholder="00/00/00"
+          <dp-date-picker class="form-control" formControlName="startDate"
             [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'startDate')" [ngClass]="{
             'is-invalid':
               addEditForm.get('startDate')?.invalid &&
@@ -63,7 +63,7 @@
           <label class="form-label">{{ "language.form.endDate" | translate }}
             <span class="text-danger">*</span></label>
           <dp-date-picker class="form-control" formControlName="endDate" [config]="datePickerConfig" theme="dp-material"
-            placeholder="00/00/00" (change)="onDateTimeChange($event,'endDate')" [ngClass]="{
+               (change)="onDateTimeChange($event,'endDate')" [ngClass]="{
             'is-invalid':
               addEditForm.get('endDate')?.invalid &&
               (addEditForm.get('endDate')?.touched || isSubmitted)

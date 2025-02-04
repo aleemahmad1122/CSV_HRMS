@@ -37,7 +37,7 @@
       <div class="col-md-6 mb-3">
         <label class="form-label">{{ "language.form.issuedDate" | translate }}
           <span class="text-danger">*</span></label>
-        <dp-date-picker class="form-control" formControlName="issuedDate" placeholder="00/00/00"
+        <dp-date-picker class="form-control" formControlName="issuedDate"
           [config]="datePickerConfig" theme="dp-material" (change)="onDateTimeChange($event,'issuedDate')" [ngClass]="{
               'is-invalid':
                 addEditForm.get('issuedDate')?.invalid &&
@@ -133,7 +133,7 @@
 
             <td style="position: relative;">
 
-              <dp-date-picker class="form-control" formControlName="issuedDate" placeholder="00/00/00"
+              <dp-date-picker class="form-control" formControlName="issuedDate"
                 style="width: 100px; overflow: hidden;" [config]="datePickerConfig" theme="dp-material"
                 (change)="onDateTimeChange($event,'issuedDate')" [ngClass]="{
               'is-invalid':
@@ -219,7 +219,7 @@
             <td style="position: relative;">
 
               <dp-date-picker style="width: 100px; overflow: hidden;" class="form-control" formControlName="returnDate"
-                placeholder="00/00/00" [config]="datePickerConfig" theme="dp-material"
+                   [config]="datePickerConfig" theme="dp-material"
                 (change)="onDateTimeChange($event,'returnDate')" [ngClass]="{
               'is-invalid':
                 addEditForm.get('returnDate')?.invalid &&
