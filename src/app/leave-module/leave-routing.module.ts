@@ -5,7 +5,7 @@ import { PermissionService } from '../shared/resolvers/permission.service';
 
 const routes: Routes = [
     {
-        path: 'leave-list',
+        path: 'leave',
         loadComponent: () => import(`./leave/leave/leave.component`).then(c => c.LeaveComponent),
         title: 'Leave List',
         resolve: { permission: PermissionService },

@@ -70,56 +70,56 @@ export class SidebarComponent implements OnInit, OnDestroy {
   tabList: Sidebar[] = [
     {
       name: 'language.generic.personalInfo',
-      route: "/employee/profile/employee/edit",
+      route: "/employee/employee/employee/edit",
       class: "fa-solid fa-user",
       permissions: "View_Personal_Info",
       show: false
     },
     {
       name: 'language.generic.payroll',
-      route: "/employee/profile/payroll/edit",
+      route: "/employee/employee/payroll/edit",
       class: "fa-solid fa-money-bill",
       permissions: "View_Employee_Payroll",
       show: false
     },
     {
       name: 'language.generic.assets',
-      route: "/employee/profile/assets",
+      route: "/employee/employee/assets",
       class: "fa-regular fa-typewriter",
       permissions: "View_Employee_Asset",
       show: false
     },
     {
       name: 'language.employee.shift',
-      route: "/employee/profile/shift/edit",
+      route: "/employee/employee/shift/edit",
       class: "fa-solid fa-briefcase",
       permissions: "View_Employee_Shift",
       show: false
     },
     {
       name: 'language.employee.department',
-      route: "/employee/profile/department-team/edit",
+      route: "/employee/employee/department-team/edit",
       class: "fa-solid fa-people-group",
       permissions: "View_Department_Team",
       show: false
     },
     {
       name: 'language.employee.education',
-      route: "/employee/profile/education-history",
+      route: "/employee/employee/education-history",
       class: "fa-sharp fa-solid fa-file-certificate",
       permissions: "View_Employee_Education",
       show: false
     },
     {
       name: 'language.employee.workHistory',
-      route: "/employee/profile/work-history",
+      route: "/employee/employee/work-history",
       class: "fa-solid fa-briefcase",
       permissions: "View_Employee_Work_History",
       show: false
     },
     {
       name: 'language.generic.changePass',
-      route: "/employee/profile/change-password",
+      route: "/employee/employee/change-password",
       class: "fa-solid fa-key",
       permissions: "View_Employee_Change_Password",
       show: false

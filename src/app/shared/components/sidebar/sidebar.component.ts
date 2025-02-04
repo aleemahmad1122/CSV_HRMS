@@ -27,13 +27,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   adminItems: Sidebar[] = [
     {
       name: 'language.sidebar.company',
-      route: '/admin/company-structure',
+      route: '/admin/company',
       permissions: 'View_Company',
       show: false,
     },
     {
       name: 'language.sidebar.jobDetailsSetup',
-      route: '/admin/job-detail',
+      route: '/admin/job',
       permissions: 'View_Job',
       show: false,
     },
@@ -45,13 +45,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'language.sidebar.projects',
-      route: '/admin/projects',
+      route: '/admin/project',
       permissions: 'View_Project',
       show: false,
     },
     {
       name: 'language.sidebar.clients',
-      route: '/admin/clients',
+      route: '/admin/client',
       permissions: 'View_Client',
       show: false,
     },
@@ -93,13 +93,13 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'language.sidebar.leaveType',
-      route: '/admin/leave-type-list',
+      route: '/admin/leave-type',
       permissions: 'View_Leave_Type',
       show: false,
     },
     {
       name: 'language.sidebar.assetsType',
-      route: '/admin/assets-type',
+      route: '/admin/asset-type',
       permissions: 'View_Asset_Type',
       show: false,
     },
@@ -114,7 +114,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   employeeItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageEmployee',
-      route: '/employee/employee-list',
+      route: '/employee/employee',
       permissions: 'View_Employee',
       show: false,
     },
@@ -129,7 +129,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   attendanceItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageAttendance',
-      route: '/attendance/attendance-list',
+      route: '/attendance/attendance',
       permissions: 'View_Attendance',
       show: false,
     },
@@ -156,7 +156,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   leaveItems: Sidebar[] = [
     {
       name: 'language.sidebar.manageLeave',
-      route: '/leave/leave-list',
+      route: '/leave/leave',
       permissions: 'View_Leave',
       show: false,
     },
@@ -192,7 +192,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
     {
       name: 'language.sidebar.manageLoan',
-      route: '/loan/list',
+      route: '/loan/loan',
       permissions: 'View_Loan',
       show: false,
     },

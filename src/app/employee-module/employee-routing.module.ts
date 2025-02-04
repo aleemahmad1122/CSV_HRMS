@@ -5,7 +5,7 @@ import { PermissionService } from '../shared/resolvers/permission.service';
 
 const routes: Routes = [
   {
-    path: 'employee-list',
+    path: 'employee',
     loadComponent: () => import(`./employee-list/employee-list.component`).then(c => c.EmployeeListComponent),
     title: 'Manage Employee',
     data: { breadcrumb: 'Manage Employee', permission: "HR_Approval,Create_Employee,Edit_Employee,View_Employee,Delete_Employee" },
@@ -21,7 +21,7 @@ const routes: Routes = [
     canActivate: [ProtectedGuard]
   },
   {
-    path: "profile",
+    path: "employee",
     loadComponent: () => import(`./components/sidebar/sidebar.component`).then(c => c.SidebarComponent),
     data: { breadcrumb: 'Profile' },
     children: [

@@ -5,7 +5,7 @@ import { PermissionService } from '../shared/resolvers/permission.service';
 
 const routes: Routes = [
     {
-        path: 'list',
+        path: 'loan',
         loadComponent: () => import(`./loan/loan.component`).then(c => c.LoanComponent),
         title: 'Loan List',
         resolve: { permission: PermissionService },

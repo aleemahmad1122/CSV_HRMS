@@ -13,7 +13,7 @@ class ProtectedGuardService {
   constructor(
     private _router: Router,
     private _dataShare: DataShareService,
-     private _authService: UserAuthenticationService
+    private _authService: UserAuthenticationService
   )
   {
     this.isLogin = _authService.isLogin();

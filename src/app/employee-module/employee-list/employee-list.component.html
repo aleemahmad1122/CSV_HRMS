@@ -77,7 +77,7 @@
         </div>
         <!--end::Dropdown-->
         <!--begin::Button-->
-        @if(isCreate){<button routerLink="/employee/profile/employee/add" class="btn btn-primary font-weight-bolder">
+        @if(isCreate){<button routerLink="/employee/employee/employee/add" class="btn btn-primary font-weight-bolder">
           <span class="svg-icon svg-icon-md">
             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -233,7 +233,7 @@
 
                     @if(data.isActive && this.isEdit && !data.isBlacklisted){
                     <li class="w-100 mb-2">
-                      <a [routerLink]="['/employee/profile/employee/edit']" [queryParams]="{ id: data.employeeId }"
+                      <a [routerLink]="['/employee/employee/employee/edit']" [queryParams]="{ id: data.employeeId }"
                         class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                         title="Edit details">
                         {{ "language.generic.edit" | translate }}

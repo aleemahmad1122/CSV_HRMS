@@ -5,7 +5,7 @@ import { PermissionService } from "../shared/resolvers/permission.service"
 
 const routes: Routes = [
   {
-    path: 'company-structure',
+    path: 'company',
     loadComponent: () => import(`./company/company-list/company-list.component`).then(c => c.CompanyListComponent),
     data: { breadcrumb: 'Company Structure', permission: "View_Company,Create_Company,Edit_Company,Delete_Company" },
     title: 'Company Structure',
@@ -20,7 +20,7 @@ const routes: Routes = [
     resolve: { permission: PermissionService }
   },
   {
-    path: 'job-detail',
+    path: 'job',
     loadComponent: () => import(`./job/job-list/job-list.component`).then(c => c.JobListComponent),
     data: { breadcrumb: 'Job', permission: "View_Job,Create_Job,Edit_Job,Delete_Job" },
     title: 'Job Detail',
@@ -49,7 +49,7 @@ const routes: Routes = [
     resolve: { permission: PermissionService }
   },
   {
-    path: 'projects',
+    path: 'project',
     loadComponent: () => import(`./project/project-list/project-list.component`).then(c => c.ProjectListComponent),
     data: { breadcrumb: 'Projects', permission: "View_Project,Create_Project,Edit_Project,Delete_Project" },
     title: 'Projects',
@@ -63,7 +63,7 @@ const routes: Routes = [
     resolve: { permission: PermissionService }
   },
   {
-    path: 'clients',
+    path: 'client',
     loadComponent: () => import(`./client/client-list/client-list.component`).then(c => c.ClientListComponent),
     data: { breadcrumb: 'Clients', permission: "View_Client,Create_Client,Edit_Client,Delete_Client" },
     title: 'Clients',
@@ -162,7 +162,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'leave-type-list',
+    path: 'leave-type',
     loadComponent: () => import(`./leave-type/list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Leave Type List', permission: "View_Leave_Type,Create_Leave_Type,Edit_Leave_Type,Delete_Leave_Type" },
     title: 'Leave Type List',
@@ -191,7 +191,7 @@ const routes: Routes = [
     resolve: { permission: PermissionService }
   },
   {
-    path: 'assets-type',
+    path: 'asset-type',
     loadComponent: () => import(`./assets/type/list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Assets Type', permission: "View_Asset_Type,Create_Asset_Type,Edit_Asset_Type,Delete_Asset_Type" },
     title: 'Assets Type',

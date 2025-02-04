@@ -71,8 +71,11 @@
               @for (item of adminItems; track $index) {
               <li class="menu-item" aria-haspopup="true">
                 @if(item.show){
-                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
-                  class="menu-link">
+                <a [routerLink]="[item.route]"
+                   [ngClass]="(activRoute.includes(item.route) ||
+                              activRoute.includes(item.route + '/add') ||
+                              activRoute.includes(item.route + '/edit')) ? 'menu-item-active' : ''"
+                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
                   </i>
@@ -106,7 +109,10 @@
               @for (item of employeeItems; track $index) {
               <li class="menu-item" aria-haspopup="true">
                 @if(item.show){
-                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+                  <a [routerLink]="[item.route]"
+                  [ngClass]="(activRoute.includes(item.route) ||
+                             activRoute.includes(item.route + '/profile/add') ||
+                             activRoute.includes(item.route + '/profile/edit')) ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
@@ -144,7 +150,10 @@
               @for (item of attendanceItems; track $index) {
               <li class="menu-item" aria-haspopup="true">
                 @if(item.show){
-                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+                  <a [routerLink]="[item.route]"
+                  [ngClass]="(activRoute.includes(item.route) ||
+                             activRoute.includes(item.route + '/add') ||
+                             activRoute.includes(item.route + '/edit')) ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
@@ -190,7 +199,10 @@
               @for (item of leaveItems; track $index) {
               <li class="menu-item" aria-haspopup="true">
                 @if(item.show){
-                <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+                  <a [routerLink]="[item.route]"
+                  [ngClass]="(activRoute.includes(item.route) ||
+                             activRoute.includes(item.route + '/add') ||
+                             activRoute.includes(item.route + '/edit')) ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>
@@ -229,7 +241,10 @@
             @for (item of payrollItems; track $index) {
             <li class="menu-item" aria-haspopup="true">
               @if(item.show){
-              <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+                <a [routerLink]="[item.route]"
+                [ngClass]="(activRoute.includes(item.route) ||
+                           activRoute.includes(item.route + '/add') ||
+                           activRoute.includes(item.route + '/edit')) ? 'menu-item-active' : ''"
                 class="menu-link">
                 <i class="menu-bullet menu-bullet-dot">
                   <span></span>
@@ -268,7 +283,10 @@
           @for (item of loanItems; track $index) {
           <li class="menu-item" aria-haspopup="true">
             @if(item.show){
-            <a [routerLink]="[item.route]" [ngClass]="activRoute === item.route ? 'menu-item-active' : ''"
+              <a [routerLink]="[item.route]"
+              [ngClass]="(activRoute.includes(item.route) ||
+                         activRoute.includes(item.route + '/add') ||
+                         activRoute.includes(item.route + '/edit')) ? 'menu-item-active' : ''"
               class="menu-link">
               <i class="menu-bullet menu-bullet-dot">
                 <span></span>

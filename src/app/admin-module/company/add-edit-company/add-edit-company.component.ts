@@ -215,7 +215,7 @@ export class AddEditCompanyComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this._router.navigate([`${'/admin/company-structure'}`]);
+    window.history.back()
   }
 
   onFileSelected(event: Event): void {

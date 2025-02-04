@@ -4,7 +4,7 @@ import { PermissionService } from '../shared/resolvers/permission.service';
 
 const routes: Routes = [
   {
-    path: 'attendance-list',
+    path: 'attendance',
     loadComponent: () => import(`./list/list.component`).then(c => c.ListComponent),
     data: { breadcrumb: 'Manage Attendances',permission:"View_Attendance,Apply_Attendance,Edit_Attendance,Attendance_Approval,HR_Approval" },
     title: 'Attendances List',
