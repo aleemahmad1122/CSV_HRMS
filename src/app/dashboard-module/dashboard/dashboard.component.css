@@ -22,7 +22,15 @@
   border-bottom: none;
 }
 
+.highcharts-tooltip-custom {
+  z-index: 999999 !important;
+  position: absolute !important;
+}
 
+.highcharts-tooltip {
+  z-index: 999999 !important;
+  position: absolute !important;
+}
 .dash-card{
 flex: 2;
 min-width: 350px;

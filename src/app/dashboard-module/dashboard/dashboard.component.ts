@@ -251,7 +251,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         layout: 'horizontal',
       },
       tooltip: {
-
+        outside:true,
+        style: {
+          zIndex: 999999,
+          position: 'absolute'
+        },
         formatter: function (this: Highcharts.Point & {
           dayName?: string;
           status?: number;
