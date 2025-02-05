@@ -130,34 +130,38 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   private initChart(): void {
     const colorMapping = {
-      0: '#f64e60', // Absent (Red)
-      1: '#1bc5bd', // Present (Green)
-      2: '#181c32', // Rejected (Red)
-      3: '#8950fc', // Leave (Blue)
-      4: '#6c757d',  // Off Day (Gray)
-      // 5: '#ffa800'  // Up coming Day (Yellow)
+      0: '#f64e60',   // Absent (Red)
+      1: '#1bc5bd',   // Present (Green)
+      2: '#181c32',   // Rejected (Red)
+      3: '#8950fc',   // Leave (Blue)
+      4: '#6c757d',   // Off Day (Gray)
+      5: '#ffa800'    // Upcoming Day (Yellow)
     };
 
     // Create an array of statuses based on the dynamic data
     const dailyStats = this.graphData.map((data) => {
-      // Convert time string to decimal hours
       const convertTimeToDecimalHours = (timeString: string): number => {
         if (!timeString) return 0;
-
-        // Split the time string and remove any fractional seconds
         const [hours, minutes, seconds] = timeString.split(':').map(part => part.split('.')[0]);
-
-        // Convert to decimal hours
         const decimalHours = parseFloat(hours) +
                               (parseFloat(minutes) / 60) +
                               (parseFloat(seconds) / 3600);
-
-        return Number(decimalHours.toFixed(2)); // Round to 2 decimal places
+        return Number(decimalHours.toFixed(2));
       };
+
+      const attendanceDate = new Date(data.attendanceDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Determine status for upcoming days
+      let status = data.attendanceStatus;
+      if (attendanceDate > today) {
+        status = 5; // Upcoming Day
+      }
 
       return {
         dayName: data.dayName.slice(0,3),
-        status: data.attendanceStatus,
+        status: status,
         hours: data.attendanceTime ? convertTimeToDecimalHours(data.attendanceTime) : 0,
         attendanceDate: data.attendanceDate,
         attendanceType: data.attendanceType,
@@ -171,29 +175,42 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // Generate series data for Highcharts
     const seriesData: any[] = Object.keys(colorMapping).map((statusKey) => {
-      const status = parseInt(statusKey);  // Convert string key to number (status)
+      const status = parseInt(statusKey);
       return {
         type: 'column',
         name: this.getStatusName(status),
         color: colorMapping[status],
         data: dailyStats
           .filter((stat) => {
-            if (status === 4) {
-              return !stat.isWorkingDay;
+            const attendanceDate = new Date(stat.attendanceDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Specific filtering logic for each status
+            switch(status) {
+              case 5: // Upcoming Day
+                return attendanceDate > today;
+              case 4: // Off Day
+                return !stat.isWorkingDay && attendanceDate <= today;
+              case 3: // Leave
+                return stat.onLeave && attendanceDate <= today;
+              default:
+                return stat.status === status &&
+                      !stat.onLeave &&
+                      stat.isWorkingDay &&
+                      attendanceDate <= today;
             }
-            if (status === 3) {
-              return stat.onLeave;
-            }
-            return stat.status === status && !stat.onLeave && stat.isWorkingDay;
           })
           .map((stat) => {
             const attendanceDate = new Date(stat.attendanceDate);
             const today = new Date();
-            today.setHours(0, 0, 0, 0); // Normalize to start of the day
+            today.setHours(0, 0, 0, 0);
 
             return {
               x: attendanceDate.getDate() - 1,
-              y: stat.hours > 0 ? stat.hours : this.convertTimeStringToNumber(stat.totalShiftHours),
+              y: status === 5 ?  this.convertTimeStringToNumber(stat.totalShiftHours) :
+                (stat.hours > 0 ? stat.hours :
+                this.convertTimeStringToNumber(stat.totalShiftHours)),
               status: status,
               dayName: stat.dayName,
               attendanceType: stat.attendanceType,
@@ -204,7 +221,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               checkInTime: this.convertToTimeLocalFormat(stat.checkInTime),
               checkOutTime: this.convertToTimeLocalFormat(stat.checkOutTime),
               activeHours: this.calculateWorkingTime(stat.checkInTime, stat.checkOutTime),
-              color: attendanceDate > today ? '#ffa800' : colorMapping[status], // Change color if future date
+              color: colorMapping[status],
             };
           }),
         pointPadding: 0.1,
@@ -212,7 +229,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         pointWidth: 20,
       };
     });
-
 
     this.chartOptions = {
       credits: {
@@ -251,7 +267,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         layout: 'horizontal',
       },
       tooltip: {
-        outside:true,
+        outside: true,
         style: {
           zIndex: 999999,
           position: 'absolute'
@@ -266,8 +282,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           attendanceDate?: string;
           checkInTime?: string | null;
           checkOutTime?: string | null;
-          totalShiftHours?:string;
-          activeHours?:string | number
+          totalShiftHours?: string;
+          activeHours?: string | number
         }) {
           // Check if it's an upcoming day
           const isUpcomingDay = this.status === 5 ||
@@ -279,9 +295,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               Day: ${this.category || 'N/A'}<br>
               Status: Upcoming Day
             `;
-          }
-          else{
-            return (this.isWorkingDay && (this.checkInTime || this.checkOutTime) && new Date(this.attendanceDate) < new Date()) ?  `
+          } else {
+            return (this.isWorkingDay && (this.checkInTime || this.checkOutTime) && new Date(this.attendanceDate) <= new Date()) ? `
                 <b>Date: ${this.attendanceDate || 'N/A'}</b><br>
                 Day: ${this.category || 'N/A'}<br>
                 Status: ${
@@ -289,17 +304,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   this.status === 1 ? 'Present' :
                   this.status === 2 ? 'Rejected' :
                   this.status === 3 ? 'Leave' :
-                  this.status === 4 ? 'Off Day' :
-                  this.status === 5 ? 'Upcoming Day' : 'N/A'
+                  this.status === 4 ? 'Off Day' : 'N/A'
                 }<br>
                 Active Hours: ${this.activeHours || 0}<br>
                 Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
                 Check In: ${this.checkInTime || 'N/A'}<br>
                 Check Out: ${this.checkOutTime || 'N/A'}<br>
                 Working Day: ${this.isWorkingDay ? 'Yes' : 'No'}<br>
-                On Leave: ${this.onLeave ? 'Yes' : 'No'}` : ( this.status == 0 ? `<b>Absent</b>` : `<b>Off Day</b>`);
+                On Leave: ${this.onLeave ? 'Yes' : 'No'}` :
+                (this.status == 0 ? `<b>Absent</b>` : `<b>Off Day</b>`);
           }
-
         },
       },
       plotOptions: {
@@ -318,7 +332,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private getStatusName(status: number): string {
-    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave', 'Off Day'];
+    const statusNames = ['Absent', 'Present', 'Rejected', 'Leave', 'Off Day', 'Upcoming Day'];
     return statusNames[status];
   }
 
