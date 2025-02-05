@@ -75,7 +75,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: "Last7Days", name: "Last 7 Days" }
   ];
 
-  fileOptionsGraph = [...this.fileOptions,   { value: "CM", name: "Current Month" }].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
+  fileOptionsGraph = [...this.fileOptions, { value: "CM", name: "Current Month" }].filter(v => v.value == 'MTD' || v.value == 'PreviousMonth' || v.value == 'CM')
 
 
   constructor(
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private _toaster: ToastrService,
     private ngZone: NgZone
   ) {
-    this.setFilter('CM','Chart')
+    this.setFilter('CM', 'Chart')
     this.setFilter('MTD')
 
     this.empId = this._localStorage.getEmployeeDetail()[0].employeeId;
@@ -144,8 +144,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         if (!timeString) return 0;
         const [hours, minutes, seconds] = timeString.split(':').map(part => part.split('.')[0]);
         const decimalHours = parseFloat(hours) +
-                              (parseFloat(minutes) / 60) +
-                              (parseFloat(seconds) / 3600);
+          (parseFloat(minutes) / 60) +
+          (parseFloat(seconds) / 3600);
         return Number(decimalHours.toFixed(2));
       };
 
@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
 
       return {
-        dayName: data.dayName.slice(0,3),
+        dayName: data.dayName.slice(0, 3),
         status: status,
         hours: data.attendanceTime ? convertTimeToDecimalHours(data.attendanceTime) : 0,
         attendanceDate: data.attendanceDate,
@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             today.setHours(0, 0, 0, 0);
 
             // Specific filtering logic for each status
-            switch(status) {
+            switch (status) {
               case 5: // Upcoming Day
                 return attendanceDate > today;
               case 4: // Off Day
@@ -196,9 +196,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 return stat.onLeave && attendanceDate <= today;
               default:
                 return stat.status === status &&
-                      !stat.onLeave &&
-                      stat.isWorkingDay &&
-                      attendanceDate <= today;
+                  !stat.onLeave &&
+                  stat.isWorkingDay &&
+                  attendanceDate <= today;
             }
           })
           .map((stat) => {
@@ -208,9 +208,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
             return {
               x: attendanceDate.getDate() - 1,
-              y: status === 5 ?  this.convertTimeStringToNumber(stat.totalShiftHours) :
+              y: status === 5 ? this.convertTimeStringToNumber(stat.totalShiftHours) :
                 (stat.hours > 0 ? stat.hours :
-                this.convertTimeStringToNumber(stat.totalShiftHours)),
+                  this.convertTimeStringToNumber(stat.totalShiftHours)),
               status: status,
               dayName: stat.dayName,
               attendanceType: stat.attendanceType,
@@ -292,27 +292,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           if (isUpcomingDay) {
             return `
               <b>Date: ${this.attendanceDate || 'N/A'}</b><br>
-              Day: ${this.category || 'N/A'}<br>
-              Status: Upcoming Day
+              <b>Day:</b>${this.category || 'N/A'}<br>
+              <b>Status:</b>  <span style='color:${colorMapping[5]}'>Upcoming Day</span>
             `;
           } else {
             return (this.isWorkingDay && (this.checkInTime || this.checkOutTime) && new Date(this.attendanceDate) <= new Date()) ? `
                 <b>Date: ${this.attendanceDate || 'N/A'}</b><br>
-                Day: ${this.category || 'N/A'}<br>
-                Status: ${
-                  this.status === 0 ? 'Absent' :
-                  this.status === 1 ? 'Present' :
+                <b>Day:</b>${this.category || 'N/A'}<br>
+                <b>Status:</b>${this.status === 0 ? 'Absent' :
+                this.status === 1 ? 'Present' :
                   this.status === 2 ? 'Rejected' :
-                  this.status === 3 ? 'Leave' :
-                  this.status === 4 ? 'Off Day' : 'N/A'
-                }<br>
-                Active Hours: ${this.activeHours || 0}<br>
-                Attendance Type: ${this.attendanceType == 0 ? 'Default' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
-                Check In: ${this.checkInTime || 'N/A'}<br>
-                Check Out: ${this.checkOutTime || 'N/A'}<br>
-                Working Day: ${this.isWorkingDay ? 'Yes' : 'No'}<br>
-                On Leave: ${this.onLeave ? 'Yes' : 'No'}` :
-                (this.status == 0 ? `<b>Absent</b>` : `<b>Off Day</b>`);
+                    this.status === 3 ? 'Leave' :
+                      this.status === 4 ? 'Off Day' : 'N/A'
+              }<br>
+                <b>Active Hours:</b>${this.activeHours || 0}<br>
+                <b>Attendance Type:</b>${this.attendanceType == 0 ? 'Import from excel' : this.attendanceType == 1 ? 'Missing Attendance' : 'Remote Request'}<br>
+                <b>Check In:</b>${this.checkInTime || `<span style='color:red' >Missing</span>`}<br>
+                <b>Check Out:</b>${this.checkOutTime || `<span style='color:red' >Missing</span>`}<br>
+                <b>Working Day:</b>${this.isWorkingDay ? 'Yes' : 'No'}<br>
+                <b>On Leave:</b>${this.onLeave ? 'Yes' : 'No'}` :
+              (this.status == 0 ? `<b>Absent</b>` : `<b>Off Day</b>`);
           }
         },
       },
@@ -321,7 +320,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           pointPadding: 0.1,
           groupPadding: 0.2,
           pointWidth: 20,
-          stacking:'normal',
+          stacking: 'normal',
           dataLabels: {
             enabled: false
           },
@@ -531,9 +530,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     switch (option) {
       case 'CM':
-      startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      endDate = formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999));
-      break;
+        startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
+        endDate = formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999));
+        break;
 
       case 'MTD':
         startDate = formatDate(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -691,7 +690,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
 
-    getGraphStats(): void {
+  getGraphStats(): void {
     try {
 
       this.api
@@ -732,7 +731,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private getChartTitle(option: string): string {
     const currentYear = new Date().getFullYear();
 
-    switch(option) {
+    switch (option) {
       case 'MTD':
         return `Attendance Summary - ${this.getCurrentMonth()} ${currentYear}`;
       case 'YTD':
