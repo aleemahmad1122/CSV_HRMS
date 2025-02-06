@@ -111,8 +111,8 @@
                 @if(item.show){
                   <a [routerLink]="[item.route]"
                   [ngClass]="(activRoute.includes(item.route) ||
-                             activRoute.includes(item.route + '/profile/add') ||
-                             activRoute.includes(item.route + '/profile/edit')) ? 'menu-item-active' : ''"
+                             activRoute.includes(item.route + '/employee/add') ||
+                             activRoute.includes(item.route + '/employee/edit')) ? 'menu-item-active' : ''"
                   class="menu-link">
                   <i class="menu-bullet menu-bullet-dot">
                     <span></span>

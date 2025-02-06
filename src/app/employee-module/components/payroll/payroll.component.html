@@ -67,7 +67,7 @@
     </div>
     <!--end::Dropdown Menu-->
   </div>
-  @if(isCreate){<button routerLink="/employee/profile/payroll/add" [queryParams]="{id:this.id}"
+  @if(isCreate){<button routerLink="/employee/employee/payroll/add" [queryParams]="{id:this.id}"
   class="btn btn-primary font-weight-bolder">
   <span class="svg-icon svg-icon-md">
     <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
@@ -149,7 +149,7 @@
 
                 @if(this.isEdit){
                 <li class="w-100  mb-2">
-                  <a [routerLink]="['/employee/profile/payroll/edit']"
+                  <a [routerLink]="['/employee/employee/payroll/edit']"
                   [queryParams]="{editId: data.employeeWorkHistoryId,id:this.id}"
                     class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                     title="Edit details">

@@ -29,7 +29,7 @@ export class FooterComponent {
     this.footerLink = [
       {
         name: "language.generic.profile",
-        path:"/employee/profile/employee/edit"
+        path:"/employee/employee/employee/edit"
       },
       {
         name: "language.generic.dashboard",

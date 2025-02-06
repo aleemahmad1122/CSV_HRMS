@@ -68,7 +68,7 @@
     </div>
 
     @if(isCreate){<button
-    routerLink="/employee/profile/education-history/add"
+    routerLink="/employee/employee/education-history/add"
     [queryParams]="{id:this.id}"
     class="btn btn-primary font-weight-bolder"
   >
@@ -171,7 +171,7 @@
 
               @if(this.isEdit){
               <li class="w-100  mb-2">
-                <a   [routerLink]="['/employee/profile/education-history//edit']"
+                <a   [routerLink]="['/employee/employee/education-history//edit']"
                 [queryParams]="{editId: data.employeeEducationId,id:this.id}"
                   class="btn btn-sm btn-default btn-text-primary btn-hover-primary btn-icon w-100 text-center"
                   title="Edit details">
