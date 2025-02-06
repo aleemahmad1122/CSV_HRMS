@@ -37,7 +37,7 @@ export class FooterComponent {
       },
       {
         name: "language.generic.attendance",
-        path:"/attendance/attendance-list"
+        path:"/attendance/attendance"
       },
     ]
 
